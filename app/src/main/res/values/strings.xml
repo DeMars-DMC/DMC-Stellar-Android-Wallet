@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlockEQ Stellar Wallet</string>
+    <string name="app_name">DMC Wallet</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -31,7 +31,7 @@
     <!--Wallet Fragment-->
     <string name="button_receive">Receive</string>
     <string name="button_send">Send</string>
-    <string name="logoDescription">Block-EQ</string>
+    <string name="logoDescription">DMC</string>
     <string name="title_activity_wallets">Wallets</string>
     <string name="title_activity_my_wallet">Wallet</string>
     <string name="learn_more">Learn more</string>
@@ -149,7 +149,7 @@
     <!--Assets Activity-->
     <string name="asset_title_text">Assets</string>
     <string name="error_supported_assets_message">There was an error fetching supported assets.</string>
-    <string name="supported_assets_header">BlockEQ Assets</string>
+    <string name="supported_assets_header">DMC Assets</string>
     <string name="set_inflation_message">Set inflation</string>
     <string name="remove_asset_message">Remove asset</string>
     <string name="no_balance_dialog_title">Minimum balance error</string>
@@ -188,11 +188,11 @@
     <string name="copy_address_content_descriptor">Copy address</string>
 
     <!--Diagnostic Activity-->
-    <string name="bug_report_message">Here is some information that will be sent to BlockEQ for troubleshooting and bug reports.</string>
+    <string name="bug_report_message">Here is some information that will be sent to DMC for troubleshooting and bug reports.</string>
     <string name="device_model">Device Model</string>
     <string name="android_version">Android version</string>
     <string name="locale">Locale</string>
-    <string name="blockeq_app_version">BlockEQ App version</string>
+    <string name="blockeq_app_version">DMC App version</string>
     <string name="public_address_of_stellar_account">Public address of Stellar account</string>
     <string name="send_report">Report issue</string>
     <string name="recovery_type">Recovery type</string>

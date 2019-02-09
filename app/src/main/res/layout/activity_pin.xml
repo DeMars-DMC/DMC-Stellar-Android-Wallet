@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:id="@+id/rootLayout">
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/customMessageTextView"
-        style="@style/ShortDescription"
+        style="@style/LandingPageDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_padding_size_xxxlarge"
@@ -65,7 +65,7 @@
             app:keypadDeleteButtonSize="@dimen/margin_padding_size_medium_large"
             app:keypadHorizontalSpacing="@dimen/margin_padding_size_xxlarge"
             app:keypadShowDeleteButton="true"
-            app:keypadTextColor="@color/white"
+            app:keypadTextColor="@color/blue4"
             app:keypadTextSize="@dimen/keypad_size"
             app:keypadVerticalSpacing="@dimen/keybadSpacing"
             app:pinLength="4" />

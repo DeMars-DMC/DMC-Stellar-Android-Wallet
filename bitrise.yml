@@ -69,7 +69,7 @@ workflows:
         inputs:
         - track: internal
         - service_account_json_key_path: "$BITRISEIO_GOOGLE_PLAY_SERVICE_KEY_JSON_URL"
-        - package_name: com.blockeq.stellarwallet
+        - package_name: io.demars.stellarwallet
     - cache-push@2.0.5: {}
     envs:
     - opts:

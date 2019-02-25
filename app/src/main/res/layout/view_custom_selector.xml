@@ -44,7 +44,7 @@
         android:layout_weight=".25"
         android:background="@drawable/selector_spinner">
 
-        <com.blockeq.stellarwallet.views.PatchedSearchableSpinner
+        <io.demars.stellarwallet.views.PatchedSearchableSpinner
             android:id="@+id/spinner"
             style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="match_parent"

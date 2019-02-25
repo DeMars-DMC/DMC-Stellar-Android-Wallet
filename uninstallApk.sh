@@ -1,2 +1,2 @@
-adb uninstall com.blockeq.stellarwallet
-adb uninstall com.blockeq.stellarwallet.test
+adb uninstall io.demars.stellarwallet
+adb uninstall io.demars.stellarwallet.test

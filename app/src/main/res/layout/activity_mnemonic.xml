@@ -44,13 +44,13 @@
 
     </RelativeLayout>
 
-    <com.blockeq.stellarwallet.views.ChipView
+    <io.demars.stellarwallet.views.ChipView
         android:id="@+id/mnemonicView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/qrLayout" />
 
-    <com.blockeq.stellarwallet.views.ChipView
+    <io.demars.stellarwallet.views.ChipView
         android:id="@+id/passphraseView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

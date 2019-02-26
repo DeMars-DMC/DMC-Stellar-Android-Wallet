@@ -1,5 +1,7 @@
 package io.demars.stellarwallet.helpers
 
+import io.demars.stellarwallet.R
+
 class Constants {
 
     companion object {
@@ -17,7 +19,15 @@ class Constants {
 
         const val INFLATION_DESTINATION = "GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT"
 
-        const val LUMENS_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/blockeq-wallet.appspot.com/o/icon-stellar.png?alt=media&token=38b70165-5255-4113-a15e-3c72bd4fab9f"
+        const val LUMENS_IMAGE_RES = R.drawable.asset_stellar_lumen_logo
+        const val RAND_IMAGE_RES = R.drawable.asset_south_african_rand_logo
+        const val NKLS_IMAGE_RES = R.drawable.asset_demars_nickel_logo
+
+        const val RAND_ISSUER = "GDCPYYD2DQZ2R6VPPWRJ5B2HQIJBGUM5EMN3XZJM4OHASMSYX2PUL4BH"
+        const val NKLS_ISSUER = "GA3VRDTEH2C7DSXRPUEBL55JUJPMFUOUVUAPDX4T3JK5QHLSNLXZDIFC"
+
+        const val RAND_NAME = "ZAR - South African"
+        const val NKLS_NAME = "DéMars Nickels"
 
         // Maximum double representation in string ((2^63)-1)/(10^7)
         const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"

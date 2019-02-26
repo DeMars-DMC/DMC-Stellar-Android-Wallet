@@ -192,7 +192,7 @@
     <string name="device_model">Device Model</string>
     <string name="android_version">Android version</string>
     <string name="locale">Locale</string>
-    <string name="blockeq_app_version">DMC App version</string>
+    <string name="dmc_app_version">DMC App version</string>
     <string name="public_address_of_stellar_account">Public address of Stellar account</string>
     <string name="send_report">Report issue</string>
     <string name="recovery_type">Recovery type</string>

@@ -116,7 +116,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         viewHolder.assetAmount.text = String.format(context.getString(R.string.balance_template),
                 StringFormat.truncateDecimalPlaces(asset.amount), asset.code.toUpperCase())
 
-        if (asset.image.isNotEmpty()) {
+        if (asset.image != 0) {
             viewHolder.defaultImage.visibility = View.GONE
             viewHolder.assetImage.visibility = View.VISIBLE
             Picasso.get().load(asset.image).into(viewHolder.assetImage)

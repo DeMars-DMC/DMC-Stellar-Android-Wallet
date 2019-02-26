@@ -20,22 +20,18 @@ import io.demars.stellarwallet.models.DefaultAsset
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.models.SupportedAsset
 import io.demars.stellarwallet.models.SupportedAssetType
-import io.demars.stellarwallet.remote.BlockEqRetrofit
 import io.demars.stellarwallet.remote.Horizon
-import io.demars.stellarwallet.remote.SupportedAssetsApi
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import kotlinx.android.synthetic.main.content_assets_activity.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse
-import retrofit2.Call
-import retrofit2.Callback
 
 
 class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
 
-    private var map: Map<String, SupportedAsset>? = null
+    private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
     private var assetsList: ArrayList<Any> = ArrayList()
     private lateinit var context : Context
     private lateinit var adapter : AssetsRecyclerViewAdapter
@@ -106,7 +102,7 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     private fun convertBalanceToSupportedAsset(balances: Array<AccountResponse.Balance>,
                                                supportedAssetsMap: Map<String, SupportedAsset>) : List<SupportedAsset> {
 
-        val lumenSupportedAsset = SupportedAsset(0, Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_URL,
+        val lumenSupportedAsset = SupportedAsset(0, Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
                 "", "", Constants.LUMENS_ASSET_NAME, "", "",
                 "0", SupportedAssetType.ADDED, null)
 
@@ -128,7 +124,7 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
                        return@map asset
                    }
                    else -> {
-                       val asset = SupportedAsset(0, it.assetCode.toLowerCase(), "",
+                       val asset = SupportedAsset(0, it.assetCode.toLowerCase(), 0,
                                it.assetIssuer.accountId, it.limit, it.assetCode, "",
                                "", it.balance, SupportedAssetType.ADDED, it.asset)
                        return@map asset
@@ -151,19 +147,32 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     }
 
     private fun loadSupportedAssets() {
-        BlockEqRetrofit.create(SupportedAssetsApi::class.java).assets.enqueue(object : Callback<Map<String, SupportedAsset>> {
-            override fun onResponse(call: Call<Map<String, SupportedAsset>>, response: retrofit2.Response<Map<String, SupportedAsset>>) {
-                map = response.body()
-                updateAdapter()
-            }
+        map.clear()
 
-            override fun onFailure(call: Call<Map<String, SupportedAsset>>, t: Throwable) {
-                Toast.makeText(applicationContext, getString(R.string.error_supported_assets_message), Toast.LENGTH_SHORT).show()
+        val rand = SupportedAsset(1, "RAND", Constants.RAND_IMAGE_RES,
+          Constants.RAND_ISSUER, "100000000000",
+          Constants.RAND_NAME, "", "", null, null, null)
 
-            }
-        })
+        val nkls = SupportedAsset(2, "NKLS", Constants.NKLS_IMAGE_RES,
+          Constants.NKLS_ISSUER, "100000000000",
+          Constants.NKLS_NAME, "", "", null, null, null)
 
+        map["RAND"] = rand
+        map["NKLS"] = nkls
 
+        updateAdapter()
+
+//        BlockEqRetrofit.create(SupportedAssetsApi::class.java).assets.enqueue(object : Callback<Map<String, SupportedAsset>> {
+//            override fun onResponse(call: Call<Map<String, SupportedAsset>>, response: retrofit2.Response<Map<String, SupportedAsset>>) {
+//                map = response.body()
+//                updateAdapter()
+//            }
+//
+//            override fun onFailure(call: Call<Map<String, SupportedAsset>>, t: Throwable) {
+//                Toast.makeText(applicationContext, getString(R.string.error_supported_assets_message), Toast.LENGTH_SHORT).show()
+//
+//            }
+//        })
     }
 
     //region Call backs

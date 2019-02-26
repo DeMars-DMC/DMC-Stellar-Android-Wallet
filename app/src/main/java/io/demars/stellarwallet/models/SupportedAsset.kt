@@ -19,7 +19,7 @@ enum class SupportedAssetType {
     ADDED, NOT_ADDED
 }
 
-data class SupportedAsset (var id: Int, var code: String, var image: String, var issuer: String,
+data class SupportedAsset (var id: Int, var code: String, var image: Int, var issuer: String,
                            var limit: String, var name: String, var createdAt: String,
                            var updatedAt: String, var amount: String?,
                            var type: SupportedAssetType? = SupportedAssetType.NOT_ADDED,

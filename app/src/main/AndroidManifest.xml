@@ -56,7 +56,7 @@
         <activity
             android:name=".activities.PinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/PinActivityTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.SendActivity"
             android:screenOrientation="portrait"

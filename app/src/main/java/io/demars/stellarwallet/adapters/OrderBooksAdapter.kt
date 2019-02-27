@@ -57,9 +57,9 @@ class OrderBooksAdapter(private val context: Context) : RecyclerView.Adapter<Rec
             OrderBookAdapterTypes.BUY_HEADER.value, OrderBookAdapterTypes.SELL_HEADER.value -> {
                 val viewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.row_order_books_header, parent, false))
                 if (viewType == OrderBookAdapterTypes.BUY_HEADER.value) {
-                    viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.buySelectorBg))
+                    viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
                 } else {
-                     viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.sellSelectorBg))
+                     viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewHolder
             }

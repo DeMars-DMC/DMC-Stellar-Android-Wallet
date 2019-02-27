@@ -12,18 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_small"
-        android:textColor="@color/silverChalice"
-        android:text="1" />
+        android:textColor="@color/grey" />
 
     <TextView
         android:id="@+id/wordItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/numberItem"
-        android:layout_marginLeft="8dp"
-        android:text="stellar"
+        android:layout_toEndOf="@id/numberItem"
+        android:layout_marginStart="8dp"
         style="@style/RegularText"
         android:textSize="@dimen/text_size_medium"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/grey" />
 
 </RelativeLayout>

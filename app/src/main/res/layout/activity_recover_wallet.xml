@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.RecoverWalletActivity">
+    tools:context=".activities.RecoverWalletActivity"
+    android:background="@color/light_gray">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/recoverToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        app:titleTextColor="@color/colorPrimaryDark"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <TextView

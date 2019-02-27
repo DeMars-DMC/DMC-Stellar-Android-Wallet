@@ -121,30 +121,46 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
             viewHolder.assetImage.visibility = View.VISIBLE
             Picasso.get().load(asset.image).into(viewHolder.assetImage)
         } else {
-            viewHolder.defaultImage.text = asset.name[0].toString()
-            viewHolder.defaultImage.visibility = View.VISIBLE
-            viewHolder.assetImage.visibility = View.GONE
+            when {
+              asset.code.equals(Constants.RAND_ASSET_TYPE, true) -> {
+                  viewHolder.defaultImage.visibility = View.GONE
+                  viewHolder.assetImage.visibility = View.VISIBLE
+                  Picasso.get().load(Constants.RAND_IMAGE_RES).into(viewHolder.assetImage)
+              }
+              asset.code.equals(Constants.NKLS_ASSET_TYPE, true) -> {
+                  viewHolder.defaultImage.visibility = View.GONE
+                  viewHolder.assetImage.visibility = View.VISIBLE
+                  Picasso.get().load(Constants.NKLS_IMAGE_RES).into(viewHolder.assetImage)
+              }
+              else -> {
+                  viewHolder.defaultImage.text = asset.name[0].toString()
+                  viewHolder.defaultImage.visibility = View.VISIBLE
+                  viewHolder.assetImage.visibility = View.GONE
+              }
+            }
         }
 
-        if (asset.code == Constants.LUMENS_ASSET_CODE) {
-            viewHolder.assetButton.text = context.getString(R.string.set_inflation_message)
-            viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.mantis))
-            viewHolder.assetButton.setOnClickListener {
-                if (WalletApplication.wallet.getBalances().isNotEmpty() &&
-                        AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_TYPE).toDouble() > 1.0) {
-                    context.startActivity(Intent(context, InflationActivity::class.java))
-                } else {
-                    showBalanceErrorDialog()
-                }
-            }
-        } else if (asset.amount!!.toDouble() == 0.0) {
-            viewHolder.assetButton.text = context.getString(R.string.remove_asset_message)
-            viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.apricot))
-            viewHolder.assetButton.setOnClickListener {
-                listener.changeTrustline(asset.asset!!, true)
-            }
-        } else {
-            viewHolder.assetButton.visibility = View.GONE
+        when {
+          asset.code == Constants.LUMENS_ASSET_CODE -> {
+              viewHolder.assetButton.text = context.getString(R.string.set_inflation_message)
+              viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
+              viewHolder.assetButton.setOnClickListener {
+                  if (WalletApplication.wallet.getBalances().isNotEmpty() &&
+                    AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_TYPE).toDouble() > 1.0) {
+                      context.startActivity(Intent(context, InflationActivity::class.java))
+                  } else {
+                      showBalanceErrorDialog()
+                  }
+              }
+          }
+          asset.amount!!.toDouble() == 0.0 -> {
+              viewHolder.assetButton.text = context.getString(R.string.remove_asset_message)
+              viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.apricot))
+              viewHolder.assetButton.setOnClickListener {
+                  listener.changeTrustline(asset.asset!!, true)
+              }
+          }
+          else -> viewHolder.assetButton.visibility = View.GONE
         }
 
         viewHolder.itemView.setOnClickListener {
@@ -175,7 +191,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         Picasso.get().load(asset.image).into(viewHolder.assetImage)
 
         viewHolder.assetButton.text = context.getString(R.string.add_asset)
-        viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.mantis))
+        viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
         viewHolder.assetButton.setOnClickListener {
             listener.changeTrustline(trustLineAsset, false)
         }

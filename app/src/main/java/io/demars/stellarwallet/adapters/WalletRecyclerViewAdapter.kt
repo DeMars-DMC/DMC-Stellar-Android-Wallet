@@ -208,7 +208,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
                 viewHolder.progressBar.visibility = View.GONE
             }
             WalletState.ACTIVE, WalletState.UPDATING -> {
-                viewHolder.root.setBackgroundColor(getColor(context, R.color.blue2))
+                viewHolder.root.setBackgroundColor(getColor(context, R.color.colorAccent))
             }
             else -> { //nothing
             }

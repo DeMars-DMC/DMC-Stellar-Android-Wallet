@@ -15,16 +15,14 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             android:elevation="4dp"
             app:title="@string/nav_contacts"
-            app:titleTextColor="@color/colorPrimaryDark"
             android:theme="@style/ToolbarTheme"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             tools:targetApi="lollipop" />
 
         <com.mancj.materialsearchbar.MaterialSearchBar
-            style="@style/MaterialSearchBarLight"
+            android:theme="@style/ToolbarTheme"
             app:mt_speechMode="false"
             app:mt_hint="@string/hint_search_bar"
             app:mt_maxSuggestionsCount="5"

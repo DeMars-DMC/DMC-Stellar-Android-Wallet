@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:text="DMC Asset"
         android:textSize="@dimen/text_size_small"
-        android:textColor="@color/silverChalice"/>
+        android:textColor="@color/grey"/>
 
 </LinearLayout>

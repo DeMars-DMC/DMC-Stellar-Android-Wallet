@@ -23,11 +23,13 @@ class Constants {
         const val RAND_IMAGE_RES = R.drawable.asset_south_african_rand_logo
         const val NKLS_IMAGE_RES = R.drawable.asset_demars_nickel_logo
 
-        const val RAND_ISSUER = "GDCPYYD2DQZ2R6VPPWRJ5B2HQIJBGUM5EMN3XZJM4OHASMSYX2PUL4BH"
-        const val NKLS_ISSUER = "GA3VRDTEH2C7DSXRPUEBL55JUJPMFUOUVUAPDX4T3JK5QHLSNLXZDIFC"
+        const val RAND_ASSET_TYPE = "RAND"
+        const val RAND_ASSET_NAME = "ZAR - South African"
+        const val RAND_ASSET_ISSUER = "GDCPYYD2DQZ2R6VPPWRJ5B2HQIJBGUM5EMN3XZJM4OHASMSYX2PUL4BH"
 
-        const val RAND_NAME = "ZAR - South African"
-        const val NKLS_NAME = "DéMars Nickels"
+        const val NKLS_ASSET_TYPE = "NKLS"
+        const val NKLS_ASSET_NAME = "DéMars Nickels"
+        const val NKLS_ASSET_ISSUER = "GA3VRDTEH2C7DSXRPUEBL55JUJPMFUOUVUAPDX4T3JK5QHLSNLXZDIFC"
 
         // Maximum double representation in string ((2^63)-1)/(10^7)
         const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"

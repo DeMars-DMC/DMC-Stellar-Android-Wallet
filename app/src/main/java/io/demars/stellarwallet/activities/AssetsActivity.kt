@@ -149,13 +149,13 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     private fun loadSupportedAssets() {
         map.clear()
 
-        val rand = SupportedAsset(1, "RAND", Constants.RAND_IMAGE_RES,
-          Constants.RAND_ISSUER, "100000000000",
-          Constants.RAND_NAME, "", "", null, null, null)
+        val rand = SupportedAsset(1, Constants.RAND_ASSET_TYPE, Constants.RAND_IMAGE_RES,
+          Constants.RAND_ASSET_ISSUER, "100000000000",
+          Constants.RAND_ASSET_NAME, "", "", null, null, null)
 
-        val nkls = SupportedAsset(2, "NKLS", Constants.NKLS_IMAGE_RES,
-          Constants.NKLS_ISSUER, "100000000000",
-          Constants.NKLS_NAME, "", "", null, null, null)
+        val nkls = SupportedAsset(2, Constants.NKLS_ASSET_TYPE, Constants.NKLS_IMAGE_RES,
+          Constants.NKLS_ASSET_ISSUER, "100000000000",
+          Constants.NKLS_ASSET_NAME, "", "", null, null, null)
 
         map["RAND"] = rand
         map["NKLS"] = nkls

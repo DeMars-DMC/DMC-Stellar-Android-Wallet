@@ -3,21 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/darkBlue"
+    android:background="@color/light_gray"
     android:padding="@dimen/activity_vertical_margin">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Available: "
-        style="@style/RegularWhiteText"/>
+        android:textColor="@color/grey"/>
 
     <TextView
         android:id="@+id/availableBalanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.0000 XLM"
-        style="@style/RegularWhiteText"/>
+        android:textColor="@color/grey"/>
 
     <View
         android:layout_width="0dp"
@@ -32,7 +32,7 @@
         android:text="@string/learn_more"
         android:textSize="@dimen/text_size_micro"
         android:padding="8dp"
-        android:background="@color/paleSky"
+        android:background="@color/grey"
         style="@style/RegularWhiteText"/>
 
 </LinearLayout>

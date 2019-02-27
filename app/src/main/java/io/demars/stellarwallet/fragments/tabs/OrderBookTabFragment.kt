@@ -122,7 +122,7 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
 
         runOnUiThread {
             updateList(orderBooks, sellingCode, buyingCode)
-            empty_view_order_book.visibility = View.GONE
+            empty_view_order_book?.visibility = View.GONE
         }
 
         if (swipeRefresh != null) {
@@ -153,7 +153,7 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
 
     private fun updateList(list : MutableList<OrderBook>, sellingCode: String, buyingCode: String) {
         Timber.d("updateTradingCurrencies %s %s", buyingCode, sellingCode)
-        orderBookRv.visibility = View.VISIBLE
+        orderBookRv?.visibility = View.VISIBLE
         this.buyingCode = buyingCode
         this.sellingCode = sellingCode
         orderBooksAdapter.setOrderBookList(list)

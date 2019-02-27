@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="elevation">@dimen/actionbar_elevation</item>
+        <item name="android:elevation">@dimen/actionbar_elevation</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

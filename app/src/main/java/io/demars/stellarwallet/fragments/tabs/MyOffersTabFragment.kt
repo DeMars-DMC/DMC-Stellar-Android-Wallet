@@ -49,6 +49,7 @@ class MyOffersTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
                 LinearLayoutManager(context).orientation)
         myOffersRv.addItemDecoration(dividerItemDecoration)
         swipeRefreshOffer.setOnRefreshListener(this)
+        swipeRefreshOffer.setColorSchemeResources(R.color.colorAccent)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

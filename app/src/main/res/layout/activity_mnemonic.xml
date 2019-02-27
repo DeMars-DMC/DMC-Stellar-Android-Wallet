@@ -4,17 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MnemonicActivity">
+    tools:context=".activities.MnemonicActivity"
+    android:background="@color/light_gray">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         android:elevation="4dp"
         tools:ignore="UnusedAttribute"
         app:title="@string/secret_phrase"
-        app:titleTextColor="@color/colorPrimaryDark"
         android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -75,7 +74,6 @@
         android:layout_height="wrap_content"
         android:text="@string/confirm_written"
         android:layout_margin="@dimen/activity_vertical_margin"
-        style="@style/PrimaryButtonStyle"
-        android:background="@color/blue2"/>
+        style="@style/PrimaryButtonStyle"/>
 
 </RelativeLayout>

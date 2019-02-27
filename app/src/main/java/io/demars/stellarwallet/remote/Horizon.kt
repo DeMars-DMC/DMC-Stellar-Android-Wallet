@@ -92,7 +92,7 @@ object Horizon : HorizonTasks {
 
     override fun registerForEffects(cursor: String, listener: EventListener<EffectResponse>) : SSEStream<EffectResponse>? {
         val server = getServer()
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId())
+        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         try {
             //ATTENTION STREAM must work with order.ASC!
             return server.effects()
@@ -160,17 +160,18 @@ object Horizon : HorizonTasks {
             var list : ArrayList<OfferResponse>? = null
             val server = getServer()
             try {
-                val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId())
+                val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
                 val response = server.offers().forAccount(sourceKeyPair).execute()
                 if(response != null) {
                     list = response.records
                 }
             } catch (error : java.lang.Exception ) {
-                Timber.d(error)
-                error.message?.let{
-                    errorMessage = it
+                if (error !is NullPointerException) {
+                    Timber.d(error)
+                    error.message?.let {
+                        errorMessage = it
+                    }
                 }
-
             }
             return list
         }
@@ -188,17 +189,19 @@ object Horizon : HorizonTasks {
     private class LoadAccountTask(private val listener: OnLoadAccount) : AsyncTask<Void, Void, AccountResponse>() {
         override fun doInBackground(vararg params: Void?) : AccountResponse? {
             val server = getServer()
-            val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId())
+            val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
             var account : AccountResponse? = null
             try {
                 account = server.accounts().account(sourceKeyPair)
 
             } catch (error : Exception) {
-                Timber.d(error.message.toString())
-                if (error is ErrorResponse) {
-                    listener.onError(error)
-                } else {
-                    listener.onError(ErrorResponse(Constants.UNKNOWN_ERROR, error.message))
+                if (error !is NullPointerException) {
+                    Timber.d(error.message.toString())
+                    if (error is ErrorResponse) {
+                        listener.onError(error)
+                    } else {
+                        listener.onError(ErrorResponse(Constants.UNKNOWN_ERROR, error.message))
+                    }
                 }
             }
 
@@ -215,7 +218,7 @@ object Horizon : HorizonTasks {
         var errorMessage : String? = null
         override fun doInBackground(vararg params: Void?): ArrayList<EffectResponse>? {
             val server = getServer()
-            val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId())
+            val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
             var effectResults : Page<EffectResponse>? = null
             try {
                 effectResults = server.effects().order(RequestBuilder.Order.DESC)

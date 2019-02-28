@@ -11,17 +11,12 @@
         android:elevation="4dp"
         android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/nav_start" />
+        app:title="@string/learn_about_stellar" />
 
-    <ScrollView
+    <WebView
+        android:id="@+id/webViewStart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/textViewStart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:padding="16dp"/>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:textColor="@color/black" />
 </LinearLayout>

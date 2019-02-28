@@ -67,7 +67,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         termsOfServiceButton.setOnClickListener {
-            startActivity(WebViewActivity.newIntent(it.context, getString(R.string.terms_of_service), "https://www.blockeq.com/terms.html"))
+            startActivity(WebViewActivity.newIntent(it.context, getString(R.string.terms_of_service), "https://docs.google.com/document/d/1C32QmABqKBI9TZdoHCNGu0fT2Y-4QhQPHtacxj5_aYc/edit?usp=sharing"))
         }
 
         if (BuildConfig.DEBUG) {

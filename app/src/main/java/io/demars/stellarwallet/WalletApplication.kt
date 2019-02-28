@@ -62,7 +62,7 @@ class WalletApplication : MultiDexApplication() {
 
         setupLifecycleListener()
 
-        wallet = BlockEqWallet(LocalStoreImpl(applicationContext))
+        wallet = DmcWallet(LocalStoreImpl(applicationContext))
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)

@@ -5,7 +5,7 @@ import io.demars.stellarwallet.interfaces.WalletStore
 import io.demars.stellarwallet.models.BasicBalance
 import org.stellar.sdk.responses.AccountResponse
 
-class BlockEqWallet(private val localStore: LocalStore) : WalletStore {
+class DmcWallet(private val localStore: LocalStore) : WalletStore {
     override fun getEncryptedPhrase(): String? {
        return localStore.getEncryptedPhrase()
     }

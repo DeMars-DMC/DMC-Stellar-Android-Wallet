@@ -135,8 +135,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun getAvailableBalance() : AvailableBalance {
-        val balance = truncateDecimalPlaces(WalletApplication.wallet.getAvailableBalance())
         val currAsset = sessionAsset.assetCode
+        val balance = truncateDecimalPlaces(WalletApplication.wallet.getAvailableBalance())
         return AvailableBalance(currAsset, balance)
     }
 

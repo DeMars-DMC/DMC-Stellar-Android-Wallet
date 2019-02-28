@@ -48,6 +48,5 @@ class StartFragment : BaseFragment() {
 
   private fun setupContent() {
     textViewStart.text = startContent
-    textViewStart.movementMethod = ScrollingMovementMethod()
   }
 }

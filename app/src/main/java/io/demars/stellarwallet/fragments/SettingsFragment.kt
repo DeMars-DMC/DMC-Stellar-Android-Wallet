@@ -85,13 +85,13 @@ class SettingsFragment : BaseFragment() {
         @SuppressLint("SetTextI18n")
         appVersionTextView.text = "Version: $appVersion"
 
-        var timesClicked = 0
+//        var timesClicked = 0
         appVersionTitle.setOnClickListener {
-            timesClicked++
-            if (timesClicked > 3) {
-                startActivity(Intent(it.context, AboutAnimationActivity::class.java))
-                timesClicked = 0
-            }
+//            timesClicked++
+//            if (timesClicked > 3) {
+//                startActivity(Intent(it.context, AboutAnimationActivity::class.java))
+//                timesClicked = 0
+//            }
         }
     }
 

@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat.getColor
+import io.demars.stellarwallet.helpers.Constants
 
 
 class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -228,7 +229,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     private fun configureAvailableBalanceViewHolder(viewHolder : AvailableBalanceViewHolder, position : Int) {
         val availableBalance = items!![position] as AvailableBalance
         @SuppressLint("SetTextI18n")
-        viewHolder.balance.text = "${availableBalance.balance} ${getVisibleAssetCode(availableBalance.assetCode)}"
+        viewHolder.balance.text = "${availableBalance.balance} ${Constants.LUMENS_ASSET_CODE}"
     }
 
     private fun getVisibleAssetCode(assetCode : String) : String {

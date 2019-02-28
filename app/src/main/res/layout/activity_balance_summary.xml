@@ -1,68 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginTop="?attr/actionBarSize"
     tools:context=".activities.BalanceSummaryActivity">
 
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar_summary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TitleText"
-        android:text="@string/balance_summary"
-        android:padding="@dimen/activity_vertical_margin"
-        android:layout_gravity="start"/>
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/balance_summary"
+        tools:ignore="UnusedAttribute" />
 
     <LinearLayout
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:background="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
+                style="@style/RegularWhiteText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/total_balance"
-                style="@style/RegularWhiteText" />
+                android:text="@string/total_balance" />
 
             <TextView
                 android:id="@+id/totalBalanceTextView"
+                style="@style/RegularWhiteText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/RegularWhiteText" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
+                style="@style/RegularWhiteText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/available_balance"
-                style="@style/RegularWhiteText" />
+                android:text="@string/available_balance" />
 
             <TextView
                 android:id="@+id/availableBalanceTextView"
+                style="@style/RegularWhiteText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/RegularWhiteText" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -71,148 +73,166 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="0,1,2"
-        android:layout_margin="@dimen/activity_vertical_margin" >
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:stretchColumns="0,1,2">
 
         <TableRow>
+
             <TextView
+                style="@style/NavTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_vertical_margin"
-                style="@style/NavTitleText"
-                android:textSize="@dimen/text_size_medium"
-                android:text="@string/type" />
+                android:text="@string/type"
+                android:textSize="@dimen/text_size_medium" />
+
             <TextView
+                style="@style/NavTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
                 android:text="@string/amount_lowercase"
-                android:textSize="@dimen/text_size_medium"
-                style="@style/NavTitleText"
-                android:padding="@dimen/activity_vertical_margin"
-                android:gravity="center" />
+                android:textSize="@dimen/text_size_medium" />
+
             <TextView
+                style="@style/NavTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/xlm"
-                style="@style/NavTitleText"
-                android:textSize="@dimen/text_size_medium"
+                android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
-                android:gravity="center" />
+                android:text="@string/xlm"
+                android:textSize="@dimen/text_size_medium" />
         </TableRow>
 
         <TableRow>
+
             <TextView
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/base_reserve"
-                style="@style/RegularText"
-                android:padding="@dimen/activity_vertical_margin" />
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/base_reserve" />
+
             <TextView
                 android:id="@+id/baseReserveAmountTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
+
             <TextView
                 android:id="@+id/baseReserveXLMTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
         <TableRow>
+
             <TextView
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trustlines"
-                style="@style/RegularText"
-                android:padding="@dimen/activity_vertical_margin" />
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/trustlines" />
+
             <TextView
                 android:id="@+id/trustlinesAmountTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
+
             <TextView
                 android:id="@+id/trustlinesXLMTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
         <TableRow>
+
             <TextView
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/offers"
-                style="@style/RegularText"
-                android:padding="@dimen/activity_vertical_margin" />
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/offers" />
+
             <TextView
                 android:id="@+id/offersAmountTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
+
             <TextView
                 android:id="@+id/offersXLMTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
         <TableRow>
+
             <TextView
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/signers"
-                style="@style/RegularText"
-                android:padding="@dimen/activity_vertical_margin" />
+                android:padding="@dimen/activity_vertical_margin"
+                android:text="@string/signers" />
+
             <TextView
                 android:id="@+id/signersAmountTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
+
             <TextView
                 android:id="@+id/signersXLMTextView"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/activity_vertical_margin"
-                style="@style/RegularText" />
+                android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/minimum_balance"
-                android:textSize="@dimen/text_size_small"
                 style="@style/NavTitleText"
-                android:padding="@dimen/activity_vertical_margin" />
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_vertical_margin"
-                android:gravity="center" />
+                android:text="@string/minimum_balance"
+                android:textSize="@dimen/text_size_small" />
+
             <TextView
-                android:id="@+id/minimumBalanceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                style="@style/NavTitleText"
-                android:textSize="@dimen/text_size_small"
                 android:padding="@dimen/activity_vertical_margin" />
+
+            <TextView
+                android:id="@+id/minimumBalanceTextView"
+                style="@style/NavTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
+                android:textSize="@dimen/text_size_small" />
         </TableRow>
 
     </TableLayout>

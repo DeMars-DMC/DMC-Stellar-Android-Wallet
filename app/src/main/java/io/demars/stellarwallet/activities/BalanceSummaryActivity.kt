@@ -20,7 +20,14 @@ class BalanceSummaryActivity : BasePopupActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupActionBar()
         setupUI()
+    }
+
+    private fun setupActionBar() {
+        setSupportActionBar(toolBar_summary)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolBar_summary.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setupUI() {

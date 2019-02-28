@@ -7,9 +7,4 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:statusBarColor">@color/blueDark</item>
     </style>
-
-    <style name="AppTheme.Light" parent="AppTheme">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@color/main_bg_light</item>
-    </style>
 </resources>

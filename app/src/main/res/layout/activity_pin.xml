@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_light"
+    android:background="@drawable/main_bg_dark"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:id="@+id/rootLayout">
@@ -65,7 +65,7 @@
             app:keypadDeleteButtonSize="@dimen/margin_padding_size_medium_large"
             app:keypadHorizontalSpacing="@dimen/margin_padding_size_xxlarge"
             app:keypadShowDeleteButton="true"
-            app:keypadTextColor="@color/colorAccent"
+            app:keypadTextColor="@color/white"
             app:keypadTextSize="@dimen/keypad_size"
             app:keypadVerticalSpacing="@dimen/keybadSpacing"
             app:pinLength="4" />

@@ -123,11 +123,7 @@ dependencies {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
 
-    implementation("com.github.stellar:java-stellar-sdk:$stellarVersion") {
-        //this library is clashing with themselves
-        //the sdk archive system is setup to support a fat jar file with all transitives inside.
-        transitive = false
-    }
+    implementation("com.github.stellar:java-stellar-sdk:$stellarVersion")
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

@@ -199,7 +199,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
                 toggleMarket.setTextColor(ContextCompat.getColor(view.context, R.color.white))
                 toggleMarket.setBackgroundResource(R.drawable.left_toggle_selected)
                 toggleLimit.setBackgroundResource(R.drawable.right_toggle)
-                toggleLimit.setTextColor(ContextCompat.getColor(view.context, R.color.colorAccent))
+                toggleLimit.setTextColor(ContextCompat.getColor(view.context, R.color.blueDark))
 
                 setBuyingSelectorEnabled(false)
                 updateBuyingValueIfNeeded()
@@ -209,7 +209,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
                 toggleLimit.setBackgroundResource(R.drawable.right_toggle_selected)
                 toggleLimit.setTextColor(ContextCompat.getColor(view.context, R.color.white))
                 toggleMarket.setBackgroundResource(R.drawable.left_toggle)
-                toggleMarket.setTextColor(ContextCompat.getColor(view.context, R.color.colorAccent))
+                toggleMarket.setTextColor(ContextCompat.getColor(view.context, R.color.blueDark))
                 setBuyingSelectorEnabled(true)
             }
             R.id.submitTrade -> {

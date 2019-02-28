@@ -66,10 +66,6 @@ class SettingsFragment : BaseFragment() {
             startActivity(Intent(it.context, DiagnosticActivity::class.java))
         }
 
-        privacyPolicyButton.setOnClickListener {
-            startActivity(WebViewActivity.newIntent(it.context, getString(R.string.privacy_policy),"https://www.blockeq.com/privacy.html"))
-        }
-
         termsOfServiceButton.setOnClickListener {
             startActivity(WebViewActivity.newIntent(it.context, getString(R.string.terms_of_service), "https://www.blockeq.com/terms.html"))
         }

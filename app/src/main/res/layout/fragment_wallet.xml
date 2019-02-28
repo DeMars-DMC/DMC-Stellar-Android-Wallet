@@ -133,9 +133,42 @@
             android:layout_gravity="center"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            android:background="@color/main_bg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/bg_rounded_button_blue_dark">
+
+            <TextView
+                android:id="@+id/publicSeedTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:padding="12dp"
+                android:ellipsize="end"
+                android:background="@color/white"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="12sp" />
+
+            <ImageButton
+                android:id="@+id/publicSeedCopyButton"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:src="@drawable/ic_copy"
+                android:contentDescription="@string/copy_address_content_descriptor" />
+
+        </LinearLayout>
 
         <TextView
+            android:paddingTop="16dp"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
             android:layout_gravity="center"

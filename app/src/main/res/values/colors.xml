@@ -31,11 +31,10 @@
     <color name="brown">#964b00</color>
 
     <!--Branding Colors-->
-    <color name="blue1">#0043FF</color>
-    <color name="blue2">#006AFF</color>
+    <color name="blueDark">#002a55</color>
     <color name="orange">#EA8D0C</color>
     <color name="orangeBright">#FF9800</color>
-    <color name="yellow">#F6C018</color>
+    <color name="yellow">#deaf2a</color>
     <color name="yellowBright">#F8C630</color>
     <color name="main_bg">#F8F8F8</color>
 

@@ -204,7 +204,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
         when(totalBalance.state) {
             WalletState.ERROR, WalletState.NOT_FUNDED -> {
-                viewHolder.root.setBackgroundColor(getColor(context, R.color.paleSky))
+                viewHolder.root.setBackgroundColor(getColor(context, R.color.blueDark))
                 viewHolder.progressBar.visibility = View.GONE
             }
             WalletState.ACTIVE, WalletState.UPDATING -> {
@@ -299,7 +299,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     private fun configureTradeEffectViewHolder(viewHolder : TradeEffectViewHolder, position : Int) {
         val trade = items!![position] as TradeEffect
 
-        viewHolder.transactionType.text = String.format(context.getString(R.string.trade_item_template),
+        viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
                 StringFormat.formatAssetCode(trade.soldAsset), StringFormat.formatAssetCode(trade.boughtAsset))
         viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.paleSky), PorterDuff.Mode.SRC_IN)
         if (WalletApplication.userSession.getSessionAsset().assetCode == trade.boughtAsset) {

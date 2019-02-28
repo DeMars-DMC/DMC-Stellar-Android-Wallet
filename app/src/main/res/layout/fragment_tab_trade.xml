@@ -46,7 +46,7 @@
                     android:layout_height="@dimen/button_height"
                     android:layout_weight=".5"
                     android:background="@drawable/right_toggle"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/blueDark"
                     android:text="@string/limit" />
             </LinearLayout>
 
@@ -168,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_padding_size_medium"
-            android:text="@string/trade_tab_notes" />
+            android:text="@string/exchange_tab_notes" />
 
     </LinearLayout>
 </ScrollView>

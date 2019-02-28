@@ -133,8 +133,7 @@
             android:layout_gravity="center"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            tools:ignore="ContentDescription"
-            android:background="@color/main_bg"/>
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"

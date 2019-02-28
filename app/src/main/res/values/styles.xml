@@ -25,9 +25,9 @@
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
         <item name="colorControlHighlight">@color/navButtonRippleColor</item>
-        <item name="colorControlNormal">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorAccent</item>
-        <item name="android:background">@color/light_gray</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/blueDark</item>
 
         <item name="android:fontFamily">@font/lato_bold</item>
     </style>
@@ -41,7 +41,7 @@
         <item name="android:textSize">@dimen/title_text_size</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/lato_bold</item>
-        <item name="android:background">@color/main_bg</item>
+        <item name="android:background">@color/main_bg_light</item>
     </style>
 
     <style name="NavTitleText" parent="TextAppearance.AppCompat">

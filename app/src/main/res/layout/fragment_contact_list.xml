@@ -1,76 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ViewFlipper
-        android:layout_alignParentTop="true"
         android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
-            app:title="@string/nav_contacts"
             android:theme="@style/ToolbarTheme"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/nav_contacts"
             tools:targetApi="lollipop" />
 
         <com.mancj.materialsearchbar.MaterialSearchBar
-            android:theme="@style/ToolbarTheme"
-            app:mt_speechMode="false"
-            app:mt_hint="@string/hint_search_bar"
-            app:mt_maxSuggestionsCount="5"
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchBar" />
+            android:theme="@style/ToolbarTheme"
+            app:mt_clearIconTint="@color/transparent_white"
+            app:mt_hint="@string/hint_search_bar"
+            app:mt_hintColor="@color/transparent_white"
+            app:mt_maxSuggestionsCount="5"
+            app:mt_backIconTint="@color/white"
+            app:mt_speechMode="false"
+            app:mt_textColor="@color/white" />
 
     </ViewFlipper>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/viewFlipper"
         android:id="@+id/rv_contact_list"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_below="@+id/viewFlipper" />
 
     <ProgressBar
         android:id="@+id/progress_view"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/empty_view"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:text="@string/you_have_no_contacts" />
 
     <LinearLayout
         android:id="@+id/enable_permissions"
-        android:orientation="vertical"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/contact_list_permission_message" />
 
         <Button
             android:id="@+id/allow_permissions_button"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:text="@string/contact_list_permission_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/contact_list_permission_button" />
     </LinearLayout>
 
 

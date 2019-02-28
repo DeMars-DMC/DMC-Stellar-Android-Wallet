@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefresh_wallet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content">
 
-<LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/colorPrimary">
-
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/ToolbarTheme">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <RelativeLayout
+                android:background="@color/blueDark"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="80dp">
 
                 <Button
                     android:id="@+id/receiveButton"
@@ -37,15 +29,16 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:text="@string/button_receive"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/selector_color_send_button" />
+                    android:textColor="@color/selector_color_send_button"
+                    android:textSize="@dimen/text_size_large" />
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/logoDescription"
-                    android:src="@drawable/ic_main_logo" />
+                    android:src="@drawable/ic_main_logo"
+                    android:padding="@dimen/margin_padding_size_small"/>
 
                 <Button
                     android:id="@+id/sendButton"
@@ -55,127 +48,118 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/button_send"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/selector_color_send_button" />
+                    android:textColor="@color/selector_color_send_button"
+                    android:textSize="@dimen/text_size_large" />
 
             </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/mainTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_activity_my_wallet"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            style="@style/TitleText" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/walletRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/noTransactionsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="ListTitleText"
-        android:gravity="center"
-        android:text="@string/no_transactions"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:id="@+id/fetchingState"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/fetching_wallet_image"
-            android:layout_gravity="center"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:src="@drawable/wallet_large"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:layout_marginTop="17dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="ListTitleText"
-            android:gravity="center"
-            android:text="@string/fetching_account_state" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/fundingState"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/qrCode"
-            android:layout_gravity="center"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            tools:ignore="ContentDescription" />
+        </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:background="@drawable/bg_rounded_button_blue_dark">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/publicSeedTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.8"
-                android:padding="12dp"
-                android:ellipsize="end"
-                android:background="@color/white"
-                android:maxLines="1"
-                android:gravity="center"
-                android:textSize="12sp" />
-
-            <ImageButton
-                android:id="@+id/publicSeedCopyButton"
-                android:layout_width="0dp"
-                android:layout_weight="0.2"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:src="@drawable/ic_copy"
-                android:contentDescription="@string/copy_address_content_descriptor" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/walletRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <TextView
-            android:paddingTop="16dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/noTransactionsTextView"
             style="ListTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/fund_account_string" />
-    </LinearLayout>
+            android:text="@string/no_transactions"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/fetchingState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/fetching_wallet_image"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:src="@drawable/wallet_large"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="ListTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="17dp"
+                android:gravity="center"
+                android:text="@string/fetching_account_state" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fundingState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/qrCode"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/bg_rounded_button_blue_dark"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/publicSeedTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="12dp"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/publicSeedCopyButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:background="@null"
+                    android:contentDescription="@string/copy_address_content_descriptor"
+                    android:src="@drawable/ic_copy" />
+
+            </LinearLayout>
+
+            <TextView
+                style="ListTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingLeft="25dp"
+                android:paddingTop="16dp"
+                android:paddingRight="25dp"
+                android:text="@string/fund_account_string" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

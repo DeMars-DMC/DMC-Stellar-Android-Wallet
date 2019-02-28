@@ -38,15 +38,16 @@
     <color name="orangeBright">#FF9800</color>
     <color name="yellow">#deaf2a</color>
     <color name="yellowBright">#F8C630</color>
-    <color name="main_bg">#F8F8F8</color>
+    <color name="main_bg_light">#F8F8F8</color>
 
     <!-- not used <color name="blue3">#008FFF</color>-->
     <color name="blue4">#04B2FF</color>
     <color name="lightBlue">#2ED6FF</color>
-    <color name="light_gray">@color/main_bg</color>
+    <color name="light_gray">@color/main_bg_light</color>
+    <color name="transparent_white">#80FFFFFF</color>
 
     <!--Global-->
-    <color name="fragmentBg">@color/main_bg</color>
+    <color name="fragmentBg">@color/main_bg_light</color>
     <color name="toggleSelected">@color/royalBlue</color>
     <color name="toggleUnselected">@color/white</color>
 

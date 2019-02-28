@@ -258,6 +258,5 @@
     <string name="exchange_alert_negative_button">Not now</string>
     <string name="fund_account_string">This account requires activation. Send at least 1 XLM to fund and activate the account</string>
     <string name="fetching_account_state">Fetching account transactions, please wait</string>
-
-
+    <string name="nav_start">Start</string>
 </resources>

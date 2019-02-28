@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import io.demars.stellarwallet.fragments.tabs.MyOffersTabFragment
 import io.demars.stellarwallet.fragments.tabs.OrderBookTabFragment
-import io.demars.stellarwallet.fragments.tabs.TradeTabFragment
+import io.demars.stellarwallet.fragments.tabs.ExchangeTabFragment
 import io.demars.stellarwallet.helpers.TradingTabs
 import io.demars.stellarwallet.helpers.TradingTabs.*
 
@@ -16,7 +16,7 @@ class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            Trade.ordinal -> TradeTabFragment()
+            Trade.ordinal -> ExchangeTabFragment()
             OrderBook.ordinal -> OrderBookTabFragment()
             MyOffers.ordinal -> MyOffersTabFragment()
             else -> throw IllegalStateException("position not valid for" + TradingPagerAdapter::class.simpleName)

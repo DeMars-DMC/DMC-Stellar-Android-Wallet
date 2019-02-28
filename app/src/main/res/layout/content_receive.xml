@@ -22,7 +22,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.60"
         android:orientation="vertical"
-        android:background="@color/qrCodeLayoutBackGroundColor">
+        android:background="@color/main_bg_light">
 
         <ImageView
             android:id="@+id/qrImageView"

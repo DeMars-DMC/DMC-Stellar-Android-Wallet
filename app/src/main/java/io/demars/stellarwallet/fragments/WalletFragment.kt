@@ -19,7 +19,6 @@ import io.demars.stellarwallet.activities.BalanceSummaryActivity
 import io.demars.stellarwallet.activities.ReceiveActivity
 import io.demars.stellarwallet.activities.StellarAddressActivity
 import io.demars.stellarwallet.adapters.WalletRecyclerViewAdapter
-import io.demars.stellarwallet.mvvm.effects.WalletViewModel
 import io.demars.stellarwallet.mvvm.effects.WalletViewState
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -34,7 +33,6 @@ import android.widget.Toast
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.effects.WalletViewModelPolling
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
-import kotlinx.android.synthetic.main.activity_view_secret_seed.*
 
 class WalletFragment : BaseFragment() {
   private lateinit var appContext: Context
@@ -67,9 +65,9 @@ class WalletFragment : BaseFragment() {
     walletRecyclerView.layoutManager = LinearLayoutManager(appContext)
     walletRecyclerView.adapter = createAdapter()
 
-    if (DebugPreferencesHelper(view.context.applicationContext).isTestNetServerEnabled) {
-      mainTitle.text = "Wallet (TEST-NET SERVER)"
-    }
+//    if (DebugPreferencesHelper(view.context.applicationContext).isTestNetServerEnabled) {
+//      mainTitle.text = "Wallet (TEST-NET SERVER)"
+//    }
 
     updateState(WalletState.UPDATING)
     lastEffectListSize = 0

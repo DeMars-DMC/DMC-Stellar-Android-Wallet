@@ -8,16 +8,14 @@ import android.support.v4.app.Fragment
 import android.view.View
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.fragments.ContactsFragment
-import io.demars.stellarwallet.fragments.SettingsFragment
-import io.demars.stellarwallet.fragments.TradingFragment
-import io.demars.stellarwallet.fragments.WalletFragment
+import io.demars.stellarwallet.fragments.*
 import timber.log.Timber
 
 class WalletActivity : BaseActivity(), io.demars.stellarwallet.utils.KeyboardUtils.SoftKeyboardToggleListener {
     private enum class WalletFragmentType {
+        START,
         WALLET,
-        TRADING,
+        EXCHANGE,
         CONTACTS,
         SETTING
     }
@@ -64,6 +62,11 @@ class WalletActivity : BaseActivity(), io.demars.stellarwallet.utils.KeyboardUti
         if (currentItemSelected != item.itemId) {
             currentItemSelected = item.itemId
             when (item.itemId) {
+                R.id.nav_start -> {
+                    val startFragment = getReusedFragment(WalletFragmentType.START.name)
+                      ?: StartFragment.newInstance()
+                    replaceFragment(startFragment, WalletFragmentType.START)
+                }
                 R.id.nav_wallet -> {
                     val walletFragment = getReusedFragment(WalletFragmentType.WALLET.name)
                             ?: WalletFragment.newInstance()
@@ -74,9 +77,9 @@ class WalletActivity : BaseActivity(), io.demars.stellarwallet.utils.KeyboardUti
                     if (!enoughAssetsToTrade()) {
                         dialogTradeAlert.show()
                     }
-                    val tradingFragment = getReusedFragment(WalletFragmentType.TRADING.name)
-                            ?: TradingFragment.newInstance()
-                    replaceFragment(tradingFragment, WalletFragmentType.TRADING)
+                    val tradingFragment = getReusedFragment(WalletFragmentType.EXCHANGE.name)
+                            ?: ExchangeFragment.newInstance()
+                    replaceFragment(tradingFragment, WalletFragmentType.EXCHANGE)
                 }
                 R.id.nav_contacts -> {
                     replaceFragment(getReusedFragment(WalletFragmentType.CONTACTS.name)

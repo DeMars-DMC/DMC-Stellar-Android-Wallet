@@ -6,7 +6,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin"
-    android:background="@color/light_gray"
+    android:background="@drawable/launch_bg"
+    android:fitsSystemWindows="true"
     tools:context=".activities.LaunchActivity">
 
     <ImageView
@@ -16,16 +17,17 @@
         android:src="@drawable/ic_main_logo"
         tools:ignore="ContentDescription"
         android:layout_centerInParent="true"
-        android:paddingBottom="100dp"/>
+        android:paddingBottom="200dp"/>
 
     <Button
         android:id="@+id/createWalletButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:text="@string/create_new_wallet"
         style="@style/PrimaryButtonStyle"
         android:layout_above="@id/recoverWalletButton"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/recoverWalletButton"
@@ -33,7 +35,8 @@
         style="@style/SecondaryButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="64dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"/>
 
 </RelativeLayout>

@@ -7,4 +7,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
+    <style name="AppTheme.Dark" parent="AppTheme">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/blueDark</item>
+    </style>
 </resources>

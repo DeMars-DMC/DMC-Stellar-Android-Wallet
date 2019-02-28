@@ -3,24 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/main_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:id="@+id/rootLayout">
-
-    <ImageView
-        android:layout_width="@dimen/logo_width"
-        android:layout_height="@dimen/logo_height"
-        android:layout_marginTop="@dimen/text_size_xxxxlarge"
-        android:src="@drawable/ic_main_logo" />
 
     <TextView
         android:id="@+id/customMessageTextView"
         style="@style/LandingPageDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_size_xxxxlarge"
         android:layout_marginStart="@dimen/margin_padding_size_xxxlarge"
-        android:layout_marginTop="@dimen/margin_padding_size_medium"
         android:layout_marginEnd="@dimen/margin_padding_size_xxxlarge"
         android:gravity="center"
         android:text="@string/please_enter_your_pin" />
@@ -48,6 +42,12 @@
             app:dotEmptyBackground="@drawable/wrong_dot_filled"
             app:dotSpacing="@dimen/dot_spacing" />
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="@dimen/logo_width"
+        android:layout_height="@dimen/logo_height"
+        android:layout_marginTop="@dimen/margin_padding_size_large"
+        android:src="@drawable/ic_main_logo" />
 
     <LinearLayout
         android:layout_width="wrap_content"

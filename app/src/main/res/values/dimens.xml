@@ -19,8 +19,8 @@
     <!--Pin-->
     <dimen name="dot_diameter">12dp</dimen>
     <dimen name="dot_spacing">12dp</dimen>
-    <dimen name="logo_width">100dp</dimen>
-    <dimen name="logo_height">100dp</dimen>
+    <dimen name="logo_width">120dp</dimen>
+    <dimen name="logo_height">120dp</dimen>
     <dimen name="keypad_size">26sp</dimen>
     <dimen name="keybadSpacing">12dp</dimen>
 

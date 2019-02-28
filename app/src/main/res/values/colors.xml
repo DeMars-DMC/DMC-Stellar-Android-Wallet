@@ -31,7 +31,9 @@
     <color name="brown">#964b00</color>
 
     <!--Branding Colors-->
+    <color name="blue">#00448B</color>
     <color name="blueDark">#002a55</color>
+    <color name="blueLight">#00468C</color>
     <color name="orange">#EA8D0C</color>
     <color name="orangeBright">#FF9800</color>
     <color name="yellow">#deaf2a</color>

@@ -125,7 +125,7 @@ class WalletFragment : BaseFragment() {
 
   private fun copyAddressToClipBoard(data: String) {
     val clipboard = (appContext.getSystemService(Context.CLIPBOARD_SERVICE)) as ClipboardManager
-    val clip = ClipData.newPlainText("BlockEQ Address", data)
+    val clip = ClipData.newPlainText("DMC Address", data)
     clipboard.primaryClip = clip
 
     Toast.makeText(appContext, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()

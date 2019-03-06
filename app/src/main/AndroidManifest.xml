@@ -34,8 +34,8 @@
             android:name=".activities.WalletActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.AssetsActivity"
             android:screenOrientation="portrait"
@@ -94,17 +94,22 @@
             android:name=".activities.AddAssetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.DebugPreferenceActivity"
+        <activity
+            android:name=".activities.DebugPreferenceActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
-        <activity android:name=".activities.WalletManagerActivity"
-            android:theme="@style/TransparentTheme"/>
+        <activity
+            android:name=".activities.WalletManagerActivity"
+            android:theme="@style/TransparentTheme" />
 
-        <activity android:name=".activities.AboutAnimationActivity"
-            android:theme="@style/TransparentTheme"/>
+        <activity
+            android:name=".activities.AboutAnimationActivity"
+            android:theme="@style/TransparentTheme" />
 
-        <service android:name=".firebase.MessagingService">
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

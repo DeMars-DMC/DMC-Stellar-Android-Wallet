@@ -86,6 +86,8 @@ class WalletApplication : MultiDexApplication() {
             } else {
                 Horizon.init(ServerType.PROD)
             }
+        } else {
+            Horizon.init(ServerType.PROD)
         }
 
         // exchange providers addresses are not very likely to change but let's refresh them during application startup.

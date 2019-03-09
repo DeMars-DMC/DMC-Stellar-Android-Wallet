@@ -73,19 +73,7 @@ class DiagnosticActivity : BaseActivity() {
 
         val emailBody = "Issue report details:\n" + explanationEditText.text + "\n\nJSON format details:\n\n" + diagnosticModel.toString()
 
-        BlockEqRetrofit.create(DiagnosticApi::class.java).uploadDiagnostic(
-                diagnosticModel).enqueue(object : Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: retrofit2.Response<JsonObject>) {
-                val issueId = ((response.body() as JsonObject)["fields"] as JsonObject).get("Report Id").toString()
-                callEmailClient(emailBody, issueId)
-                Timber.v("diagnostic created id = {$issueId}")
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Timber.e("Error uploading diagnostic")
-            }
-        })
-
+        callEmailClient(emailBody)
     }
 
     private fun getRecoveryType(): String {
@@ -110,10 +98,10 @@ class DiagnosticActivity : BaseActivity() {
         return recoveryType
     }
 
-    private fun callEmailClient(emailBody: String, issueId : String) {
+    private fun callEmailClient(emailBody: String) {
         val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = Uri.parse("mailto:support@blockeq.com")
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Issue report [$issueId]")
+        intent.data = Uri.parse("mailto:support@demars.io")
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Issue report")
         intent.putExtra(Intent.EXTRA_TEXT, emailBody)
 
         // fallback component was found in most emulators without email app

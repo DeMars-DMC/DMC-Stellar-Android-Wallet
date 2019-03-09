@@ -38,7 +38,7 @@ class ViewSecretSeedActivity : BaseActivity() {
 
     private fun copyAddressToClipBoard(data: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("BlockEQ Address", data)
+        val clip = ClipData.newPlainText("DMC Address", data)
         clipboard.primaryClip = clip
 
         Toast.makeText(this, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()

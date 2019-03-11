@@ -132,6 +132,11 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
                   viewHolder.assetImage.visibility = View.VISIBLE
                   Picasso.get().load(Constants.NKLS_IMAGE_RES).into(viewHolder.assetImage)
               }
+              asset.code.equals(Constants.RGTS_ASSET_TYPE, true) -> {
+                  viewHolder.defaultImage.visibility = View.GONE
+                  viewHolder.assetImage.visibility = View.VISIBLE
+                  Picasso.get().load(Constants.RGTS_IMAGE_RES).into(viewHolder.assetImage)
+              }
               else -> {
                   viewHolder.defaultImage.text = asset.name[0].toString()
                   viewHolder.defaultImage.visibility = View.VISIBLE

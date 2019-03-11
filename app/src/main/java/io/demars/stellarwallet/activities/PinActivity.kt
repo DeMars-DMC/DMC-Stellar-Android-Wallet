@@ -12,6 +12,12 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import timber.log.Timber
+import android.content.DialogInterface
+import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
+import android.annotation.TargetApi
+
+
 
 class PinActivity : AppCompatActivity() {
 
@@ -115,6 +121,18 @@ class PinActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED)
         super.onBackPressed()
         overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
+    }
+    //endregion
+
+    //region Biometrics
+    @TargetApi(Build.VERSION_CODES.P)
+    private fun displayBiometricPrompt(biometricCallback: BiometricPrompt.AuthenticationCallback) {
+        BiometricPrompt.Builder(this)
+          .setTitle("Title")
+          .setSubtitle("Subtitle")
+          .setDescription("Description")
+          .setNegativeButton("Cancel", mainExecutor, DialogInterface.OnClickListener { _, _ -> })
+          .build()
     }
     //endregion
 }

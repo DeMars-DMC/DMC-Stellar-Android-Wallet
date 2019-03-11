@@ -148,4 +148,6 @@ dependencies {
     implementation 'commons-lang:commons-lang:2.6'
 
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
 }

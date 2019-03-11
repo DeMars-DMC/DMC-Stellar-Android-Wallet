@@ -33,7 +33,7 @@ class Constants {
         const val NKLS_ASSET_ISSUER = "GA3VRDTEH2C7DSXRPUEBL55JUJPMFUOUVUAPDX4T3JK5QHLSNLXZDIFC"
 
         const val RGTS_ASSET_TYPE = "RGTS"
-        const val RGTS_ASSET_NAME = "Zimbabwean Dollars"
+        const val RGTS_ASSET_NAME = "Zim Dollars"
         const val RGTS_ASSET_ISSUER = "GDM5A2NHVLFZMEXMONWEWV4HZEZGDZDW32TUUNW7QI4M3AEG3Z2VJ4ST"
 
         // Maximum double representation in string ((2^63)-1)/(10^7)

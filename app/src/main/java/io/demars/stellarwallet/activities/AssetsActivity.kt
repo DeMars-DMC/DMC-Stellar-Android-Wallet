@@ -157,22 +157,15 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
           Constants.NKLS_ASSET_ISSUER, "100000000000",
           Constants.NKLS_ASSET_NAME, "", "", null, null, null)
 
+        val rgts = SupportedAsset(3, Constants.RGTS_ASSET_TYPE, Constants.RGTS_IMAGE_RES,
+          Constants.RGTS_ASSET_ISSUER, "100000000000",
+          Constants.RGTS_ASSET_NAME, "", "", null, null, null)
+
         map["RAND"] = rand
         map["NKLS"] = nkls
+        map["RGTS"] = rgts
 
         updateAdapter()
-
-//        BlockEqRetrofit.create(SupportedAssetsApi::class.java).assets.enqueue(object : Callback<Map<String, SupportedAsset>> {
-//            override fun onResponse(call: Call<Map<String, SupportedAsset>>, response: retrofit2.Response<Map<String, SupportedAsset>>) {
-//                map = response.body()
-//                updateAdapter()
-//            }
-//
-//            override fun onFailure(call: Call<Map<String, SupportedAsset>>, t: Throwable) {
-//                Toast.makeText(applicationContext, getString(R.string.error_supported_assets_message), Toast.LENGTH_SHORT).show()
-//
-//            }
-//        })
     }
 
     //region Call backs

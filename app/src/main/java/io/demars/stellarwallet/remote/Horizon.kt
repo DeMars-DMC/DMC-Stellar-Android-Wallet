@@ -14,10 +14,7 @@ import io.demars.stellarwallet.mvvm.effects.remote.OnLoadEffects
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*
-import org.stellar.sdk.responses.AccountResponse
-import org.stellar.sdk.responses.OfferResponse
-import org.stellar.sdk.responses.OrderBookResponse
-import org.stellar.sdk.responses.Page
+import org.stellar.sdk.responses.*
 import org.stellar.sdk.responses.effects.EffectResponse
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
@@ -384,6 +381,10 @@ object Horizon : HorizonTasks {
         Timber.e(error.body.toString())
         return HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
           arrayListOf(error.body.toString()),
+          HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
+      } catch(error: java.lang.Exception) {
+        return HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
+          arrayListOf(error.message),
           HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
       }
       return null

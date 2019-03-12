@@ -79,7 +79,6 @@ dependencies {
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
     implementation "io.github.novacrypto:BIP39:$novaCryptoVersion"
-    implementation "com.andrognito.pinlockview:pinlockview:$pinlockviewVersion"
     implementation "com.toptoche.searchablespinner:searchablespinnerlibrary:$searchablespinnerVersion"
     implementation "com.journeyapps:zxing-android-embedded:$zxingAndroidVersion"
     implementation "com.github.davidmigloz:number-keyboard:$numberKeyBoardVersion"

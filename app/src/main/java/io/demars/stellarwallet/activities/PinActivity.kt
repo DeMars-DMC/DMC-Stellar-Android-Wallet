@@ -16,7 +16,7 @@ import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import android.annotation.TargetApi
 import androidx.appcompat.app.AppCompatActivity
-
+import io.demars.stellarwallet.interfaces.OnPinLockCompleteListener
 
 class PinActivity : AppCompatActivity() {
 
@@ -63,8 +63,8 @@ class PinActivity : AppCompatActivity() {
 
         appContext = applicationContext
 
-        pinLockView.setPinLockListener(object : io.demars.stellarwallet.interfaces.OnPinLockCompleteListener() {
-            override fun onComplete(pin: String?) {
+        pinLockView.setPinLockListener(object : OnPinLockCompleteListener() {
+            override fun onComplete(pin: String) {
                 Timber.d("OnComplete")
                 if (PIN == null || PIN == pin) {
                     val intent = Intent()
@@ -124,14 +124,14 @@ class PinActivity : AppCompatActivity() {
     //endregion
 
     //region Biometrics
-    @TargetApi(Build.VERSION_CODES.P)
-    private fun displayBiometricPrompt(biometricCallback: BiometricPrompt.AuthenticationCallback) {
-        BiometricPrompt.Builder(this)
-          .setTitle("Title")
-          .setSubtitle("Subtitle")
-          .setDescription("Description")
-          .setNegativeButton("Cancel", mainExecutor, DialogInterface.OnClickListener { _, _ -> })
-          .build()
-    }
+//    @TargetApi(Build.VERSION_CODES.P)
+//    private fun displayBiometricPrompt(biometricCallback: BiometricPrompt.AuthenticationCallback) {
+//        BiometricPrompt.Builder(this)
+//          .setTitle("Title")
+//          .setSubtitle("Subtitle")
+//          .setDescription("Description")
+//          .setNegativeButton("Cancel", mainExecutor, DialogInterface.OnClickListener { _, _ -> })
+//          .build()
+//    }
     //endregion
 }

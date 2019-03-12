@@ -71,8 +71,8 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
 
     private fun updateAdapter() {
         assetsList.clear()
-        assetsList.addAll(convertBalanceToSupportedAsset(WalletApplication.wallet.getBalances(), map!!))
-        val filteredList = getFilteredSupportedAssets(map!!)
+        assetsList.addAll(convertBalanceToSupportedAsset(WalletApplication.wallet.getBalances(), map))
+        val filteredList = getFilteredSupportedAssets(map)
         if (!filteredList.isEmpty()) {
             assetsList.add(getString(R.string.supported_assets_header))
             assetsList.addAll(filteredList)

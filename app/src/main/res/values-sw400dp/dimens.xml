@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_zero">0dp</dimen>
-    <dimen name="padding_mini">6dp</dimen>
-    <dimen name="padding_horizontal">12dp</dimen>
-    <dimen name="padding_horizontal_double">24dp</dimen>
-    <dimen name="padding_vertical">16dp</dimen>
-    <dimen name="padding_vertical_double">32dp</dimen>
+    <dimen name="padding_mini">8dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
+    <dimen name="padding_horizontal_double">32dp</dimen>
+    <dimen name="padding_vertical">24dp</dimen>
+    <dimen name="padding_vertical_double">48dp</dimen>
 
-    <dimen name="logo_width_main">100dp</dimen>
-    <dimen name="logo_width_pin">80dp</dimen>
+    <dimen name="logo_width_main">140dp</dimen>
+    <dimen name="logo_width_pin">100dp</dimen>
 
     <dimen name="button_height">36dp</dimen>
-    <dimen name="button_height_big">48dp</dimen>
+    <dimen name="button_height_big">56dp</dimen>
 
-    <dimen name="text_size">15sp</dimen>
-    <dimen name="text_size_big">18sp</dimen>
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
 
-    <dimen name="pin_spacing_vertical">8dp</dimen>
-    <dimen name="pin_spacing_horizontal">24dp</dimen>
+    <dimen name="pin_spacing_vertical">16dp</dimen>
+    <dimen name="pin_spacing_horizontal">48dp</dimen>
 
     <!--ALL BELOW SHOULD BE CLEANED UP-->
     <dimen name="activity_vertical_margin">16dp</dimen>

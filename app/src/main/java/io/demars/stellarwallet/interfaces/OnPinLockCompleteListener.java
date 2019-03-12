@@ -1,15 +1,17 @@
 package io.demars.stellarwallet.interfaces;
 
-import com.andrognito.pinlockview.PinLockListener;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class OnPinLockCompleteListener implements PinLockListener {
+import io.demars.stellarwallet.views.pin.PinLockView;
+
+public abstract class OnPinLockCompleteListener implements PinLockView.PinLockListener {
     @Override
     public void onEmpty() {
         // empty
     }
 
     @Override
-    public void onPinChange(int pinLength, String intermediatePin) {
+    public void onPinChange(int pinLength, @NotNull String intermediatePin) {
         // empty
     }
 }

@@ -18,6 +18,7 @@ import org.stellar.sdk.responses.*
 import org.stellar.sdk.responses.effects.EffectResponse
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
+import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
 object Horizon : HorizonTasks {
@@ -77,7 +78,7 @@ object Horizon : HorizonTasks {
             listener.onFailed(response.extras.resultCodes.operationsResultCodes[0].toString())
           }
         }
-      } catch (error: java.lang.Exception) {
+      } catch (error: Exception) {
         if (error.message != null) {
           listener.onFailed(error.message as String)
         } else {
@@ -136,7 +137,7 @@ object Horizon : HorizonTasks {
         Handler(Looper.getMainLooper()).post {
           listener.onOrderBook(response.asks, response.bids)
         }
-      } catch (error: java.lang.Exception) {
+      } catch (error: Exception) {
         error.message?.let {
           listener.onFailed(it)
         } ?: run {
@@ -162,7 +163,7 @@ object Horizon : HorizonTasks {
         if (response != null) {
           list = response.records
         }
-      } catch (error: java.lang.Exception) {
+      } catch (error: Exception) {
         if (error !is NullPointerException) {
           Timber.d(error)
           error.message?.let {
@@ -382,10 +383,16 @@ object Horizon : HorizonTasks {
         return HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
           arrayListOf(error.body.toString()),
           HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
-      } catch(error: java.lang.Exception) {
-        return HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
-          arrayListOf(error.message),
-          HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
+      } catch (error: Exception) {
+        return when (error) {
+          is ConnectException -> HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
+            arrayListOf("connection_problem"), HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
+          is SubmitTransactionTimeoutResponseException ->
+            HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
+              arrayListOf("tx_timeout"), HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
+          else -> HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
+            arrayListOf(error.message), HorizonException.HorizonExceptionType.CHANGE_TRUST_LINE)
+        }
       }
       return null
     }

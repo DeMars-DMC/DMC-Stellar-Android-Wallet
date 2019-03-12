@@ -209,6 +209,12 @@
     <string name="technical_tx_failed">tx_failed</string>
     <string name="readable_tx_failed">Transaction failed</string>
 
+    <string name="technical_connection_problem">connection_problem</string>
+    <string name="readable_connection_problem">Connection problem</string>
+
+    <string name="technical_tx_timeout">tx_timeout</string>
+    <string name="readable_tx_timeout">Transaction timed out</string>
+
     <string name="technical_tx_insufficient_balance">tx_insufficient_balance</string>
     <string name="readable_tx_insufficient_balance">Insufficient balance</string>
 

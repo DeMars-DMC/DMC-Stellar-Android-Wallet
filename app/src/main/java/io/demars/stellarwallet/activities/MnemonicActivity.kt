@@ -21,7 +21,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
 
     companion object {
         private const val MNEMONIC_PHRASE = "MNEMONIC_PHRASE"
-        private const val PASS_PHRASE = "PASS_PHRASE"
 
         private const val WALLET_LENGTH = "WALLET_LENGTH"
 
@@ -31,17 +30,15 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
             return intent
         }
 
-        fun newDisplayMnemonicIntent(context: Context, mnemonic: String, passphrase : String?): Intent {
+        fun newDisplayMnemonicIntent(context: Context, mnemonic: String): Intent {
             val intent = Intent(context, MnemonicActivity::class.java)
             intent.putExtra(MnemonicActivity.MNEMONIC_PHRASE, mnemonic)
-            intent.putExtra(MnemonicActivity.PASS_PHRASE, passphrase)
             return intent
         }
     }
 
     private var mnemonicString : String = String()
     private var passphraseToCreate : String = String()
-    private var passphraseToDisplay : String? = null
     private var walletLength : MnemonicType = MnemonicType.WORD_12
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,9 +108,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupMnemonicView() {
         mnemonicView.loadChips(getMnemonic())
-        passphraseToDisplay?.let {
-            passphraseView.loadChips(arrayListOf(it), arrayListOf("passPhrase"))
-        }
     }
 
     //endregion
@@ -150,10 +144,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
 
         if (intent.hasExtra(WALLET_LENGTH)) {
             walletLength = intent.getSerializableExtra(WALLET_LENGTH) as MnemonicType
-        }
-
-        if (intent.hasExtra(PASS_PHRASE)) {
-           passphraseToDisplay = intent.getStringExtra(PASS_PHRASE)
         }
     }
 

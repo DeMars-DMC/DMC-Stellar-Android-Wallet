@@ -34,5 +34,6 @@
     <dimen name="badge_height">38dp</dimen>
 
     <dimen name="contact_header">48dp</dimen>
+    <dimen name="padding_vertical">24dp</dimen>
 
 </resources>

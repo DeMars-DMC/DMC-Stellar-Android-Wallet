@@ -47,14 +47,9 @@
         android:id="@+id/mnemonicView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qrLayout" />
-
-    <io.demars.stellarwallet.views.ChipView
-        android:id="@+id/passphraseView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/passphraseButton"
-        android:layout_below="@id/mnemonicView" />
+        android:layout_below="@id/qrLayout"
+        android:layout_above="@id/passphraseButton"
+        android:overScrollMode="never"/>
 
     <TextView
         android:id="@+id/passphraseButton"

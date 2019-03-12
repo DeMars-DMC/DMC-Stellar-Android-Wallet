@@ -102,8 +102,7 @@ class SettingsFragment : BaseFragment() {
                     context?.let {
                         val mnemonic = WalletManagerActivity.getResultDataString(data)
                         if (mnemonic != null) {
-                            val phrase = WalletManagerActivity.getResultExtraDataString(data)
-                            startActivity(MnemonicActivity.newDisplayMnemonicIntent(it, mnemonic, phrase))
+                            startActivity(MnemonicActivity.newDisplayMnemonicIntent(it, mnemonic))
                         } else {
                             Timber.e("fatal error: mnemonic is null")
                         }

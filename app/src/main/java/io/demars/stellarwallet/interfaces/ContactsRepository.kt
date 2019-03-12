@@ -1,6 +1,6 @@
 package io.demars.stellarwallet.interfaces
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.models.ContactsResult
 
 interface ContactsRepository {

@@ -1,9 +1,9 @@
 package io.demars.stellarwallet
 
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 
-import android.support.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.onView
 
 object SettingsPage : BasePage() {
     override fun onPageLoaded(): SettingsPage {

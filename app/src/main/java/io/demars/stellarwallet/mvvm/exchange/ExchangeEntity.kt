@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.mvvm.exchange
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName="exchanges")
 data class ExchangeEntity(val name:String, val address:String, val memo:String) {

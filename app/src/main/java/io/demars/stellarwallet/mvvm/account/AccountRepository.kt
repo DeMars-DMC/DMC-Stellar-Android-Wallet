@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.mvvm.account
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.StellarAccount

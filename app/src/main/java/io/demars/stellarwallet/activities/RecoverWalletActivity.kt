@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.utils.GlobalGraphHelper

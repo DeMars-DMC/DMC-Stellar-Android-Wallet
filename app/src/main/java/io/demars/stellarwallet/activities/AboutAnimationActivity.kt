@@ -1,12 +1,12 @@
 package io.demars.stellarwallet.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.R
 import kotlinx.android.synthetic.main.activity_about_animation.*
 

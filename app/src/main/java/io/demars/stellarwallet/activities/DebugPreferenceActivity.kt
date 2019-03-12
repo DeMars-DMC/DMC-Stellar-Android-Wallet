@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.fragments.DebugFragment
 import kotlinx.android.synthetic.main.activity_debug_preference.*

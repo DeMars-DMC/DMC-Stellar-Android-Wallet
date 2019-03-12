@@ -2,7 +2,7 @@ package io.demars.stellarwallet.utils
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.WalletActivity

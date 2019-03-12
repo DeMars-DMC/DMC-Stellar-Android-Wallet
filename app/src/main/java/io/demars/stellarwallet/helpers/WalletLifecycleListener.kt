@@ -1,12 +1,11 @@
 package io.demars.stellarwallet.helpers
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.mvvm.effects.EffectsRepository
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 

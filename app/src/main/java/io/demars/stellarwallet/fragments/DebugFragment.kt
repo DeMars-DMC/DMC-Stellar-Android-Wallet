@@ -2,8 +2,8 @@ package io.demars.stellarwallet.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.preference.PreferenceFragmentCompat
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 

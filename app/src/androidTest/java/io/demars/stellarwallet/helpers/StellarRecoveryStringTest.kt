@@ -1,7 +1,6 @@
 package io.demars.stellarwallet.helpers
 
-import android.support.test.runner.AndroidJUnit4
-import io.demars.stellarwallet.R
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
 

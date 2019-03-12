@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.View
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.models.MnemonicType

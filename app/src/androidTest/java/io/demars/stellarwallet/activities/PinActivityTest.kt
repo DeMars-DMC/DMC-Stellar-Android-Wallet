@@ -3,11 +3,11 @@ package io.demars.stellarwallet.activities
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.contrib.ActivityResultMatchers.hasResultCode
-import android.support.test.filters.SmallTest
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.PinPage
 import junit.framework.TestCase.assertEquals
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,7 +21,7 @@ class PinActivityTest {
     @get:Rule
     val rule = object : ActivityTestRule<PinActivity>(PinActivity::class.java) {
         override fun getActivityIntent(): Intent {
-            return PinActivity.newInstance(InstrumentationRegistry.getTargetContext(), null)
+            return PinActivity.newInstance(InstrumentationRegistry.getInstrumentation().context, null)
         }
     }
 

@@ -1,8 +1,8 @@
 package io.demars.stellarwallet.mvvm.exchange
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.models.ExchangeApiModel
 import io.demars.stellarwallet.models.ExchangeMapper
 import io.demars.stellarwallet.remote.BlockEqRetrofit

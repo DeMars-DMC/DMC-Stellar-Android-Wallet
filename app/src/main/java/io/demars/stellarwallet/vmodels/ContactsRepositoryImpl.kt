@@ -1,7 +1,6 @@
 package io.demars.stellarwallet.vmodels
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.MutableLiveData
 import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
@@ -11,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract
 import android.provider.ContactsContract.RawContacts
+import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.interfaces.ContactsRepository
 import io.demars.stellarwallet.interfaces.ContactsRepository.ContactOperationStatus
 import io.demars.stellarwallet.models.Contact

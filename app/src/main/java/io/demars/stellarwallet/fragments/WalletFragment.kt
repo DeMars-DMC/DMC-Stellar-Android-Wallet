@@ -1,14 +1,11 @@
 package io.demars.stellarwallet.fragments
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,12 +24,14 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.stellar.sdk.responses.effects.EffectResponse
 import timber.log.Timber
-import android.support.v4.content.ContextCompat.getColor
 import android.graphics.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.effects.WalletViewModelPolling
-import io.demars.stellarwallet.utils.DebugPreferencesHelper
 
 class WalletFragment : BaseFragment() {
   private lateinit var appContext: Context
@@ -103,7 +102,7 @@ class WalletFragment : BaseFragment() {
       }
     }
 
-    fetching_wallet_image.setColorFilter(getColor(appContext, R.color.paleSky), PorterDuff.Mode.SRC_ATOP)
+    fetching_wallet_image.setColorFilter(ContextCompat.getColor(appContext, R.color.paleSky), PorterDuff.Mode.SRC_ATOP)
   }
 
   override fun onDestroyView() {
@@ -115,7 +114,7 @@ class WalletFragment : BaseFragment() {
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
 
-    imageView.setImageBitmap(tintImage(bitmap, getColor(appContext, R.color.paleSky)))
+    imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(appContext, R.color.paleSky)))
   }
 
   private fun initAdressCopyButton(secretSeed: String) {

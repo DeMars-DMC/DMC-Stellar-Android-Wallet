@@ -2,10 +2,10 @@ package io.demars.stellarwallet.utils;
 
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 import android.text.TextUtils;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import io.demars.stellarwallet.WalletApplication;
 
 import org.junit.After;
@@ -71,7 +71,7 @@ public class AccountUtilsTest {
 
         mnemonic12 = TextUtils.join(" ", mnemonicWords12);
         mnemonic24 = TextUtils.join(" ", mnemonicWords24);
-        context = InstrumentationRegistry.getTargetContext();
+        context = InstrumentationRegistry.getInstrumentation().getContext();
     }
 
     @Test

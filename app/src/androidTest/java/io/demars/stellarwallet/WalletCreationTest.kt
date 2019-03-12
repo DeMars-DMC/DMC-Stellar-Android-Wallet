@@ -1,7 +1,7 @@
 package io.demars.stellarwallet
 
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.activities.LaunchActivity
 import org.junit.Rule
 import org.junit.Test

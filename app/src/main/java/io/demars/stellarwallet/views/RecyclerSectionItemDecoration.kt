@@ -2,11 +2,11 @@ package io.demars.stellarwallet.views
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
 import io.demars.stellarwallet.R
 import timber.log.Timber

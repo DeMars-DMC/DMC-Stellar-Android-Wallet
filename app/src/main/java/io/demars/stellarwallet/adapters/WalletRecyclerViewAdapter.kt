@@ -3,8 +3,6 @@ package io.demars.stellarwallet.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +15,12 @@ import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.StringFormat.Companion.getFormattedDate
 import io.demars.stellarwallet.utils.StringFormat.Companion.truncateDecimalPlaces
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat.getColor
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.helpers.Constants
 
 
@@ -192,7 +191,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
         //TODO move this to states
         if (code.isEmpty()) {
-            tintProgressBar(viewHolder.progressBar, getColor(context, R.color.white))
+            tintProgressBar(viewHolder.progressBar, ContextCompat.getColor(context, R.color.white))
             viewHolder.progressBar.visibility = View.VISIBLE
             viewHolder.assetsButton.visibility = View.GONE
             viewHolder.assetName.text = totalBalance.assetName
@@ -205,11 +204,11 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
         when(totalBalance.state) {
             WalletState.ERROR, WalletState.NOT_FUNDED -> {
-                viewHolder.root.setBackgroundColor(getColor(context, R.color.blueDark))
+                viewHolder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.blueDark))
                 viewHolder.progressBar.visibility = View.GONE
             }
             WalletState.ACTIVE, WalletState.UPDATING -> {
-                viewHolder.root.setBackgroundColor(getColor(context, R.color.colorAccent))
+                viewHolder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
             }
             else -> { //nothing
             }

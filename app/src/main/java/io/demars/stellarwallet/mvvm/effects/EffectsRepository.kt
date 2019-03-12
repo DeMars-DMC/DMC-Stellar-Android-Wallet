@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.mvvm.effects
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.mvvm.effects.remote.OnLoadEffects
 import io.demars.stellarwallet.mvvm.effects.remote.RemoteRepository
 import org.stellar.sdk.requests.EventListener

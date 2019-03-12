@@ -3,11 +3,11 @@ package io.demars.stellarwallet.activities
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.contrib.ActivityResultMatchers
-import android.support.test.rule.ActivityTestRule
+import androidx.test.espresso.contrib.ActivityResultMatchers
 import org.junit.Rule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.PinPage
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.GlobalGraphHelper
@@ -22,7 +22,7 @@ class WalletManagerActivityTest {
     private val mnemonic = "fee dog ivory manual dash little train senior one hospital hobby cat"
     private val pin = "1234"
 
-    private var context : Context = InstrumentationRegistry.getTargetContext()
+    private var context : Context = InstrumentationRegistry.getInstrumentation().context
     @get:Rule
     var rule = ActivityTestRule<WalletManagerActivity>(WalletManagerActivity::class.java, true, false)
 

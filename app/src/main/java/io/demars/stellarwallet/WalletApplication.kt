@@ -1,9 +1,9 @@
 package io.demars.stellarwallet
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
-import android.support.multidex.MultiDexApplication
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.multidex.MultiDexApplication
 import io.demars.stellarwallet.encryption.PRNGFixes
 import io.demars.stellarwallet.helpers.LocalStoreImpl
 import io.demars.stellarwallet.helpers.WalletLifecycleListener

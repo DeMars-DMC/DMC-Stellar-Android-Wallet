@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.helpers
 
 import android.app.Activity
-import android.support.v7.app.AlertDialog
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import android.widget.EditText

@@ -5,12 +5,12 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.DrawableContainer
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
-import android.support.v4.content.ContextCompat
 import android.text.InputType
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.CustomArrayAdapter
 import io.demars.stellarwallet.models.SelectionModel

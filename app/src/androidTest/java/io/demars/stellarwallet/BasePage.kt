@@ -1,7 +1,7 @@
 package io.demars.stellarwallet
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.uiautomator.UiDevice
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 
 abstract class BasePage {
     internal abstract fun onPageLoaded(): BasePage

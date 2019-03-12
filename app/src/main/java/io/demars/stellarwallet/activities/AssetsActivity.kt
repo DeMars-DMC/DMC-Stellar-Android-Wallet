@@ -189,7 +189,6 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
                     progressBar.visibility = View.GONE
                     if (isRemove) {
                         WalletApplication.userSession.setSessionAsset(DefaultAsset())
-                        finish()
                     }
                 }
 

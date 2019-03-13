@@ -102,7 +102,7 @@ class WalletFragment : BaseFragment() {
       }
     }
 
-    fetching_wallet_image.setColorFilter(ContextCompat.getColor(appContext, R.color.paleSky), PorterDuff.Mode.SRC_ATOP)
+    fetching_wallet_image.setColorFilter(ContextCompat.getColor(appContext, R.color.colorPaleSky), PorterDuff.Mode.SRC_ATOP)
   }
 
   override fun onDestroyView() {
@@ -114,7 +114,7 @@ class WalletFragment : BaseFragment() {
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
 
-    imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(appContext, R.color.paleSky)))
+    imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(appContext, R.color.colorPaleSky)))
   }
 
   private fun initAdressCopyButton(secretSeed: String) {

@@ -107,15 +107,15 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             Mode.SEND_TO -> {
                 titleBalance.text = WalletApplication.userSession.getFormattedCurrentAvailableBalance(applicationContext)
                 bottomButton.text = getString(R.string.next_button_text)
-                ContactNameText.visibility = View.GONE
-                ContactNameEditText.visibility = View.GONE
+                contactNameText.visibility = View.GONE
+                contactNameEditText.visibility = View.GONE
                 addressTitleText.text = getString(R.string.send_to_text)
             }
             Mode.UPDATE_CONTACT -> {
                 titleBalance.visibility = View.GONE
                 bottomButton.text = getString(R.string.save_button)
-                ContactNameText.visibility = View.GONE
-                ContactNameEditText.visibility = View.GONE
+                contactNameText.visibility = View.GONE
+                contactNameEditText.visibility = View.GONE
                 addressTitleText.text = getString(R.string.stellar_address_title)
                 addressEditText.setText(contact.stellarAddress)
             }
@@ -177,7 +177,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
                         }
                     }
                     Mode.CREATE_CONTACT -> {
-                        val name = ContactNameEditText.text.toString()
+                        val name = contactNameEditText.text.toString()
                         if (name.isBlank() || address.isBlank()) {
                             Toast.makeText(applicationContext, "one or more fields are empty", Toast.LENGTH_SHORT).show()
                         } else {

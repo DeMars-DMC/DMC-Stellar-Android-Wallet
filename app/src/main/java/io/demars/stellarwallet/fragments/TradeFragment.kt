@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_trade.*
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 
-class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
+class TradeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
     private lateinit var fragmentAdapter: TradingPagerAdapter
 
     private var orderBookListener : OnUpdateOrderBook? = null
@@ -29,7 +29,7 @@ class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBoo
     private var currentBuy : DataAsset? = null
 
     companion object {
-        fun newInstance(): ExchangeFragment = ExchangeFragment()
+        fun newInstance(): TradeFragment = TradeFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

@@ -21,7 +21,7 @@ import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
-import kotlinx.android.synthetic.main.fragment_tab_exchange.*
+import kotlinx.android.synthetic.main.fragment_tab_trade.*
 import kotlinx.android.synthetic.main.view_custom_selector.view.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.OrderBookResponse
@@ -47,7 +47,7 @@ class ExchangeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     private val decimalFormat = DecimalFormat("0.#######")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_tab_exchange, container, false)
+        return inflater.inflate(R.layout.fragment_tab_trade, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

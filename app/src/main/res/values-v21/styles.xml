@@ -8,7 +8,6 @@
         <item name="colorControlHighlight">@color/navButtonRippleColor</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:elevation">@dimen/elevation</item>
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:background">@color/blueDark</item>
     </style>

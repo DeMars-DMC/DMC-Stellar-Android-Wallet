@@ -148,7 +148,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         when {
           asset.code == Constants.LUMENS_ASSET_CODE -> {
               viewHolder.assetButton.text = context.getString(R.string.set_inflation_message)
-              viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
+              viewHolder.assetButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent)
               viewHolder.assetButton.setOnClickListener {
                   if (WalletApplication.wallet.getBalances().isNotEmpty() &&
                     AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_TYPE).toDouble() > 1.0) {
@@ -160,7 +160,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
           }
           asset.amount!!.toDouble() == 0.0 -> {
               viewHolder.assetButton.text = context.getString(R.string.remove_asset_message)
-              viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.apricot))
+              viewHolder.assetButton.background = ContextCompat.getDrawable(context, R.drawable.button_apricot)
               viewHolder.assetButton.setOnClickListener {
                   listener.changeTrustline(asset.asset!!, true)
               }
@@ -196,7 +196,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         Picasso.get().load(asset.image).into(viewHolder.assetImage)
 
         viewHolder.assetButton.text = context.getString(R.string.add_asset)
-        viewHolder.assetButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
+        viewHolder.assetButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent)
         viewHolder.assetButton.setOnClickListener {
             listener.changeTrustline(trustLineAsset, false)
         }

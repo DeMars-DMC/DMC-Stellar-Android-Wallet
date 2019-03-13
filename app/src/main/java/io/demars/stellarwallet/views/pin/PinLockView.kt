@@ -286,18 +286,18 @@ class PinLockView : RecyclerView {
     get() = mIndicatorDots != null
 
   constructor(context: Context) : super(context) {
-    init(null, 0)
+    init(null)
   }
 
   constructor(context: Context, @Nullable attrs: AttributeSet) : super(context, attrs) {
-    init(attrs, 0)
+    init(attrs)
   }
 
   constructor(context: Context, @Nullable attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-    init(attrs, defStyle)
+    init(attrs)
   }
 
-  private fun init(attributeSet: AttributeSet?, defStyle: Int) {
+  private fun init(attributeSet: AttributeSet?) {
 
     val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.PinLockView)
 

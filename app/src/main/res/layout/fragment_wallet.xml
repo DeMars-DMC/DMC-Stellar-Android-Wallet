@@ -8,18 +8,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:elevation="@dimen/elevation"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            tools:ignore="UnusedAttribute">
 
             <RelativeLayout
-                android:background="@color/blueDark"
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
+                android:layout_height="@dimen/toolbar_size_big"
+                android:background="@color/blueDark"
+                android:paddingStart="@dimen/padding_micro"
+                android:paddingEnd="@dimen/padding_zero">
 
                 <Button
                     android:id="@+id/receiveButton"
@@ -37,8 +40,8 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/logoDescription"
-                    android:src="@drawable/ic_main_logo"
-                    android:padding="@dimen/margin_padding_size_small"/>
+                    android:padding="@dimen/margin_padding_size_small"
+                    android:src="@drawable/ic_main_logo" />
 
                 <Button
                     android:id="@+id/sendButton"
@@ -63,7 +66,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/walletRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"/>
 
         </LinearLayout>
 
@@ -109,42 +113,52 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             android:visibility="gone"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/qrCode"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/qr_code_size_mini"
+                android:layout_height="@dimen/qr_code_size_mini"
                 android:layout_gravity="center"
-                tools:ignore="ContentDescription" />
+                android:background="@drawable/qr_code"
+                android:elevation="@dimen/elevation_mini"
+                android:contentDescription="@string/public_address"
+                android:padding="@dimen/padding_mini"
+                tools:ignore="ContentDescription,UnusedAttribute" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/bg_rounded_button_blue_dark"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/button_height_big"
+                android:layout_margin="@dimen/padding_horizontal"
+                android:layout_marginTop="@dimen/padding_vertical"
+                android:background="@drawable/text_widget_white"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:elevation="@dimen/elevation_mini"
+                android:orientation="horizontal"
+                tools:ignore="UnusedAttribute">
 
                 <TextView
                     android:id="@+id/publicSeedTextView"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
-                    android:background="@color/white"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:padding="12dp"
-                    android:textSize="12sp" />
+                    android:padding="@dimen/padding_horizontal"
+                    android:textSize="@dimen/text_size" />
 
                 <ImageButton
                     android:id="@+id/publicSeedCopyButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
-                    android:background="@null"
+                    android:elevation="@dimen/elevation_mini"
+                    android:background="@drawable/background_rounded_right_button_blue"
                     android:contentDescription="@string/copy_address_content_descriptor"
                     android:src="@drawable/ic_copy" />
 
@@ -156,9 +170,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingLeft="25dp"
-                android:paddingTop="16dp"
-                android:paddingRight="25dp"
+                android:paddingLeft="@dimen/padding_vertical"
+                android:paddingTop="@dimen/padding_horizontal"
+                android:paddingRight="@dimen/padding_vertical"
                 android:text="@string/fund_account_string" />
         </LinearLayout>
     </LinearLayout>

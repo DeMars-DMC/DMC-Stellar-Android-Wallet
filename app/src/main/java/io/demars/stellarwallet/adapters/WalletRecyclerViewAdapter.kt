@@ -289,10 +289,10 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         when {
             transaction.type == EffectType.RECEIVED.value -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.mantis), PorterDuff.Mode.SRC_IN)
             transaction.type == EffectType.SENT.value -> {
-                viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.apricot), PorterDuff.Mode.SRC_IN)
+                viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
                 viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
             }
-            else -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.paleSky), PorterDuff.Mode.SRC_IN)
+            else -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
         }
     }
 
@@ -301,7 +301,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
         viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
                 StringFormat.formatAssetCode(trade.soldAsset), StringFormat.formatAssetCode(trade.boughtAsset))
-        viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.paleSky), PorterDuff.Mode.SRC_IN)
+        viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
         if (WalletApplication.userSession.getSessionAsset().assetCode == trade.boughtAsset) {
             viewHolder.amount.text = truncateDecimalPlaces(trade.boughtAmount)
         } else {

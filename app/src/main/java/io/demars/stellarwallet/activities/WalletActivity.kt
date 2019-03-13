@@ -78,7 +78,7 @@ class WalletActivity : BaseActivity(), io.demars.stellarwallet.utils.KeyboardUti
                         dialogTradeAlert.show()
                     }
                     val tradingFragment = getReusedFragment(WalletFragmentType.EXCHANGE.name)
-                            ?: ExchangeFragment.newInstance()
+                            ?: TradeFragment.newInstance()
                     replaceFragment(tradingFragment, WalletFragmentType.EXCHANGE)
                 }
                 R.id.nav_contacts -> {

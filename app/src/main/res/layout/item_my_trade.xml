@@ -5,12 +5,10 @@
     android:layout_height="wrap_content"
     android:background="@color/main_bg_light"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/margin_padding_size_medium"
-    android:paddingLeft="@dimen/margin_padding_size_medium"
-    android:paddingTop="@dimen/margin_padding_size_medium_large"
-    android:paddingEnd="@dimen/margin_padding_size_medium"
-    android:paddingRight="@dimen/margin_padding_size_medium"
-    android:paddingBottom="@dimen/margin_padding_size_medium_large"
+    android:paddingStart="@dimen/padding_horizontal"
+    android:paddingTop="@dimen/padding_vertical"
+    android:paddingEnd="@dimen/padding_horizontal"
+    android:paddingBottom="@dimen/padding_vertical"
     android:weightSum="1">
 
     <TextView

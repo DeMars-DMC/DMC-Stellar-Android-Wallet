@@ -141,7 +141,7 @@ class RecoverWalletActivity : BaseActivity() {
             endIndex += word.length
 
             val colorText = if (!wordListBIP39.contains(word)) {
-                ForegroundColorSpan(ContextCompat.getColor(this, R.color.apricot))
+                ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorApricot))
             } else {
                 ForegroundColorSpan(ContextCompat.getColor(this, R.color.regularTextColor))
             }
@@ -155,7 +155,7 @@ class RecoverWalletActivity : BaseActivity() {
     private fun highlightSeed() {
         val seedText = secretKeyEditText.text
         val colorText = if (seedText.length != Constants.STELLAR_ADDRESS_LENGTH || seedText[0] != 'S') {
-            ForegroundColorSpan(ContextCompat.getColor(this, R.color.apricot))
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorApricot))
         } else {
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.regularTextColor))
         }

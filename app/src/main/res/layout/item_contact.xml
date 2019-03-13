@@ -30,15 +30,11 @@
         android:layout_height="@dimen/badge_height" />
 
     <Button
-        style="@style/PrimaryButtonStyle"
+        style="@style/ButtonAccentStyle"
         android:id="@+id/button_add_address"
         android:layout_width="wrap_content"
-        android:layout_height="37dp"
+        android:layout_height="@dimen/button_height"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/padding_horizontal"
-        android:layout_marginEnd="@dimen/padding_mini"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:text="@string/add_stellar_address"
         android:elevation="@dimen/padding_zero"
         android:textAllCaps="false"

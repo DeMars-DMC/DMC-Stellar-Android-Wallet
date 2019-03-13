@@ -3,7 +3,7 @@ package io.demars.stellarwallet.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import io.demars.stellarwallet.fragments.tabs.MyOffersTabFragment
+import io.demars.stellarwallet.fragments.tabs.MyTradesTabFragment
 import io.demars.stellarwallet.fragments.tabs.OrderBookTabFragment
 import io.demars.stellarwallet.fragments.tabs.ExchangeTabFragment
 import io.demars.stellarwallet.helpers.TradingTabs
@@ -18,7 +18,7 @@ class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return when (position) {
             Trade.ordinal -> ExchangeTabFragment()
             OrderBook.ordinal -> OrderBookTabFragment()
-            MyOffers.ordinal -> MyOffersTabFragment()
+            MyTrades.ordinal -> MyTradesTabFragment()
             else -> throw IllegalStateException("position not valid for" + TradingPagerAdapter::class.simpleName)
         }
     }
@@ -27,7 +27,7 @@ class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return when (position) {
             Trade.ordinal -> Trade.title
             OrderBook.ordinal -> OrderBook.title
-            MyOffers.ordinal -> MyOffers.title
+            MyTrades.ordinal -> MyTrades.title
             else -> throw IllegalStateException("position not valid for" + TradingPagerAdapter::class.simpleName)
         }
     }

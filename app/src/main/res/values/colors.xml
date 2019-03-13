@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Theme-->
-    <color name="colorPrimary">@color/light_gray</color>
-    <color name="colorPrimaryDark">@color/light_gray</color>
+    <color name="colorPrimary">#002a55</color>
+    <color name="colorPrimaryDark">#002a55</color>
+    <color name="colorPrimaryHighlight">#0151A5</color>
+
     <color name="colorAccent">#EA8D0C</color>
-    <color name="colorHighlightAccent">#FF9800</color>
+    <color name="colorAccentHighlight">#B16B09</color>
+
+    <color name="colorYellow">#deaf2a</color>
+    <color name="colorYellowHighlight">#AC8722</color>
 
     <color name="colorGreen">#09AF00</color>
-    <color name="colorHighlightGreen">#75E900</color>
+    <color name="colorGreenHighlight">#077A00</color>
 
     <color name="colorDisabled">#797979</color>
+    <color name="colorDisabledHighlight">#424242</color>
+
+    <color name="colorApricot">#ee7a70</color>
+    <color name="colorApricotHighlight">#CC6A62</color>
+
+    <color name="colorLightGrey">@color/alto</color>
     <color name="colorBackgroundWidget">#f7f7f7</color>
+
+    <color name="colorPaleSky">#6f7785</color>
 
     <!--MERGE COLORS-->
     <!--Colors-->
@@ -32,8 +45,6 @@
     <color name="black">#000000</color>
     <color name="gallery">#ececec</color>
     <color name="mantis">#71CD5C</color>
-    <color name="apricot">#ee7a70</color>
-    <color name="paleSky">#6f7785</color>
     <color name="purple">#800080</color>
     <color name="pink">#ffa5d2</color>
     <color name="brown">#964b00</color>
@@ -42,8 +53,6 @@
     <color name="blue">#00448B</color>
     <color name="blueDark">#002a55</color>
     <color name="blueLight">#00468C</color>
-    <color name="yellow">#deaf2a</color>
-    <color name="yellowBright">#F8C630</color>
     <color name="main_bg_light">#F8F8F8</color>
 
     <!-- not used <color name="blue3">#008FFF</color>-->
@@ -58,15 +67,15 @@
     <color name="toggleUnselected">@color/white</color>
 
     <color name="primaryButtonBg">@color/colorAccent</color>
-    <color name="primaryButtonPressedBg">@color/colorHighlightAccent</color>
+    <color name="primaryButtonPressedBg">@color/colorAccentHighlight</color>
     <color name="primaryButtonText">@color/white</color>
 
-    <color name="secondaryButtonBg">@color/yellow</color>
-    <color name="secondaryButtonPressedBg">@color/yellowBright</color>
+    <color name="secondaryButtonBg">@color/colorYellow</color>
+    <color name="secondaryButtonPressedBg">@color/colorYellowHighlight</color>
     <color name="secondaryButtonText">@color/white</color>
 
     <color name="container">@color/white</color>
-    <color name="divider">@color/alto</color>
+    <color name="divider">@color/colorLightGrey</color>
     <color name="regularTextColor">@color/black</color>
     <color name="regularWhiteTextColor">@color/white</color>
     <color name="listTitleTextColor">@color/colorDisabled</color>
@@ -97,15 +106,8 @@
 
     <!--Trade-->
     <color name="selectorHint">@color/frenchGray</color>
-    <color name="sellSelectorBg">@color/terracotta</color>
     <color name="editTextEnabled">@color/white</color>
     <color name="editTextDisabled">@color/alabaster</color>
     <color name="percentageSelector">@color/gallery</color>
     <color name="percentageSelectorClicked">@color/lightGray</color>
-    <color name="downArrow">@color/alto</color>
-    <color name="buySelectorBg">@color/mantis</color>
-
-    <!--My Offers-->
-    <color name="delete">@color/apricot</color>
-
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -10,7 +11,7 @@
         android:focusable="true"
         android:clickable="true"
         android:layout_width="0dp"
-        android:layout_height="@dimen/spinner_height"
+        android:layout_height="@dimen/button_height_big"
         android:layout_weight=".75">
 
         <EditText
@@ -26,7 +27,7 @@
             android:paddingRight="@dimen/margin_padding_size_medium"
             android:textColorHint="@color/selectorHint"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_medium"/>
+            android:textSize="@dimen/text_size"/>
 
         <View
             android:layout_margin="1dp"
@@ -48,18 +49,10 @@
             android:id="@+id/spinner"
             style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spinner_height"
+            android:layout_height="@dimen/button_height_big"
             android:backgroundTint="@color/white"
-            android:spinnerMode="dialog"/>
-
-        <!--<Spinner-->
-        <!--android:id="@+id/spinner"-->
-        <!--style="@style/Widget.AppCompat.DropDownItem.Spinner"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:spinnerMode="dialog"-->
-        <!--android:backgroundTint="@color/white"-->
-        <!--android:layout_height="@dimen/spinner_height"-->
-        <!--/>-->
+            android:spinnerMode="dialog"
+            tools:ignore="UnusedAttribute" />
     </RelativeLayout>
 
 </LinearLayout>

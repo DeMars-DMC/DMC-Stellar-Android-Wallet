@@ -31,8 +31,8 @@
         android:layout_height="wrap_content"
         android:text="@string/learn_more"
         android:textSize="@dimen/text_size_micro"
-        android:padding="8dp"
-        android:background="@color/colorDisabled"
+        android:padding="@dimen/padding_mini"
+        android:background="@drawable/button_grey"
         style="@style/RegularWhiteText"/>
 
 </LinearLayout>

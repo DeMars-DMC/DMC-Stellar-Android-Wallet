@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/manuallyAddAssetButton"
         android:layout_below="@id/toolbar"
-        android:fadeScrollbars="false" />
+        android:fadeScrollbars="false"
+        android:overScrollMode="never"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -30,7 +31,7 @@
 
     <Button
         android:id="@+id/manuallyAddAssetButton"
-        style="@style/PrimaryButtonStyle"
+        style="@style/ButtonAccentStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

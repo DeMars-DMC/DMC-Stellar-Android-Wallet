@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="@dimen/activity_vertical_margin"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/pin_spacing_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iconImageView"
@@ -10,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="@dimen/activity_vertical_margin"/>
+        android:layout_marginEnd="@dimen/padding_horizontal"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -23,17 +25,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/RegularText"
-            android:textSize="@dimen/text_size_medium"
-            android:text="Sent" />
+            android:textSize="@dimen/text_size"
+            tools:text="Sent" />
 
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/LongDescription"
-            android:layout_marginTop="@dimen/margin_padding_size_small"
-            android:textColor="@color/paleSky"
-            android:text="Sep 12, 2018" />
+            android:layout_marginTop="@dimen/padding_mini"
+            android:textColor="@color/colorPaleSky"
+            tools:text="Sep 12, 2018" />
 
     </LinearLayout>
 
@@ -42,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/RegularText"
-        android:textSize="@dimen/text_size_medium"
-        android:text="2.0000"
+        android:textSize="@dimen/text_size"
+        tools:text="2.0000"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"/>
 

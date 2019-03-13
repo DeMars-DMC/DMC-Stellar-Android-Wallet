@@ -28,7 +28,7 @@ import org.stellar.sdk.responses.OfferResponse
 import timber.log.Timber
 import java.util.*
 
-class MyOffersTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRefreshListener {
+class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var appContext : Context
     private var myOffers = mutableListOf<MyOffer>()
     private var offerResponses = mutableListOf<OfferResponse>()

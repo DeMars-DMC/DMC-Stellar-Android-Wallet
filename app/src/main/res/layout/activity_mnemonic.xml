@@ -44,14 +44,15 @@
                 android:id="@+id/qrImageView"
                 android:layout_width="@dimen/qr_code_size"
                 android:layout_height="@dimen/qr_code_size"
-                android:layout_centerInParent="true"
-                android:background="@drawable/bg_qr_code"
+                android:background="@drawable/qr_code"
                 android:contentDescription="@string/secret_phrase"
                 android:padding="@dimen/padding_mini"
                 android:layout_marginTop="@dimen/padding_vertical"
+                android:elevation="@dimen/elevation_mini"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/warningPhraseTextView" />
+                app:layout_constraintTop_toBottomOf="@id/warningPhraseTextView"
+                tools:ignore="UnusedAttribute" />
 
             <io.demars.stellarwallet.views.ChipView
                 android:id="@+id/mnemonicView"
@@ -88,9 +89,9 @@
 
     <Button
         android:id="@+id/confirmButton"
-        style="@style/PrimaryButtonStyle"
+        style="@style/ButtonAccentStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:text="@string/confirm_written"

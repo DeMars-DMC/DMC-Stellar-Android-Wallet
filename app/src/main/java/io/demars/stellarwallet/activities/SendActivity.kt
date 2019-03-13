@@ -160,7 +160,7 @@ class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallbac
         if (isAmountValid()) {
             amountTextView.setTextColor(ContextCompat.getColor(this, R.color.toryBlue))
         } else {
-            amountTextView.setTextColor(ContextCompat.getColor(this, R.color.apricot))
+            amountTextView.setTextColor(ContextCompat.getColor(this, R.color.colorApricot))
         }
     }
 

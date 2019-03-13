@@ -26,7 +26,7 @@
 
     <Button
         android:id="@+id/createWalletButton"
-        style="@style/PrimaryButtonStyle"
+        style="@style/ButtonAccentStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_above="@id/recoverWalletButton"
@@ -37,7 +37,7 @@
 
     <Button
         android:id="@+id/recoverWalletButton"
-        style="@style/SecondaryButtonStyle"
+        style="@style/ButtonYellowStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"

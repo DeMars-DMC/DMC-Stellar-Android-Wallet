@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.interfaces.OnDeleteRequest
 import io.demars.stellarwallet.models.MyOffer
-import kotlinx.android.synthetic.main.row_my_offers.view.*
+import kotlinx.android.synthetic.main.item_my_trade.view.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
@@ -23,7 +23,7 @@ class MyOffersAdapter(private val myOffersList: MutableList<MyOffer>, private va
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.row_my_offers, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_my_trade, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

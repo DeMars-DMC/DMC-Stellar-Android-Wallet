@@ -1,5 +1,5 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/colorHighlightAccent">
+    android:color="@color/colorAccentHighlight">
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/corner_radius" />

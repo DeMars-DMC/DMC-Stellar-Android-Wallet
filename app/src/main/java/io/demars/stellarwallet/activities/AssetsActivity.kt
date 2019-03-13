@@ -23,7 +23,7 @@ import io.demars.stellarwallet.models.SupportedAssetType
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
-import kotlinx.android.synthetic.main.content_assets_activity.*
+import kotlinx.android.synthetic.main.activity_assets.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse
@@ -44,7 +44,7 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.content_assets_activity)
+        setContentView(R.layout.activity_assets)
 
         setupUI()
         loadSupportedAssets()

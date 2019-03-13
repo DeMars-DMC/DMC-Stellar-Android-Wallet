@@ -23,7 +23,7 @@ class InflationActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         addressEditText.setText(Constants.INFLATION_DESTINATION)

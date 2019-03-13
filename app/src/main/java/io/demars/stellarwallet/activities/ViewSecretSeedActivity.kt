@@ -32,7 +32,7 @@ class ViewSecretSeedActivity : BaseActivity() {
                 copyImageButton.setOnClickListener { copyAddressToClipBoard(secretSeed)  }
             }
         }
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

@@ -56,7 +56,7 @@ class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallbac
     //region User Interface
 
     private fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         titleText.text = WalletApplication.userSession.getFormattedCurrentAvailableBalance(applicationContext)

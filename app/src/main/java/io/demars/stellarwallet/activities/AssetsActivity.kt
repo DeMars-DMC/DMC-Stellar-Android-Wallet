@@ -52,7 +52,7 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     }
 
     private fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         progressBar.visibility = View.VISIBLE
         bindAdapter()

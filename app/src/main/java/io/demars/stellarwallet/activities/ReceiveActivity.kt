@@ -19,7 +19,7 @@ class ReceiveActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_receive)
 
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val pubAddress = WalletApplication.wallet.getStellarAccountId()

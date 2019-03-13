@@ -24,7 +24,7 @@ class AddAssetActivity : BaseActivity() {
     }
 
     fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         addAssetButton.setOnClickListener {

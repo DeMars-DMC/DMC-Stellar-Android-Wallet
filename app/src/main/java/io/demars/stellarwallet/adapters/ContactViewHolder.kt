@@ -57,7 +57,7 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val stellarAddress = contact.stellarAddress
         if (stellarAddress.isNullOrBlank()) {
             button.text = appContext.getString(R.string.add_stellar_address)
-            button.setBackgroundColor(ContextCompat.getColor(appContext, R.color.orange))
+            button.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorAccent))
         } else {
             button.text = appContext.getString(R.string.send_payment)
             button.setBackgroundColor(ContextCompat.getColor(appContext, R.color.mantis))

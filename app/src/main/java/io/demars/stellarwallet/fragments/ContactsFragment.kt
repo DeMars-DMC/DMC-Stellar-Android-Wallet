@@ -60,7 +60,7 @@ class ContactsFragment : Fragment() {
         appContext = view.context.applicationContext
         activity?.let {
             @Suppress("CAST_NEVER_SUCCEEDS")
-            (it as AppCompatActivity).setSupportActionBar(toolBar)
+            (it as AppCompatActivity).setSupportActionBar(toolbar)
             rv_contact_list.layoutManager =  LinearLayoutManager(it)
         }
 

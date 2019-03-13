@@ -10,16 +10,10 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.models.Diagnostic
 import io.demars.stellarwallet.models.Values
-import io.demars.stellarwallet.remote.BlockEqRetrofit
-import io.demars.stellarwallet.remote.DiagnosticApi
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.DiagnosticUtils
 import io.demars.stellarwallet.utils.StringFormat
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_diagnostic.*
-import retrofit2.Call
-import retrofit2.Callback
-import timber.log.Timber
 
 
 class DiagnosticActivity : BaseActivity() {
@@ -34,7 +28,7 @@ class DiagnosticActivity : BaseActivity() {
     }
 
     fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val isPassphrase = WalletApplication.wallet.getEncryptedPhrase() != null

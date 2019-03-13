@@ -17,11 +17,10 @@ import com.soneso.stellarmnemonics.Wallet
 import kotlinx.android.synthetic.main.activity_mnemonic.*
 
 class MnemonicActivity : BaseActivity(), View.OnClickListener {
-    private val CREATE_WALLET_REQUEST = 0x01
 
     companion object {
+        private const val CREATE_WALLET_REQUEST = 0x01
         private const val MNEMONIC_PHRASE = "MNEMONIC_PHRASE"
-
         private const val WALLET_LENGTH = "WALLET_LENGTH"
 
         fun newCreateMnemonicIntent(context: Context, type : MnemonicType): Intent {
@@ -89,7 +88,7 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
             }
         } else {
             // Create chips UI
-            qrLayout.visibility = View.GONE
+            qrImageView.visibility = View.GONE
 
             // TODO: Problem linked to setting isRecoveryPhrase before it is confirmed in
             // RecoveryWalletActivity.kt for a secret seed, so that needs to be refactored to
@@ -101,9 +100,9 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setupActionBar() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolBar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setupMnemonicView() {

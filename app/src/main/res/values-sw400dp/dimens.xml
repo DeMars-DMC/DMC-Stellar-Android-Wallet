@@ -18,6 +18,10 @@
     <dimen name="pin_spacing_vertical">16dp</dimen>
     <dimen name="pin_spacing_horizontal">48dp</dimen>
 
+    <dimen name="corner_radius">6dp</dimen>
+
+    <dimen name="qr_code_size">250dp</dimen>
+
     <!--ALL BELOW SHOULD BE CLEANED UP-->
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>

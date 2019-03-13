@@ -92,7 +92,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
 
     //region User Interface
     private fun setupUI() {
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
 
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)

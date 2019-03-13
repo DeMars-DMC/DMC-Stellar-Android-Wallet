@@ -13,11 +13,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        tools:ignore="UnusedAttribute"
         app:title="@string/button_send"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ToolbarTheme" />
 
     <TextView
         android:id="@+id/titleText"

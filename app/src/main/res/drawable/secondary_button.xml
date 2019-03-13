@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/secondary_button_pressed" android:state_pressed="true"/>
     <!--Disable is the same-->
-    <item android:drawable="@drawable/primary_button_disabled" android:state_enabled="false"/>
+    <item android:drawable="@drawable/button_disabled" android:state_enabled="false"/>
     <item android:drawable="@drawable/secondary_button_bg" />
 </selector>

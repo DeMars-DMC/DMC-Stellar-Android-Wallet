@@ -11,11 +11,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
         app:title="Send a Bug Report"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:ignore="UnusedAttribute" />
+        android:theme="@style/ToolbarTheme"/>
 
     <ScrollView
         android:fadeScrollbars="false"

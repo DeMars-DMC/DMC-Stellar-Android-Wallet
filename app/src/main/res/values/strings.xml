@@ -256,7 +256,7 @@
 
     <!--Update stellar address-->
     <string name="stellar_address_title">Public Address</string>
-    <string name="create_button">CREATE</string>
+    <string name="create_button">Create</string>
     <string name="exchange_alert_title">Not enough assets</string>
     <string name="exchange_alert_message">You must have at least one Stellar asset in addition to Lumens(XLM) in order to exchange.</string>
     <string name="exchange_alert_positive_button">Add asset</string>
@@ -265,4 +265,8 @@
     <string name="fetching_account_state">Fetching account transactions, please wait</string>
     <string name="nav_start">Start</string>
     <string name="learn_about_stellar">Learn about Stellar &amp; DMC</string>
+    <string name="search">Search</string>
+    <string name="dmc_asset">DMC Asset</string>
+    <string name="available">Available:</string>
+    <string name="_1_0000_xlm">1.0000 XLM</string>
 </resources>

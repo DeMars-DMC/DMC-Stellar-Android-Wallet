@@ -9,15 +9,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available: "
-        android:textColor="@color/grey"/>
+        android:text="@string/available"
+        android:textColor="@color/colorDisabled"/>
 
     <TextView
         android:id="@+id/availableBalanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1.0000 XLM"
-        android:textColor="@color/grey"/>
+        android:text="@string/_1_0000_xlm"
+        android:textColor="@color/colorDisabled"/>
 
     <View
         android:layout_width="0dp"
@@ -32,7 +32,7 @@
         android:text="@string/learn_more"
         android:textSize="@dimen/text_size_micro"
         android:padding="8dp"
-        android:background="@color/grey"
+        android:background="@color/colorDisabled"
         style="@style/RegularWhiteText"/>
 
 </LinearLayout>

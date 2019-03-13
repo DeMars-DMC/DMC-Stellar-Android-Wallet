@@ -10,11 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/asset_title_text"
-        tools:ignore="UnusedAttribute" />
+        app:title="@string/asset_title_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assetsRecyclerView"

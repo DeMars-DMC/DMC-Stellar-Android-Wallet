@@ -10,11 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        tools:ignore="UnusedAttribute"
         app:title="@string/inflation_destination_title"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ToolbarTheme" />
 
     <LinearLayout
         android:layout_below="@id/toolbar"

@@ -84,14 +84,7 @@ class SettingsFragment : BaseFragment() {
 
         @SuppressLint("SetTextI18n")
         appVersionTextView.text = "Version: $appVersion"
-
-//        var timesClicked = 0
         appVersionTitle.setOnClickListener {
-//            timesClicked++
-//            if (timesClicked > 3) {
-//                startActivity(Intent(it.context, AboutAnimationActivity::class.java))
-//                timesClicked = 0
-//            }
         }
     }
 
@@ -102,7 +95,8 @@ class SettingsFragment : BaseFragment() {
                     context?.let {
                         val mnemonic = WalletManagerActivity.getResultDataString(data)
                         if (mnemonic != null) {
-                            startActivity(MnemonicActivity.newDisplayMnemonicIntent(it, mnemonic))
+                            val phrase = WalletManagerActivity.getResultExtraDataString(data)
+                            startActivity(MnemonicActivity.newDisplayMnemonicIntent(it, mnemonic, phrase))
                         } else {
                             Timber.e("fatal error: mnemonic is null")
                         }

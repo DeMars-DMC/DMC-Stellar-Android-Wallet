@@ -20,15 +20,14 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
         <item name="colorControlHighlight">@color/navButtonRippleColor</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
         <item name="android:background">@color/blueDark</item>
-
         <item name="android:fontFamily">@font/lato_bold</item>
     </style>
 
@@ -97,10 +96,7 @@
         <item name="android:fontFamily">@font/lato_bold</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="elevation">@dimen/actionbar_elevation</item>
-        <item name="android:elevation">@dimen/actionbar_elevation</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -114,7 +110,7 @@
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/primaryButtonText</item>
-        <item name="android:background">@drawable/primary_button</item>
+        <item name="android:background">@drawable/button_accent</item>
     </style>
 
     <style name="SecondaryButtonStyle" parent="ButtonStyle">

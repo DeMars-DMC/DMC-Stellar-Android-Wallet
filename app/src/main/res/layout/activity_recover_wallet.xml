@@ -11,9 +11,7 @@
         android:id="@+id/recoverToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ToolbarTheme" />
 
     <TextView
         android:id="@+id/invalidPhraseTextView"

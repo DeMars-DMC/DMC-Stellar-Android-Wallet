@@ -11,47 +11,52 @@
         android:id="@+id/rounded_iv_profile"
         android:layout_width="@dimen/badge_width"
         android:layout_height="@dimen/badge_height"
+        android:layout_marginStart="@dimen/padding_mini"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/contact_letter"
-        android:textSize="13sp"
+        android:textSize="@dimen/text_size"
         android:textColor="@color/white"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/padding_mini"
         android:layout_gravity="center_vertical"
         tools:text="D"
         android:layout_width="@dimen/badge_width"
         android:layout_height="@dimen/badge_height" />
 
     <Button
+        style="@style/PrimaryButtonStyle"
         android:id="@+id/button_add_address"
         android:layout_width="wrap_content"
         android:layout_height="37dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_mini"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:text="@string/add_stellar_address"
+        android:elevation="@dimen/padding_zero"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="11sp"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp,UnusedAttribute" />
 
     <TextView
         android:id="@+id/tv_label"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_toEndOf="@+id/rounded_iv_profile"
         android:layout_toStartOf="@+id/button_add_address"
         android:layout_alignBaseline="@+id/rounded_iv_profile"
         android:gravity="center_vertical"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size"
         tools:text="Name Surname" />
 </RelativeLayout>

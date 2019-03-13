@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_small"
-        android:textColor="@color/grey" />
+        android:textColor="@color/colorDisabled" />
 
     <TextView
         android:id="@+id/wordItem"
@@ -22,6 +22,6 @@
         android:layout_marginStart="8dp"
         style="@style/RegularText"
         android:textSize="@dimen/text_size_medium"
-        android:textColor="@color/grey" />
+        android:textColor="@color/colorDisabled" />
 
 </RelativeLayout>

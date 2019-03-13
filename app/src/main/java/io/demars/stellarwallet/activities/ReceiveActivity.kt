@@ -11,13 +11,13 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import kotlinx.android.synthetic.main.content_receive.*
+import kotlinx.android.synthetic.main.activity_receive.*
 
 class ReceiveActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.content_receive)
+        setContentView(R.layout.activity_receive)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

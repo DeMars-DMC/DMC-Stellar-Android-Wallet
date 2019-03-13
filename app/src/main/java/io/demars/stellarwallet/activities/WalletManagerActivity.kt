@@ -71,6 +71,11 @@ class WalletManagerActivity : AppCompatActivity() {
             if (intent == null) return null
             return intent.getStringExtra(INTENT_RESULT_DATA)
         }
+
+        fun getResultExtraDataString(intent:Intent?) : String? {
+            if (intent == null) return null
+            return intent.getStringExtra(INTENT_RESULT_EXTRA_DATA)
+        }
     }
 
 

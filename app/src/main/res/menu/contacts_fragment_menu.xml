@@ -10,10 +10,9 @@
 
     <item
         android:id="@+id/search_contacts"
-        android:title="@string/refresh"
+        android:title="@string/search"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_search_white_24" />
-
 
     <item
         android:id="@+id/add_contact"

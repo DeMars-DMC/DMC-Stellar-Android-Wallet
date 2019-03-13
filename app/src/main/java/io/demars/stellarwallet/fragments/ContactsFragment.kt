@@ -103,12 +103,6 @@ class ContactsFragment : Fragment() {
                 showContacts(true)
                 return true
             }
-            R.id.add_contact -> {
-                activity?.let {
-                    startActivity(StellarAddressActivity.createContact(it))
-                }
-                return true
-            }
             R.id.search_contacts -> {
                 viewFlipper.showNext()
                 searchBar.enableSearch()
@@ -120,6 +114,12 @@ class ContactsFragment : Fragment() {
                         }
                     }
                 })
+                return true
+            }
+            R.id.add_contact -> {
+                activity?.let {
+                    startActivity(StellarAddressActivity.createContact(it))
+                }
                 return true
             }
         }
@@ -235,7 +235,7 @@ class ContactsFragment : Fragment() {
             0 -> rv_contact_list.addItemDecoration(DividerItemDecoration(rv_contact_list.context, DividerItemDecoration.VERTICAL))
             2 -> rv_contact_list.removeItemDecorationAt(1)
         }
-        val item = RecyclerSectionItemDecoration(appContext.resources.getDimension(R.dimen.contact_header).toInt(), true, getSectionCallback(list))
+        val item = RecyclerSectionItemDecoration(appContext.resources.getDimension(R.dimen.padding_vertical_double).toInt(), true, getSectionCallback(list))
         rv_contact_list.addItemDecoration(item)
         progress_view.visibility = View.GONE
         if (list.size == 0) {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.RecoverWalletActivity"
-    android:background="@color/light_gray">
+    android:background="@color/light_gray"
+    tools:context=".activities.RecoverWalletActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/recoverToolbar"
@@ -13,67 +13,68 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/invalidPhraseTextView"
-        android:layout_below="@+id/recoverToolbar"
+        style="@style/RegularText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/invalid_input_for_phrase"
-        style="@style/RegularText"
+        android:layout_below="@+id/recoverToolbar"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:gravity="center"
+        android:text="@string/invalid_input_for_phrase"
         android:textColor="@color/terracotta"
-        android:visibility="invisible"
-        android:layout_margin="@dimen/activity_vertical_margin"/>
+        android:visibility="invisible" />
 
     <EditText
         android:id="@+id/phraseEditText"
-        android:layout_below="@id/invalidPhraseTextView"
-        android:layout_above="@id/bottomButton"
+        style="@style/RegularText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:digits="@string/mnemonic_alphabet"
-        android:inputType="textFilter"
-        style="@style/RegularText"
-        android:padding="@dimen/activity_vertical_margin"
+        android:layout_above="@id/bottomButton"
+        android:layout_below="@id/invalidPhraseTextView"
         android:background="@android:color/transparent"
-        android:textSize="@dimen/text_size_medium"
-        android:gravity="top"/>
+        android:digits="@string/mnemonic_alphabet"
+        android:gravity="top"
+        android:inputType="textFilter"
+        android:padding="@dimen/activity_vertical_margin"
+        android:textSize="@dimen/text_size_medium" />
 
     <EditText
         android:id="@+id/secretKeyEditText"
-        android:layout_below="@id/invalidPhraseTextView"
-        android:layout_above="@id/passphraseButton"
+        style="@style/RegularText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/passphraseButton"
+        android:layout_below="@id/invalidPhraseTextView"
+        android:background="@android:color/transparent"
         android:digits="@string/stellar_address_alphabet"
-        style="@style/RegularText"
+        android:gravity="top"
         android:inputType="textCapCharacters"
         android:padding="@dimen/activity_vertical_margin"
-        android:background="@android:color/transparent"
-        android:textSize="@dimen/text_size_medium"
-        android:gravity="top"/>
+        android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/passphraseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/advanced_security"
         android:layout_above="@+id/bottomButton"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:padding="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/advanced_security" />
 
     <Button
         android:id="@+id/bottomButton"
-        android:layout_alignParentBottom="true"
+        style="@style/PrimaryButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/next_button_text"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:layout_marginBottom="10dp"
-        style="@style/PrimaryButtonStyle"/>
+        android:text="@string/next_button_text" />
 
 </RelativeLayout>

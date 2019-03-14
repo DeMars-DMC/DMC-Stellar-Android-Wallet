@@ -16,8 +16,9 @@
 
     <ImageView
         android:layout_width="@dimen/logo_width_main"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/logo_width_main"
         android:src="@drawable/ic_main_logo"
+        android:scaleType="fitXY"
         tools:ignore="ContentDescription"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/createWalletButton"

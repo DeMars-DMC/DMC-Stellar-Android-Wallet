@@ -25,8 +25,8 @@
     <dimen name="qr_code_size">200dp</dimen>
     <dimen name="qr_code_size_mini">150dp</dimen>
 
-    <dimen name="elevation_mini">2dp</dimen>
-    <dimen name="elevation">4dp</dimen>
+    <dimen name="elevation_mini">1dp</dimen>
+    <dimen name="elevation">2dp</dimen>
 
     <dimen name="toolbar_size_big">60dp</dimen>
 

@@ -153,17 +153,18 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
           Constants.RAND_ASSET_ISSUER, "100000000000",
           Constants.RAND_ASSET_NAME, "", "", null, null, null)
 
-        val nkls = SupportedAsset(2, Constants.NKLS_ASSET_TYPE, Constants.NKLS_IMAGE_RES,
-          Constants.NKLS_ASSET_ISSUER, "100000000000",
-          Constants.NKLS_ASSET_NAME, "", "", null, null, null)
-
-        val rgts = SupportedAsset(3, Constants.RGTS_ASSET_TYPE, Constants.RGTS_IMAGE_RES,
+        val rgts = SupportedAsset(2, Constants.RGTS_ASSET_TYPE, Constants.RGTS_IMAGE_RES,
           Constants.RGTS_ASSET_ISSUER, "100000000000",
           Constants.RGTS_ASSET_NAME, "", "", null, null, null)
 
+//        val nkls = SupportedAsset(3, Constants.NKLS_ASSET_TYPE, Constants.NKLS_IMAGE_RES,
+//          Constants.NKLS_ASSET_ISSUER, "100000000000",
+//          Constants.NKLS_ASSET_NAME, "", "", null, null, null)
+
+
         map["RAND"] = rand
-        map["NKLS"] = nkls
         map["RGTS"] = rgts
+//        map["NKLS"] = nkls
 
         updateAdapter()
     }

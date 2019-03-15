@@ -127,11 +127,11 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
                   viewHolder.assetImage.visibility = View.VISIBLE
                   Picasso.get().load(Constants.RAND_IMAGE_RES).into(viewHolder.assetImage)
               }
-              asset.code.equals(Constants.NKLS_ASSET_TYPE, true) -> {
-                  viewHolder.defaultImage.visibility = View.GONE
-                  viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.NKLS_IMAGE_RES).into(viewHolder.assetImage)
-              }
+//              asset.code.equals(Constants.NKLS_ASSET_TYPE, true) -> {
+//                  viewHolder.defaultImage.visibility = View.GONE
+//                  viewHolder.assetImage.visibility = View.VISIBLE
+//                  Picasso.get().load(Constants.NKLS_IMAGE_RES).into(viewHolder.assetImage)
+//              }
               asset.code.equals(Constants.RGTS_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE

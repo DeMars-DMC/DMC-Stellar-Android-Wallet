@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -47,6 +49,7 @@
             style="@style/NavTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_vertical"
             android:layout_marginBottom="@dimen/padding_vertical"
             android:padding="@dimen/padding_micro"
             android:text="@string/name"
@@ -118,6 +121,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        style="@style/ButtonYellowStyle"
+        android:id="@+id/sendToContactButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:text="@string/send_to_contact"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButton"/>
 
     <Button
         android:id="@+id/bottomButton"

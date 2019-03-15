@@ -32,6 +32,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
     private lateinit var contact: Contact
 
     companion object {
+        private const val RQ_SEND_TO_CONTACT = 111
         private const val ARG_MODE = "ARG_MODE"
         private const val ARG_CONTACT = "ARG_CONTACT"
 
@@ -107,6 +108,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             Mode.SEND_TO -> {
                 titleBalance.text = WalletApplication.userSession.getFormattedCurrentAvailableBalance(applicationContext)
                 bottomButton.text = getString(R.string.next_button_text)
+                sendToContactButton.visibility = View.VISIBLE
                 contactNameText.visibility = View.GONE
                 contactNameEditText.visibility = View.GONE
                 addressTitleText.text = getString(R.string.send_to_text)
@@ -114,6 +116,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             Mode.UPDATE_CONTACT -> {
                 titleBalance.visibility = View.GONE
                 bottomButton.text = getString(R.string.save_button)
+                sendToContactButton.visibility = View.GONE
                 contactNameText.visibility = View.GONE
                 contactNameEditText.visibility = View.GONE
                 addressTitleText.text = getString(R.string.stellar_address_title)
@@ -121,6 +124,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             }
             Mode.CREATE_CONTACT -> {
                 titleBalance.visibility = View.GONE
+                sendToContactButton.visibility = View.GONE
                 bottomButton.text = getString(R.string.create_button)
                 addressTitleText.text = getString(R.string.stellar_address_title)
             }
@@ -128,6 +132,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
 
         cameraImageButton.setOnClickListener(this)
         bottomButton.setOnClickListener(this)
+        sendToContactButton.setOnClickListener(this)
     }
 
     override fun onCreateOptionsMenu(menu : Menu) : Boolean {
@@ -143,6 +148,9 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         when(v.id) {
             R.id.cameraImageButton -> {
                 initiateScan()
+            }
+            R.id.sendToContactButton -> {
+                startActivityForResult(ContactsActivity.withKey(this), RQ_SEND_TO_CONTACT)
             }
             R.id.bottomButton -> {
                 when(mode) {

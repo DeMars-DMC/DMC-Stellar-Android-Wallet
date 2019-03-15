@@ -99,6 +99,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
+    implementation 'androidx.core:core-ktx:1.0.1'
+
     //picasso includes okhttp3
     implementation 'com.squareup.picasso:picasso:2.71828'
 

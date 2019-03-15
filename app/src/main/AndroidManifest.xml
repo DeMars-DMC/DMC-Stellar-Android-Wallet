@@ -46,7 +46,7 @@
             android:name=".activities.StellarAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ContactsActivity"
             android:screenOrientation="portrait"

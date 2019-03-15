@@ -64,10 +64,6 @@ class WalletFragment : BaseFragment() {
     walletRecyclerView.layoutManager = LinearLayoutManager(appContext)
     walletRecyclerView.adapter = createAdapter()
 
-//    if (DebugPreferencesHelper(view.context.applicationContext).isTestNetServerEnabled) {
-//      mainTitle.text = "Wallet (TEST-NET SERVER)"
-//    }
-
     updateState(WalletState.UPDATING)
     lastEffectListSize = 0
 

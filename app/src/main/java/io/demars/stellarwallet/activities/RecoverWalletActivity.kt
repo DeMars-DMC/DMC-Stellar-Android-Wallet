@@ -20,10 +20,10 @@ class RecoverWalletActivity : BaseActivity() {
     private var isRecoveryPhrase = true
     private var passphrase : String? = null
     private lateinit var recoveryString : String
-    private val RESTORE_REQUEST = 0x01
 
     companion object {
-        private var INTENT_ARG_RECOVERY = "INTENT_ARG_RECOVERY"
+        private const val RESTORE_REQUEST = 0x01
+        private const val INTENT_ARG_RECOVERY = "INTENT_ARG_RECOVERY"
         fun newInstance(context: Context, isRecovery: Boolean) : Intent {
             val intent = Intent(context, RecoverWalletActivity::class.java)
             intent.putExtra(INTENT_ARG_RECOVERY, isRecovery)
@@ -160,7 +160,9 @@ class RecoverWalletActivity : BaseActivity() {
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.regularTextColor))
         }
 
-        secretKeyEditText.text.setSpan(colorText, 0, seedText.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        if (secretKeyEditText.text.isNotEmpty()) {
+            secretKeyEditText.text.setSpan(colorText, 0, seedText.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
     }
 
     private fun getMnemonicString() : String {

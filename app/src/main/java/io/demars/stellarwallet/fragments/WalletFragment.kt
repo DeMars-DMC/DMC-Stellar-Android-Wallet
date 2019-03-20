@@ -30,10 +30,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.effects.WalletViewModelPolling
 
-class WalletFragment : BaseFragment() {
+class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var appContext: Context
   private lateinit var viewModel: WalletViewModelPolling
   private var state = WalletState.UNKNOWN
@@ -69,16 +70,8 @@ class WalletFragment : BaseFragment() {
 
     initViewModels()
 
-    swipeRefresh_wallet.setOnRefreshListener {
-      updateState(WalletState.UPDATING)
-      swipeRefresh_wallet.postDelayed({
-        activity?.let {
-          if (!it.isFinishing) {
-            viewModel.forceRefresh()
-          }
-        }
-      }, REFRESH_EFFECT_DELAY)
-    }
+    swipeRefresh.setOnRefreshListener(this)
+    swipeRefresh.setColorSchemeResources(R.color.colorAccent)
 
     receiveButton.setOnClickListener {
       receiveButton.isEnabled = false
@@ -97,6 +90,17 @@ class WalletFragment : BaseFragment() {
     }
 
     fetching_wallet_image.setColorFilter(ContextCompat.getColor(appContext, R.color.colorPaleSky), PorterDuff.Mode.SRC_ATOP)
+  }
+
+  override fun onRefresh() {
+    updateState(WalletState.UPDATING)
+    swipeRefresh.postDelayed({
+      activity?.let {
+        if (!it.isFinishing) {
+          viewModel.forceRefresh()
+        }
+      }
+    }, REFRESH_EFFECT_DELAY)
   }
 
   override fun onDestroyView() {
@@ -246,7 +250,7 @@ class WalletFragment : BaseFragment() {
           WalletState.NOT_FUNDED -> {
             sendButton.isEnabled = false
             receiveButton.isEnabled = true
-            swipeRefresh_wallet.isEnabled = true
+            swipeRefresh.isEnabled = true
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE
@@ -255,7 +259,7 @@ class WalletFragment : BaseFragment() {
             noTransactionsTextView.visibility = View.GONE
             sendButton.isEnabled = false
             receiveButton.isEnabled = false
-            swipeRefresh_wallet.isRefreshing = false
+            swipeRefresh.isRefreshing = false
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
@@ -263,14 +267,14 @@ class WalletFragment : BaseFragment() {
             noTransactionsTextView.visibility = View.GONE
             sendButton.isEnabled = false
             receiveButton.isEnabled = false
-            swipeRefresh_wallet.isRefreshing = true
+            swipeRefresh.isRefreshing = true
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
           WalletState.ACTIVE -> {
             sendButton.isEnabled = true
             receiveButton.isEnabled = true
-            swipeRefresh_wallet.isRefreshing = false
+            swipeRefresh.isRefreshing = false
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.GONE

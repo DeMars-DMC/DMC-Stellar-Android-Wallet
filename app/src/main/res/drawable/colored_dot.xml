@@ -7,6 +7,6 @@
         android:color="@color/colorPaleSky"/>
 
     <size
-        android:width="8dp"
-        android:height="8dp"/>
+        android:width="@dimen/padding_medium"
+        android:height="@dimen/padding_medium"/>
 </shape>

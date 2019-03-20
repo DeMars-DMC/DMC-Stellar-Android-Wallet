@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_zero">0dp</dimen>
+    <dimen name="padding_macro">1.5dp</dimen>
     <dimen name="padding_micro">3dp</dimen>
     <dimen name="padding_mini">6dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_horizontal">12dp</dimen>
     <dimen name="padding_horizontal_double">24dp</dimen>
     <dimen name="padding_vertical">16dp</dimen>

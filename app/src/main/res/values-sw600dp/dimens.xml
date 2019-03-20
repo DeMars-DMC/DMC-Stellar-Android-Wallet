@@ -1,7 +1,9 @@
 <resources>
     <dimen name="padding_zero">0dp</dimen>
+    <dimen name="padding_macro">3dp</dimen>
     <dimen name="padding_micro">6dp</dimen>
     <dimen name="padding_mini">12dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
     <dimen name="padding_horizontal">24dp</dimen>
     <dimen name="padding_horizontal_double">48dp</dimen>
     <dimen name="padding_vertical">36dp</dimen>

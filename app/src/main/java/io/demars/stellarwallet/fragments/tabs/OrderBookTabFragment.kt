@@ -43,7 +43,7 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
         orderBookRv.adapter = orderBooksAdapter
         orderBookRv.layoutManager = layout
         swipeRefresh.setOnRefreshListener(this)
-
+        swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

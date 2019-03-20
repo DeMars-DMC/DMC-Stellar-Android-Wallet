@@ -14,6 +14,7 @@ import io.demars.stellarwallet.mvvm.exchange.ExchangeRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.remote.ServerType
 import com.facebook.stetho.Stetho
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import shadow.okhttp3.OkHttpClient
@@ -59,6 +60,8 @@ class WalletApplication : MultiDexApplication() {
         Security.addProvider(BouncyCastleProvider() as Provider?)
 
         PRNGFixes.apply()
+
+        AndroidThreeTen.init(this)
 
         setupLifecycleListener()
 

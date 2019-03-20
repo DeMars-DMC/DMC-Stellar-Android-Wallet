@@ -48,8 +48,8 @@ class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
         val dividerItemDecoration = DividerItemDecoration(context,
                 LinearLayoutManager(context).orientation)
         myOffersRv.addItemDecoration(dividerItemDecoration)
-        swipeRefreshOffer.setOnRefreshListener(this)
-        swipeRefreshOffer.setColorSchemeResources(R.color.colorAccent)
+        swipeRefresh.setOnRefreshListener(this)
+        swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -94,8 +94,8 @@ class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
     private fun setRefreshingFalse(){
         val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
-            if (swipeRefreshOffer != null) {
-                swipeRefreshOffer.isRefreshing = false
+            if (swipeRefresh != null) {
+                swipeRefresh.isRefreshing = false
             }
         }
         handler.post(runnable)

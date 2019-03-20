@@ -77,6 +77,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycleVersion"
     implementation "com.google.android:flexbox:$flexboxVersion"
 
+    //Remove
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
     implementation "io.github.novacrypto:BIP39:$novaCryptoVersion"
     implementation "com.toptoche.searchablespinner:searchablespinnerlibrary:$searchablespinnerVersion"
@@ -143,6 +144,6 @@ dependencies {
     implementation 'commons-lang:commons-lang:2.6'
 
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
-    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
     implementation 'com.google.firebase:firebase-core:16.0.7'
 }

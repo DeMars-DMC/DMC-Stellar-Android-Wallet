@@ -14,7 +14,7 @@ class StringFormat {
     }
 
     fun getFormattedDateTime(str: String, is24hours: Boolean): String {
-      val pattern = if (is24hours) "MMM dd, yyyy - HH:mm" else "MMM dd, yyyy - h:m a"
+      val pattern = if (is24hours) "MMM dd, yyyy - HH:mm" else "MMM dd, yyyy - h:mm a"
       val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
         .withZone(ZoneId.systemDefault())
       return formatter.format(Instant.parse(str))

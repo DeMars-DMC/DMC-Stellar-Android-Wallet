@@ -67,8 +67,6 @@ class WalletFragment : BaseFragment() {
     updateState(WalletState.UPDATING)
     lastEffectListSize = 0
 
-    // since closing the stream causes so many crashes let's disable the pull to refresh
-    swipeRefresh_wallet.isEnabled = false
     initViewModels()
 
     swipeRefresh_wallet.setOnRefreshListener {
@@ -248,6 +246,7 @@ class WalletFragment : BaseFragment() {
           WalletState.NOT_FUNDED -> {
             sendButton.isEnabled = false
             receiveButton.isEnabled = true
+            swipeRefresh_wallet.isEnabled = true
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE
@@ -256,6 +255,7 @@ class WalletFragment : BaseFragment() {
             noTransactionsTextView.visibility = View.GONE
             sendButton.isEnabled = false
             receiveButton.isEnabled = false
+            swipeRefresh_wallet.isRefreshing = false
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
@@ -263,13 +263,14 @@ class WalletFragment : BaseFragment() {
             noTransactionsTextView.visibility = View.GONE
             sendButton.isEnabled = false
             receiveButton.isEnabled = false
-            swipeRefresh_wallet.isRefreshing = false
+            swipeRefresh_wallet.isRefreshing = true
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
           WalletState.ACTIVE -> {
             sendButton.isEnabled = true
             receiveButton.isEnabled = true
+            swipeRefresh_wallet.isRefreshing = false
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.GONE

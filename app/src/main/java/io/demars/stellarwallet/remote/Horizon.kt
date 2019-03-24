@@ -10,12 +10,17 @@ import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.AssetUtil
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
-import io.demars.stellarwallet.mvvm.effects.remote.OnLoadEffects
+import io.demars.stellarwallet.models.Operation
+import io.demars.stellarwallet.mvvm.remote.OnLoadEffects
+import io.demars.stellarwallet.mvvm.remote.OnLoadOperations
+import io.demars.stellarwallet.mvvm.remote.OnLoadTrades
+import io.demars.stellarwallet.mvvm.remote.OnLoadTransactions
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*
 import org.stellar.sdk.responses.*
 import org.stellar.sdk.responses.effects.EffectResponse
+import org.stellar.sdk.responses.operations.OperationResponse
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
 import java.net.ConnectException
@@ -40,6 +45,18 @@ object Horizon : HorizonTasks {
 
   override fun getLoadEffectsTask(cursor: String, limit: Int, listener: OnLoadEffects): AsyncTask<Void, Void, ArrayList<EffectResponse>?> {
     return LoadEffectsTask(cursor, limit, listener)
+  }
+
+  override fun getLoadOperationsTask(cursor: String, limit: Int, listener: OnLoadOperations): AsyncTask<Void, Void, ArrayList<Pair<OperationResponse, String?>>?> {
+    return LoadOperationsTask(cursor, limit, listener)
+  }
+
+  override fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadTransactions): AsyncTask<Void, Void, ArrayList<TransactionResponse>?> {
+    return LoadTransactionsTask(cursor, limit, listener)
+  }
+
+  override fun getLoadTradesTask(cursor: String, limit: Int, listener: OnLoadTrades): AsyncTask<Void, Void, ArrayList<TradeResponse>?> {
+    return Horizon.LoadTradesTask(cursor, limit, listener)
   }
 
   override fun getSendTask(listener: SuccessErrorCallback, destAddress: String, secretSeed: CharArray, memo: String, amount: String): AsyncTask<Void, Void, HorizonException> {
@@ -103,6 +120,50 @@ object Horizon : HorizonTasks {
     return null
   }
 
+  override fun registerForOperations(cursor: String, listener: EventListener<OperationResponse>): SSEStream<OperationResponse>? {
+    val server = getServer()
+    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    try {
+      //ATTENTION STREAM must work with order.ASC!
+      return server.operations()
+        .cursor(cursor)
+        .order(RequestBuilder.Order.ASC)
+        .forAccount(sourceKeyPair).stream(listener)
+    } catch (error: Exception) {
+      Timber.e(error.message.toString())
+    }
+    return null
+  }
+
+  override fun registerForTransactions(cursor: String, listener: EventListener<TransactionResponse>): SSEStream<TransactionResponse>? {
+    val server = getServer()
+    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    try {
+      //ATTENTION STREAM must work with order.ASC!
+      return server.transactions()
+        .cursor(cursor)
+        .order(RequestBuilder.Order.ASC)
+        .forAccount(sourceKeyPair).stream(listener)
+    } catch (error: Exception) {
+      Timber.e(error.message.toString())
+    }
+    return null
+  }
+
+  override fun registerForTrades(cursor: String, listener: EventListener<TradeResponse>): SSEStream<TradeResponse>? {
+    val server = getServer()
+    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    try {
+      //ATTENTION STREAM must work with order.ASC!
+      return (server.trades().order(RequestBuilder.Order.ASC) as TradesRequestBuilder)
+        .cursor(cursor)
+        .forAccount(sourceKeyPair).stream(listener)
+    } catch (error: Exception) {
+      Timber.e(error.message.toString())
+    }
+    return null
+  }
+
   override fun getCreateMarketOffer(listener: OnMarketOfferListener, secretSeed: CharArray, sellingAsset: Asset, buyingAsset: Asset, amount: String, price: String) {
     AsyncTask.execute {
       val server = getServer()
@@ -110,17 +171,23 @@ object Horizon : HorizonTasks {
       val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
       val sourceAccount = server.accounts().account(sourceKeyPair)
 
-      val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE).addOperation(managedOfferOperation).build()
-      transaction.sign(sourceKeyPair)
-      val response = server.submitTransaction(transaction)
-      Handler(Looper.getMainLooper()).post {
-        if (response.isSuccess) {
-          listener.onExecuted()
-        } else {
-          val list = response.extras.resultCodes.operationsResultCodes
-          if (list != null && !list.isEmpty()) {
-            listener.onFailed(list[0].toString())
+      try {
+        val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE).addOperation(managedOfferOperation).build()
+        transaction.sign(sourceKeyPair)
+        val response = server.submitTransaction(transaction)
+        Handler(Looper.getMainLooper()).post {
+          if (response.isSuccess) {
+            listener.onExecuted()
+          } else {
+            val list = response.extras.resultCodes.operationsResultCodes
+            if (list != null && !list.isEmpty()) {
+              listener.onFailed(list[0].toString())
+            }
           }
+        }
+      } catch (ex: Exception) {
+        Handler(Looper.getMainLooper()).post {
+          listener.onFailed(ex.localizedMessage)
         }
       }
     }
@@ -211,7 +278,6 @@ object Horizon : HorizonTasks {
     }
   }
 
-
   private class LoadEffectsTask(val cursor: String, val limit: Int, private val listener: OnLoadEffects) : AsyncTask<Void, Void, ArrayList<EffectResponse>?>() {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<EffectResponse>? {
@@ -238,7 +304,118 @@ object Horizon : HorizonTasks {
         listener.onLoadEffects(result)
       }
     }
+  }
 
+  private class LoadOperationsTask(val cursor: String, val limit: Int, private val listener: OnLoadOperations) : AsyncTask<Void, Void, ArrayList<Pair<OperationResponse, String?>>?>() {
+    var errorMessage: String? = null
+    override fun doInBackground(vararg params: Void?): ArrayList<Pair<OperationResponse, String?>>? {
+      val server = getServer()
+      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+      var operationsResult: ArrayList<Pair<OperationResponse, String?>>? = null
+      try {
+        operationsResult = server.operations().order(RequestBuilder.Order.DESC)
+          .cursor(cursor)
+          .limit(limit)
+          .includeFailed(false)
+          .forAccount(sourceKeyPair).execute()?.records?.filter {
+          it.type == Operation.OperationType.CREATED.value ||
+          it.type == Operation.OperationType.PAYMENT.value ||
+          it.type == Operation.OperationType.CHANGE_TRUST.value ||
+          it.type == Operation.OperationType.ALLOW_TRUST.value
+        }?.map {
+          when (it.type) {
+            Operation.OperationType.CREATED.value -> Pair(it, getMemoForOperation(it))
+            Operation.OperationType.PAYMENT.value -> Pair(it, getMemoForOperation(it))
+            else -> {
+              Pair<OperationResponse, String?>(it, null)
+            }
+          }
+        } as ArrayList<Pair<OperationResponse, String?>>
+      } catch (error: Exception) {
+        Timber.e(error.message.toString())
+        errorMessage = error.message.toString()
+      }
+
+      return operationsResult
+    }
+
+    private fun getMemoForOperation(operationResponse: OperationResponse?): String? {
+      val transactionResponse = getServer().transactions()
+        .transaction(operationResponse?.transactionHash)
+      var memo: String? = null
+      if (transactionResponse?.memo is MemoText) {
+        memo = (transactionResponse.memo as MemoText).text
+      }
+
+      return memo
+    }
+
+    override fun onPostExecute(result: ArrayList<Pair<OperationResponse, String?>>?) {
+      errorMessage?.let {
+        listener.onError(it)
+      } ?: run {
+        listener.onLoadOperations(result)
+      }
+    }
+  }
+
+  private class LoadTransactionsTask(val cursor: String, val limit: Int, private val listener: OnLoadTransactions) : AsyncTask<Void, Void, ArrayList<TransactionResponse>?>() {
+    var errorMessage: String? = null
+    override fun doInBackground(vararg params: Void?): ArrayList<TransactionResponse>? {
+      val server = getServer()
+      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+      var transactionResults: Page<TransactionResponse>? = null
+      try {
+        transactionResults = server.transactions().order(RequestBuilder.Order.DESC)
+          .cursor(cursor)
+          .limit(limit)
+          .includeFailed(false)
+          .forAccount(sourceKeyPair).execute()
+      } catch (error: Exception) {
+        Timber.e(error.message.toString())
+        errorMessage = error.message.toString()
+      }
+
+      return transactionResults?.records
+    }
+
+    override fun onPostExecute(result: ArrayList<TransactionResponse>?) {
+      errorMessage?.let {
+        listener.onError(it)
+      } ?: run {
+        listener.onLoadTransactions(result)
+      }
+    }
+  }
+
+  private class LoadTradesTask(val cursor: String, val limit: Int, private val listener: OnLoadTrades) : AsyncTask<Void, Void, ArrayList<TradeResponse>?>() {
+    var errorMessage: String? = null
+    override fun doInBackground(vararg params: Void?): ArrayList<TradeResponse>? {
+      val server = getServer()
+      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+      var tradeResults: Page<TradeResponse>? = null
+      try {
+        tradeResults = (server.trades().order(RequestBuilder.Order.DESC) as TradesRequestBuilder)
+          .cursor(cursor)
+          .limit(limit)
+          .forAccount(sourceKeyPair).execute()
+
+
+      } catch (error: Exception) {
+        Timber.e(error.message.toString())
+        errorMessage = error.message.toString()
+      }
+
+      return tradeResults?.records
+    }
+
+    override fun onPostExecute(result: ArrayList<TradeResponse>?) {
+      errorMessage?.let {
+        listener.onError(it)
+      } ?: run {
+        listener.onLoadTrades(result)
+      }
+    }
   }
 
   private class SendTask(private val listener: SuccessErrorCallback, private val destAddress: String,

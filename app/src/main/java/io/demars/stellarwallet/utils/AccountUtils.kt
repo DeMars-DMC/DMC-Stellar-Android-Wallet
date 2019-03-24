@@ -5,7 +5,6 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.encryption.CipherWrapper
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.mvvm.effects.EffectsRepository
 import com.soneso.stellarmnemonics.Wallet
 import org.stellar.sdk.KeyPair
 

@@ -28,7 +28,7 @@ import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 import java.text.DecimalFormat
 
-class ExchangeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
+class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     private lateinit var appContext : Context
     private lateinit var parentListener: OnTradeCurrenciesChanged
     private lateinit var selectedSellingCurrency: SelectionModel

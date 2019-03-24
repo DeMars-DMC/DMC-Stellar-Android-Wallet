@@ -7,7 +7,10 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
-import io.demars.stellarwallet.mvvm.effects.EffectsRepository
+import io.demars.stellarwallet.mvvm.local.EffectsRepository
+import io.demars.stellarwallet.mvvm.local.OperationsRepository
+import io.demars.stellarwallet.mvvm.local.TradesRepository
+import io.demars.stellarwallet.mvvm.local.TransactionsRepository
 
 class GlobalGraphHelper {
     companion object {
@@ -30,6 +33,9 @@ class GlobalGraphHelper {
         fun wipe(context: Context) : Boolean {
             clearSession()
             EffectsRepository.getInstance().clear()
+            OperationsRepository.getInstance().clear()
+            TransactionsRepository.getInstance().clear()
+            TradesRepository.getInstance().clear()
             val keyStoreWrapper = KeyStoreWrapper(context)
             keyStoreWrapper.clear()
             return WalletApplication.wallet.clearLocalStore()
@@ -45,6 +51,9 @@ class GlobalGraphHelper {
         fun clearSession() {
             WalletApplication.userSession.setPin(null)
             EffectsRepository.getInstance().closeStream()
+            OperationsRepository.getInstance().closeStream()
+            TransactionsRepository.getInstance().closeStream()
+            TradesRepository.getInstance().closeStream()
         }
     }
 }

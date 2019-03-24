@@ -271,4 +271,5 @@
     <string name="public_address">Public Address</string>
     <string name="add_asset">Add asset</string>
     <string name="send_to_contact">Send to contact</string>
+    <string name="pattern_price">Price: %s</string>
 </resources>

@@ -26,7 +26,7 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val button: TextView = itemView.findViewById<View>(R.id.button_add_address) as TextView
 
     private var mBoundContact: Contact? = null // Can be null
-    private val colors: IntArray = intArrayOf(R.color.terracotta, R.color.lightBlue, R.color.puce, R.color.mantis, R.color.brown,
+    private val colors: IntArray = intArrayOf(R.color.terracotta, R.color.lightBlue, R.color.puce, R.color.colorMantis, R.color.brown,
             R.color.purple, R.color.pink, R.color.lightBlue, R.color.colorPaleSky, R.color.colorApricot, R.color.cornflowerBlue)
 
     fun bind(contact: Contact) {

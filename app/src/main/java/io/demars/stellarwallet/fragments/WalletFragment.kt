@@ -16,13 +16,12 @@ import io.demars.stellarwallet.activities.BalanceSummaryActivity
 import io.demars.stellarwallet.activities.ReceiveActivity
 import io.demars.stellarwallet.activities.StellarAddressActivity
 import io.demars.stellarwallet.adapters.WalletRecyclerViewAdapter
-import io.demars.stellarwallet.mvvm.effects.WalletViewState
+import io.demars.stellarwallet.mvvm.WalletViewState
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.runOnUiThread
-import org.stellar.sdk.responses.effects.EffectResponse
 import timber.log.Timber
 import android.graphics.*
 import android.widget.Toast
@@ -32,15 +31,22 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.demars.stellarwallet.models.*
-import io.demars.stellarwallet.mvvm.effects.WalletViewModelPolling
+import io.demars.stellarwallet.mvvm.WalletViewModelPolling
+import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
+import org.stellar.sdk.responses.TradeResponse
+import org.stellar.sdk.responses.operations.OperationResponse
 
 class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var appContext: Context
   private lateinit var viewModel: WalletViewModelPolling
   private var state = WalletState.UNKNOWN
   private var lastEffectListSize = 0
+  private var lastTransactionsListSize = 0
+  private var lastTradesListSize = 0
   private var activeAsset: String = DefaultAsset().LUMENS_ASSET_NAME
   private var qrRendered = false
+
+  private var stellarContacts: ArrayList<Contact> = ArrayList()
 
   companion object {
     private const val REFRESH_EFFECT_DELAY = 400L
@@ -62,11 +68,23 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    ContactsRepositoryImpl(activity!!).getContactsListLiveData(true)
+      .observe(viewLifecycleOwner, Observer {
+        stellarContacts = ArrayList(it.stellarContacts)
+        if (walletRecyclerView.adapter is WalletRecyclerViewAdapter) {
+          (walletRecyclerView.adapter as WalletRecyclerViewAdapter).setContacts(stellarContacts)
+          walletRecyclerView.adapter?.notifyDataSetChanged()
+        }
+      })
+
     walletRecyclerView.layoutManager = LinearLayoutManager(appContext)
     walletRecyclerView.adapter = createAdapter()
 
     updateState(WalletState.UPDATING)
+
     lastEffectListSize = 0
+    lastTransactionsListSize = 0
+    lastTradesListSize = 0
 
     initViewModels()
 
@@ -190,11 +208,14 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       when (newState) {
         WalletState.ACTIVE -> {
           noTransactionsTextView.visibility = View.GONE
-          viewState?.effectList?.let {
-            val numberEffects = it.size
+          viewState?.operationList?.let { operations ->
+            val numberEffects = operations.size
             Timber.d("ACTIVE effects = $numberEffects vs last event $lastEffectListSize")
             lastEffectListSize = numberEffects
-            listWrapper = createListWithData(it, viewState.activeAssetCode, viewState.availableBalance!!, viewState.totalBalance!!)
+            viewState.tradesList?.let { trades ->
+              listWrapper = createListWithData(operations, trades, viewState.activeAssetCode,
+                viewState.availableBalance!!, viewState.totalBalance!!)
+            }
           }
         }
         WalletState.UPDATING -> {
@@ -222,6 +243,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             if (!qrRendered && viewState != null && qrCode != null) {
               generateQRCode(viewState.accountId, qrCode, 500)
               initAdressCopyButton(viewState.accountId)
+
               qrRendered = true
             }
 
@@ -292,6 +314,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
    */
   private fun createAdapter(): WalletRecyclerViewAdapter {
     val adapter = WalletRecyclerViewAdapter(activity!!)
+    adapter.setContacts(stellarContacts)
     adapter.setOnAssetDropdownListener(object : WalletRecyclerViewAdapter.OnAssetDropdownListener {
       override fun onAssetDropdownClicked(view: View, position: Int) {
         val context = view.context
@@ -309,15 +332,18 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     return adapter
   }
 
-  private fun createListWithData(effects: ArrayList<EffectResponse>, activeAsset: String, availableBalance: AvailableBalance, totalAssetBalance: TotalBalance): WalletHeterogeneousWrapper {
+  private fun createListWithData(operations: ArrayList<Pair<OperationResponse, String?>>, trades: ArrayList<TradeResponse>,
+                                 activeAsset: String, availableBalance: AvailableBalance,
+                                 totalAssetBalance: TotalBalance): WalletHeterogeneousWrapper {
     val time = System.currentTimeMillis()
     val list = createListWrapper()
     list.showAvailableBalance(availableBalance)
     list.updateTotalBalance(totalAssetBalance)
-    list.updateEffectsList(activeAsset, effects)
+    list.updateOperationsList(activeAsset, operations)
+    list.updateTradesList(activeAsset, trades)
     list.updateAvailableBalance(availableBalance)
     val delta = System.currentTimeMillis() - time
-    Timber.d("createListWithData(list{${effects.size}}, $activeAsset), it took: $delta ms")
+    Timber.d("createListWithData(list{${operations.size}}, $activeAsset), it took: $delta ms")
     return list
   }
 

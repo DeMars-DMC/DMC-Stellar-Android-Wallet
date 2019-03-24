@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.mvvm.effects.remote
+package io.demars.stellarwallet.mvvm.remote
 
 import org.stellar.sdk.responses.effects.EffectResponse
 import java.util.ArrayList

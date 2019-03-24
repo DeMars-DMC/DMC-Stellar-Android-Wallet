@@ -35,11 +35,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size"
-        android:paddingBottom="2dp"
         android:layout_marginStart="@dimen/padding_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dotImageView"
         tools:text="Sent" />
+
+    <TextView
+        android:id="@+id/transactionInfoTextView"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size"
+        android:paddingTop="@dimen/padding_mini"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTypeTextView"
+        tools:text="Test Memo" />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -47,11 +58,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPaleSky"
-        android:paddingTop="@dimen/padding_micro"
+        android:paddingTop="@dimen/padding_mini"
         android:paddingBottom="@dimen/padding_vertical"
         tools:text="Sep 12, 2018 11:22"
-        app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/transactionTypeTextView" />
+        app:layout_constraintStart_toStartOf="@+id/transactionInfoTextView"
+        app:layout_constraintTop_toBottomOf="@+id/transactionInfoTextView" />
 
 
     <TextView

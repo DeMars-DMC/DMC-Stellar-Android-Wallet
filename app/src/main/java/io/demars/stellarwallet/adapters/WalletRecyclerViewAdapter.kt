@@ -257,6 +257,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
   private fun configureAvailableBalanceViewHolder(viewHolder: AvailableBalanceViewHolder, position: Int) {
     val availableBalance = items!![position] as AvailableBalance
+
     @SuppressLint("SetTextI18n")
     viewHolder.balance.text = "${availableBalance.balance} ${Constants.LUMENS_ASSET_CODE}"
   }

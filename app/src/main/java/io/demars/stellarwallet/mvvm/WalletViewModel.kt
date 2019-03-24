@@ -50,38 +50,22 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     loadAccount(false)
 
     operationsRepository.loadList(false).observeForever {
-      Timber.d("effects repository, observer triggered")
+      Timber.d("operations repository, observer triggered")
       if (it != null) {
-        var toNotify = true
         operationsListResponse = it
         if (accountResponse != null && tradesListResponse != null) {
           state = WalletState.ACTIVE
-        } else if (tradesListResponse != null) {
-          loadAccount(true)
-          toNotify = false
-        } else {
-          tradesRepository.forceRefresh()
-        }
-        if (toNotify) {
           notifyViewState()
         }
       }
     }
 
     tradesRepository.loadList(false).observeForever {
-      Timber.d("effects repository, observer triggered")
+      Timber.d("trades repository, observer triggered")
       if (it != null) {
-        var toNotify = true
         tradesListResponse = it
         if (accountResponse != null && operationsListResponse != null) {
           state = WalletState.ACTIVE
-        } else if (operationsListResponse != null) {
-          loadAccount(true)
-          toNotify = false
-        } else {
-          operationsRepository.forceRefresh()
-        }
-        if (toNotify) {
           notifyViewState()
         }
       }
@@ -99,8 +83,6 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     state = WalletState.UPDATING
     doAsync {
       loadAccount(true)
-      operationsRepository.forceRefresh()
-      tradesRepository.forceRefresh()
     }
   }
 
@@ -121,10 +103,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             accountResponse = it.stellarAccount.getAccountResponse()
             if (operationsListResponse != null && tradesListResponse != null) {
               state = WalletState.ACTIVE
-            } else if (operationsListResponse != null) {
-              tradesRepository.forceRefresh()
-            } else {
-              operationsRepository.forceRefresh()
+              notifyViewState()
             }
           }
           404 -> {
@@ -135,8 +114,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             }
           }
           else -> {
-            // disabling the ui of ERROR since without pull to refresh makes no sense
-            // state = WalletState.ERROR
+            state = WalletState.ERROR
             if (!pollingStarted) {
               startPolling()
             }
@@ -161,9 +139,10 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
           accountId, sessionAsset.assetCode, availableBalance, totalAvailableBalance,
           operationsListResponse, tradesListResponse))
       }
-//            WalletState.ERROR -> {
-//                 walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.ERROR, accountId,  sessionAsset.assetCode, null, null, null))
-//            }
+      WalletState.ERROR -> {
+        walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.ERROR, accountId,
+          sessionAsset.assetCode, null, null, null, null))
+      }
       WalletState.NOT_FUNDED -> {
         val availableBalance = AvailableBalance("XLM", DEFAULT_ACCOUNT_BALANCE)
         val totalAvailableBalance = TotalBalance(state, "Lumens", "XLM", DEFAULT_ACCOUNT_BALANCE)

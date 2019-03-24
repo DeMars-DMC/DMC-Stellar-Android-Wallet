@@ -31,8 +31,15 @@ class WalletHeterogeneousWrapper {
 
   fun updateAvailableBalance(balance: AvailableBalance) {
     if (WalletApplication.userSession.getSessionAsset().assetCode == Constants.LUMENS_ASSET_TYPE) {
-      array.removeAt(AVAILABLE_INDEX)
-      array.add(AVAILABLE_INDEX, balance)
+      if (availableBalanceOffset != 0) {
+        availableBalanceOffset = 0
+        array.add(AVAILABLE_INDEX, balance)
+      } else {
+        array.removeAt(AVAILABLE_INDEX)
+        array.add(AVAILABLE_INDEX, balance)
+      }
+    } else {
+      hideAvailableBalance()
     }
   }
 
@@ -73,13 +80,6 @@ class WalletHeterogeneousWrapper {
     }
   }
 
-  fun showAvailableBalance(balance: AvailableBalance) {
-    if (availableBalanceOffset != 0) {
-      availableBalanceOffset = 0
-      array.add(AVAILABLE_INDEX, balance)
-    }
-  }
-
   private fun addFilteredOperations(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>?) {
     val filteredOperations = getFilteredOperations(list, activeAsset)
     if (filteredOperations != null) {
@@ -108,7 +108,7 @@ class WalletHeterogeneousWrapper {
       array.subList(EFFECTS_LIST_INDEX - availableBalanceOffset, array.size).sortByDescending {
         when (it) {
           is Trade -> Instant.parse(it.createdAt).toEpochMilli()
-          else ->Instant.parse((it as Operation).createdAt).toEpochMilli()
+          else -> Instant.parse((it as Operation).createdAt).toEpochMilli()
         }
       }
     }
@@ -293,7 +293,7 @@ class WalletHeterogeneousWrapper {
     }
   }
 
-  private fun convertPrice(price: Price?): String?{
+  private fun convertPrice(price: Price?): String? {
     if (price == null) return null
 
     return (price.numerator.toDouble() / price.denominator.toDouble()).toString()

@@ -40,9 +40,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var appContext: Context
   private lateinit var viewModel: WalletViewModelPolling
   private var state = WalletState.UNKNOWN
-  private var lastEffectListSize = 0
-  private var lastTransactionsListSize = 0
-  private var lastTradesListSize = 0
+  private var lastOperationsListSize = 0
   private var activeAsset: String = DefaultAsset().LUMENS_ASSET_NAME
   private var qrRendered = false
 
@@ -82,9 +80,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     updateState(WalletState.UPDATING)
 
-    lastEffectListSize = 0
-    lastTransactionsListSize = 0
-    lastTradesListSize = 0
+    lastOperationsListSize = 0
 
     initViewModels()
 
@@ -210,9 +206,12 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
           noTransactionsTextView.visibility = View.GONE
           viewState?.operationList?.let { operations ->
             val numberEffects = operations.size
-            Timber.d("ACTIVE effects = $numberEffects vs last event $lastEffectListSize")
-            lastEffectListSize = numberEffects
+            Timber.d("ACTIVE operations = $numberEffects vs last event $lastOperationsListSize")
+            lastOperationsListSize = numberEffects
             viewState.tradesList?.let { trades ->
+              val numberTrades = trades.size
+              Timber.d("ACTIVE operations + trades = $numberTrades vs last event $lastOperationsListSize")
+              lastOperationsListSize += numberTrades
               listWrapper = createListWithData(operations, trades, viewState.activeAssetCode,
                 viewState.availableBalance!!, viewState.totalBalance!!)
             }
@@ -337,11 +336,10 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                                  totalAssetBalance: TotalBalance): WalletHeterogeneousWrapper {
     val time = System.currentTimeMillis()
     val list = createListWrapper()
-    list.showAvailableBalance(availableBalance)
     list.updateTotalBalance(totalAssetBalance)
+    list.updateAvailableBalance(availableBalance)
     list.updateOperationsList(activeAsset, operations)
     list.updateTradesList(activeAsset, trades)
-    list.updateAvailableBalance(availableBalance)
     val delta = System.currentTimeMillis() - time
     Timber.d("createListWithData(list{${operations.size}}, $activeAsset), it took: $delta ms")
     return list

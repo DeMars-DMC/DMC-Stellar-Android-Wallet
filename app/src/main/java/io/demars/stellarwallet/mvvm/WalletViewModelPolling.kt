@@ -55,12 +55,8 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
       Timber.d("effects repository, observer triggered")
       if (it != null) {
         operationsListResponse = it
-        if (stellarAccount != null && tradesListResponse != null) {
-          state = WalletState.ACTIVE
-          notifyViewState()
-        } else if (tradesListResponse == null) {
-          tradesRepository.forceRefresh()
-        }
+        state = WalletState.ACTIVE
+        notifyViewState()
       }
     }
 
@@ -71,8 +67,6 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
         if (stellarAccount != null && operationsListResponse != null) {
           state = WalletState.ACTIVE
           notifyViewState()
-        } else if(operationsListResponse == null) {
-          operationsRepository.forceRefresh()
         }
       }
     }
@@ -82,8 +76,6 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
     state = WalletState.UPDATING
     doAsync {
       loadAccount(true)
-      operationsRepository.forceRefresh()
-      tradesRepository.forceRefresh()
     }
   }
 
@@ -107,8 +99,10 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
                 || immutableAccount.basicHashCode() != it.stellarAccount.basicHashCode()
                 || state != WalletState.ACTIVE) {
                 stellarAccount = it.stellarAccount
-                operationsRepository.forceRefresh()
-                tradesRepository.forceRefresh()
+                if (operationsListResponse != null && tradesListResponse != null) {
+                  state = WalletState.ACTIVE
+                  notifyViewState()
+                }
               } else {
                 //let's ignore this response
                 Timber.d("ignoring account response")
@@ -123,8 +117,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
               }
             }
             else -> {
-              // disabling the ui of ERROR since without pull to refresh makes no sense
-              // state = WalletState.ERROR
+              state = WalletState.ERROR
               if (!pollingStarted) {
                 startPolling()
               }
@@ -146,9 +139,11 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
             it.getAccountId(), sessionAsset.assetCode, availableBalance, totalAvailableBalance,
             operationsListResponse, tradesListResponse))
         }
-        // WalletState.ERROR -> {
-        //      walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.ERROR, accountId,  sessionAsset.assetCode, null, null, null))
-        // }
+        WalletState.ERROR -> {
+          walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.ERROR,
+            it.getAccountId(), sessionAsset.assetCode,
+            null, null, null, null))
+        }
         WalletState.NOT_FUNDED -> {
           val availableBalance = AvailableBalance("XLM", DEFAULT_ACCOUNT_BALANCE)
           val totalAvailableBalance = TotalBalance(state, "Lumens", "XLM", DEFAULT_ACCOUNT_BALANCE)
@@ -199,7 +194,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
           when {
             NetworkUtils(applicationContext).isNetworkAvailable() -> loadAccount(true)
           }
-          handler.postDelayed(this, 4000)
+          handler.postDelayed(this, 10000)
         }
       }
       handler.post(runnableCode)

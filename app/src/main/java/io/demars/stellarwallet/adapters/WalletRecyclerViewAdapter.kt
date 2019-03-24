@@ -291,7 +291,9 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
       if (it.stellarAddress == address) return it.name
     }
 
-    return if (address.length < 12) address else address.substring(0, 11) + "..."
+    val length = address.length
+    return if (length < 12) address else
+      "${address.substring(0, 5)}...${address.substring(length - 6, length - 1)}"
   }
 
   @SuppressLint("SetTextI18n")

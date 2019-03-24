@@ -72,23 +72,23 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         TransactionHeaderViewHolder(v)
       }
       TransactionViewType.OPERATION.value -> {
-        val v = inflater.inflate(R.layout.item_account_effect, parent, false)
+        val v = inflater.inflate(R.layout.item_account_activity, parent, false)
         OperationViewHolder(v)
       }
       TransactionViewType.TRANSACTION.value -> {
-        val v = inflater.inflate(R.layout.item_account_effect, parent, false)
+        val v = inflater.inflate(R.layout.item_account_activity, parent, false)
         OperationViewHolder(v)
       }
       TransactionViewType.TRADE.value -> {
-        val v = inflater.inflate(R.layout.item_account_effect, parent, false)
+        val v = inflater.inflate(R.layout.item_account_activity, parent, false)
         OperationViewHolder(v)
       }
       TransactionViewType.TRADE_EFFECT.value -> {
-        val v = inflater.inflate(R.layout.item_account_effect, parent, false)
+        val v = inflater.inflate(R.layout.item_account_activity, parent, false)
         OperationViewHolder(v)
       }
       else -> {
-        val v = inflater.inflate(R.layout.item_account_effect, parent, false)
+        val v = inflater.inflate(R.layout.item_account_activity, parent, false)
         OperationViewHolder(v)
       }
     }

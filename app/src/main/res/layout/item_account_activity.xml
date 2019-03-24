@@ -32,22 +32,27 @@
     <TextView
         android:id="@+id/transactionTypeTextView"
         style="@style/RegularText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size"
         android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dotImageView"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
         tools:text="Sent" />
 
     <TextView
         android:id="@+id/transactionInfoTextView"
         style="@style/RegularText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size"
+        android:textColor="@color/colorPaleSky"
         android:paddingTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
         app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
         app:layout_constraintTop_toBottomOf="@+id/transactionTypeTextView"
         tools:text="Test Memo" />
@@ -55,13 +60,15 @@
     <TextView
         android:id="@+id/dateTextView"
         style="@style/LongDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPaleSky"
+        android:textColor="@color/colorDisabled"
         android:paddingTop="@dimen/padding_mini"
         android:paddingBottom="@dimen/padding_vertical"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         tools:text="Sep 12, 2018 11:22"
-        app:layout_constraintStart_toStartOf="@+id/transactionInfoTextView"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
+        app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
         app:layout_constraintTop_toBottomOf="@+id/transactionInfoTextView" />
 
 

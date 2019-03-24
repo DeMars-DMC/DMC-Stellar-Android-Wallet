@@ -272,7 +272,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
           WalletState.NOT_FUNDED -> {
             sendButton.isEnabled = false
             receiveButton.isEnabled = true
-            swipeRefresh.isEnabled = true
+            swipeRefresh.isRefreshing = false
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE

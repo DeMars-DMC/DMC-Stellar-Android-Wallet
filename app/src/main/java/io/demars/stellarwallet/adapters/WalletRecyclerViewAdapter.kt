@@ -419,7 +419,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
     operation.memo?.let {
       viewHolder.info.visibility = VISIBLE
-      viewHolder.info.text = "Memo: $it"
+      viewHolder.info.text = it
     }
 
     when (operation.type) {

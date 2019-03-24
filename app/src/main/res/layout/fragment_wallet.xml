@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -57,19 +58,11 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/walletRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/walletRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"/>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:overScrollMode="never" />
 
         <TextView
             android:id="@+id/noTransactionsTextView"
@@ -111,10 +104,10 @@
             android:id="@+id/fundingState"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:clipToPadding="false"
-            android:clipChildren="false"
             android:visibility="gone"
             tools:ignore="UseCompoundDrawables">
 
@@ -124,8 +117,8 @@
                 android:layout_height="@dimen/qr_code_size_mini"
                 android:layout_gravity="center"
                 android:background="@drawable/qr_code"
-                android:elevation="@dimen/elevation_mini"
                 android:contentDescription="@string/public_address"
+                android:elevation="@dimen/elevation_mini"
                 android:padding="@dimen/padding_mini"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -135,8 +128,8 @@
                 android:layout_margin="@dimen/padding_horizontal"
                 android:layout_marginTop="@dimen/padding_vertical"
                 android:background="@drawable/text_widget_white"
-                android:clipToPadding="false"
                 android:clipChildren="false"
+                android:clipToPadding="false"
                 android:elevation="@dimen/elevation_mini"
                 android:orientation="horizontal"
                 tools:ignore="UnusedAttribute">
@@ -157,9 +150,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
-                    android:elevation="@dimen/elevation_mini"
                     android:background="@drawable/background_rounded_right_button_blue"
                     android:contentDescription="@string/copy_address_content_descriptor"
+                    android:elevation="@dimen/elevation_mini"
                     android:src="@drawable/ic_copy" />
 
             </LinearLayout>
@@ -176,4 +169,4 @@
                 android:text="@string/fund_account_string" />
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

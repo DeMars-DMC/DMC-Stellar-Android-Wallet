@@ -175,8 +175,7 @@ class WalletHeterogeneousWrapper {
     if (list == null) return null
 
     return (list.filter {
-      true
-//      getAssetCode(it) == assetType || convertAsset(it.counterAsset) == assetType
+      convertAsset(it.baseAsset) == assetType || convertAsset(it.counterAsset) == assetType
     } as ArrayList)
   }
 

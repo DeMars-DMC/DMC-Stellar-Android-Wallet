@@ -5,16 +5,11 @@ import android.os.Handler
 import android.os.Looper
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.interfaces.OnLoadAccount
-import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.models.AssetUtil
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.models.Operation
-import io.demars.stellarwallet.mvvm.remote.OnLoadEffects
-import io.demars.stellarwallet.mvvm.remote.OnLoadOperations
-import io.demars.stellarwallet.mvvm.remote.OnLoadTrades
-import io.demars.stellarwallet.mvvm.remote.OnLoadTransactions
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*
@@ -312,6 +307,7 @@ object Horizon : HorizonTasks {
       val server = getServer()
       val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
       var operationsResult: ArrayList<Pair<OperationResponse, String?>>? = null
+      var operationToFindMemo: ArrayList<OperationResponse>
       try {
         operationsResult = server.operations().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
@@ -323,13 +319,13 @@ object Horizon : HorizonTasks {
           it.type == Operation.OperationType.CHANGE_TRUST.value ||
           it.type == Operation.OperationType.ALLOW_TRUST.value
         }?.map {
-          when (it.type) {
-            Operation.OperationType.CREATED.value -> Pair(it, getMemoForOperation(it))
-            Operation.OperationType.PAYMENT.value -> Pair(it, getMemoForOperation(it))
-            else -> {
-              Pair<OperationResponse, String?>(it, null)
+          if (it.type == Operation.OperationType.CREATED.value ||
+            it.type == Operation.OperationType.PAYMENT.value) {
+            Handler(Looper.getMainLooper()).post {
+              LoadTransactionForOperationTask(it.transactionHash, listener).execute()
             }
           }
+            Pair<OperationResponse, String?>(it, null)
         } as ArrayList<Pair<OperationResponse, String?>>
       } catch (error: Exception) {
         Timber.e(error.message.toString())
@@ -337,17 +333,6 @@ object Horizon : HorizonTasks {
       }
 
       return operationsResult
-    }
-
-    private fun getMemoForOperation(operationResponse: OperationResponse?): String? {
-      val transactionResponse = getServer().transactions()
-        .transaction(operationResponse?.transactionHash)
-      var memo: String? = null
-      if (transactionResponse?.memo is MemoText) {
-        memo = (transactionResponse.memo as MemoText).text
-      }
-
-      return memo
     }
 
     override fun onPostExecute(result: ArrayList<Pair<OperationResponse, String?>>?) {
@@ -384,6 +369,32 @@ object Horizon : HorizonTasks {
         listener.onError(it)
       } ?: run {
         listener.onLoadTransactions(result)
+      }
+    }
+  }
+
+  private class LoadTransactionForOperationTask(private val transactionHash: String,
+                                                private val listener: OnLoadOperations): AsyncTask<Void, Void, TransactionResponse>()  {
+    var errorMessage: String? = null
+    override fun doInBackground(vararg params: Void?): TransactionResponse? {
+      val server = getServer()
+      var transactionResponse: TransactionResponse? = null
+      try {
+         transactionResponse = server.transactions()
+          .transaction(transactionHash)
+      } catch (error: Exception) {
+        Timber.e(error.message.toString())
+        errorMessage = error.message.toString()
+      }
+
+      return transactionResponse
+    }
+
+    override fun onPostExecute(result: TransactionResponse?){
+      errorMessage?.let {
+        listener.onError(it)
+      } ?: run {
+        listener.onLoadTransactionForOperation(result)
       }
     }
   }

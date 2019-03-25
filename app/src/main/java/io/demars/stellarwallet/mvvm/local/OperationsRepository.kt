@@ -2,10 +2,12 @@ package io.demars.stellarwallet.mvvm.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.demars.stellarwallet.mvvm.remote.OnLoadOperations
+import io.demars.stellarwallet.interfaces.OnLoadOperations
 import io.demars.stellarwallet.mvvm.remote.RemoteRepository
+import org.stellar.sdk.MemoText
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream
+import org.stellar.sdk.responses.TransactionResponse
 import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
@@ -91,6 +93,26 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
             notifyLiveData(operationsList)
           }
         }
+      }
+
+      override fun onLoadTransactionForOperation(result: TransactionResponse?) {
+        var index = 0
+        var memo = ""
+        for (operation in operationsList) {
+          if (operation.first.transactionHash == result?.hash && result?.memo is MemoText) {
+            index = operationsList.indexOf(operation)
+            memo = (result.memo as MemoText).text
+            break
+          }
+        }
+
+        if (memo.isNotEmpty()) {
+          val operation = operationsList[index].first
+          operationsList.removeAt(index)
+          operationsList.add(index, Pair(operation, memo))
+        }
+
+        notifyLiveData(operationsList)
       }
     })
   }

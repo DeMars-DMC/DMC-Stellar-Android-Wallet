@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.mvvm.remote
+package io.demars.stellarwallet.interfaces
 
 import org.stellar.sdk.responses.TransactionResponse
 

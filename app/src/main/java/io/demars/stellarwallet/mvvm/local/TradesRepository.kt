@@ -2,7 +2,7 @@ package io.demars.stellarwallet.mvvm.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.demars.stellarwallet.mvvm.remote.OnLoadTrades
+import io.demars.stellarwallet.interfaces.OnLoadTrades
 import io.demars.stellarwallet.mvvm.remote.RemoteRepository
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream

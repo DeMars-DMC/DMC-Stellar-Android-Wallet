@@ -1,14 +1,9 @@
 package io.demars.stellarwallet.remote
 
 import android.os.AsyncTask
-import io.demars.stellarwallet.interfaces.OnLoadAccount
-import io.demars.stellarwallet.mvvm.remote.OnLoadEffects
-import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
-import io.demars.stellarwallet.mvvm.remote.OnLoadOperations
-import io.demars.stellarwallet.mvvm.remote.OnLoadTrades
-import io.demars.stellarwallet.mvvm.remote.OnLoadTransactions
 import org.stellar.sdk.Asset
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream

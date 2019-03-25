@@ -9,19 +9,15 @@ import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants.Companion.DEFAULT_ACCOUNT_BALANCE
 import io.demars.stellarwallet.models.*
-import io.demars.stellarwallet.mvvm.account.AccountRepository
-import io.demars.stellarwallet.mvvm.local.EffectsRepository
+import io.demars.stellarwallet.mvvm.account.StellarAccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
-import io.demars.stellarwallet.mvvm.local.TransactionsRepository
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.StringFormat.Companion.truncateDecimalPlaces
 import org.jetbrains.anko.doAsync
 import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.responses.TradeResponse
-import org.stellar.sdk.responses.TransactionResponse
-import org.stellar.sdk.responses.effects.EffectResponse
 import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
@@ -30,7 +26,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
   private val applicationContext: Context = application.applicationContext
   private var sessionAsset: SessionAsset = DefaultAsset()
 
-  private val accountRepository: AccountRepository = AccountRepository()
+  private val stellarAccountRepository: StellarAccountRepository = StellarAccountRepository()
   private val operationsRepository: OperationsRepository = OperationsRepository.getInstance()
   private val tradesRepository: TradesRepository = TradesRepository.getInstance()
 
@@ -96,7 +92,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
   private fun loadAccount(notify: Boolean) {
     Timber.d("Loading account, notify {$notify}")
-    accountRepository.loadAccount().observeForever {
+    stellarAccountRepository.loadAccount().observeForever {
       if (it != null) {
         when (it.httpCode) {
           200 -> {

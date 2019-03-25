@@ -18,7 +18,7 @@ import timber.log.Timber
  * Tried to implement (https://github.com/JoaquimLey/transport-eta/blob/26ce1a7f4b2dff12c6efa2292531035e70bfc4ae/app/src/main/java/com/joaquimley/buseta/repository/BusRepository.java)
  * While at the same time only using remote, and not local or Room db
  */
-class AccountRepository {
+class StellarAccountRepository {
     private var liveData = MutableLiveData<AccountEvent>()
 
     /**

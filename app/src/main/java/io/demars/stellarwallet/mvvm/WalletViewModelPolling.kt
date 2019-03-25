@@ -11,7 +11,7 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants.Companion.DEFAULT_ACCOUNT_BALANCE
 import io.demars.stellarwallet.interfaces.StellarAccount
 import io.demars.stellarwallet.models.*
-import io.demars.stellarwallet.mvvm.account.AccountRepository
+import io.demars.stellarwallet.mvvm.account.StellarAccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
 import io.demars.stellarwallet.utils.AccountUtils
@@ -27,7 +27,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
   private val applicationContext: Context = application.applicationContext
   private var sessionAsset: SessionAsset = DefaultAsset()
 
-  private val accountRepository: AccountRepository = AccountRepository()
+  private val stellarAccountRepository: StellarAccountRepository = StellarAccountRepository()
   private val operationsRepository: OperationsRepository = OperationsRepository.getInstance()
   private val tradesRepository: TradesRepository = TradesRepository.getInstance()
 
@@ -90,7 +90,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
   private fun loadAccount(notify: Boolean) {
     Timber.d("Loading account, notify {$notify}")
     handlerMain.post {
-      accountRepository.loadAccount().observeForever {
+      stellarAccountRepository.loadAccount().observeForever {
         if (it != null) {
           when (it.httpCode) {
             200 -> {

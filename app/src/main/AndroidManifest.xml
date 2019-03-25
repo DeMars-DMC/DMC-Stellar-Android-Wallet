@@ -62,6 +62,10 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".activities.PhoneVerificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".activities.PinActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

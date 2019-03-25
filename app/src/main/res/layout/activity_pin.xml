@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/main_bg_dark"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
     android:paddingStart="@dimen/padding_horizontal"
     android:paddingTop="@dimen/padding_vertical"
     android:paddingEnd="@dimen/padding_horizontal"
@@ -41,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_padding_size_large"
+            android:layout_marginTop="@dimen/padding_vertical"
             android:layout_marginBottom="@dimen/padding_vertical">
 
             <io.demars.stellarwallet.views.pin.IndicatorDots
@@ -68,7 +67,8 @@
             android:layout_width="@dimen/logo_width_pin"
             android:layout_height="@dimen/logo_width_pin"
             android:layout_gravity="center_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_marginBottom="@dimen/padding_vertical"
             android:src="@drawable/ic_main_logo" />
 
         <io.demars.stellarwallet.views.pin.PinLockView

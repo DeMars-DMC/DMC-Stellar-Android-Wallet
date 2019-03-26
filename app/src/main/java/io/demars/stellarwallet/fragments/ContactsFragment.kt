@@ -104,8 +104,8 @@ class ContactsFragment : Fragment() {
     refreshButton = menu.findItem(R.id.refresh_contacts)
     searchButton = menu.findItem(R.id.search_contacts)
     addContactButton = menu.findItem(R.id.add_contact)
-    setMenuItemsEnable(false)
     menuItemsInitialized = true
+    setMenuItemsEnable(true)
     super.onCreateOptionsMenu(menu, inflater)
   }
 

@@ -15,12 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
+            app:popupTheme="@style/ToolbarTheme"
             app:title="@string/nav_contacts" />
 
         <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
             app:mt_clearIconTint="@color/transparent_white"
             app:mt_hint="@string/hint_search_bar"

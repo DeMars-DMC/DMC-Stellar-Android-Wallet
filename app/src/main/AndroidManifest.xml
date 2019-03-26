@@ -24,7 +24,7 @@
             android:name=".activities.LaunchActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -36,7 +36,7 @@
             android:name=".activities.WalletActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.AssetsActivity"
@@ -62,13 +62,9 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.PhoneVerificationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".activities.PinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/SplashTheme" />
         <activity
             android:name=".activities.SendActivity"
             android:screenOrientation="portrait"

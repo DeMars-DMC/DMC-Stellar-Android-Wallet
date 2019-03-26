@@ -8,7 +8,7 @@ import io.demars.stellarwallet.fragments.ContactsFragment
 
 class ContactsActivity : BaseActivity() {
   enum class Mode {
-    ALL, WITH_KEY
+    ALL, STELLAR
   }
 
   private lateinit var mode: Mode
@@ -24,7 +24,7 @@ class ContactsActivity : BaseActivity() {
 
     fun withKey(context: Context): Intent {
       val intent = Intent(context, ContactsActivity::class.java)
-      intent.putExtra(ARG_MODE, Mode.WITH_KEY)
+      intent.putExtra(ARG_MODE, Mode.STELLAR)
       return intent
     }
   }

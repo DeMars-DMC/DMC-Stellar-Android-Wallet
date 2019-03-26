@@ -61,8 +61,8 @@ class ContactsFragment : Fragment() {
   // A UI Fragment must inflate its View
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View {
-    mode = if (arguments?.get(ARG_MODE) == ContactsActivity.Mode.WITH_KEY)
-      ContactsActivity.Mode.WITH_KEY else ContactsActivity.Mode.ALL
+    mode = if (arguments?.get(ARG_MODE) == ContactsActivity.Mode.STELLAR)
+      ContactsActivity.Mode.STELLAR else ContactsActivity.Mode.ALL
     return inflater.inflate(R.layout.fragment_contact_list, container, false)
   }
 
@@ -72,7 +72,7 @@ class ContactsFragment : Fragment() {
     activity?.let {
       @Suppress("CAST_NEVER_SUCCEEDS")
       (it as AppCompatActivity).setSupportActionBar(toolbar)
-      if (mode == ContactsActivity.Mode.WITH_KEY) {
+      if (mode == ContactsActivity.Mode.STELLAR) {
         it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
       }
 
@@ -223,19 +223,16 @@ class ContactsFragment : Fragment() {
     ContactsRepositoryImpl(appContext).getContactsListLiveData(forceRefresh).observe(viewLifecycleOwner, Observer {
       Timber.d("Observer triggered {${it?.stellarContacts?.size}")
       it?.let { that ->
-        currentContactList = ArrayList(that.contacts)
-        currentContactList.addAll(0, that.stellarContacts)
-        if (mode == ContactsActivity.Mode.WITH_KEY) {
-          val contactsWithKey = ArrayList<Contact>()
-          currentContactList.forEach {
-            if (!it.stellarAddress.isNullOrEmpty()) {
-              contactsWithKey.add(it)
-            }
+        when (mode) {
+          ContactsActivity.Mode.ALL -> {
+            currentContactList = ArrayList(that.contacts)
+            currentContactList.addAll(0, that.stellarContacts)
           }
-
-          currentContactList.clear()
-          currentContactList.addAll(contactsWithKey)
+          ContactsActivity.Mode.STELLAR -> {
+            currentContactList = ArrayList(that.stellarContacts)
+          }
         }
+
 
         populateList(currentContactList)
         if (::refreshButton.isInitialized) {

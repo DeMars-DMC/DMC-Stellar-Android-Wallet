@@ -7,17 +7,12 @@
     android:orientation="vertical"
     tools:context=".activities.DiagnosticActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
         app:title="Send a Bug Report"
-        app:titleTextColor="@color/colorPrimaryDark"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:ignore="UnusedAttribute" />
+        android:theme="@style/ToolbarTheme"/>
 
     <ScrollView
         android:fadeScrollbars="false"
@@ -47,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin" />
 
             <TextView
@@ -61,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin" />
 
             <TextView
@@ -75,13 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/blockeq_app_version"
+                android:text="@string/dmc_app_version"
                 style="@style/SettingsButton" />
 
             <TextView
@@ -89,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin" />
 
             <TextView
@@ -103,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"/>
 
@@ -118,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"/>
 
@@ -133,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/RegularText"
-                android:textColor="@color/paleSky"
+                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"/>
 
@@ -151,7 +146,7 @@
                 android:lines="4"
                 style="@style/RegularText"
                 android:gravity="top|start"
-                android:background="@drawable/bg_edit_text"
+                android:background="@drawable/edit_text"
                 android:padding="@dimen/activity_vertical_margin"
                 android:importantForAutofill="no"
                 android:hint="@string/explanation_hint"
@@ -164,7 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/send_report"
-                style="@style/PrimaryButtonStyle"
+                style="@style/ButtonAccentStyle"
                 android:layout_margin="@dimen/activity_vertical_margin"/>
 
         </LinearLayout>

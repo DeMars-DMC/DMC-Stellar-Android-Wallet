@@ -1,81 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_gray"
     tools:context=".activities.MnemonicActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        tools:ignore="UnusedAttribute"
-        app:title="@string/secret_phrase"
-        app:titleTextColor="@color/colorPrimaryDark"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/secret_phrase" />
 
-    <TextView
-        android:id="@+id/warningPhraseTextView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolBar"
-        android:text="@string/phrase_warning"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:gravity="center"/>
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/passphraseButton">
 
-    <RelativeLayout
-        android:id="@+id/qrLayout"
-        android:layout_below="@id/warningPhraseTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/qrImageView"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            android:background="@color/qrCodeBackGroundColor"
-            android:contentDescription="@string/secret_phrase" />
+            <TextView
+                android:id="@+id/warningPhraseTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_vertical"
+                android:layout_marginStart="@dimen/padding_horizontal"
+                android:layout_marginEnd="@dimen/padding_horizontal"
+                android:gravity="center"
+                android:text="@string/phrase_warning"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/qrImageView"
+                android:layout_width="@dimen/qr_code_size"
+                android:layout_height="@dimen/qr_code_size"
+                android:background="@drawable/qr_code"
+                android:contentDescription="@string/secret_phrase"
+                android:padding="@dimen/padding_mini"
+                android:layout_marginTop="@dimen/padding_vertical"
+                android:elevation="@dimen/elevation_mini"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/warningPhraseTextView"
+                tools:ignore="UnusedAttribute" />
 
-    <com.blockeq.stellarwallet.views.ChipView
-        android:id="@+id/mnemonicView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qrLayout" />
+            <io.demars.stellarwallet.views.ChipView
+                android:id="@+id/mnemonicView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/qrImageView"  />
 
-    <com.blockeq.stellarwallet.views.ChipView
-        android:id="@+id/passphraseView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/passphraseButton"
-        android:layout_below="@id/mnemonicView" />
+            <io.demars.stellarwallet.views.ChipView
+                android:id="@+id/passphraseView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/mnemonicView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/passphraseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/advanced_security"
         android:layout_above="@+id/confirmButton"
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:focusable="true"
-        android:padding="@dimen/activity_vertical_margin" />
+        android:padding="@dimen/padding_horizontal"
+        android:text="@string/advanced_security"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/confirmButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/confirmButton"
-        android:layout_alignParentBottom="true"
+        style="@style/ButtonAccentStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/confirm_written"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_vertical_margin"
-        style="@style/PrimaryButtonStyle"
-        android:background="@color/blue2"/>
+        android:text="@string/confirm_written"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

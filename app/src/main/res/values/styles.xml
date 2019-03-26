@@ -11,10 +11,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
-    <style name="PinActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
-
 
     <style name="TransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
@@ -25,12 +24,14 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
         <item name="colorControlHighlight">@color/navButtonRippleColor</item>
-        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:background">@color/blueDark</item>
         <item name="android:fontFamily">@font/lato_bold</item>
     </style>
 
@@ -43,11 +44,11 @@
         <item name="android:textSize">@dimen/title_text_size</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/lato_bold</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/main_bg_light</item>
     </style>
 
     <style name="NavTitleText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/darkBlue</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/navigation_title</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/lato_bold</item>
@@ -55,13 +56,13 @@
 
     <style name="ShortDescription" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:fontFamily">@font/lato_regular</item>
     </style>
 
     <style name="LandingPageDescription" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/blue2</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:fontFamily">@font/lato_regular</item>
     </style>
 
@@ -99,10 +100,7 @@
         <item name="android:fontFamily">@font/lato_bold</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-        <item name="elevation">@dimen/actionbar_elevation</item>
-        <item name="android:elevation">@dimen/actionbar_elevation</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -111,20 +109,20 @@
         <item name="android:fontFamily">@font/lato_regular</item>
     </style>
 
-    <style name="PrimaryButtonStyle" parent="ButtonStyle">
+    <style name="ButtonAccentStyle" parent="ButtonStyle">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textColor">@color/primaryButtonText</item>
-        <item name="android:background">@drawable/primary_button</item>
+        <item name="android:background">@drawable/button_accent</item>
     </style>
 
-    <style name="SecondaryButtonStyle" parent="ButtonStyle">
+    <style name="ButtonYellowStyle" parent="ButtonStyle">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textColor">@color/secondaryButtonText</item>
-        <item name="android:background">@drawable/secondary_button</item>
+        <item name="android:background">@drawable/button_yellow</item>
     </style>
 
     <style name="HorizontalDivider">
@@ -140,11 +138,11 @@
     </style>
 
     <style name="SettingsTitle" parent="RegularText">
-        <item name="android:textColor">@color/blue2</item>
+        <item name="android:textColor">@color/blueDark</item>
     </style>
 
     <style name="SettingsButton" parent="RegularText">
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>

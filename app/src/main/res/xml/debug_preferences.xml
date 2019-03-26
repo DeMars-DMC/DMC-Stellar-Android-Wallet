@@ -1,33 +1,25 @@
-<android.support.v7.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/preference_debug_leak_canary"
+        android:summary="@string/debug_leak_canary_summary"
+        android:title="@string/debug_leak_canary_title" />
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="Code Analysis">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/preference_debug_pin_disabled"
+        android:summary="@string/debug_disable_pin_summary"
+        android:title="@string/debug_disable_pin_title" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="@string/preference_debug_leak_canary"
-            android:title="@string/debug_leak_canary_title"
-            android:summary="@string/debug_leak_canary_summary"
-            android:defaultValue="false" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/preference_debug_trade_tooltip"
+        android:summary="@string/debug_enable_trade_tooltips_summary"
+        android:title="@string/debug_enable_trade_tooltips_title" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="@string/preference_debug_pin_disabled"
-            android:title="@string/debug_disable_pin_title"
-            android:summary="@string/debug_disable_pin_summary"
-            android:defaultValue="false" />
-
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="@string/preference_debug_trade_tooltip"
-            android:title="@string/debug_enable_trade_tooltips_title"
-            android:summary="@string/debug_enable_trade_tooltips_summary"
-            android:defaultValue="false" />
-
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="@string/preference_debug_test_server"
-            android:title="@string/debug_enable_test_server"
-            android:summary="@string/debug_enable_test_server_summary"
-            android:defaultValue="false" />
-
-    </android.support.v7.preference.PreferenceCategory>
-
-</android.support.v7.preference.PreferenceScreen>
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/preference_debug_test_server"
+        android:summary="@string/debug_enable_test_server_summary"
+        android:title="@string/debug_enable_test_server" />
+</PreferenceScreen>

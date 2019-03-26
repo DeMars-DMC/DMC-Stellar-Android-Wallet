@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="@dimen/padding_horizontal"
+    android:paddingEnd="@dimen/padding_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false">
+
+    <ImageView
+        android:id="@+id/dotImageView"
+        android:src="@drawable/colored_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/transactionTypeTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/transactionTypeTextView"/>
+
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="@dimen/padding_micro"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/padding_micro"
+        android:background="@drawable/timeline_line_indicator_bg"
+        android:alpha="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dotImageView"
+        app:layout_constraintStart_toStartOf="@id/dotImageView"
+        app:layout_constraintEnd_toEndOf="@id/dotImageView" />
+
+    <TextView
+        android:id="@+id/transactionTypeTextView"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dotImageView"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
+        tools:text="Sent" />
+
+    <TextView
+        android:id="@+id/transactionInfoTextView"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size"
+        android:textColor="@color/colorPaleSky"
+        android:paddingTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
+        app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTypeTextView"
+        tools:text="Test Memo" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        style="@style/LongDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorDisabled"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        tools:text="Sep 12, 2018 11:22"
+        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
+        app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/transactionInfoTextView" />
+
+
+    <TextView
+        android:id="@+id/amountTextView"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/text_size"
+        tools:text="2.0000"
+        app:layout_constraintTop_toTopOf="@id/transactionTypeTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

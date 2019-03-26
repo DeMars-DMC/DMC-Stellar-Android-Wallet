@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inputType="textPassword"
-        android:textSize="@dimen/text_size_medium"
+        android:textSize="@dimen/text_size"
         android:hint="@string/passphrase_hint" />
 
 </FrameLayout>

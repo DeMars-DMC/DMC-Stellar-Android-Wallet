@@ -9,17 +9,12 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        tools:ignore="UnusedAttribute"
         app:title="@string/button_send"
-        app:titleTextColor="@color/colorPrimaryDark"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ToolbarTheme" />
 
     <TextView
         android:id="@+id/titleText"
@@ -95,6 +90,7 @@
             android:layout_height="match_parent"
             android:ellipsize="end"
             android:maxLines="1"
+            android:maxLength="28"
             android:textSize="16sp"
             android:background="@android:color/transparent"
             android:hint="@string/optional"

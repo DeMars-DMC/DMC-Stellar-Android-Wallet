@@ -5,7 +5,7 @@
 
     <stroke
         android:width="@dimen/common_stroke"
-        android:color="@color/toggleSelected" />
+        android:color="@color/blueDark" />
 
     <corners
         android:bottomLeftRadius="@dimen/common_radius"

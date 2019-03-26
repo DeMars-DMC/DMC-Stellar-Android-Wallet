@@ -1,81 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.InflationActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        tools:ignore="UnusedAttribute"
-        app:title="@string/inflation_destination_title"
-        app:titleTextColor="@color/colorPrimaryDark"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/inflation_destination_title" />
 
     <LinearLayout
-        android:layout_below="@id/toolBar"
-        android:id="@+id/addressLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:orientation="horizontal"
-        android:background="@drawable/bg_rounded_button_blue">
-
-        <EditText
-            android:id="@+id/addressEditText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            android:padding="12dp"
-            android:background="@color/addressBackGroundColor"
-            android:textSize="12sp"
-            android:scrollHorizontally="true"
-            android:digits="@string/stellar_address_alphabet"
-            android:inputType="textCapCharacters"
-            android:hint="@string/send_address_hint" />
-
-        <ImageButton
-            android:id="@+id/cameraImageButton"
-            android:layout_width="0dp"
-            android:layout_weight="0.15"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:src="@drawable/ic_camera"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/inflationInfoTextView"
-        android:layout_below="@+id/addressLayout"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/RegularText"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="@string/inflation_info_message"/>
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/saveButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TextView
+            android:id="@+id/inflationInfoTextView"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_vertical"
+            android:text="@string/inflation_info_message"
+            android:paddingStart="@dimen/padding_horizontal_double"
+            android:paddingEnd="@dimen/padding_horizontal_double"
+            android:gravity="center" />
+
+
+        <LinearLayout
+            android:id="@+id/addressLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_margin="@dimen/padding_vertical"
+            android:background="@drawable/bg_rounded_left_button_white"
+            android:elevation="@dimen/elevation_mini"
+            android:orientation="horizontal"
+            tools:ignore="UnusedAttribute">
+
+            <EditText
+                android:id="@+id/addressEditText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:background="@color/addressBackGroundColor"
+                android:digits="@string/stellar_address_alphabet"
+                android:hint="@string/send_address_hint"
+                android:inputType="textCapCharacters"
+                android:padding="@dimen/padding_horizontal"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size" />
+
+            <ImageButton
+                android:id="@+id/cameraImageButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:elevation="@dimen/elevation_mini"
+                android:layout_weight="0.2"
+                android:background="@drawable/background_rounded_right_button_accent"
+                android:contentDescription="@string/copy_address_content_descriptor"
+                android:src="@drawable/ic_camera" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/saveButton"
+        style="@style/ButtonAccentStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/sendButtonColor"
-        android:textColor="@color/white"
-        style="@style/ButtonStyle"
-        android:text="@string/save_button"
+        android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_vertical_margin"/>
+        android:layout_margin="@dimen/padding_horizontal"
+        android:text="@string/save_button"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:visibility="gone"
-        android:layout_centerInParent="true" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

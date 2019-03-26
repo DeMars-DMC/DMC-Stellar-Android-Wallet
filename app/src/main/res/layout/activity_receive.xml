@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/receive_title"
+        android:theme="@style/ToolbarTheme"/>
+    
+    <RelativeLayout
+        android:id="@+id/qrLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.60"
+        android:orientation="vertical"
+        android:background="@color/main_bg_light">
+
+        <ImageView
+            android:id="@+id/qrImageView"
+            android:layout_width="@dimen/qr_code_size"
+            android:layout_height="@dimen/qr_code_size"
+            android:layout_centerInParent="true"
+            android:background="@drawable/qr_code"
+            android:contentDescription="@string/secret_phrase"
+            android:padding="@dimen/padding_mini"
+            android:elevation="@dimen/elevation_mini"
+            tools:ignore="UnusedAttribute" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/addressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.40"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:elevation="@dimen/elevation_mini"
+        android:padding="@dimen/padding_horizontal"
+        android:background="@color/addressLayoutBackGroundColor"
+        tools:ignore="UnusedAttribute">
+
+        <TextView
+            android:id="@+id/addressTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_wallet_address"
+            android:textColor="@color/addressTextColor"
+            android:paddingStart="@dimen/padding_micro"
+            android:paddingEnd="@dimen/padding_micro"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:elevation="@dimen/elevation_mini"
+            android:layout_below="@+id/addressTitle"
+            android:orientation="horizontal"
+            android:background="@drawable/text_widget"
+            tools:ignore="UnusedAttribute">
+
+            <TextView
+                android:id="@+id/addressEditText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:padding="@dimen/padding_horizontal"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
+
+            <ImageButton
+                android:id="@+id/copyImageButton"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_rounded_right_button_accent"
+                android:elevation="@dimen/elevation_mini"
+                android:src="@drawable/ic_copy"
+                android:contentDescription="@string/copy_address_content_descriptor" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,74 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/main_bg_dark"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:id="@+id/rootLayout">
-
-    <ImageView
-        android:layout_width="@dimen/logo_width"
-        android:layout_height="@dimen/logo_height"
-        android:layout_marginTop="@dimen/text_size_xxxxlarge"
-        android:src="@drawable/ic_main_logo" />
-
-    <TextView
-        android:id="@+id/customMessageTextView"
-        style="@style/LandingPageDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_padding_size_xxxlarge"
-        android:layout_marginTop="@dimen/margin_padding_size_medium"
-        android:layout_marginEnd="@dimen/margin_padding_size_xxxlarge"
-        android:gravity="center"
-        android:text="@string/please_enter_your_pin" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_padding_size_large">
-
-        <com.andrognito.pinlockview.IndicatorDots
-            android:id="@+id/indicatorDots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:dotDiameter="@dimen/dot_diameter"
-            app:dotEmptyBackground="@drawable/dot_empty_background"
-            app:dotFilledBackground="@drawable/dot_filled"
-            app:dotSpacing="@dimen/dot_spacing" />
-
-        <com.andrognito.pinlockview.IndicatorDots
-            android:id="@+id/wrongPinDots"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:dotDiameter="@dimen/dot_diameter"
-            app:dotEmptyBackground="@drawable/wrong_dot_filled"
-            app:dotSpacing="@dimen/dot_spacing" />
-    </RelativeLayout>
+    android:paddingStart="@dimen/padding_horizontal"
+    android:paddingTop="@dimen/padding_vertical"
+    android:paddingEnd="@dimen/padding_horizontal"
+    android:paddingBottom="@dimen/padding_vertical"
+    tools:context=".activities.PinActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.andrognito.pinlockview.PinLockView
+        <TextView
+            android:id="@+id/customMessageTextView"
+            style="@style/LandingPageDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:layout_marginBottom="@dimen/padding_vertical"
+            android:text="@string/please_enter_your_pin" />
+
+        <FrameLayout
+            android:id="@+id/indicatorsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_marginBottom="@dimen/padding_vertical">
+
+            <io.demars.stellarwallet.views.pin.IndicatorDots
+                android:id="@+id/indicatorDots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dotDiameter="@dimen/dot_diameter"
+                app:dotEmptyBackground="@drawable/dot_empty_background"
+                app:dotFilledBackground="@drawable/dot_filled"
+                app:dotSpacing="@dimen/dot_spacing" />
+
+            <io.demars.stellarwallet.views.pin.IndicatorDots
+                android:id="@+id/wrongPinDots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:dotDiameter="@dimen/dot_diameter"
+                app:dotEmptyBackground="@drawable/wrong_dot_filled"
+                app:dotSpacing="@dimen/dot_spacing" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/imageLogo"
+            android:layout_width="@dimen/logo_width_pin"
+            android:layout_height="@dimen/logo_width_pin"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_marginBottom="@dimen/padding_vertical"
+            android:src="@drawable/ic_main_logo" />
+
+        <io.demars.stellarwallet.views.pin.PinLockView
             android:id="@+id/pinLockView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_padding_size_medium_large"
-            android:layout_marginEnd="@dimen/margin_padding_size_medium_large"
-            app:keypadButtonSize="@dimen/margin_padding_size_xxxlarge"
-            app:keypadDeleteButtonPressedColor="@color/deletePressedColor"
-            app:keypadDeleteButtonSize="@dimen/margin_padding_size_medium_large"
-            app:keypadHorizontalSpacing="@dimen/margin_padding_size_xxlarge"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            app:keypadButtonSize="@dimen/button_height_big"
+            app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
+            app:keypadDeleteButtonSize="@dimen/button_height_big"
             app:keypadShowDeleteButton="true"
-            app:keypadTextColor="@color/blue4"
+            app:keypadTextColor="@color/white"
             app:keypadTextSize="@dimen/keypad_size"
-            app:keypadVerticalSpacing="@dimen/keybadSpacing"
+            app:keypadVerticalSpacing="@dimen/pin_spacing_vertical"
+            app:keypadHorizontalSpacing="@dimen/pin_spacing_horizontal"
             app:pinLength="4" />
     </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

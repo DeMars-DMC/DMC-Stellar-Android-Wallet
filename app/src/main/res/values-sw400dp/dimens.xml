@@ -1,0 +1,34 @@
+<resources>
+    <dimen name="padding_zero">0dp</dimen>
+    <dimen name="padding_macro">2dp</dimen>
+    <dimen name="padding_micro">4dp</dimen>
+    <dimen name="padding_mini">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
+    <dimen name="padding_horizontal_double">32dp</dimen>
+    <dimen name="padding_vertical">24dp</dimen>
+    <dimen name="padding_vertical_double">48dp</dimen>
+
+    <dimen name="logo_width_main">140dp</dimen>
+    <dimen name="logo_width_pin">100dp</dimen>
+
+    <dimen name="button_height">40dp</dimen>
+    <dimen name="button_height_big">56dp</dimen>
+
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+
+    <dimen name="pin_spacing_vertical">16dp</dimen>
+    <dimen name="pin_spacing_horizontal">48dp</dimen>
+
+    <dimen name="corner_radius">4dp</dimen>
+
+    <dimen name="qr_code_size">250dp</dimen>
+    <dimen name="qr_code_size_mini">200dp</dimen>
+
+    <dimen name="elevation_mini">2dp</dimen>
+    <dimen name="elevation">4dp</dimen>
+
+    <dimen name="toolbar_size_big">80dp</dimen>
+
+</resources>

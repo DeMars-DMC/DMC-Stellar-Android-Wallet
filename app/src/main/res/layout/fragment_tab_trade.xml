@@ -14,14 +14,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/container"
+            android:background="@color/main_bg_light"
             android:orientation="vertical"
-            android:paddingStart="@dimen/margin_padding_size_medium"
-            android:paddingLeft="@dimen/margin_padding_size_medium"
-            android:paddingTop="@dimen/margin_padding_size_large"
-            android:paddingEnd="@dimen/margin_padding_size_medium"
-            android:paddingRight="@dimen/margin_padding_size_medium"
-            android:paddingBottom="@dimen/margin_padding_size_large">
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingTop="@dimen/padding_vertical"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,30 +44,31 @@
                     android:layout_height="@dimen/button_height"
                     android:layout_weight=".5"
                     android:background="@drawable/right_toggle"
+                    android:textColor="@color/blueDark"
                     android:text="@string/limit" />
             </LinearLayout>
 
-            <com.blockeq.stellarwallet.views.CustomSelector
+            <io.demars.stellarwallet.views.CustomSelector
                 android:id="@+id/sellingCustomSelector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 app:hint="@string/selling_hint"
                 app:inputType="decimal"
-                app:customStrokeColor="@color/sellSelectorBg"/>
+                app:customStrokeColor="@color/colorYellow"/>
 
             <TextView
                 android:id="@+id/holdings"
                 style="@style/RegularText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 tools:text="1,000,000,000.1234567 PTS"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -78,7 +77,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
-                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_marginEnd="@dimen/padding_mini"
                     android:layout_weight=".2"
                     android:background="@drawable/percentage_selector_bg"
                     android:text="@string/tenth" />
@@ -88,7 +87,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
-                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_marginEnd="@dimen/padding_mini"
                     android:layout_weight=".2"
                     android:background="@drawable/percentage_selector_bg"
                     android:text="@string/quarter" />
@@ -98,7 +97,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
-                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_marginEnd="@dimen/padding_mini"
                     android:layout_weight=".2"
                     android:background="@drawable/percentage_selector_bg"
                     android:text="@string/half" />
@@ -108,7 +107,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
-                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_marginEnd="@dimen/padding_mini"
                     android:layout_weight=".2"
                     android:background="@drawable/percentage_selector_bg"
                     android:text="@string/three_quarters" />
@@ -127,31 +126,31 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 android:gravity="center">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_arrow_downward_black_36dp"
-                    android:tint="@color/downArrow" />
+                    android:tint="@color/colorLightGrey" />
             </LinearLayout>
 
-            <com.blockeq.stellarwallet.views.CustomSelector
+            <io.demars.stellarwallet.views.CustomSelector
                 android:id="@+id/buyingCustomSelector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 app:hint="@string/buying_hint"
                 app:inputType="decimal"
-                app:customStrokeColor="@color/buySelectorBg"/>
+                app:customStrokeColor="@color/colorYellow"/>
 
             <Button
                 android:id="@+id/submitTrade"
-                style="@style/PrimaryButtonStyle"
+                style="@style/ButtonAccentStyle"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spinner_height"
-                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:layout_height="@dimen/button_height_big"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 android:enabled="false"
                 android:text="@string/submit" />
 
@@ -166,8 +165,8 @@
             style="@style/LongDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding_size_medium"
-            android:text="@string/trade_tab_notes" />
+            android:padding="@dimen/padding_horizontal"
+            android:text="@string/exchange_tab_notes" />
 
     </LinearLayout>
 </ScrollView>

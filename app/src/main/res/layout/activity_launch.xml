@@ -21,9 +21,27 @@
         android:scaleType="fitXY"
         tools:ignore="ContentDescription"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/createWalletButton"
+        app:layout_constraintBottom_toTopOf="@id/verificationEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/verificationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:background="@drawable/dmc_edit_text_accent"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_big"
+        android:hint="@string/phone_number_hint"
+        android:textColorHint="@color/colorPaleSky"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:inputType="phone|number"
+        android:imeOptions="actionDone"
+        android:maxLength="20"
+        app:layout_constraintBottom_toTopOf="@id/createWalletButton" />
 
     <Button
         android:id="@+id/createWalletButton"

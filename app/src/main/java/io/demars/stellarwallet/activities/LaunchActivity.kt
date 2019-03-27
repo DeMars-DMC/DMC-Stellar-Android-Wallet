@@ -50,7 +50,6 @@ class LaunchActivity : BaseActivity() {
         verifyPhoneNumber()
       }
     }
-
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

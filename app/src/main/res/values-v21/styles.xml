@@ -12,6 +12,10 @@
         <item name="android:background">@color/blueDark</item>
     </style>
 
+    <style name="BlackTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="elevation">@dimen/elevation</item>
         <item name="android:elevation">@dimen/elevation</item>
@@ -22,4 +26,5 @@
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:elevation">@dimen/elevation</item>
     </style>
+
 </resources>

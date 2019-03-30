@@ -11,6 +11,10 @@
     <!--<uses-permission android:name="android.permission.USE_BIOMETRIC"/>-->
     <!--<uses-permission android:name="android.permission.USE_FINGERPRINT" />-->
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:name=".WalletApplication"
         android:allowBackup="false"
@@ -55,7 +59,12 @@
         <activity
             android:name=".activities.CameraActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/BlackTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activities.Camera2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BlackTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.MnemonicActivity"

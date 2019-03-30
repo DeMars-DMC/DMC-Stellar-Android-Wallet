@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.models.ExchangeApiModel
 import io.demars.stellarwallet.models.ExchangeMapper
-import io.demars.stellarwallet.remote.BlockEqRetrofit
+import io.demars.stellarwallet.remote.DmcRetrofit
 import io.demars.stellarwallet.remote.ExchangeProvidersApi
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +38,7 @@ class ExchangeRepository(application: Application) {
     }
 
     private fun refreshExchanges() {
-        BlockEqRetrofit.create(ExchangeProvidersApi::class.java).exchangeProviders().enqueue(object : Callback<List<ExchangeApiModel>>{
+        DmcRetrofit.create(ExchangeProvidersApi::class.java).exchangeProviders().enqueue(object : Callback<List<ExchangeApiModel>>{
             override fun onResponse(call: Call<List<ExchangeApiModel>>, response: retrofit2.Response<List<ExchangeApiModel>>) {
                 val list = response.body()
                 if (list != null && list.isNotEmpty()) {

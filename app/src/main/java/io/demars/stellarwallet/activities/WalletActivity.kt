@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.fragments.*
 import timber.log.Timber
 
@@ -28,6 +29,8 @@ class WalletActivity : BaseActivity(), io.demars.stellarwallet.utils.KeyboardUti
         setContentView(R.layout.activity_wallet)
 
         dialogTradeAlert = createTradingErrorDialog()
+
+        Firebase.updateUsersWallet()
 
         setupUI()
     }

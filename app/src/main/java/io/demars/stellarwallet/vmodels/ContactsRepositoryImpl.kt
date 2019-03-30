@@ -26,8 +26,8 @@ import kotlin.concurrent.thread
 object ContactsRepositoryImpl : ContactsRepository {
   private lateinit var appContext: Context
   private const val mimeTypeStellarAddress = "vnd.android.cursor.item/stellarAccount"
-  private const val BLOCKEQ_ACCOUNT_NAME = "blockeq"
-  private const val BLOCKEQ_ACCOUNT_TYPE = "default"
+  private const val DMC_ACCOUNT_NAME = "dmc"
+  private const val DMC_ACCOUNT_TYPE = "default"
 
   private var contactsLiveData: MutableLiveData<ContactsResult> = MutableLiveData()
   private var stellarContactList: ArrayList<Contact> = ArrayList()
@@ -51,8 +51,8 @@ object ContactsRepositoryImpl : ContactsRepository {
   override fun createContact(name: String, stellarAddress: String): Long {
     val ops = ArrayList<ContentProviderOperation>()
     ops.add(ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
-      .withValue(RawContacts.ACCOUNT_TYPE, BLOCKEQ_ACCOUNT_NAME)
-      .withValue(RawContacts.ACCOUNT_NAME, BLOCKEQ_ACCOUNT_TYPE).build())
+      .withValue(RawContacts.ACCOUNT_TYPE, DMC_ACCOUNT_TYPE)
+      .withValue(RawContacts.ACCOUNT_NAME, DMC_ACCOUNT_TYPE).build())
 
     ops.add(ContentProviderOperation
       .newInsert(ContactsContract.Data.CONTENT_URI)
@@ -97,9 +97,8 @@ object ContactsRepositoryImpl : ContactsRepository {
 
         ops.add(ContentProviderOperation
           .newInsert(ContactsContract.RawContacts.CONTENT_URI)
-          .withValue(ContactsContract.RawContacts.ACCOUNT_NAME,
-            BLOCKEQ_ACCOUNT_NAME)
-          .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, BLOCKEQ_ACCOUNT_TYPE)
+          .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, DMC_ACCOUNT_NAME)
+          .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, DMC_ACCOUNT_TYPE)
           .build())
 
         ops.add(ContentProviderOperation

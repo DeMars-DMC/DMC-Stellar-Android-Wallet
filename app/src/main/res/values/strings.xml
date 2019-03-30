@@ -279,4 +279,11 @@
     <string name="verify">Verify</string>
     <string name="code_from_sms">Code from SMS</string>
     <string name="pattern_send_new_sms">Send new SMS %s</string>
+    <string name="retake">Retake</string>
+    <string name="send">Send</string>
+    <string name="photo_of_id">Photo of ID</string>
+    <string name="ensure_image">Ensure image is clear and legible</string>
+    <string name="failed_upload_image">Failed to upload image. Please try again</string>
+    <string name="uploading_photo">Uploading photo...</string>
+    <string name="uploading_photo_error">Something went wrong. Please try again</string>
 </resources>

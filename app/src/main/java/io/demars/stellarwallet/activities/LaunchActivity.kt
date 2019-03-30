@@ -1,6 +1,8 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.View
@@ -19,11 +21,14 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 import android.os.CountDownTimer
 import com.google.firebase.FirebaseTooManyRequestsException
+import io.demars.stellarwallet.firebase.DmcUser
+import io.demars.stellarwallet.firebase.Firebase
 
 
 class LaunchActivity : BaseActivity() {
 
   companion object {
+    private const val REQUEST_CODE_CAMERA = 111
     private const val SMS_TIMEOUT = 60L
   }
 
@@ -34,7 +39,7 @@ class LaunchActivity : BaseActivity() {
   private var mode = Mode.PHONE_NUMBER
   private var token: PhoneAuthProvider.ForceResendingToken? = null
   private var verificationId: String? = null
-  private var phoneNumber: String = ""
+  private var phone: String = ""
   private val smsTimer = object : CountDownTimer(SMS_TIMEOUT * 1000, 1000) {
     override fun onTick(millisUntilFinished: Long) {
       val secondsLeft = (millisUntilFinished / 1000).toInt()
@@ -56,6 +61,8 @@ class LaunchActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
     FirebaseAuth.getInstance().useAppLanguage()
+    // TODO: REMOVE AT THE END
+    FirebaseAuth.getInstance().signOut()
     updateForMode(mode)
   }
 
@@ -181,7 +188,9 @@ class LaunchActivity : BaseActivity() {
   }
 
   private fun verifyPhoneNumber() {
-    PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, SMS_TIMEOUT,
+    if (phone.trim().isEmpty()) return
+
+    PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, SMS_TIMEOUT,
       TimeUnit.SECONDS, this, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
       override fun onCodeSent(verificationId: String?, forceResendingToken: PhoneAuthProvider.ForceResendingToken?) {
         super.onCodeSent(verificationId, forceResendingToken)
@@ -220,12 +229,25 @@ class LaunchActivity : BaseActivity() {
   }
 
   private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+    hideUI()
     FirebaseAuth.getInstance().signInWithCredential(credential)
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
-          val user = task.result?.user
-          onError(user?.displayName, true)
+          task.result?.user?.uid?.let { uid ->
+            val user = DmcUser(phone)
+            Firebase.getDatabaseReference().child("users").child(uid).setValue(user)
+              .addOnSuccessListener {
+                Timber.d("Added a new user to Firebase Database uid - $uid, phone - $phone")
+                openCameraActivity()
+              }.addOnFailureListener {
+                Timber.w("Failed to add a new user to Firebase Database uid - $uid, phone - $phone, error - ${it.message}")
+                onError("Failed to create a new user. Please try again", true)
+
+                showUI()
+              }
+          }?: showUI()
         } else {
+          showUI()
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
             onError("Wrong code from SMS", true)
           } else {
@@ -246,17 +268,17 @@ class LaunchActivity : BaseActivity() {
   private fun clearPhoneAuthSession() {
     token = null
     verificationId = null
-    phoneNumber = ""
+    phone = ""
     smsTimer.cancel()
   }
 
   private fun validatePhoneNumber() {
-    phoneNumber = verificationEditText.text.toString()
-    if (phoneNumber.isBlank()) {
+    phone = verificationEditText.text.toString()
+    if (phone.isBlank()) {
       onError("Phone number should not be empty", true)
-    } else if (!phoneNumber.startsWith("+")) {
+    } else if (!phone.startsWith("+")) {
       verificationEditText.text.insert(0, "+")
-      phoneNumber = verificationEditText.text.toString()
+      phone = verificationEditText.text.toString()
     }
   }
 
@@ -287,5 +309,31 @@ class LaunchActivity : BaseActivity() {
   override fun onDestroy() {
     super.onDestroy()
     clearPhoneAuthSession()
+  }
+
+  private fun openCameraActivity() {
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//      startActivity(Camera2Activity.newInstance(this))
+//    } else {
+    startActivityForResult(CameraActivity.newInstance(this), REQUEST_CODE_CAMERA)
+//    }
+  }
+
+  private fun hideUI() {
+    verificationEditText.visibility = View.GONE
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
+  }
+
+  private fun showUI() {
+    verificationEditText.visibility = View.GONE
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == REQUEST_CODE_CAMERA) {
+      updateForMode(Mode.STELLAR)
+    }
   }
 }

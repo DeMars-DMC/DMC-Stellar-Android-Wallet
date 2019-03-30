@@ -3,6 +3,7 @@ package io.demars.stellarwallet.utils
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import com.google.firebase.auth.FirebaseAuth
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.WalletActivity
@@ -36,8 +37,7 @@ class GlobalGraphHelper {
             OperationsRepository.getInstance().clear()
             TransactionsRepository.getInstance().clear()
             TradesRepository.getInstance().clear()
-            val keyStoreWrapper = KeyStoreWrapper(context)
-            keyStoreWrapper.clear()
+            KeyStoreWrapper(context).clear()
             return WalletApplication.wallet.clearLocalStore()
         }
 

@@ -1,8 +1,8 @@
 package io.demars.stellarwallet.activities
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.View
@@ -61,8 +61,6 @@ class LaunchActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
     FirebaseAuth.getInstance().useAppLanguage()
-    // TODO: REMOVE AT THE END
-    FirebaseAuth.getInstance().signOut()
     updateForMode(mode)
   }
 
@@ -245,7 +243,7 @@ class LaunchActivity : BaseActivity() {
 
                 showUI()
               }
-          }?: showUI()
+          } ?: showUI()
         } else {
           showUI()
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -312,11 +310,9 @@ class LaunchActivity : BaseActivity() {
   }
 
   private fun openCameraActivity() {
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//      startActivity(Camera2Activity.newInstance(this))
-//    } else {
-    startActivityForResult(CameraActivity.newInstance(this), REQUEST_CODE_CAMERA)
-//    }
+    val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this)
+    else CameraActivity.newInstance(this), REQUEST_CODE_CAMERA)
   }
 
   private fun hideUI() {

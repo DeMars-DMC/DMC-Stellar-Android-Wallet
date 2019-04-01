@@ -11,10 +11,6 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import timber.log.Timber
-import android.content.DialogInterface
-import android.hardware.biometrics.BiometricPrompt
-import android.os.Build
-import android.annotation.TargetApi
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.interfaces.OnPinLockCompleteListener
 

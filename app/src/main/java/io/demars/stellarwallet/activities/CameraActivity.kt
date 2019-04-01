@@ -8,7 +8,6 @@ import android.hardware.Camera
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
 import io.demars.stellarwallet.R
 import kotlinx.android.synthetic.main.activity_camera.*
 import timber.log.Timber
@@ -26,7 +25,7 @@ import io.demars.stellarwallet.firebase.Firebase
 @Suppress("DEPRECATION")
 class CameraActivity : BaseActivity() {
   companion object {
-    private const val REQUEST_GALLERY = 111
+    public const val REQUEST_GALLERY = 111
     private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
     fun newInstance(context: Context): Intent {
       return Intent(context, CameraActivity::class.java)
@@ -36,6 +35,7 @@ class CameraActivity : BaseActivity() {
   private lateinit var file: File
   private var camera: Camera? = null
   private var pictureBytes: ByteArray? = null
+  private var hasCamera = false
   private val picture = Camera.PictureCallback { data, _ ->
     pictureBytes = data
     updateView()
@@ -46,17 +46,9 @@ class CameraActivity : BaseActivity() {
     setContentView(R.layout.activity_camera)
 
     file = File(getExternalFilesDir(null), PIC_FILE_NAME)
+    hasCamera = checkCameraHardware(this)
 
     updateView()
-
-    // Create an instance of Camera
-    camera = getCameraInstance()
-    camera?.let {
-      // Create our Preview view
-      CameraPreview(this, it)
-    }.also {
-      camera_preview.addView(it)
-    }
   }
 
   private fun updateView() {
@@ -64,9 +56,11 @@ class CameraActivity : BaseActivity() {
       cameraButton.visibility = GONE
       galleryButton.visibility = GONE
 
-      ensureImageMessage.visibility = VISIBLE
       retakeButton.visibility = VISIBLE
       sendButton.visibility = VISIBLE
+
+      ensureImageMessage.visibility = VISIBLE
+      ensureImageMessage.setText(R.string.ensure_image)
 
       retakeButton.setOnClickListener {
         onBackPressed()
@@ -76,15 +70,29 @@ class CameraActivity : BaseActivity() {
         sendPictureToFirebase()
       }
     } else {
-      ensureImageMessage.visibility = GONE
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
 
-      cameraButton.visibility = VISIBLE
+      if (hasCamera) {
+        cameraButton.visibility = VISIBLE
+        ensureImageMessage.visibility = GONE
+        // Create an instance of Camera
+        camera = getCameraInstance()
+        camera?.let {
+          // Create our Preview view & add it to container
+          cameraPreview.addView(CameraPreview(this, it))
+        }
+      } else {
+        cameraButton.visibility = GONE
+        ensureImageMessage.visibility = VISIBLE
+        ensureImageMessage.setText(R.string.no_camera_message)
+      }
+
       galleryButton.visibility = VISIBLE
 
       imagePreview.setImageDrawable(null)
-      camera_preview.visibility = VISIBLE
+      cameraPreview.visibility = VISIBLE
+      camera?.startPreview()
 
       cameraButton.setOnClickListener {
         takePicture()
@@ -244,7 +252,10 @@ class CameraActivity : BaseActivity() {
           val picFromGallery = data?.data
           pictureBytes = getBitesFromUri(picFromGallery)
           imagePreview.setImageURI(picFromGallery)
-          camera_preview.visibility = GONE
+
+          cameraPreview.visibility = GONE
+          camera?.stopPreview()
+
           updateView()
         }
       }

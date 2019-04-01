@@ -38,6 +38,7 @@ class GlobalGraphHelper {
             TransactionsRepository.getInstance().clear()
             TradesRepository.getInstance().clear()
             KeyStoreWrapper(context).clear()
+            FirebaseAuth.getInstance().signOut()
             return WalletApplication.wallet.clearLocalStore()
         }
 

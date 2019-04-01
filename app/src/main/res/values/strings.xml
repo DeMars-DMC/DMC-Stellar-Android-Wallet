@@ -284,6 +284,7 @@
     <string name="photo_of_id">Photo of ID</string>
     <string name="ensure_image">Ensure image is clear and legible</string>
     <string name="failed_upload_image">Failed to upload image. Please try again</string>
-    <string name="uploading_photo">Uploading photo...</string>
+    <string name="uploading_photo">Uploading photo…</string>
     <string name="uploading_photo_error">Something went wrong. Please try again</string>
+    <string name="no_camera_message">No camera detected\nplease add from gallery</string>
 </resources>

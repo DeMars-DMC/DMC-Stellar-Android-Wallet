@@ -20,7 +20,10 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.R
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.views.AutoFitTextureView
 import kotlinx.android.synthetic.main.activity_camera2.*
 import timber.log.Timber
@@ -109,6 +112,7 @@ class Camera2Activity : BaseActivity() {
    * A [Handler] for running tasks in the background.
    */
   private var backgroundHandler: Handler? = null
+  private var mainHandler = Handler(Looper.getMainLooper())
 
   /**
    * An [ImageReader] that handles still image capture.
@@ -126,7 +130,8 @@ class Camera2Activity : BaseActivity() {
    */
   private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
     pictureBytes = ByteArray(it.acquireLatestImage().planes[0].buffer.remaining())
-    updateView()
+    mainHandler.post { updateView() }
+
   }
 
   /**
@@ -834,6 +839,7 @@ class Camera2Activity : BaseActivity() {
       galleryButton.visibility = VISIBLE
 
       imagePreview.setImageDrawable(null)
+      textureView.visibility = VISIBLE
 
       cameraButton.setOnClickListener {
         lockFocus()
@@ -846,10 +852,39 @@ class Camera2Activity : BaseActivity() {
   }
 
   private fun pickFromGallery() {
+    //Create an Intent with action as ACTION_PICK
+    val intent = Intent(Intent.ACTION_PICK)
+    // Sets the type as image/*. This ensures only components of type image are selected
+    intent.type = "image/*"
+    //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+    val mimeTypes = arrayOf("image/jpeg", "image/png")
+    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+    // Launching the Intent
+    startActivityForResult(intent, CameraActivity.REQUEST_GALLERY)
   }
 
   private fun sendPictureToFirebase() {
-
+    pictureBytes?.let {
+      Firebase.getCurrentUserUid()?.let { uid ->
+        showUploadingView()
+        Firebase.uploadBytes(it,
+          OnSuccessListener {
+            Firebase.getDatabaseReference().child("users").child(uid)
+              .child("id_image_sent").setValue(true)
+              .addOnSuccessListener {
+                Toast.makeText(this, "ID photo uploaded", Toast.LENGTH_LONG).show()
+                finish()
+              }.addOnFailureListener {
+                Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
+                hideUploadingView()
+              }
+          }, OnFailureListener {
+          Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
+          hideUploadingView()
+        })
+      }
+        ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
+    }
   }
 
   override fun onBackPressed() {
@@ -862,6 +897,14 @@ class Camera2Activity : BaseActivity() {
     }
   }
 
+  private fun getBitesFromUri(uri: Uri?): ByteArray? {
+    uri?.let {
+      contentResolver.openInputStream(it)?.let { inputStream ->
+        return inputStream.readBytes()
+      }
+    } ?: return null
+  }
+
   public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     // Result code is RESULT_OK only if the user selects an Image
     if (resultCode == Activity.RESULT_OK)
@@ -871,18 +914,28 @@ class Camera2Activity : BaseActivity() {
           val picFromGallery = data?.data
           pictureBytes = getBitesFromUri(picFromGallery)
           imagePreview.setImageURI(picFromGallery)
+
+          textureView.visibility = GONE
+
           updateView()
         }
       }
   }
 
-  private fun getBitesFromUri(uri: Uri?): ByteArray? {
-    uri?.let {
-      contentResolver.openInputStream(it)?.let { inputStream ->
-        return inputStream.readBytes()
-      }
-    } ?: return null
+  private fun showUploadingView() {
+    ensureImageMessage.setText(R.string.uploading_photo)
+
+    retakeButton.visibility = GONE
+    sendButton.visibility = GONE
   }
+
+  private fun hideUploadingView() {
+    ensureImageMessage.setText(R.string.uploading_photo_error)
+
+    retakeButton.visibility = VISIBLE
+    sendButton.visibility = VISIBLE
+  }
+
   internal class CompareSizesByArea : Comparator<Size> {
 
     // We cast here to ensure the multiplications won't overflow

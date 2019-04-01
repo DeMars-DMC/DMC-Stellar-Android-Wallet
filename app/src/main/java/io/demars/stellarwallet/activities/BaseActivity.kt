@@ -17,8 +17,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         // Ask for pin if it's not disabled and if any pin exists only
-        val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled &&
-          KeyStoreWrapper(applicationContext).getAliases().isNotEmpty()
+        val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
         if (WalletApplication.appReturnedFromBackground && askForPin){
             WalletApplication.appReturnedFromBackground = false
 

@@ -410,8 +410,6 @@ object Horizon : HorizonTasks {
           .cursor(cursor)
           .limit(limit)
           .forAccount(sourceKeyPair).execute()
-
-
       } catch (error: Exception) {
         Timber.e(error.message.toString())
         errorMessage = error.message.toString()

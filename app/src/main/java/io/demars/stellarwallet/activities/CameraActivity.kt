@@ -18,14 +18,15 @@ import android.net.Uri
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.firebase.Firebase
 
 @Suppress("DEPRECATION")
-class CameraActivity : BaseActivity() {
+class CameraActivity : AppCompatActivity() {
   companion object {
-    public const val REQUEST_GALLERY = 111
+    private const val REQUEST_GALLERY = 111
     private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
     fun newInstance(context: Context): Intent {
       return Intent(context, CameraActivity::class.java)

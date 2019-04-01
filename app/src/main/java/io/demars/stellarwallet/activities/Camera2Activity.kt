@@ -19,6 +19,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -34,7 +35,7 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class Camera2Activity : BaseActivity() {
+class Camera2Activity : AppCompatActivity() {
   /**
    * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
    * [TextureView].
@@ -706,7 +707,6 @@ class Camera2Activity : BaseActivity() {
 
     private const val REQUEST_GALLERY = 111
     private const val REQUEST_CAMERA_PERMISSION = 222
-    private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
 
     /**
      * Camera state: Showing camera preview.
@@ -809,8 +809,6 @@ class Camera2Activity : BaseActivity() {
     setContentView(R.layout.activity_camera2)
     textureView = findViewById(R.id.texture)
 
-    file = File(getExternalFilesDir(null), PIC_FILE_NAME)
-
     updateView()
   }
 
@@ -860,7 +858,7 @@ class Camera2Activity : BaseActivity() {
     val mimeTypes = arrayOf("image/jpeg", "image/png")
     intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
     // Launching the Intent
-    startActivityForResult(intent, CameraActivity.REQUEST_GALLERY)
+    startActivityForResult(intent, REQUEST_GALLERY)
   }
 
   private fun sendPictureToFirebase() {

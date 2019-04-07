@@ -36,6 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.CreateUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.WalletActivity"
             android:label="@string/app_name"
@@ -127,6 +130,7 @@
         <activity
             android:name=".activities.AboutAnimationActivity"
             android:theme="@style/TransparentTheme" />
+
         <service
             android:name=".firebase.MessagingService"
             android:exported="false">

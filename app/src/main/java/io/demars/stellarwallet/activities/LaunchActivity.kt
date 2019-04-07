@@ -1,9 +1,9 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -26,7 +26,7 @@ import io.demars.stellarwallet.views.pin.PinLockView
 
 class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
-    private const val REQUEST_CODE_CAMERA = 111
+    private const val REQUEST_CREATE_USER = 111
     private const val SMS_TIMEOUT = 60L
   }
 
@@ -60,6 +60,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
     FirebaseAuth.getInstance().useAppLanguage()
+    FirebaseAuth.getInstance().signOut()
     updateForMode(mode)
   }
 
@@ -73,28 +74,24 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateViewForInitial() {
-    if (FirebaseAuth.getInstance().currentUser == null) {
-      phone = "+${getPhoneCode()}"
+    phone = "+${getPhoneCode()}"
 
-      verificationLabel.visibility = View.VISIBLE
-      verificationLabel.text = getString(R.string.enter_your_phone_number)
+    verificationLabel.visibility = View.VISIBLE
+    verificationLabel.text = getString(R.string.enter_your_phone_number)
 
-      verificationText.visibility = View.VISIBLE
-      verificationText.text = phone
+    verificationText.visibility = View.VISIBLE
+    verificationText.text = phone
 
-      loginMessage.visibility = View.VISIBLE
-      loginButton.visibility = View.VISIBLE
-      loginButton.isEnabled = true
-      loginButton.setText(R.string.log_in)
-      loginButton.setOnClickListener {
-        verifyPhoneNumber()
-      }
-
-      dialerView.visibility = View.VISIBLE
-      dialerView.mDialerListener = this
-    } else {
-      updateForMode(Mode.STELLAR)
+    loginMessage.visibility = View.VISIBLE
+    loginButton.visibility = View.VISIBLE
+    loginButton.isEnabled = true
+    loginButton.setText(R.string.log_in)
+    loginButton.setOnClickListener {
+      verifyPhoneNumber()
     }
+
+    dialerView.visibility = View.VISIBLE
+    dialerView.mDialerListener = this
   }
 
   private fun updateViewForCode() {
@@ -211,7 +208,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
           task.result?.user?.uid?.let { uid ->
-
+            startActivityForResult(CreateUserActivity.newInstance(this, uid, phone),
+              REQUEST_CREATE_USER)
           } ?: onError("Something went wrong. Please try again")
         } else {
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -262,11 +260,6 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     clearPhoneAuthSession()
   }
 
-  private fun openCameraActivity() {
-    val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this)
-    else CameraActivity.newInstance(this), REQUEST_CODE_CAMERA)
-  }
 
   private fun hideUI() {
     verificationText.visibility = View.GONE
@@ -277,8 +270,10 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == REQUEST_CODE_CAMERA) {
+    if (requestCode == REQUEST_CREATE_USER && resultCode == Activity.RESULT_OK) {
       updateForMode(Mode.STELLAR)
+    } else {
+      updateForMode(Mode.INITIAL)
     }
   }
 

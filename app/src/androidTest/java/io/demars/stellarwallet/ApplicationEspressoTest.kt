@@ -88,8 +88,7 @@ class ApplicationEspressoTest {
     private fun onActivity(activity : KClass<out Activity>) {
         when (activity) {
             LaunchActivity::class -> {
-                onView(ViewMatchers.withId(R.id.createWalletButton))
-                onView(ViewMatchers.withId(R.id.recoverWalletButton))
+                onView(ViewMatchers.withId(R.id.loginButton))
             }
 
             WalletActivity::class -> {
@@ -107,7 +106,6 @@ class ApplicationEspressoTest {
      */
     private fun createWallet(option : MnemonicType, pin : String) {
         onActivity(LaunchActivity::class)
-        onView(ViewMatchers.withId(R.id.createWalletButton)).perform(ViewActions.click())
 
         val optionString : String = when (option) {
             MnemonicType.WORD_12 -> context.getString(R.string.create_word_option_1)

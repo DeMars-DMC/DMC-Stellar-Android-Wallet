@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
-import java.util.*
 
 class PinLockView : RecyclerView {
 
@@ -31,10 +30,12 @@ class PinLockView : RecyclerView {
   private var mAdapter: PinLockAdapter? = null
   private var mPinLockListener: PinLockListener? = null
   private var mCustomizationOptionsBundle: CustomizationOptionsBundle? = null
-  private var mCustomKeySet: IntArray? = null
+
+  var mDialerListener: DialerListener? = null
 
   private val mOnNumberClickListener = object : PinLockAdapter.OnNumberClickListener {
     override fun onNumberClicked(keyValue: Int) {
+      mDialerListener?.onDial(keyValue)
       if (mPin.length < pinLength) {
         mPin += keyValue.toString()
 
@@ -54,6 +55,7 @@ class PinLockView : RecyclerView {
             mPinLockListener!!.onPinChange(mPin.length, mPin)
           }
         }
+
       } else {
         if (!isShowDeleteButton) {
           resetPinLockView()
@@ -78,6 +80,7 @@ class PinLockView : RecyclerView {
 
   private val mOnDeleteClickListener = object : PinLockAdapter.OnDeleteClickListener {
     override fun onDeleteClicked() {
+      mDialerListener?.onDelete()
       if (mPin.isNotEmpty()) {
         mPin = mPin.substring(0, mPin.length - 1)
 
@@ -107,6 +110,7 @@ class PinLockView : RecyclerView {
 
     override fun onDeleteLongClicked() {
       resetPinLockView()
+      mDialerListener?.onDeleteAll()
       if (mPinLockListener != null) {
         mPinLockListener!!.onEmpty()
       }
@@ -389,14 +393,14 @@ class PinLockView : RecyclerView {
 
   companion object {
     private const val DEFAULT_PIN_LENGTH = 4
-    private val DEFAULT_KEY_SET = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
   }
 
   class LTRGridLayoutManager : GridLayoutManager {
     override fun isLayoutRTL(): Boolean = false
-
     constructor(context: Context, spanCount: Int) : super(context, spanCount)
+    @Suppress("unused")
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+    @Suppress("unused")
     constructor(context: Context, spanCount: Int, orientation: Int, reverseLayout: Boolean) : super(context, spanCount, orientation, reverseLayout)
   }
 
@@ -422,6 +426,12 @@ class PinLockView : RecyclerView {
      * @param intermediatePin the intermediate pin
      */
     fun onPinChange(pinLength: Int, intermediatePin: String)
+  }
+
+  interface DialerListener {
+    fun onDial(number: Int)
+    fun onDelete()
+    fun onDeleteAll()
   }
 
   class ItemSpaceDecoration(private val mHorizontalSpaceWidth: Int, private val mVerticalSpaceHeight: Int, private val mSpanCount: Int, private val mIncludeEdge: Boolean) : RecyclerView.ItemDecoration() {

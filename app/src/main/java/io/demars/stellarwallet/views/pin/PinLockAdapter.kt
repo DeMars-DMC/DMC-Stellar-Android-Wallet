@@ -1,12 +1,10 @@
 package io.demars.stellarwallet.views.pin
 
-import android.graphics.PorterDuff
-import android.graphics.Rect
 import android.util.TypedValue
 import android.view.*
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 
@@ -36,57 +34,9 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     if (holder.itemViewType == VIEW_TYPE_NUMBER) {
-      val vh1 = holder as NumberViewHolder
-      configureNumberButtonHolder(vh1, position)
+      (holder as NumberViewHolder).configureNumberButtonHolder()
     } else if (holder.itemViewType == VIEW_TYPE_DELETE) {
-      val vh2 = holder as DeleteViewHolder
-      configureDeleteButtonHolder(vh2)
-    }
-  }
-
-  private fun configureNumberButtonHolder(holder: NumberViewHolder?, position: Int) {
-    if (holder != null) {
-      if (position == 9) {
-        holder.mNumberButton.visibility = View.GONE
-      } else {
-        holder.mNumberButton.text = mKeyValues!![position].toString()
-        holder.mNumberButton.visibility = View.VISIBLE
-        holder.mNumberButton.tag = mKeyValues!![position]
-      }
-
-      if (customizationOptions != null) {
-        holder.mNumberButton.setTextColor(customizationOptions!!.textColor)
-        if (customizationOptions!!.buttonBackgroundDrawable != null) {
-          holder.mNumberButton.background = customizationOptions!!.buttonBackgroundDrawable
-        }
-        holder.mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-          customizationOptions!!.textSize.toFloat())
-        val params = FrameLayout.LayoutParams(
-          customizationOptions!!.buttonSize,
-          customizationOptions!!.buttonSize,
-          Gravity.CENTER)
-        holder.mNumberButton.layoutParams = params
-      }
-    }
-  }
-
-  private fun configureDeleteButtonHolder(holder: DeleteViewHolder?) {
-    if (holder != null) {
-      if (customizationOptions!!.isShowDeleteButton && pinLength > 0) {
-        holder.mButtonImage.visibility = View.VISIBLE
-        if (customizationOptions!!.deleteButtonDrawable != null) {
-          holder.mButtonImage.setImageDrawable(customizationOptions!!.deleteButtonDrawable)
-        }
-        holder.mButtonImage.setColorFilter(customizationOptions!!.textColor,
-          PorterDuff.Mode.SRC_ATOP)
-        val params = FrameLayout.LayoutParams(
-          customizationOptions!!.deleteButtonSize,
-          customizationOptions!!.deleteButtonSize,
-          Gravity.CENTER)
-        holder.mButtonImage.layoutParams = params
-      } else {
-        holder.mButtonImage.visibility = View.GONE
-      }
+      (holder as DeleteViewHolder).configureDeleteButtonHolder()
     }
   }
 
@@ -110,7 +60,31 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   inner class NumberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    internal var mNumberButton: Button = itemView.findViewById(R.id.button) as Button
+    fun configureNumberButtonHolder() {
+      if (adapterPosition == 9) {
+        mNumberButton.visibility = View.GONE
+      } else {
+        mNumberButton.text = mKeyValues!![adapterPosition].toString()
+        mNumberButton.visibility = View.VISIBLE
+        mNumberButton.tag = mKeyValues!![adapterPosition]
+      }
+
+      if (customizationOptions != null) {
+        mNumberButton.setTextColor(customizationOptions!!.textColor)
+        if (customizationOptions!!.buttonBackgroundDrawable != null) {
+          mNumberButton.background = customizationOptions!!.buttonBackgroundDrawable
+        }
+        mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+          customizationOptions!!.textSize.toFloat())
+        val params = FrameLayout.LayoutParams(
+          customizationOptions!!.buttonSize,
+          customizationOptions!!.buttonSize,
+          Gravity.CENTER)
+        mNumberButton.layoutParams = params
+      }
+    }
+
+    private var mNumberButton: TextView = itemView.findViewById(R.id.button) as TextView
 
     init {
       mNumberButton.setOnClickListener { v ->
@@ -122,12 +96,10 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   inner class DeleteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private var mDeleteButton: FrameLayout = itemView.findViewById(R.id.button) as FrameLayout
-    internal var mButtonImage: ImageView = itemView.findViewById(R.id.buttonImage) as ImageView
+    private var mDeleteButton: ImageView = itemView.findViewById(R.id.button) as ImageView
 
     init {
-
-      if (customizationOptions!!.isShowDeleteButton && pinLength > 0) {
+      if (customizationOptions!!.isShowDeleteButton) {
         mDeleteButton.setOnClickListener {
           if (onDeleteClickListener != null) {
             onDeleteClickListener!!.onDeleteClicked()
@@ -140,29 +112,12 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
           }
           true
         }
-
-        mDeleteButton.setOnTouchListener(object : View.OnTouchListener {
-          private var rect: Rect? = null
-
-          override fun onTouch(v: View, event: MotionEvent): Boolean {
-            if (event.action == MotionEvent.ACTION_DOWN) {
-              mButtonImage.setColorFilter(customizationOptions!!
-                .deleteButtonPressesColor)
-              rect = Rect(v.left, v.top, v.right, v.bottom)
-            }
-            if (event.action == MotionEvent.ACTION_UP) {
-              mButtonImage.clearColorFilter()
-            }
-            if (event.action == MotionEvent.ACTION_MOVE) {
-              if (!rect!!.contains(v.left + event.x.toInt(),
-                  v.top + event.y.toInt())) {
-                mButtonImage.clearColorFilter()
-              }
-            }
-            return false
-          }
-        })
       }
+    }
+
+    fun configureDeleteButtonHolder() {
+      mDeleteButton.setColorFilter(customizationOptions?.textColor!!)
+      mDeleteButton.setImageDrawable(customizationOptions?.deleteButtonDrawable!!)
     }
   }
 
@@ -172,7 +127,6 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   interface OnDeleteClickListener {
     fun onDeleteClicked()
-
     fun onDeleteLongClicked()
   }
 

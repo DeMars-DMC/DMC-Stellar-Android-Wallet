@@ -272,7 +272,7 @@
     <string name="add_asset">Add asset</string>
     <string name="send_to_contact">Send to contact</string>
     <string name="pattern_price">Price: %s</string>
-    <string name="phone_number_hint">Enter your phone number</string>
+    <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="verify_phone_number">Verify phone number</string>
     <string name="continue_as_guest">Continue as guest</string>
     <string name="continue_as_guest_explain">We suggest you to verify your DMC account with your phone number. Verified accounts are able to deposit/withdraw assets and also every account will have registration bonus 5 Lumens(XLM) from DMC team.\nYou can always verify your info later in settings</string>
@@ -287,4 +287,9 @@
     <string name="uploading_photo">Uploading photo…</string>
     <string name="uploading_photo_error">Something went wrong. Please try again</string>
     <string name="no_camera_message">No camera detected\nplease add from gallery</string>
+    <string name="log_in">Log in</string>
+    <string name="open_a_new_account">Open a new account</string>
+    <string name="log_in_message">If this number is not attached to any DMC account, you will be able to create a new one</string>
+    <string name="symbol_plus">+</string>
+    <string name="enter_code_from_sms">Enter code from SMS</string>
 </resources>

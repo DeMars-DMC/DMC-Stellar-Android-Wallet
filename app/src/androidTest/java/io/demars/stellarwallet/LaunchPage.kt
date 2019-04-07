@@ -11,15 +11,12 @@ import androidx.test.platform.app.InstrumentationRegistry
 object LaunchPage : BasePage() {
 
     override fun onPageLoaded(): LaunchPage {
-        onView(ViewMatchers.withId(R.id.recoverWalletButton))
-        onView(ViewMatchers.withId(R.id.createWalletButton))
+        onView(ViewMatchers.withId(R.id.loginButton))
         return this
     }
 
     fun createWallet(option : MnemonicType, pin : String): LaunchPage {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        onView(ViewMatchers.withId(R.id.createWalletButton)).perform(ViewActions.click())
 
         val optionString : String = when (option) {
             MnemonicType.WORD_12 -> context.getString(R.string.create_word_option_1)
@@ -39,7 +36,7 @@ object LaunchPage : BasePage() {
     fun clickRecoverFromSecretKey() : LaunchPage {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        onView(ViewMatchers.withId(R.id.recoverWalletButton)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(ViewActions.click())
         val string = context.getString(R.string.recover_from_seed)
 
         Espresso.onView(ViewMatchers.withText(string))
@@ -53,7 +50,7 @@ object LaunchPage : BasePage() {
     fun clickRecoverFromPhrase(): LaunchPage {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        onView(ViewMatchers.withId(R.id.recoverWalletButton)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(ViewActions.click())
         val string = context.getString(R.string.recover_from_phrase)
 
         Espresso.onView(ViewMatchers.withText(string))

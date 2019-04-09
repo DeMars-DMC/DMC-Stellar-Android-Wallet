@@ -62,6 +62,9 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     FirebaseAuth.getInstance().useAppLanguage()
     FirebaseAuth.getInstance().signOut()
     updateForMode(mode)
+    startActivityForResult(CreateUserActivity.newInstance(this, "", phone),
+      REQUEST_CREATE_USER)
+
   }
 
   private fun updateForMode(mode: Mode) {

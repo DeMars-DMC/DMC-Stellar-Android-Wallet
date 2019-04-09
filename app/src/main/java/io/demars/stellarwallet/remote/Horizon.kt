@@ -631,20 +631,16 @@ object Horizon : HorizonTasks {
 
   private fun createServer(serverAddress: String): Server {
     val server = Server(serverAddress)
-    // These two clients are a copy of the lines 32 and 42 of org.stellar.sdk.Server class with the stetho interceptor
-    // REVIEW this once you upgrade stellar library
     val httpClient = OkHttpClient.Builder()
       .connectTimeout(10, TimeUnit.SECONDS)
       .readTimeout(30, TimeUnit.SECONDS)
       .retryOnConnectionFailure(true)
-      .addNetworkInterceptor(io.demars.stellarwallet.remote.ShadowedStethoInterceptor())
       .build()
 
     val submitHttpClient = OkHttpClient.Builder()
       .connectTimeout(10, TimeUnit.SECONDS)
       .readTimeout(HORIZON_SUBMIT_TIMEOUT + 5, TimeUnit.SECONDS)
       .retryOnConnectionFailure(true)
-      .addNetworkInterceptor(io.demars.stellarwallet.remote.ShadowedStethoInterceptor())
       .build()
 
     server.httpClient = httpClient

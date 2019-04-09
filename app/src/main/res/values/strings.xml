@@ -96,7 +96,8 @@
     <string name="half">50%</string>
     <string name="three_quarters">75%</string>
     <string name="all">100%</string>
-    <string name="submit">Place Trade</string>
+    <string name="submit">Submit</string>
+    <string name="place_trade">Place Trade</string>
     <string name="exchange_tab_notes">Your market order may not be completely filled depending
         on amount offered. View the order book to see the amount available at the market rate.
         Any amount larger than this will be posed as an offer.</string>
@@ -292,4 +293,29 @@
     <string name="log_in_message">If this number is not attached to any DMC account, you will be able to create a new one</string>
     <string name="symbol_plus">+</string>
     <string name="enter_code_from_sms">Enter code from SMS</string>
+    <string name="welcome_message">Congratulations for downloading the DMC App. Soon you\'ll be able to move money instantly across borders for fractions of a cent.\n\nIn order make a deposit or a withdrawal we require some basic information.\n\nIt will only take a couple of minute to complete. As soon as your account has been verified you\'ll receive a FREE deposit of  5 Stellar Lumens.\n\nEarn while you type :-)</string>
+    <string name="welcome">Welcome</string>
+    <string name="create_account">Create account</string>
+    <string name="continue_str">Continue</string>
+    <string name="create_dmc_account">Create DMC account</string>
+    <string name="nationality">Nationality</string>
+    <string name="country">Country</string>
+    <string name="first_name">First name</string>
+    <string name="surname">Surname</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="residential_address">Residential address</string>
+    <string name="first_line">First line</string>
+    <string name="second_line">Second line(optional)</string>
+    <string name="town_city">Town/City</string>
+    <string name="postcode">Postcode</string>
+    <string name="email_address">Email address</string>
+    <string name="id_document_type">ID document type</string>
+    <string name="document_number">Document number</string>
+    <string name="expiry_date">Expiry date</string>
+    <string name="personal_id">Personal ID</string>
+    <string name="upload_id_photo_tip">Upload a clear picture of your ID document</string>
+    <string name="upload_selfie_tip">Upload a clear selfie holding your ID doc next to your face</string>
+    <string name="select_nationality">Select nationality</string>
+    <string name="select_country">Select country</string>
+    <string name="select_document_type">Select Document type</string>
 </resources>

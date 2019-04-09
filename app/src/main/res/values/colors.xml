@@ -60,6 +60,7 @@
     <color name="lightBlue">#2ED6FF</color>
     <color name="light_gray">@color/main_bg_light</color>
     <color name="transparent_white">#80FFFFFF</color>
+    <color name="transparent_black">#80000000</color>
 
     <!--Global-->
     <color name="fragmentBg">@color/main_bg_light</color>

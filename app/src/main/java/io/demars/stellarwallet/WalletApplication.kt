@@ -13,7 +13,6 @@ import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.mvvm.exchange.ExchangeRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.remote.ServerType
-import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import org.bouncycastle.jce.provider.BouncyCastleProvider
@@ -68,7 +67,6 @@ class WalletApplication : MultiDexApplication() {
         wallet = DmcWallet(LocalStoreImpl(applicationContext))
 
         if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this)
             Timber.plant(Timber.DebugTree())
 
             if (DebugPreferencesHelper(applicationContext).isLeakCanaryEnabled) {

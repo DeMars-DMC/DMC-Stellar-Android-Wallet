@@ -127,10 +127,6 @@
             android:name=".activities.WalletManagerActivity"
             android:theme="@style/TransparentTheme" />
 
-        <activity
-            android:name=".activities.AboutAnimationActivity"
-            android:theme="@style/TransparentTheme" />
-
         <service
             android:name=".firebase.MessagingService"
             android:exported="false">

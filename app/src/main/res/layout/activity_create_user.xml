@@ -268,11 +268,12 @@
                     android:background="@null"
                     android:hint="@string/document_number"
                     android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
+                    android:inputType="textCapCharacters"
                     android:maxLines="1"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
+                    android:textColorHint="@color/colorPaleSky"
+                    tools:ignore="TextFields" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -293,7 +294,7 @@
                     android:drawableEnd="@drawable/ic_date_palesky_24dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
+                    android:paddingStart="16dp"
                     android:paddingEnd="24dp"
                     android:text="@string/expiry_date"
                     android:textColor="@color/colorPaleSky"

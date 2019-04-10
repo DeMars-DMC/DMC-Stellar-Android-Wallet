@@ -209,7 +209,6 @@
         <item>263,ZW</item>
     </string-array>
     <string-array name="country">
-        <item>Select country</item>
         <item>Afghanistan</item>
         <item>\u00c5land Islands</item>
         <item>Albania</item>
@@ -457,7 +456,6 @@
         <item>Zimbabwe</item>
     </string-array>
     <string-array name="nationality">
-        <item>Select nationality</item>
         <item>Afghan</item>
         <item>\u00c5land Island</item>
         <item>Albanian</item>

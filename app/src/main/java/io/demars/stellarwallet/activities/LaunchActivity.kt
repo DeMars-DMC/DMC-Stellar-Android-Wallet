@@ -76,6 +76,9 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private fun updateViewForInitial() {
     phone = "+${getPhoneCode()}"
 
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
+
     verificationLabel.visibility = View.VISIBLE
     verificationLabel.text = getString(R.string.enter_your_phone_number)
 
@@ -96,6 +99,9 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun updateViewForCode() {
     smsCode = ""
+
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
 
     verificationText.visibility = View.VISIBLE
     verificationText.text = formatSmsCode()
@@ -121,11 +127,20 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       GlobalGraphHelper.launchWallet(this)
     } else {
       verificationText.visibility = View.GONE
+      loginButton.visibility = View.GONE
+      dialerView.visibility = View.GONE
 
-      loginButton.visibility = View.VISIBLE
-      loginButton.isEnabled = true
-      loginButton.setText(R.string.recover_wallet)
-      loginButton.setOnClickListener {
+      createWalletButton.visibility = View.VISIBLE
+      createWalletButton.isEnabled = true
+      createWalletButton.setText(R.string.recover_wallet)
+      createWalletButton.setOnClickListener {
+        showCreateDialog()
+      }
+
+      recoverWalletButton.visibility = View.VISIBLE
+      recoverWalletButton.isEnabled = true
+      recoverWalletButton.setText(R.string.recover_wallet)
+      recoverWalletButton.setOnClickListener {
         showRecoverDialog()
       }
     }
@@ -267,6 +282,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     loginMessage.visibility = View.GONE
     loginButton.visibility = View.GONE
     dialerView.visibility = View.GONE
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

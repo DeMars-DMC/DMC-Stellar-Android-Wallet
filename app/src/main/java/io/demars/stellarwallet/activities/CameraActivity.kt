@@ -141,18 +141,15 @@ class CameraActivity : AppCompatActivity() {
 
   private fun sendPictureToFirebase() {
     pictureBytes?.let { bytes ->
-      Firebase.getCurrentUserUid()?.let { uid ->
-        showUploadingView()
-        Firebase.uploadBytes(bytes, forSelfie,
-          OnSuccessListener {
-            setResult(Activity.RESULT_OK)
-            finish()
-          }, OnFailureListener {
-          Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
-          hideUploadingView()
-        })
-      }
-        ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
+      showUploadingView()
+      Firebase.uploadBytes(bytes, forSelfie,
+        OnSuccessListener {
+          setResult(Activity.RESULT_OK)
+          finish()
+        }, OnFailureListener {
+        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+        hideUploadingView()
+      })
     }
   }
 

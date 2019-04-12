@@ -96,4 +96,25 @@
         app:pinLength="4"
         tools:ignore="UnusedAttribute" />
 
+    <Button
+        android:id="@+id/createWalletButton"
+        style="@style/ButtonAccentStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_above="@id/recoverWalletButton"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:text="@string/create_new_wallet"
+        android:textSize="@dimen/text_size_big"
+        app:layout_constraintBottom_toTopOf="@id/recoverWalletButton"/>
+
+    <Button
+        android:id="@+id/recoverWalletButton"
+        style="@style/ButtonYellowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_alignParentBottom="true"
+        android:text="@string/recover_wallet"
+        android:textSize="@dimen/text_size_big"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

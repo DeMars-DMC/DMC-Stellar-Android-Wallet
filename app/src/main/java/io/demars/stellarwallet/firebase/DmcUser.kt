@@ -19,6 +19,6 @@ data class DmcUser(
   var id_expiry_date = ""
   var id_photo_uploaded = false
   var id_selfie_uploaded = false
-  var registrationCompleted = false
+  var registration_completed = false
   var verified = false
 }

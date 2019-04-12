@@ -277,7 +277,7 @@ class CreateUserActivity : BaseActivity() {
     verifiedOnce = true
 
     if (verified) {
-      user.registrationCompleted = true
+      user.registration_completed = true
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           setResult(Activity.RESULT_OK)

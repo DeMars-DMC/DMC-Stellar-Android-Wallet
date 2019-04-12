@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,13 @@ import kotlinx.android.synthetic.main.activity_create_user.*
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.Address
 import java.util.*
 
@@ -23,9 +31,11 @@ class CreateUserActivity : BaseActivity() {
   private var expiryDateDialog: DatePickerDialog? = null
   lateinit var user: DmcUser
   private var address = Address()
+  private var verifiedOnce = false
 
   companion object {
-    private const val REQUEST_CODE_CAMERA = 111
+    private const val REQUEST_CODE_CAMERA_ID = 111
+    private const val REQUEST_CODE_CAMERA_SELFIE = 222
     private const val ARG_UID = "ARG_UID"
     private const val ARG_PHONE = "ARG_PHONE"
 
@@ -52,10 +62,6 @@ class CreateUserActivity : BaseActivity() {
     dialogButton.setOnClickListener {
       hideWelcomeDialog()
       ViewUtils.showKeyboard(this, firstNameInput)
-    }
-
-    personalIdContainer.setOnClickListener {
-      openCameraActivity(REQUEST_CODE_CAMERA)
     }
 
     firstNameInput.addTextChangedListener(object : AfterTextChanged() {
@@ -162,6 +168,18 @@ class CreateUserActivity : BaseActivity() {
     expiryDatePicker.setOnClickListener {
       showExpiryDateDialog()
     }
+
+    idPhotoContainer.setOnClickListener {
+      openCameraActivity(REQUEST_CODE_CAMERA_ID)
+    }
+
+    idSelfieContainer.setOnClickListener {
+      openCameraActivity(REQUEST_CODE_CAMERA_SELFIE)
+    }
+
+    submitButton.setOnClickListener {
+      verifyAndCreateNewUser()
+    }
   }
 
   private fun showExpiryDateDialog() {
@@ -212,8 +230,79 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun openCameraActivity(requestCode: Int) {
+    val useFrontCamera = requestCode == REQUEST_CODE_CAMERA_SELFIE
     val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this)
-    else CameraActivity.newInstance(this), requestCode)
+    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, useFrontCamera)
+    else CameraActivity.newInstance(this, useFrontCamera), requestCode)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (resultCode == Activity.RESULT_OK) {
+      when (requestCode) {
+        REQUEST_CODE_CAMERA_ID -> {
+          user.id_photo_uploaded = true
+          idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+        }
+        REQUEST_CODE_CAMERA_SELFIE -> {
+          user.id_selfie_uploaded = true
+          idSelfieCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+        }
+      }
+    }
+  }
+
+  private fun verifyAndCreateNewUser() {
+    var verified = user.first_name.isNotBlank()
+    addVerificationSpan(firstNameLabel, verified)
+    verified = user.last_name.isNotBlank()
+    addVerificationSpan(surnameLabel, verified)
+    verified = user.birth_date.isNotBlank()
+    addVerificationSpan(birthDateLabel, verified)
+    verified = user.nationality.isNotBlank()
+    addVerificationSpan(nationalityLabel, verified)
+    verified = user.address.isNotBlank()
+    addVerificationSpan(addressLabel, verified)
+    verified = user.email_address.isNotBlank()
+    addVerificationSpan(emailLabel, verified)
+    verified = user.document_type.isNotBlank()
+    addVerificationSpan(documentTypeLabel, verified)
+    verified = user.document_number.isNotBlank()
+    addVerificationSpan(documentNumberLabel, verified)
+    verified = user.id_expiry_date.isNotBlank()
+    addVerificationSpan(expiryDateLabel, verified)
+    verified = user.id_photo_uploaded && user.id_selfie_uploaded
+    addVerificationSpan(personalIdLabel, verified)
+
+    verifiedOnce = true
+
+    if (verified) {
+      user.registrationCompleted = true
+      Firebase.getDatabaseReference().child("users")
+        .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
+          setResult(Activity.RESULT_OK)
+          finish()
+        }.addOnFailureListener {
+          Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
+        }
+    } else {
+      Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
+      scrollView.smoothScrollTo(0, 0)
+    }
+  }
+
+  private fun addVerificationSpan(textView: TextView, verified: Boolean) {
+    val spannable = SpannableStringBuilder(if (verifiedOnce)
+      textView.text.substring(0, textView.text.length - 2) else textView.text)
+    val color = ContextCompat.getColor(this,
+      if (verified) R.color.colorGreen else R.color.colorApricot)
+    val textToInsert = if (verified) " ✓" else " ✗"
+    val spanIndex = spannable.length
+
+    spannable.insert(spanIndex, textToInsert)
+    spannable.setSpan(ForegroundColorSpan(color), spanIndex, spanIndex + 2,
+      Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+    textView.setText(spannable, TextView.BufferType.SPANNABLE)
   }
 }

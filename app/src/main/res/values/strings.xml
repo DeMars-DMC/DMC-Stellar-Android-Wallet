@@ -318,4 +318,6 @@
     <string name="select_nationality">Select nationality</string>
     <string name="select_country">Select country</string>
     <string name="select_document_type">Select Document type</string>
+    <string name="use">Use</string>
+    <string name="selfie_with_id">Selfie with ID</string>
 </resources>

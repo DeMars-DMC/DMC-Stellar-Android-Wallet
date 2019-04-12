@@ -24,10 +24,12 @@ object Firebase {
     return getCurrentUser()?.uid
   }
 
-  fun uploadBytes(bytes: ByteArray, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
+  fun uploadBytes(bytes: ByteArray, forSelfie:Boolean, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
+    val fileName = if (forSelfie) "id_selfie.jpg" else "id_photo.jpg"
     getCurrentUser()?.let {
       getStorageReference()
-        .child("images/users/${it.uid}/id_photo.jpg")
+        .child("images/users/${it.uid}")
+        .child(fileName)
         .putBytes(bytes)
         .addOnSuccessListener(onSuccess)
         .addOnFailureListener(onFailure)

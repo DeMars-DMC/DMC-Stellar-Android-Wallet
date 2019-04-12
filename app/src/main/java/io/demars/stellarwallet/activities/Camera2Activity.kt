@@ -60,6 +60,7 @@ class Camera2Activity : AppCompatActivity() {
    * ID of the current [CameraDevice].
    */
   private lateinit var cameraId: String
+  private var forSelfie = false
 
   /**
    * An [AutoFitTextureView] for camera preview.
@@ -130,7 +131,9 @@ class Camera2Activity : AppCompatActivity() {
    * still image is ready to be saved.
    */
   private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-    pictureBytes = ByteArray(it.acquireLatestImage().planes[0].buffer.remaining())
+    val buffer = it.acquireLatestImage().planes[0].buffer
+    pictureBytes = ByteArray(buffer.capacity())
+    buffer.get(pictureBytes)
     mainHandler.post { updateView() }
 
   }
@@ -287,14 +290,6 @@ class Camera2Activity : AppCompatActivity() {
       for (cameraId in manager.cameraIdList) {
         val characteristics = manager.getCameraCharacteristics(cameraId)
 
-        // We don't use a front facing camera in this sample.
-        val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-        if (cameraDirection != null &&
-          cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-        ) {
-          continue
-        }
-
         val map = characteristics.get(
           CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         ) ?: continue
@@ -351,11 +346,19 @@ class Camera2Activity : AppCompatActivity() {
         flashSupported =
           characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
 
-        this.cameraId = cameraId
-
-        // We've found a viable camera and finished setting up member variables,
-        // so we don't need to iterate through other available cameras.
-        return
+        // We don't use a front facing camera in this sample.
+        val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
+        if (cameraDirection != null &&
+          cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
+          if (forSelfie) {
+            this.cameraId = cameraId
+            return
+          } else {
+            continue
+          }
+        } else {
+          this.cameraId = cameraId
+        }
       }
     } catch (e: CameraAccessException) {
       Timber.e(e.toString())
@@ -799,14 +802,18 @@ class Camera2Activity : AppCompatActivity() {
       }
     }
 
-    fun newInstance(context: Context): Intent {
-      return Intent(context, Camera2Activity::class.java)
+    private const val ARG_FOR_SELFIE = "ARG_FOR_SELFIE"
+    fun newInstance(context: Context, forSelfie: Boolean): Intent {
+      val intent = Intent(context, Camera2Activity::class.java)
+      intent.putExtra(ARG_FOR_SELFIE, forSelfie)
+      return intent
     }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_camera2)
+    forSelfie = intent.getBooleanExtra(ARG_FOR_SELFIE, false)
     textureView = findViewById(R.id.texture)
 
     updateView()
@@ -836,6 +843,8 @@ class Camera2Activity : AppCompatActivity() {
       cameraButton.visibility = VISIBLE
       galleryButton.visibility = VISIBLE
 
+      mainTitle.setText(if (forSelfie) R.string.selfie_with_id else R.string.photo_of_id)
+
       imagePreview.setImageDrawable(null)
       textureView.visibility = VISIBLE
 
@@ -862,26 +871,20 @@ class Camera2Activity : AppCompatActivity() {
   }
 
   private fun sendPictureToFirebase() {
-    pictureBytes?.let {
+    pictureBytes?.let { bytes ->
       Firebase.getCurrentUserUid()?.let { uid ->
         showUploadingView()
-        Firebase.uploadBytes(it,
+        Firebase.uploadBytes(bytes, forSelfie,
           OnSuccessListener {
-            Firebase.getDatabaseReference().child("users").child(uid)
-              .child("id_image_sent").setValue(true)
-              .addOnSuccessListener {
-                Toast.makeText(this, "ID photo uploaded", Toast.LENGTH_LONG).show()
-                finish()
-              }.addOnFailureListener {
-                Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
-                hideUploadingView()
-              }
+            setResult(Activity.RESULT_OK)
+            finish()
           }, OnFailureListener {
           Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
-          hideUploadingView()
+          mainHandler.post {
+            hideUploadingView()
+          }
         })
-      }
-        ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
+      } ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
     }
   }
 
@@ -898,10 +901,13 @@ class Camera2Activity : AppCompatActivity() {
   private fun getBitesFromUri(uri: Uri?): ByteArray? {
     uri?.let {
       contentResolver.openInputStream(it)?.let { inputStream ->
-        return inputStream.readBytes()
+        val bytes = inputStream.readBytes()
+        inputStream.close()
+        return bytes
       }
     } ?: return null
   }
+
 
   public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     // Result code is RESULT_OK only if the user selects an Image

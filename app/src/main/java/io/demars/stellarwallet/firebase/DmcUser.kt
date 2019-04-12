@@ -17,6 +17,8 @@ data class DmcUser(
   var document_type = ""
   var document_number = ""
   var id_expiry_date = ""
+  var id_photo_uploaded = false
+  var id_selfie_uploaded = false
   var registrationCompleted = false
   var verified = false
 }

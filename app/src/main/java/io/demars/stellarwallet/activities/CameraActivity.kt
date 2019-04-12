@@ -27,9 +27,12 @@ import io.demars.stellarwallet.firebase.Firebase
 class CameraActivity : AppCompatActivity() {
   companion object {
     private const val REQUEST_GALLERY = 111
+    private const val ARG_FOR_SELFIE = "ARG_FOR_SELFIE"
     private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
-    fun newInstance(context: Context): Intent {
-      return Intent(context, CameraActivity::class.java)
+    fun newInstance(context: Context, forSelfie: Boolean): Intent {
+      val intent = Intent(context, CameraActivity::class.java)
+      intent.putExtra(ARG_FOR_SELFIE, forSelfie)
+      return intent
     }
   }
 
@@ -37,6 +40,9 @@ class CameraActivity : AppCompatActivity() {
   private var camera: Camera? = null
   private var pictureBytes: ByteArray? = null
   private var hasCamera = false
+  private var forSelfie = false
+  private var frontCameraIndex = -1
+  private var useFront = false
   private val picture = Camera.PictureCallback { data, _ ->
     pictureBytes = data
     updateView()
@@ -46,8 +52,14 @@ class CameraActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_camera)
 
+    forSelfie = intent.getBooleanExtra(ARG_FOR_SELFIE, false)
+
     file = File(getExternalFilesDir(null), PIC_FILE_NAME)
     hasCamera = checkCameraHardware(this)
+    if (hasCamera && forSelfie) {
+      // Double check that frontal camera exists
+      useFront = checkFrontCamera()
+    }
 
     updateView()
   }
@@ -73,6 +85,8 @@ class CameraActivity : AppCompatActivity() {
     } else {
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
+
+      mainTitle.setText(if (forSelfie) R.string.selfie_with_id else R.string.photo_of_id)
 
       if (hasCamera) {
         cameraButton.visibility = VISIBLE
@@ -102,6 +116,10 @@ class CameraActivity : AppCompatActivity() {
       galleryButton.setOnClickListener {
         pickFromGallery()
       }
+
+      cameraPreview.setOnClickListener {
+        camera?.autoFocus(null)
+      }
     }
   }
 
@@ -122,25 +140,19 @@ class CameraActivity : AppCompatActivity() {
   }
 
   private fun sendPictureToFirebase() {
-    pictureBytes?.let {
+    pictureBytes?.let { bytes ->
       Firebase.getCurrentUserUid()?.let { uid ->
         showUploadingView()
-        Firebase.uploadBytes(it,
+        Firebase.uploadBytes(bytes, forSelfie,
           OnSuccessListener {
-            Firebase.getDatabaseReference().child("users").child(uid)
-              .child("id_image_sent").setValue(true)
-              .addOnSuccessListener {
-                Toast.makeText(this, "ID photo uploaded", Toast.LENGTH_LONG).show()
-                finish()
-              }.addOnFailureListener {
-                Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
-                hideUploadingView()
-              }
+            setResult(Activity.RESULT_OK)
+            finish()
           }, OnFailureListener {
           Toast.makeText(this, R.string.failed_upload_image, Toast.LENGTH_LONG).show()
           hideUploadingView()
         })
-      } ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
+      }
+        ?: Toast.makeText(this, "Cannot find user account, please try to verify again", Toast.LENGTH_LONG).show()
     }
   }
 
@@ -149,10 +161,30 @@ class CameraActivity : AppCompatActivity() {
     return context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
   }
 
+  /** Check if this device has a frontal camera */
+  private fun checkFrontCamera(): Boolean {
+    var cameraCount = 0
+    val cameraInfo = Camera.CameraInfo()
+    cameraCount = Camera.getNumberOfCameras()
+    for (camIdx in 0 until cameraCount) {
+      Camera.getCameraInfo(camIdx, cameraInfo)
+      if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+        frontCameraIndex = camIdx
+        return true
+      }
+    }
+
+    return false
+  }
+
   /** A safe way to get an instance of the Camera object. */
   private fun getCameraInstance(): Camera? {
     return try {
-      Camera.open() // attempt to get a Camera instance
+      if (useFront && frontCameraIndex != -1) {
+        Camera.open(frontCameraIndex)
+      } else {
+        Camera.open() // attempt to get a Camera instance
+      }
     } catch (e: Exception) {
       // Camera is not available (in use or does not exist)
       null // returns null if camera is unavailable
@@ -180,7 +212,7 @@ class CameraActivity : AppCompatActivity() {
 
       //set camera to continually auto-focus
       val params = mCamera.parameters
-      params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+
       mCamera.parameters = params
 
       // Setup & start preview

@@ -8,7 +8,6 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import io.demars.stellarwallet.WalletApplication
 
 object Firebase {
   //region Storage
@@ -16,7 +15,7 @@ object Firebase {
     return FirebaseStorage.getInstance().reference
   }
 
-  private fun getCurrentUser(): FirebaseUser? {
+  fun getCurrentUser(): FirebaseUser? {
     return FirebaseAuth.getInstance().currentUser
   }
 
@@ -24,7 +23,7 @@ object Firebase {
     return getCurrentUser()?.uid
   }
 
-  fun uploadBytes(bytes: ByteArray, forSelfie:Boolean, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
+  fun uploadBytes(bytes: ByteArray, forSelfie: Boolean, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
     val fileName = if (forSelfie) "id_selfie.jpg" else "id_photo.jpg"
     getCurrentUser()?.let {
       getStorageReference()
@@ -38,26 +37,21 @@ object Firebase {
   //endregion
 
   //region Real-time Database
-  fun getDatabaseReference(): DatabaseReference {
-    return FirebaseDatabase.getInstance().reference
-  }
+  fun getDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance().reference
 
-  fun updateUsersWallet() {
+
+  fun getUserStellarAddress(listener: ValueEventListener) =
     getCurrentUserUid()?.let { uid ->
-      val addressReference = getDatabaseReference().child("users")
-        .child(uid).child("stellar_address")
-      WalletApplication.wallet.getStellarAccountId().let { address ->
-        addressReference.addValueEventListener(object : ValueEventListener {
-          override fun onDataChange(dataSnapshot: DataSnapshot) {
-            if (!dataSnapshot.exists() || dataSnapshot.getValue(String::class.java) != address) {
-              addressReference.setValue(address)
-            }
-          }
-
-          override fun onCancelled(error: DatabaseError) {}
-        })
-      }
+      getStellarAddressRef(uid)
+        .addValueEventListener(listener)
     }
+
+  fun getStellarAddressRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
+    .child(uid).child("stellar_address")
+
+  fun getUser(uid: String, listener: ValueEventListener) {
+    getDatabaseReference().child("users")
+      .child(uid).addValueEventListener(listener)
   }
   //endregion
 }

@@ -280,6 +280,8 @@ class CreateUserActivity : BaseActivity() {
       user.registration_completed = true
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
+          val intent = Intent()
+          intent.putExtra("user", user)
           setResult(Activity.RESULT_OK)
           finish()
         }.addOnFailureListener {

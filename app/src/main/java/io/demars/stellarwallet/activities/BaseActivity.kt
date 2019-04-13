@@ -15,14 +15,18 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun onResume() {
     super.onResume()
-    // Ask for pin if it's not disabled and if any pin exists only
-    val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled &&
-      GlobalGraphHelper.isExistingWallet()
+    val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
     if (WalletApplication.appReturnedFromBackground && askForPin) {
       WalletApplication.appReturnedFromBackground = false
 
-      Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
-      startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
+      if (GlobalGraphHelper.isExistingWallet()) {
+        Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
+        startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
+      } else {
+        Timber.d("Bad state, wiping wallet")
+        // bad state, let's clean the wallet
+        GlobalGraphHelper.wipe(applicationContext)
+      }
     }
   }
 

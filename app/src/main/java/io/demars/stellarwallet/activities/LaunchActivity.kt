@@ -21,6 +21,11 @@ import java.util.concurrent.TimeUnit
 import android.os.CountDownTimer
 import android.telephony.TelephonyManager
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.firebase.DmcUser
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.views.pin.PinLockView
 
 
@@ -37,6 +42,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private var mode = Mode.INITIAL
   private var token: PhoneAuthProvider.ForceResendingToken? = null
   private var verificationId: String? = null
+  private var dmcUser: DmcUser? = null
   private var phone: String = ""
   private var smsCode: String = ""
   private val smsTimer = object : CountDownTimer(SMS_TIMEOUT * 1000, 1000) {
@@ -60,8 +66,28 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
     FirebaseAuth.getInstance().useAppLanguage()
-    FirebaseAuth.getInstance().signOut()
-    updateForMode(mode)
+
+    // Initial check if user already signed in
+    Firebase.getCurrentUser()?.let { user ->
+      Firebase.getUser(user.uid, object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+          if (dataSnapshot.exists()) {
+            dmcUser = dataSnapshot.getValue(DmcUser::class.java)
+            if (dmcUser?.registration_completed!!) {
+              updateForMode(Mode.STELLAR)
+            } else {
+              updateForMode(Mode.INITIAL)
+            }
+          } else {
+            updateForMode(Mode.INITIAL)
+          }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
+      })
+    } ?: updateForMode(Mode.INITIAL)
+
   }
 
   private fun updateForMode(mode: Mode) {
@@ -122,19 +148,29 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun updateViewForStellar() {
     if (GlobalGraphHelper.isExistingWallet()) {
-      verificationText.visibility = View.GONE
-      loginButton.visibility = View.GONE
+      hideUI()
       GlobalGraphHelper.launchWallet(this)
     } else {
       verificationText.visibility = View.GONE
       loginButton.visibility = View.GONE
       dialerView.visibility = View.GONE
+      loginMessage.visibility = View.GONE
 
-      createWalletButton.visibility = View.VISIBLE
-      createWalletButton.isEnabled = true
-      createWalletButton.setText(R.string.recover_wallet)
-      createWalletButton.setOnClickListener {
-        showCreateDialog()
+      if (dmcUser?.stellar_address.isNullOrBlank()) {
+        verificationLabel.visibility = View.VISIBLE
+        verificationLabel.text = getString(R.string.attach_wallet_message)
+
+        createWalletButton.visibility = View.VISIBLE
+        createWalletButton.isEnabled = true
+        createWalletButton.setText(R.string.create_wallet)
+        createWalletButton.setOnClickListener {
+          showCreateDialog()
+        }
+      } else {
+        verificationLabel.visibility = View.VISIBLE
+        verificationLabel.text = getString(R.string.recover_wallet_message)
+
+        createWalletButton.visibility = View.GONE
       }
 
       recoverWalletButton.visibility = View.VISIBLE
@@ -223,8 +259,29 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
           task.result?.user?.uid?.let { uid ->
-            startActivityForResult(CreateUserActivity.newInstance(this, uid, phone),
-              REQUEST_CREATE_USER)
+            Firebase.getUser(uid, object : ValueEventListener {
+              override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                  dmcUser = dataSnapshot.getValue(DmcUser::class.java) as DmcUser
+                  if (dmcUser?.registration_completed!!) {
+                    updateForMode(Mode.STELLAR)
+                  } else {
+                    startCreatingNewUser()
+                  }
+                } else {
+                  startCreatingNewUser()
+                }
+              }
+
+              override fun onCancelled(error: DatabaseError) {
+
+              }
+
+              private fun startCreatingNewUser() {
+                startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, uid, phone),
+                  REQUEST_CREATE_USER)
+              }
+            })
           } ?: onError("Something went wrong. Please try again")
         } else {
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -288,6 +345,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == REQUEST_CREATE_USER && resultCode == Activity.RESULT_OK) {
+      dmcUser = data?.getSerializableExtra("user") as DmcUser?
       updateForMode(Mode.STELLAR)
     } else {
       updateForMode(Mode.INITIAL)

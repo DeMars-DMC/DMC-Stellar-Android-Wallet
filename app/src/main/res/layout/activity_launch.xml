@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/appLogo"
-        android:layout_width="@dimen/logo_width_pin"
-        android:layout_height="@dimen/logo_width_pin"
+        android:layout_width="@dimen/logo_width_main"
+        android:layout_height="@dimen/logo_width_main"
         android:scaleType="fitXY"
         android:src="@drawable/ic_main_logo"
         app:layout_constraintBottom_toTopOf="@id/verificationLabel"
@@ -34,7 +34,8 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/enter_your_phone_number"
-        app:layout_constraintBottom_toTopOf="@id/verificationText" />
+        app:layout_constraintBottom_toTopOf="@id/verificationText"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/verificationText"
@@ -48,6 +49,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/colorPaleSky"
         android:textSize="28sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/loginMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +68,7 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/log_in_message"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/loginButton" />
 
     <Button
@@ -86,6 +89,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@color/main_bg_light"
         android:elevation="@dimen/elevation"
+        android:visibility="gone"
         app:keypadButtonSize="@dimen/button_height_big"
         app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
         app:keypadDeleteButtonSize="@dimen/button_height_big"
@@ -102,9 +106,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_above="@id/recoverWalletButton"
-        android:layout_marginBottom="@dimen/padding_mini"
         android:text="@string/create_new_wallet"
         android:textSize="@dimen/text_size_big"
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/padding_mini"
         app:layout_constraintBottom_toTopOf="@id/recoverWalletButton"/>
 
     <Button
@@ -115,6 +122,10 @@
         android:layout_alignParentBottom="true"
         android:text="@string/recover_wallet"
         android:textSize="@dimen/text_size_big"
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/padding_vertical"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

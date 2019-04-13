@@ -99,7 +99,6 @@ class PinActivity : AppCompatActivity() {
                 customMessageTextView.text = resources.getQuantityString(R.plurals.attempts_template,
                         MAX_ATTEMPTS - numAttempts, MAX_ATTEMPTS - numAttempts)
                 if (numAttempts == MAX_ATTEMPTS) {
-                    //TODO move this to WalletManager
                     GlobalGraphHelper.wipeAndRestart(this@PinActivity)
                 }
             }

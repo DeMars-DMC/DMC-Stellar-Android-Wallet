@@ -320,4 +320,10 @@
     <string name="select_document_type">Select Document type</string>
     <string name="use">Use</string>
     <string name="selfie_with_id">Selfie with ID</string>
+    <string name="attach_wallet_message">Thank you for completing the registration. Now please create new Stellar wallet or recover existent if you have one already. This Stellar wallet will be attached to your DMC account</string>
+    <string name="recover_wallet_message">Recover wallet attached to your DMC account</string>
+    <string name="try_again">Try again</string>
+    <string name="non_matching_wallet_message">You can only use wallet that was attached to your DMC account after registration. If you don\'t have access to that wallet anymore or want to change your attached Stellar Wallet - you can contact our support team</string>
+    <string name="non_matching_wallet_title">Wallet doesn\'t match</string>
+    <string name="contact_us">Contact us</string>
 </resources>

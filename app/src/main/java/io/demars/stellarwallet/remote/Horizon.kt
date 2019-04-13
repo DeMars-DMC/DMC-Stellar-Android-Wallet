@@ -161,12 +161,11 @@ object Horizon : HorizonTasks {
 
   override fun getCreateMarketOffer(listener: OnMarketOfferListener, secretSeed: CharArray, sellingAsset: Asset, buyingAsset: Asset, amount: String, price: String) {
     AsyncTask.execute {
-      val server = getServer()
-      val managedOfferOperation = ManageOfferOperation.Builder(sellingAsset, buyingAsset, amount, price).build()
-      val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
-      val sourceAccount = server.accounts().account(sourceKeyPair)
-
       try {
+        val server = getServer()
+        val managedOfferOperation = ManageOfferOperation.Builder(sellingAsset, buyingAsset, amount, price).build()
+        val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val sourceAccount = server.accounts().account(sourceKeyPair)
         val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE).addOperation(managedOfferOperation).build()
         transaction.sign(sourceKeyPair)
         val response = server.submitTransaction(transaction)
@@ -277,9 +276,9 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<EffectResponse>? {
       val server = getServer()
-      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
       var effectResults: Page<EffectResponse>? = null
       try {
+        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         effectResults = server.effects().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -305,10 +304,9 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<Pair<OperationResponse, String?>>? {
       val server = getServer()
-      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
       var operationsResult: ArrayList<Pair<OperationResponse, String?>>? = null
-      var operationToFindMemo: ArrayList<OperationResponse>
       try {
+        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         operationsResult = server.operations().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -348,9 +346,9 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<TransactionResponse>? {
       val server = getServer()
-      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
       var transactionResults: Page<TransactionResponse>? = null
       try {
+        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         transactionResults = server.transactions().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -403,9 +401,9 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<TradeResponse>? {
       val server = getServer()
-      val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
       var tradeResults: Page<TradeResponse>? = null
       try {
+        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         tradeResults = (server.trades().order(RequestBuilder.Order.DESC) as TradesRequestBuilder)
           .cursor(cursor)
           .limit(limit)
@@ -432,12 +430,12 @@ object Horizon : HorizonTasks {
                          private val amount: String) : AsyncTask<Void, Void, HorizonException>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
-      val server = getServer()
-      val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
-      val destKeyPair = KeyPair.fromAccountId(destAddress)
-      var isCreateAccount = false
-
       try {
+        val server = getServer()
+        val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val destKeyPair = KeyPair.fromAccountId(destAddress)
+        var isCreateAccount = false
+
         try {
           server.accounts().account(destKeyPair)
         } catch (error: Exception) {
@@ -497,14 +495,11 @@ object Horizon : HorizonTasks {
     : AsyncTask<Void, Void, HorizonException>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
-
-      val server = getServer()
-      val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
-      val destKeyPair = KeyPair.fromAccountId(inflationDest)
-
       try {
+        val server = getServer()
+        val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val destKeyPair = KeyPair.fromAccountId(inflationDest)
         val sourceAccount = server.accounts().account(sourceKeyPair)
-
         val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
           .addOperation(SetOptionsOperation.Builder()
             .setInflationDestination(destKeyPair)
@@ -543,14 +538,11 @@ object Horizon : HorizonTasks {
     : AsyncTask<Void, Void, HorizonException?>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
-
-      val server = getServer()
-      val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
-      val limit = if (removeTrust) "0.0000000" else Constants.MAX_ASSET_STRING_VALUE
-
       try {
+        val server = getServer()
+        val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val limit = if (removeTrust) "0.0000000" else Constants.MAX_ASSET_STRING_VALUE
         val sourceAccount = server.accounts().account(sourceKeyPair)
-
         val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
           .addOperation(ChangeTrustOperation.Builder(asset, limit).build())
           .build()

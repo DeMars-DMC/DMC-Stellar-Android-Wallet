@@ -1,12 +1,13 @@
 package io.demars.stellarwallet.firebase
 
 import com.google.firebase.database.IgnoreExtraProperties
+import java.io.Serializable
 
 @IgnoreExtraProperties
 data class DmcUser(
   var uid: String = "",
   var phone: String = ""
-) {
+) : Serializable {
   var first_name = ""
   var last_name = ""
   var birth_date = ""

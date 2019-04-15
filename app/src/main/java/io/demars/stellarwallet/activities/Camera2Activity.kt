@@ -301,7 +301,7 @@ class Camera2Activity : AppCompatActivity() {
         )
         imageReader = ImageReader.newInstance(
           largest.width, largest.height,
-          ImageFormat.JPEG, /*maxImages*/ 2
+          ImageFormat.JPEG, /*maxImages*/ 1
         ).apply {
           setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
         }
@@ -579,7 +579,6 @@ class Camera2Activity : AppCompatActivity() {
     } catch (e: CameraAccessException) {
       Timber.e(e.toString())
     }
-
   }
 
   /**

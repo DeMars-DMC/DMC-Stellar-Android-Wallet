@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
-import io.demars.stellarwallet.encryption.PRNGFixes
 import io.demars.stellarwallet.helpers.LocalStoreImpl
 import io.demars.stellarwallet.helpers.WalletLifecycleListener
 import io.demars.stellarwallet.interfaces.WalletStore
@@ -15,11 +14,9 @@ import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.remote.ServerType
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
-import org.bouncycastle.jce.provider.BouncyCastleProvider
+import io.demars.stellarwallet.encryption.PRNGFixes
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
-import java.security.Provider
-import java.security.Security
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -53,10 +50,6 @@ class WalletApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         Logger.getLogger(OkHttpClient::class.java.name).level = Level.FINE
-
-        //removing the default provider coming from Android SDK.
-        Security.removeProvider("BC")
-        Security.addProvider(BouncyCastleProvider() as Provider?)
 
         PRNGFixes.apply()
 

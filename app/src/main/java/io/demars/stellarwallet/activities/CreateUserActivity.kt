@@ -231,7 +231,7 @@ class CreateUserActivity : BaseActivity() {
 
   private fun openCameraActivity(requestCode: Int) {
     val useFrontCamera = requestCode == REQUEST_CODE_CAMERA_SELFIE
-    val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+    val useCamera2 = false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/
     startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, useFrontCamera)
     else CameraActivity.newInstance(this, useFrontCamera), requestCode)
   }

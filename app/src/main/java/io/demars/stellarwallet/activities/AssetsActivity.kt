@@ -149,22 +149,26 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     private fun loadSupportedAssets() {
         map.clear()
 
-        val rand = SupportedAsset(1, Constants.RAND_ASSET_TYPE, Constants.RAND_IMAGE_RES,
-          Constants.RAND_ASSET_ISSUER, "100000000000",
-          Constants.RAND_ASSET_NAME, "", "", null, null, null)
+        val zar = SupportedAsset(0, Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
+          Constants.ZAR_ASSET_ISSUER, "100000000000",
+          Constants.ZAR_ASSET_NAME, "", "", null, null, null)
 
-        val rgts = SupportedAsset(2, Constants.RGTS_ASSET_TYPE, Constants.RGTS_IMAGE_RES,
-          Constants.RGTS_ASSET_ISSUER, "100000000000",
-          Constants.RGTS_ASSET_NAME, "", "", null, null, null)
+        val rtgs = SupportedAsset(1, Constants.RTGS_ASSET_TYPE, Constants.RTGS_IMAGE_RES,
+          Constants.RTGS_ASSET_ISSUER, "100000000000",
+          Constants.RTGS_ASSET_NAME, "", "", null, null, null)
 
-//        val nkls = SupportedAsset(3, Constants.NKLS_ASSET_TYPE, Constants.NKLS_IMAGE_RES,
-//          Constants.NKLS_ASSET_ISSUER, "100000000000",
-//          Constants.NKLS_ASSET_NAME, "", "", null, null, null)
+        val dmc = SupportedAsset(2, Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
+          Constants.DMC_ASSET_ISSUER, "100000000000",
+          Constants.DMC_ASSET_NAME, "", "", null, null, null)
 
+        val usd = SupportedAsset(3, Constants.USD_ASSET_TYPE, Constants.USD_IMAGE_RES,
+          Constants.USD_ASSET_ISSUER, "100000000000",
+          Constants.USD_ASSET_NAME, "", "", null, null, null)
 
-        map["RAND"] = rand
-        map["RGTS"] = rgts
-//        map["NKLS"] = nkls
+        map[Constants.ZAR_ASSET_TYPE] = zar
+        map[Constants.RTGS_ASSET_TYPE] = rtgs
+        map[Constants.DMC_ASSET_TYPE] = dmc
+        map[Constants.USD_ASSET_TYPE] = usd
 
         updateAdapter()
     }

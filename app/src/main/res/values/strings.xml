@@ -71,7 +71,7 @@
     <string name="view_phrase">View Phrase</string>
     <string name="view_seed">View Secret Key (Not recommended)</string>
     <string name="wallet">Wallet</string>
-    <string name="clear_wallet">Clear Wallet</string>
+    <string name="log_out">Log out</string>
     <string name="security">Security</string>
     <string name="pin_send_payments">Request PIN when sending payments</string>
     <string name="troubleshooting">Troubleshooting</string>

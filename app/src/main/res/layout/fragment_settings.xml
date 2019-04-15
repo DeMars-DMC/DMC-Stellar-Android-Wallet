@@ -80,7 +80,7 @@
                 android:id="@+id/clearWalletButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/clear_wallet"
+                android:text="@string/log_out"
                 style="@style/SettingsButton" />
 
             <TextView

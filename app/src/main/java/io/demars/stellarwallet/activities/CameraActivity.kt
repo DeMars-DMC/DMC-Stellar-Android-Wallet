@@ -56,10 +56,7 @@ class CameraActivity : AppCompatActivity() {
 
     file = File(getExternalFilesDir(null), PIC_FILE_NAME)
     hasCamera = checkCameraHardware(this)
-    if (hasCamera && forSelfie) {
-      // Double check that frontal camera exists
-      useFront = checkFrontCamera()
-    }
+    useFront = checkFrontCamera()
 
     updateView()
   }
@@ -160,15 +157,21 @@ class CameraActivity : AppCompatActivity() {
 
   /** Check if this device has a frontal camera */
   private fun checkFrontCamera(): Boolean {
-    var cameraCount = 0
-    val cameraInfo = Camera.CameraInfo()
-    cameraCount = Camera.getNumberOfCameras()
-    for (camIdx in 0 until cameraCount) {
-      Camera.getCameraInfo(camIdx, cameraInfo)
-      if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-        frontCameraIndex = camIdx
-        return true
+    try {
+      if (hasCamera && forSelfie) {
+        var cameraCount = 0
+        val cameraInfo = Camera.CameraInfo()
+        cameraCount = Camera.getNumberOfCameras()
+        for (camIdx in 0..cameraCount) {
+          Camera.getCameraInfo(camIdx, cameraInfo)
+          if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            frontCameraIndex = camIdx
+            return true
+          }
+        }
       }
+    } catch (ex:Exception) {
+      // Do nothing and return false
     }
 
     return false

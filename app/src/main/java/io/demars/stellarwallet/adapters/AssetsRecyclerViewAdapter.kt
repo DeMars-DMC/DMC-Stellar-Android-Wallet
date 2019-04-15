@@ -122,20 +122,25 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
             Picasso.get().load(asset.image).into(viewHolder.assetImage)
         } else {
             when {
-              asset.code.equals(Constants.RAND_ASSET_TYPE, true) -> {
+              asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.RAND_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get().load(Constants.ZAR_IMAGE_RES).into(viewHolder.assetImage)
               }
-//              asset.code.equals(Constants.NKLS_ASSET_TYPE, true) -> {
-//                  viewHolder.defaultImage.visibility = View.GONE
-//                  viewHolder.assetImage.visibility = View.VISIBLE
-//                  Picasso.get().load(Constants.NKLS_IMAGE_RES).into(viewHolder.assetImage)
-//              }
-              asset.code.equals(Constants.RGTS_ASSET_TYPE, true) -> {
+              asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.RGTS_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get().load(Constants.RTGS_IMAGE_RES).into(viewHolder.assetImage)
+              }
+              asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
+                  viewHolder.defaultImage.visibility = View.GONE
+                  viewHolder.assetImage.visibility = View.VISIBLE
+                  Picasso.get().load(Constants.DMC_IMAGE_RES).into(viewHolder.assetImage)
+              }
+              asset.code.equals(Constants.USD_ASSET_TYPE, true) -> {
+                  viewHolder.defaultImage.visibility = View.GONE
+                  viewHolder.assetImage.visibility = View.VISIBLE
+                  Picasso.get().load(Constants.USD_IMAGE_RES).into(viewHolder.assetImage)
               }
               else -> {
                   viewHolder.defaultImage.text = asset.name[0].toString()

@@ -22,7 +22,7 @@ class SettingsFragment : BaseFragment() {
     private lateinit var appContext : Context
 
     enum class SettingsAction {
-        SHOW_MNEMONIC, SHOW_SECRET_SEED, CLEAR_WALLET, TOGGLE_PIN_ON_SENDING, TOGGLE_ENABLE_WEAR_APP
+        SHOW_MNEMONIC, SHOW_SECRET_SEED, LOG_OUT, TOGGLE_PIN_ON_SENDING, TOGGLE_ENABLE_WEAR_APP
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -55,7 +55,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         clearWalletButton.setOnClickListener {
-            startActivityForResult(WalletManagerActivity.verifyPin(it.context), SettingsAction.CLEAR_WALLET.ordinal)
+            startActivityForResult(WalletManagerActivity.verifyPin(it.context), SettingsAction.LOG_OUT.ordinal)
         }
 
         pinOnSendPaymentsButton.setOnClickListener {
@@ -117,7 +117,7 @@ class SettingsFragment : BaseFragment() {
                 }
             }
 
-            SettingsAction.CLEAR_WALLET.ordinal -> {
+            SettingsAction.LOG_OUT.ordinal -> {
                 if (resultCode == Activity.RESULT_OK) {
                     GlobalGraphHelper.wipeAndRestart(activity as FragmentActivity)
                 }

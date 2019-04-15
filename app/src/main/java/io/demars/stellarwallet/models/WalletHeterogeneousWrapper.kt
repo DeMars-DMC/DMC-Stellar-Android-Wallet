@@ -137,30 +137,39 @@ class WalletHeterogeneousWrapper {
   private fun getFilteredOperations(list: ArrayList<Pair<OperationResponse, String?>>?, assetType: String): ArrayList<Pair<OperationResponse, String?>>? {
     if (list == null) return null
 
-    return list.filter {
+    val newList = ArrayList<Pair<OperationResponse, String?>>(list)
+    val returnList = ArrayList<Pair<OperationResponse, String?>>()
+    for (it in newList) {
       when (it.first) {
         is CreateAccountOperationResponse -> {
-          assetType == Constants.LUMENS_ASSET_TYPE
+          if (assetType == Constants.LUMENS_ASSET_TYPE) {
+            returnList.add(it)
+          }
         }
         is PaymentOperationResponse -> {
-          assetType == getAssetCode(it.first)
+          if (assetType == getAssetCode(it.first)) {
+            returnList.add(it)
+          }
         }
         is PathPaymentOperationResponse -> {
-          false
         }
         is ChangeTrustOperationResponse -> {
-          assetType == getAssetCode(it.first)
+          if (assetType == getAssetCode(it.first)) {
+            returnList.add(it)
+          }
         }
         is AllowTrustOperationResponse -> {
-          assetType == getAssetCode(it.first)
+          if (assetType == getAssetCode(it.first)) {
+            returnList.add(it)
+          }
         }
         is ManageOfferOperationResponse -> {
-          // Use trades instead(because it shows all created offers that wasn't traded yet)
-          false
         }
-        else -> false
+        else -> {}
       }
-    } as ArrayList
+    }
+
+    return returnList
   }
 
   private fun getFilteredTransactions(list: ArrayList<TransactionResponse>?, assetType: String): ArrayList<TransactionResponse>? {

@@ -51,7 +51,16 @@ object Firebase {
 
   fun getUser(uid: String, listener: ValueEventListener) {
     getDatabaseReference().child("users")
+      .child(uid).removeEventListener(listener)
+    getDatabaseReference().child("users")
       .child(uid).addValueEventListener(listener)
+  }
+
+  fun removeUserListener(listener: ValueEventListener) {
+    getCurrentUserUid()?.let { uid ->
+      getDatabaseReference().child("users")
+        .child(uid).removeEventListener(listener)
+    }
   }
   //endregion
 }

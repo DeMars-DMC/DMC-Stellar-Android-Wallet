@@ -14,15 +14,22 @@ import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_create_user.*
 import android.app.DatePickerDialog
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.Address
+import io.demars.stellarwallet.views.DmcURLSpan
 import java.util.*
 
 
@@ -184,6 +191,18 @@ class CreateUserActivity : BaseActivity() {
     submitButton.setOnClickListener {
       verifyAndCreateNewUser()
     }
+
+    val spannable = SpannableStringBuilder(termsConditions.text)
+    val termsConditionStr = "Terms and Conditions"
+    val spanIndex = spannable.indexOf(termsConditionStr)
+    spannable.setSpan(DmcURLSpan(Constants.URL_TERMS_AND_CONDITIONS),
+      spanIndex, spanIndex + termsConditionStr.length,
+      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannable.setSpan(StyleSpan(Typeface.BOLD),
+      spanIndex, spanIndex + termsConditionStr.length,
+      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    termsConditions.text = spannable
+    termsConditions.movementMethod = LinkMovementMethod.getInstance()
   }
 
   private fun showExpiryDateDialog() {
@@ -257,26 +276,76 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun verifyAndCreateNewUser() {
-    var verified = user.first_name.isNotBlank()
-    addVerificationSpan(firstNameLabel, verified)
-    verified = user.last_name.isNotBlank()
-    addVerificationSpan(surnameLabel, verified)
-    verified = user.birth_date.isNotBlank()
-    addVerificationSpan(birthDateLabel, verified)
-    verified = user.nationality.isNotBlank()
-    addVerificationSpan(nationalityLabel, verified)
-    verified = user.address.isNotBlank()
-    addVerificationSpan(addressLabel, verified)
-    verified = user.email_address.isNotBlank()
-    addVerificationSpan(emailLabel, verified)
-    verified = user.document_type.isNotBlank()
-    addVerificationSpan(documentTypeLabel, verified)
-    verified = user.document_number.isNotBlank()
-    addVerificationSpan(documentNumberLabel, verified)
-    verified = user.id_expiry_date.isNotBlank()
-    addVerificationSpan(expiryDateLabel, verified)
-    verified = user.id_photo_uploaded && user.id_selfie_uploaded
-    addVerificationSpan(personalIdLabel, verified)
+    var verified = true
+    if (user.first_name.isNotBlank()) {
+      addVerificationSpan(firstNameLabel, true)
+    } else {
+      addVerificationSpan(firstNameLabel, false)
+      verified = false
+    }
+
+    if (user.last_name.isNotBlank()) {
+      addVerificationSpan(surnameLabel, true)
+    } else {
+      addVerificationSpan(surnameLabel, false)
+      verified = false
+    }
+
+    if (user.birth_date.isNotBlank()) {
+      addVerificationSpan(birthDateLabel, true)
+    } else {
+      addVerificationSpan(birthDateLabel, false)
+      verified = false
+    }
+
+    if (user.nationality.isNotBlank()) {
+      addVerificationSpan(nationalityLabel, true)
+    } else {
+      addVerificationSpan(nationalityLabel, false)
+      verified = false
+    }
+
+    if (user.address.isNotBlank()) {
+      addVerificationSpan(addressLabel, true)
+    } else {
+      addVerificationSpan(addressLabel, false)
+      verified = false
+    }
+
+    if (user.email_address.isNotBlank()) {
+      addVerificationSpan(emailLabel, true)
+    } else {
+      addVerificationSpan(emailLabel, false)
+      verified = false
+    }
+
+    if (user.document_type.isNotBlank()) {
+      addVerificationSpan(documentTypeLabel, true )
+    } else {
+      addVerificationSpan(documentTypeLabel, false)
+      verified = false
+    }
+
+    if (user.document_number.isNotBlank()) {
+      addVerificationSpan(documentNumberLabel, true)
+    } else {
+      addVerificationSpan(documentNumberLabel, false)
+      verified = false
+    }
+
+    if (user.id_expiry_date.isNotBlank()) {
+      addVerificationSpan(expiryDateLabel, true)
+    } else {
+      addVerificationSpan(expiryDateLabel, false)
+      verified = false
+    }
+
+    if (user.id_photo_uploaded && user.id_selfie_uploaded) {
+      addVerificationSpan(personalIdLabel, true)
+    } else {
+      addVerificationSpan(personalIdLabel, false)
+      verified = false
+    }
 
     verifiedOnce = true
 
@@ -286,7 +355,7 @@ class CreateUserActivity : BaseActivity() {
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           val intent = Intent()
           intent.putExtra("user", user)
-          setResult(Activity.RESULT_OK)
+          setResult(Activity.RESULT_OK, intent)
           finish()
         }.addOnFailureListener {
           Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()

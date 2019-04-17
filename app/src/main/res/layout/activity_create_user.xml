@@ -409,6 +409,16 @@
 
                 </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/termsConditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPaleSky"
+                    android:text="@string/terms_and_conditions_agree"
+                    android:paddingStart="@dimen/padding_horizontal"
+                    android:paddingEnd="@dimen/padding_horizontal"
+                    android:paddingBottom="@dimen/padding_horizontal" />
+
                 <Button
                     android:id="@+id/submitButton"
                     style="@style/ButtonAccentStyle"

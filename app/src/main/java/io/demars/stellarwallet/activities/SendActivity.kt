@@ -26,10 +26,10 @@ import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint
-import com.davidmiguel.numberkeyboard.NumberKeyboardListener
+import io.demars.stellarwallet.views.pin.PinLockView
 import kotlinx.android.synthetic.main.activity_send_funds.*
 
-class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallback {
+class SendActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCallback {
 
     companion object {
         private const val MAX_ALLOWED_DECIMALS = 7
@@ -63,12 +63,12 @@ class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallbac
         assetCodeTextView.text = WalletApplication.userSession.getFormattedCurrentAssetCode()
 
         amountTextView.text = "0"
-        numberKeyboard.setListener(this)
+        numberKeyboard.mDialerListener = this
 
         if (intent.hasExtra(ARG_ADDRESS_DATA)) {
             address = intent.getStringExtra(ARG_ADDRESS_DATA)
         } else {
-            throw IllegalStateException("failed to parse the arguments, please use ${SendActivity::class.java.simpleName}#newIntent(...)")
+//             throw IllegalStateException("failed to parse the arguments, please use ${SendActivity::class.java.simpleName}#newIntent(...)")
         }
 
         addressEditText.text = address
@@ -113,24 +113,17 @@ class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallbac
         }
     }
 
-    override fun onNumberClicked(number: Int) {
+    //region Dialer Clicks
+    override fun onDial(number: Int) {
         if (amountText.isEmpty() && number == 0) {
             return
         }
         updateAmount(amountText + number)
     }
 
-    override fun onLeftAuxButtonClicked() {
-        if (!hasDecimalPoint(amountText)) {
-            amountText = if (amountText.isEmpty()) "0." else "$amountText."
-            showAmount(amountText)
-        }
-    }
+    override fun onDelete() {
+        if (amountText.isEmpty()) return
 
-    override fun onRightAuxButtonClicked() {
-        if (amountText.isEmpty()) {
-            return
-        }
         var newAmountText: String
         if (amountText.length <= 1) {
             newAmountText = ""
@@ -145,6 +138,19 @@ class SendActivity : BaseActivity(), NumberKeyboardListener, SuccessErrorCallbac
         }
         updateAmount(newAmountText)
     }
+
+    override fun onDeleteAll() {
+        if (amountText.isEmpty()) return
+        updateAmount("")
+    }
+
+    override fun onDot() {
+        if (!hasDecimalPoint(amountText)) {
+            amountText = if (amountText.isEmpty()) "0." else "$amountText."
+            showAmount(amountText)
+        }
+    }
+    //endregion
 
     private fun updateAmount(newAmountText: String) {
         val newAmount = if (newAmountText.isEmpty()) 0.0 else java.lang.Double.parseDouble(newAmountText)

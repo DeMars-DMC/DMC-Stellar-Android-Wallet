@@ -115,7 +115,7 @@ class Camera2Activity : AppCompatActivity() {
    */
   private var backgroundHandler: Handler? = null
   private var mainHandler = Handler(Looper.getMainLooper())
-
+  private var autoFocusSupported = false
   /**
    * An [ImageReader] that handles still image capture.
    */
@@ -131,11 +131,14 @@ class Camera2Activity : AppCompatActivity() {
    * still image is ready to be saved.
    */
   private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-    val buffer = it.acquireLatestImage().planes[0].buffer
-    pictureBytes = ByteArray(buffer.capacity())
-    buffer.get(pictureBytes)
-    mainHandler.post { updateView() }
-
+    if (it != null) {
+      val image = it.acquireLatestImage()
+      val buffer = image.planes[0].buffer
+      pictureBytes = ByteArray(buffer.capacity())
+      buffer.get(pictureBytes)
+      image.close()
+      mainHandler.post { updateView() }
+    }
   }
 
   /**
@@ -294,6 +297,13 @@ class Camera2Activity : AppCompatActivity() {
           CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         ) ?: continue
 
+        var cameraAutoFocus = false
+        val afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES)
+        afAvailableModes?.let {
+          cameraAutoFocus = !(afAvailableModes.isEmpty() || (afAvailableModes.size == 1
+            && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF))
+        }
+
         // For still image captures, we use the largest available size.
         val largest = Collections.max(
           Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
@@ -342,21 +352,18 @@ class Camera2Activity : AppCompatActivity() {
           textureView.setAspectRatio(previewSize.height, previewSize.width)
         }
 
-        // Check if the flash is supported.
-        flashSupported =
-          characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-
-        // We don't use a front facing camera in this sample.
         val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
         if (cameraDirection != null &&
           cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
           if (forSelfie) {
+            this.autoFocusSupported = cameraAutoFocus
             this.cameraId = cameraId
             return
           } else {
             continue
           }
         } else {
+          this.autoFocusSupported = cameraAutoFocus
           this.cameraId = cameraId
         }
       }
@@ -633,7 +640,7 @@ class Camera2Activity : AppCompatActivity() {
           CaptureRequest.CONTROL_AF_MODE,
           CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
         )
-      }?.also { setAutoFlash(it) }
+      }
 
       val captureCallback = object : CameraCaptureSession.CaptureCallback() {
 
@@ -848,7 +855,11 @@ class Camera2Activity : AppCompatActivity() {
       textureView.visibility = VISIBLE
 
       cameraButton.setOnClickListener {
-        lockFocus()
+        if (autoFocusSupported) {
+          lockFocus()
+        } else {
+          captureStillPicture()
+        }
       }
 
       galleryButton.setOnClickListener {

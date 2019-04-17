@@ -415,6 +415,10 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
+  override fun onDot() {
+
+  }
+
   private fun formatSmsCode(): String {
     return when (smsCode.length) {
       0 -> "_ _ _ _ _ _"

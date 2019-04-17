@@ -15,9 +15,11 @@
 
     <dimen name="button_height">32dp</dimen>
     <dimen name="button_height_big">48dp</dimen>
+    <dimen name="button_height_send">@dimen/button_height</dimen>
 
     <dimen name="text_size">14sp</dimen>
     <dimen name="text_size_big">18sp</dimen>
+    <dimen name="text_size_xbig">24sp</dimen>
 
     <dimen name="pin_spacing_vertical">8dp</dimen>
     <dimen name="pin_spacing_horizontal">24dp</dimen>

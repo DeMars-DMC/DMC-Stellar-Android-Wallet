@@ -88,7 +88,6 @@ dependencies {
     implementation "io.github.novacrypto:BIP39:$novaCryptoVersion"
     implementation "com.toptoche.searchablespinner:searchablespinnerlibrary:$searchablespinnerVersion"
     implementation "com.journeyapps:zxing-android-embedded:$zxingAndroidVersion"
-    implementation "com.github.davidmigloz:number-keyboard:$numberKeyBoardVersion"
     implementation "com.brandongogetap:stickyheaders:$stickyheadersVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:1.1.0"

@@ -50,10 +50,14 @@ class CreateUserActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     ViewUtils.setTransparentStatusBar(this)
-    ViewUtils.setActivityKeyboardHidden(this)
     setContentView(R.layout.activity_create_user)
 
-    user = DmcUser(intent.getStringExtra(ARG_UID), intent.getStringExtra(ARG_PHONE))
+    user = if (intent.getStringExtra(ARG_UID).isNullOrBlank() ||
+      intent.getStringExtra(ARG_PHONE).isNullOrBlank()) {
+      DmcUser()
+    } else {
+      DmcUser(intent.getStringExtra(ARG_UID), intent.getStringExtra(ARG_PHONE))
+    }
 
     initUI()
   }
@@ -231,7 +235,7 @@ class CreateUserActivity : BaseActivity() {
 
   private fun openCameraActivity(requestCode: Int) {
     val useFrontCamera = requestCode == REQUEST_CODE_CAMERA_SELFIE
-    val useCamera2 = false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/
+    val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, useFrontCamera)
     else CameraActivity.newInstance(this, useFrontCamera), requestCode)
   }

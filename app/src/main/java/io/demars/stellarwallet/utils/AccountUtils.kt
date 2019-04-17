@@ -14,9 +14,9 @@ class AccountUtils {
         private const val CIPHER_TRANSFORMATION : String = "RSA/ECB/PKCS1Padding"
 
         fun generateWallet (context: Context, mnemonic: String, passphrase: String?, pin : String) {
-            AccountUtils.encryptAndStoreWallet(context, mnemonic, passphrase, pin)
+            encryptAndStoreWallet(context, mnemonic, passphrase, pin)
 
-            val stellarKeyPair = AccountUtils.getStellarKeyPair(mnemonic, passphrase)
+            val stellarKeyPair = getStellarKeyPair(mnemonic, passphrase)
 
             WalletApplication.wallet.setStellarAccountId(stellarKeyPair.accountId)
             WalletApplication.userSession.setPin(pin)

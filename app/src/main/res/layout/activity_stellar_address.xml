@@ -53,7 +53,7 @@
             android:layout_marginBottom="@dimen/padding_vertical"
             android:padding="@dimen/padding_micro"
             android:text="@string/name"
-            android:textColor="@color/sendToTextColor" />
+            android:textColor="@color/colorDisabled" />
 
         <EditText
             android:id="@+id/contactNameEditText"
@@ -79,7 +79,7 @@
             android:layout_marginBottom="@dimen/padding_vertical"
             android:layout_marginTop="@dimen/padding_vertical"
             android:padding="@dimen/padding_micro"
-            android:textColor="@color/sendToTextColor"
+            android:textColor="@color/colorDisabled"
             tool:text="ADDRESS TITLE" />
 
         <LinearLayout

@@ -92,12 +92,12 @@
         android:visibility="gone"
         app:keypadButtonSize="@dimen/button_height_big"
         app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
-        app:keypadDeleteButtonSize="@dimen/button_height_big"
         app:keypadShowDeleteButton="true"
+        app:keypadDotButtonDrawable="@null"
+        app:keypadShowDotButton="false"
         app:keypadTextColor="@color/black"
         app:keypadTextSize="@dimen/keypad_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:pinLength="4"
         tools:ignore="UnusedAttribute" />
 
     <Button

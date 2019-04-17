@@ -106,8 +106,7 @@ object ViewUtils {
 
   @JvmStatic
   fun setActivityKeyboardHidden(activity: CreateUserActivity) {
-    activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN or
-      WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
   }
 
 //  @JvmStatic

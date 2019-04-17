@@ -26,9 +26,9 @@
         <attr name="keypadHorizontalSpacing" format="dimension" />
         <attr name="keypadButtonBackgroundDrawable" format="integer" />
         <attr name="keypadDeleteButtonDrawable" format="integer" />
-        <attr name="keypadDeleteButtonSize" format="dimension" />
         <attr name="keypadShowDeleteButton" format="boolean" />
-        <attr name="keypadDeleteButtonPressedColor" format="color" />
+        <attr name="keypadDotButtonDrawable" format="integer" />
+        <attr name="keypadShowDotButton" format="boolean" />
         <attr name="dotEmptyBackground" format="reference" />
         <attr name="dotFilledBackground" format="reference" />
         <attr name="dotDiameter" format="dimension" />

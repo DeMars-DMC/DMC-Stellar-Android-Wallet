@@ -18,13 +18,13 @@ class PinLockView : RecyclerView {
   private var mHorizontalSpacing: Int = 0
   private var mVerticalSpacing: Int = 0
   private var mTextColor: Int = 0
-  private var mDeleteButtonPressedColor: Int = 0
   private var mTextSize: Int = 0
   private var mButtonSize: Int = 0
-  private var mDeleteButtonSize: Int = 0
   private var mButtonBackgroundDrawable: Drawable? = null
   private var mDeleteButtonDrawable: Drawable? = null
   private var mShowDeleteButton: Boolean = false
+  private var mDotButtonDrawable: Drawable? = null
+  private var mShowDotButton: Boolean = false
 
   private var mIndicatorDots: IndicatorDots? = null
   private var mAdapter: PinLockAdapter? = null
@@ -114,6 +114,12 @@ class PinLockView : RecyclerView {
       if (mPinLockListener != null) {
         mPinLockListener!!.onEmpty()
       }
+    }
+  }
+
+  private val mOnDotClickListener = object : PinLockAdapter.OnDotClickListener {
+    override fun onDotClicked() {
+      mDialerListener?.onDot()
     }
   }
 
@@ -228,20 +234,20 @@ class PinLockView : RecyclerView {
     }
 
   /**
-   * Get the delete button size in pixels
+   * Get the drawable of the dot button
    *
-   * @return size in pixels
+   * @return the dot button drawable
    */
   /**
-   * Set the size of the delete button in pixels
+   * Set the drawable of the dot button dynamically
    *
-   * @param deleteButtonSize size in pixels
+   * @param dotButtonDrawable the delete button drawable
    */
-  var deleteButtonSize: Int
-    get() = mDeleteButtonSize
-    set(deleteButtonSize) {
-      this.mDeleteButtonSize = deleteButtonSize
-      mCustomizationOptionsBundle!!.deleteButtonSize = deleteButtonSize
+  var dotButtonDrawable: Drawable?
+    get() = mDotButtonDrawable
+    set(dotButtonDrawable) {
+      this.mDotButtonDrawable = dotButtonDrawable
+      mCustomizationOptionsBundle!!.dotButtonDrawable = dotButtonDrawable
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -264,20 +270,20 @@ class PinLockView : RecyclerView {
     }
 
   /**
-   * Get the delete button pressed/focused state color
+   * Is the dot button shown
    *
-   * @return color of the button
+   * @return returns true if shown, false otherwise
    */
   /**
-   * Set the pressed/focused state color of the delete button
+   * Dynamically set if the delete button should be shown
    *
-   * @param deleteButtonPressedColor the color of the delete button
+   * @param showDotButton true if the delete button should be shown, false otherwise
    */
-  var deleteButtonPressedColor: Int
-    get() = mDeleteButtonPressedColor
-    set(deleteButtonPressedColor) {
-      this.mDeleteButtonPressedColor = deleteButtonPressedColor
-      mCustomizationOptionsBundle!!.deleteButtonPressesColor = deleteButtonPressedColor
+  var isShowDotButton: Boolean
+    get() = mShowDotButton
+    set(showDotButton) {
+      this.mShowDotButton = showDotButton
+      mCustomizationOptionsBundle!!.isShowDotButton = showDotButton
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -312,11 +318,11 @@ class PinLockView : RecyclerView {
       mTextColor = typedArray.getColor(R.styleable.PinLockView_keypadTextColor, ContextCompat.getColor(context, R.color.white))
       mTextSize = typedArray.getDimension(R.styleable.PinLockView_keypadTextSize, context.resources.getDimension(R.dimen.text_size)).toInt()
       mButtonSize = typedArray.getDimension(R.styleable.PinLockView_keypadButtonSize, context.resources.getDimension(R.dimen.button_height_big)).toInt()
-      mDeleteButtonSize = typedArray.getDimension(R.styleable.PinLockView_keypadDeleteButtonSize, context.resources.getDimension(R.dimen.button_height_big)).toInt()
       mButtonBackgroundDrawable = typedArray.getDrawable(R.styleable.PinLockView_keypadButtonBackgroundDrawable)
       mDeleteButtonDrawable = typedArray.getDrawable(R.styleable.PinLockView_keypadDeleteButtonDrawable)
       mShowDeleteButton = typedArray.getBoolean(R.styleable.PinLockView_keypadShowDeleteButton, true)
-      mDeleteButtonPressedColor = typedArray.getColor(R.styleable.PinLockView_keypadDeleteButtonPressedColor, ContextCompat.getColor(context, R.color.greyish))
+      mDotButtonDrawable = typedArray.getDrawable(R.styleable.PinLockView_keypadDotButtonDrawable)
+      mShowDotButton = typedArray.getBoolean(R.styleable.PinLockView_keypadShowDotButton, true)
     } finally {
       typedArray.recycle()
     }
@@ -327,9 +333,9 @@ class PinLockView : RecyclerView {
     mCustomizationOptionsBundle!!.buttonSize = mButtonSize
     mCustomizationOptionsBundle!!.buttonBackgroundDrawable = mButtonBackgroundDrawable
     mCustomizationOptionsBundle!!.deleteButtonDrawable = mDeleteButtonDrawable
-    mCustomizationOptionsBundle!!.deleteButtonSize = mDeleteButtonSize
     mCustomizationOptionsBundle!!.isShowDeleteButton = mShowDeleteButton
-    mCustomizationOptionsBundle!!.deleteButtonPressesColor = mDeleteButtonPressedColor
+    mCustomizationOptionsBundle!!.dotButtonDrawable = mDotButtonDrawable
+    mCustomizationOptionsBundle!!.isShowDotButton = mShowDotButton
 
     initView()
   }
@@ -340,6 +346,7 @@ class PinLockView : RecyclerView {
     mAdapter = PinLockAdapter()
     mAdapter!!.onItemClickListener = mOnNumberClickListener
     mAdapter!!.onDeleteClickListener = mOnDeleteClickListener
+    mAdapter!!.onDotClickListener = mOnDotClickListener
     mAdapter!!.customizationOptions = mCustomizationOptionsBundle
     adapter = mAdapter
 
@@ -397,9 +404,11 @@ class PinLockView : RecyclerView {
 
   class LTRGridLayoutManager : GridLayoutManager {
     override fun isLayoutRTL(): Boolean = false
+
     constructor(context: Context, spanCount: Int) : super(context, spanCount)
     @Suppress("unused")
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+
     @Suppress("unused")
     constructor(context: Context, spanCount: Int, orientation: Int, reverseLayout: Boolean) : super(context, spanCount, orientation, reverseLayout)
   }
@@ -432,11 +441,12 @@ class PinLockView : RecyclerView {
     fun onDial(number: Int)
     fun onDelete()
     fun onDeleteAll()
+    fun onDot()
   }
 
   class ItemSpaceDecoration(private val mHorizontalSpaceWidth: Int, private val mVerticalSpaceHeight: Int, private val mSpanCount: Int, private val mIncludeEdge: Boolean) : RecyclerView.ItemDecoration() {
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
 
       val position = parent.getChildAdapterPosition(view)
       val column = position % mSpanCount

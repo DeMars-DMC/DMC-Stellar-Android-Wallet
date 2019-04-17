@@ -100,11 +100,6 @@
     <color name="addressTextColor">@color/colorDisabled</color>
     <color name="addressLayoutBackGroundColor">@color/white</color>
 
-    <!--Send-->
-    <color name="sendToTextColor">@color/colorDisabled</color>
-    <color name="sendButtonColor">@color/primaryButtonBg</color>
-    <color name="currencyTextColor">@color/lightGray</color>
-
     <!--Trade-->
     <color name="selectorHint">@color/frenchGray</color>
     <color name="editTextEnabled">@color/white</color>

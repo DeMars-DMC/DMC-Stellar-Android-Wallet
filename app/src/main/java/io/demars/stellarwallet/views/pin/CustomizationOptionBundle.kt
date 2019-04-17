@@ -8,7 +8,7 @@ class CustomizationOptionsBundle {
   var buttonSize: Int = 0
   var buttonBackgroundDrawable: Drawable? = null
   var deleteButtonDrawable: Drawable? = null
-  var deleteButtonSize: Int = 0
   var isShowDeleteButton: Boolean = false
-  var deleteButtonPressesColor: Int = 0
+  var dotButtonDrawable: Drawable? = null
+  var isShowDotButton: Boolean = false
 }

@@ -14,6 +14,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import android.app.Activity
+import android.app.AlertDialog
 import android.net.Uri
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -186,6 +187,7 @@ class CameraActivity : AppCompatActivity() {
         Camera.open() // attempt to get a Camera instance
       }
     } catch (e: Exception) {
+      AlertDialog.Builder(this).setMessage(e.localizedMessage).show()
       // Camera is not available (in use or does not exist)
       null // returns null if camera is unavailable
     }
@@ -202,8 +204,6 @@ class CameraActivity : AppCompatActivity() {
       // Install a SurfaceHolder.Callback so we get notified when the
       // underlying surface is created and destroyed.
       addCallback(this@CameraPreview)
-      // deprecated setting, but required on Android versions prior to 3.0
-      setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {

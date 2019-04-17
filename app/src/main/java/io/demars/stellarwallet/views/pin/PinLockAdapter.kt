@@ -14,6 +14,7 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   var customizationOptions: CustomizationOptionsBundle? = null
   var onItemClickListener: OnNumberClickListener? = null
   var onDeleteClickListener: OnDeleteClickListener? = null
+  var onDotClickListener: OnDotClickListener? = null
   var pinLength: Int = 0
 
   private var mKeyValues: IntArray? = getAdjustKeyValues(intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0))
@@ -25,26 +26,30 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     if (viewType == VIEW_TYPE_NUMBER) {
       val view = inflater.inflate(R.layout.layout_number_item, parent, false)
       viewHolder = NumberViewHolder(view)
-    } else {
+    } else if (viewType == VIEW_TYPE_DELETE){
       val view = inflater.inflate(R.layout.layout_delete_item, parent, false)
       viewHolder = DeleteViewHolder(view)
+    } else {
+      val view = inflater.inflate(R.layout.layout_delete_item, parent, false)
+      viewHolder = DotViewHolder(view)
     }
     return viewHolder
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    if (holder.itemViewType == VIEW_TYPE_NUMBER) {
-      (holder as NumberViewHolder).configureNumberButtonHolder()
-    } else if (holder.itemViewType == VIEW_TYPE_DELETE) {
-      (holder as DeleteViewHolder).configureDeleteButtonHolder()
+    when {
+      holder.itemViewType == VIEW_TYPE_NUMBER -> (holder as NumberViewHolder).configureNumberButtonHolder()
+      holder.itemViewType == VIEW_TYPE_DELETE -> (holder as DeleteViewHolder).configureDeleteButtonHolder()
+      else -> (holder as DotViewHolder).configureDotButtonHolder()
     }
   }
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == itemCount - 1) {
-      VIEW_TYPE_DELETE
-    } else VIEW_TYPE_NUMBER
+  override fun getItemViewType(position: Int): Int = when (position) {
+    itemCount - 1 -> VIEW_TYPE_DELETE
+    itemCount - 3 -> VIEW_TYPE_DOT
+    else -> VIEW_TYPE_NUMBER
   }
+
 
   private fun getAdjustKeyValues(keyValues: IntArray): IntArray {
     val adjustedKeyValues = IntArray(keyValues.size + 1)
@@ -116,8 +121,27 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun configureDeleteButtonHolder() {
+      mDeleteButton.setImageDrawable(customizationOptions?.deleteButtonDrawable)
       mDeleteButton.setColorFilter(customizationOptions?.textColor!!)
-      mDeleteButton.setImageDrawable(customizationOptions?.deleteButtonDrawable!!)
+    }
+  }
+
+  inner class DotViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var mDotButton: ImageView = itemView.findViewById(R.id.button) as ImageView
+
+    init {
+      if (customizationOptions!!.isShowDotButton) {
+        mDotButton.setOnClickListener {
+          if (onDotClickListener != null) {
+            onDotClickListener!!.onDotClicked()
+          }
+        }
+      }
+    }
+
+    fun configureDotButtonHolder() {
+      mDotButton.setImageDrawable(customizationOptions?.dotButtonDrawable)
+      mDotButton.setColorFilter(customizationOptions?.textColor!!)
     }
   }
 
@@ -130,8 +154,13 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun onDeleteLongClicked()
   }
 
+  interface OnDotClickListener {
+    fun onDotClicked()
+  }
+
   companion object {
     private const val VIEW_TYPE_NUMBER = 0
     private const val VIEW_TYPE_DELETE = 1
+    private const val VIEW_TYPE_DOT = 2
   }
 }

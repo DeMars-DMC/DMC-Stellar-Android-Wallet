@@ -22,7 +22,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.text.style.URLSpan
+import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -30,26 +30,26 @@ import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
+import org.jetbrains.anko.textColor
 import java.util.*
 
 
 class CreateUserActivity : BaseActivity() {
+  lateinit var user: DmcUser
+  private var isCreating = true
   private var birthDateDialog: DatePickerDialog? = null
   private var expiryDateDialog: DatePickerDialog? = null
-  lateinit var user: DmcUser
   private var address = Address()
-  private var verifiedOnce = false
+  private var infoCheckedOnce = false
 
   companion object {
     private const val REQUEST_CODE_CAMERA_ID = 111
     private const val REQUEST_CODE_CAMERA_SELFIE = 222
-    private const val ARG_UID = "ARG_UID"
-    private const val ARG_PHONE = "ARG_PHONE"
+    private const val ARG_USER = "ARG_USER"
 
-    fun newInstance(context: Context, uid: String, phoneNumber: String): Intent {
+    fun newInstance(context: Context, user: DmcUser): Intent {
       val intent = Intent(context, CreateUserActivity::class.java)
-      intent.putExtra(ARG_UID, uid)
-      intent.putExtra(ARG_PHONE, phoneNumber)
+      intent.putExtra(ARG_USER, user)
       return intent
     }
   }
@@ -59,150 +59,14 @@ class CreateUserActivity : BaseActivity() {
     ViewUtils.setTransparentStatusBar(this)
     setContentView(R.layout.activity_create_user)
 
-    user = if (intent.getStringExtra(ARG_UID).isNullOrBlank() ||
-      intent.getStringExtra(ARG_PHONE).isNullOrBlank()) {
-      DmcUser()
+    this.user = intent.getSerializableExtra(ARG_USER) as DmcUser
+    this.isCreating = !user.isRegistrationCompleted()
+
+    if (isCreating) {
+      showEditableView()
     } else {
-      DmcUser(intent.getStringExtra(ARG_UID), intent.getStringExtra(ARG_PHONE))
+      showNonEditableView()
     }
-
-    initUI()
-  }
-
-  private fun initUI() {
-    dialogButton.setOnClickListener {
-      hideWelcomeDialog()
-      ViewUtils.showKeyboard(this, firstNameInput)
-    }
-
-    firstNameInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        user.first_name = editable.trim().toString()
-      }
-    })
-
-    surnameInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        user.last_name = editable.trim().toString()
-      }
-    })
-
-    dateOfBirthPicker.setOnClickListener {
-      showBirthDateDialog()
-    }
-
-    nationalityPicker.setOnClickListener {
-      val nationalities = resources.getStringArray(R.array.nationality)
-      AlertDialog.Builder(this).setTitle(getString(R.string.select_nationality))
-        .setItems(nationalities) { _, which ->
-          val nationality = nationalities[which]
-          nationalityPicker.setTextColor(Color.BLACK)
-          nationalityPicker.text = nationality
-          user.nationality = nationality
-        }.show()
-    }
-
-    addressFirstLineInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        address.firstLine = editable.trim().toString()
-        if (address.isValid()) {
-          user.address = address.toString()
-        }
-      }
-    })
-
-    addressSecondLineInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        address.secondLine = editable.trim().toString()
-        if (address.isValid()) {
-          user.address = address.toString()
-        }
-      }
-    })
-
-    townCityInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        address.townCity = editable.trim().toString()
-        if (address.isValid()) {
-          user.address = address.toString()
-        }
-      }
-    })
-
-    postcodeInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        address.postCode = editable.trim().toString()
-        if (address.isValid()) {
-          user.address = address.toString()
-        }
-      }
-    })
-
-    countryPicker.setOnClickListener {
-      val countries = resources.getStringArray(R.array.country)
-      AlertDialog.Builder(this).setTitle(getString(R.string.select_country))
-        .setItems(countries) { _, which ->
-          val country = countries[which]
-          countryPicker.setTextColor(Color.BLACK)
-          countryPicker.text = country
-          address.country = country
-          if (address.isValid()) {
-            user.address = address.toString()
-          }
-        }.show()
-    }
-
-    emailInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        user.email_address = editable.trim().toString()
-      }
-    })
-
-    documentTypePicker.setOnClickListener {
-      val documentTypes = resources.getStringArray(R.array.document_type)
-      AlertDialog.Builder(this).setTitle(getString(R.string.select_document_type))
-        .setItems(documentTypes) { _, which ->
-          val documentType = documentTypes[which]
-          documentTypePicker.setTextColor(Color.BLACK)
-          documentTypePicker.text = documentType
-          user.document_type = documentType
-        }.show()
-
-    }
-
-    documentNumberInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        user.document_number = editable.trim().toString()
-      }
-    })
-
-    expiryDatePicker.setOnClickListener {
-      showExpiryDateDialog()
-    }
-
-    idPhotoContainer.setOnClickListener {
-      openCameraActivity(REQUEST_CODE_CAMERA_ID)
-    }
-
-    idSelfieContainer.setOnClickListener {
-      openCameraActivity(REQUEST_CODE_CAMERA_SELFIE)
-    }
-
-    submitButton.setOnClickListener {
-      verifyAndCreateNewUser()
-    }
-
-    val spannable = SpannableStringBuilder(termsConditions.text)
-    val termsConditionStr = "Terms and Conditions"
-    val spanIndex = spannable.indexOf(termsConditionStr)
-    spannable.setSpan(DmcURLSpan(Constants.URL_TERMS_AND_CONDITIONS),
-      spanIndex, spanIndex + termsConditionStr.length,
-      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    spannable.setSpan(StyleSpan(Typeface.BOLD),
-      spanIndex, spanIndex + termsConditionStr.length,
-      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    termsConditions.text = spannable
-    termsConditions.movementMethod = LinkMovementMethod.getInstance()
   }
 
   private fun showExpiryDateDialog() {
@@ -276,81 +140,81 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun verifyAndCreateNewUser() {
-    var verified = true
+    var infoChecked = true
     if (user.first_name.isNotBlank()) {
       addVerificationSpan(firstNameLabel, true)
     } else {
       addVerificationSpan(firstNameLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.last_name.isNotBlank()) {
       addVerificationSpan(surnameLabel, true)
     } else {
       addVerificationSpan(surnameLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.birth_date.isNotBlank()) {
       addVerificationSpan(birthDateLabel, true)
     } else {
       addVerificationSpan(birthDateLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.nationality.isNotBlank()) {
       addVerificationSpan(nationalityLabel, true)
     } else {
       addVerificationSpan(nationalityLabel, false)
-      verified = false
+      infoChecked = false
     }
 
-    if (user.address.isNotBlank()) {
+    if (user.address.isValid()) {
       addVerificationSpan(addressLabel, true)
     } else {
       addVerificationSpan(addressLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.email_address.isNotBlank()) {
       addVerificationSpan(emailLabel, true)
     } else {
       addVerificationSpan(emailLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.document_type.isNotBlank()) {
-      addVerificationSpan(documentTypeLabel, true )
+      addVerificationSpan(documentTypeLabel, true)
     } else {
       addVerificationSpan(documentTypeLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.document_number.isNotBlank()) {
       addVerificationSpan(documentNumberLabel, true)
     } else {
       addVerificationSpan(documentNumberLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.id_expiry_date.isNotBlank()) {
       addVerificationSpan(expiryDateLabel, true)
     } else {
       addVerificationSpan(expiryDateLabel, false)
-      verified = false
+      infoChecked = false
     }
 
     if (user.id_photo_uploaded && user.id_selfie_uploaded) {
       addVerificationSpan(personalIdLabel, true)
     } else {
       addVerificationSpan(personalIdLabel, false)
-      verified = false
+      infoChecked = false
     }
 
-    verifiedOnce = true
+    infoCheckedOnce = true
 
-    if (verified) {
-      user.registration_completed = true
+    if (infoChecked) {
+      user.state = DmcUser.State.VERIFYING.ordinal
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           val intent = Intent()
@@ -367,7 +231,7 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun addVerificationSpan(textView: TextView, verified: Boolean) {
-    val spannable = SpannableStringBuilder(if (verifiedOnce)
+    val spannable = SpannableStringBuilder(if (infoCheckedOnce)
       textView.text.substring(0, textView.text.length - 2) else textView.text)
     val color = ContextCompat.getColor(this,
       if (verified) R.color.colorGreen else R.color.colorApricot)
@@ -379,5 +243,212 @@ class CreateUserActivity : BaseActivity() {
       Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
     textView.setText(spannable, TextView.BufferType.SPANNABLE)
+  }
+
+  private fun showEditableView() {
+    toolbar.setTitle(R.string.create_dmc_account)
+
+    dialogButton.setOnClickListener {
+      hideWelcomeDialog()
+      ViewUtils.showKeyboard(this, firstNameInput)
+    }
+
+    firstNameText.visibility = GONE
+    surnameText.visibility = GONE
+    addressText.visibility = GONE
+    emailText.visibility = GONE
+    documentNumberText.visibility = GONE
+
+    firstNameInput.visibility = VISIBLE
+    surnameInput.visibility = VISIBLE
+    addressFirstLineInput.visibility = VISIBLE
+    addressSecondLineInput.visibility = VISIBLE
+    townCityInput.visibility = VISIBLE
+    postcodeInput.visibility = VISIBLE
+    emailInput.visibility = VISIBLE
+    documentNumberInput.visibility = VISIBLE
+    submitButton.visibility = VISIBLE
+
+    firstNameInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        user.first_name = editable.trim().toString()
+      }
+    })
+
+    surnameInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        user.last_name = editable.trim().toString()
+      }
+    })
+
+    dateOfBirthPicker.setOnClickListener {
+      showBirthDateDialog()
+    }
+
+    nationalityPicker.setOnClickListener {
+      val nationalities = resources.getStringArray(R.array.nationality)
+      AlertDialog.Builder(this).setTitle(getString(R.string.select_nationality))
+        .setItems(nationalities) { _, which ->
+          val nationality = nationalities[which]
+          nationalityPicker.setTextColor(Color.BLACK)
+          nationalityPicker.text = nationality
+          user.nationality = nationality
+        }.show()
+    }
+
+    addressFirstLineInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        address.first_line = editable.trim().toString()
+        if (address.isValid()) {
+          user.address = address
+        }
+      }
+    })
+
+    addressSecondLineInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        address.second_line = editable.trim().toString()
+        if (address.isValid()) {
+          user.address = address
+        }
+      }
+    })
+
+    townCityInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        address.town_city = editable.trim().toString()
+        if (address.isValid()) {
+          user.address = address
+        }
+      }
+    })
+
+    postcodeInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        address.post_code = editable.trim().toString()
+        if (address.isValid()) {
+          user.address = address
+        }
+      }
+    })
+
+    countryPicker.setOnClickListener {
+      val countries = resources.getStringArray(R.array.country)
+      AlertDialog.Builder(this).setTitle(getString(R.string.select_country))
+        .setItems(countries) { _, which ->
+          val country = countries[which]
+          countryPicker.setTextColor(Color.BLACK)
+          countryPicker.text = country
+          address.country = country
+          if (address.isValid()) {
+            user.address = address
+          }
+        }.show()
+    }
+
+    emailInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        user.email_address = editable.trim().toString()
+      }
+    })
+
+    documentTypePicker.setOnClickListener {
+      val documentTypes = resources.getStringArray(R.array.document_type)
+      AlertDialog.Builder(this).setTitle(getString(R.string.select_document_type))
+        .setItems(documentTypes) { _, which ->
+          val documentType = documentTypes[which]
+          documentTypePicker.setTextColor(Color.BLACK)
+          documentTypePicker.text = documentType
+          user.document_type = documentType
+        }.show()
+
+    }
+
+    documentNumberInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        user.document_number = editable.trim().toString()
+      }
+    })
+
+    expiryDatePicker.setOnClickListener {
+      showExpiryDateDialog()
+    }
+
+    idPhotoContainer.setOnClickListener {
+      openCameraActivity(REQUEST_CODE_CAMERA_ID)
+    }
+
+    idSelfieContainer.setOnClickListener {
+      openCameraActivity(REQUEST_CODE_CAMERA_SELFIE)
+    }
+
+    submitButton.setOnClickListener {
+      verifyAndCreateNewUser()
+    }
+
+    val spannable = SpannableStringBuilder(termsConditions.text)
+    val termsConditionStr = "Terms and Conditions"
+    val spanIndex = spannable.indexOf(termsConditionStr)
+    spannable.setSpan(DmcURLSpan(Constants.URL_TERMS_AND_CONDITIONS),
+      spanIndex, spanIndex + termsConditionStr.length,
+      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannable.setSpan(StyleSpan(Typeface.BOLD),
+      spanIndex, spanIndex + termsConditionStr.length,
+      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    termsConditions.text = spannable
+    termsConditions.movementMethod = LinkMovementMethod.getInstance()
+  }
+
+  private fun showNonEditableView() {
+    toolbar.setTitle(R.string.account_info)
+
+    firstNameInput.visibility = GONE
+    surnameInput.visibility = GONE
+    addressFirstLineInput.visibility = GONE
+    addressSecondLineInput.visibility = GONE
+    townCityInput.visibility = GONE
+    postcodeInput.visibility = GONE
+    countryPicker.visibility = GONE
+    emailInput.visibility = GONE
+    documentNumberInput.visibility = GONE
+    submitButton.visibility = GONE
+    termsConditions.visibility = GONE
+    dialogBg.visibility = GONE
+    welcomeDialog.visibility = GONE
+
+    dateOfBirthPicker.setOnClickListener(null)
+    nationalityPicker.setOnClickListener(null)
+    countryPicker.setOnClickListener(null)
+    documentTypePicker.setOnClickListener(null)
+    expiryDatePicker.setOnClickListener(null)
+    idPhotoContainer.setOnClickListener(null)
+    idSelfieContainer.setOnClickListener(null)
+
+    firstNameText.visibility = VISIBLE
+    surnameText.visibility = VISIBLE
+    addressText.visibility = VISIBLE
+    emailText.visibility = VISIBLE
+    documentNumberText.visibility = VISIBLE
+
+    firstNameText.text = user.first_name
+    surnameText.text = user.last_name
+    dateOfBirthPicker.text = user.birth_date
+    nationalityPicker.text = user.nationality
+    addressText.text = user.address.toString()
+    emailText.text = user.email_address
+    documentTypePicker.text = user.document_type
+    documentNumberText.text = user.document_number
+    expiryDatePicker.text = user.id_expiry_date
+
+    dateOfBirthPicker.textColor = Color.BLACK
+    nationalityPicker.textColor = Color.BLACK
+    countryPicker.textColor = Color.BLACK
+    documentTypePicker.textColor = Color.BLACK
+    expiryDatePicker.textColor = Color.BLACK
+
+    idPhotoCheck.setImageResource(if (user.id_photo_uploaded)
+      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+    idSelfieCheck.setImageResource(if (user.id_selfie_uploaded)
+      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
   }
 }

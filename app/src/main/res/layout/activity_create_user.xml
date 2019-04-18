@@ -59,6 +59,17 @@
                     android:textColorHint="@color/colorPaleSky" />
 
                 <TextView
+                    android:id="@+id/firstNameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/surnameLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,6 +91,17 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textColorHint="@color/colorPaleSky" />
+
+                <TextView
+                    android:id="@+id/surnameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/birthDateLabel"
@@ -155,6 +177,17 @@
                     android:paddingEnd="16dp"
                     android:textColorHint="@color/colorPaleSky" />
 
+                <TextView
+                    android:id="@+id/addressText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/button_height_big"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/addressSecondLineInput"
                     android:layout_width="match_parent"
@@ -168,7 +201,7 @@
                     android:paddingEnd="16dp"
                     android:textColorHint="@color/colorPaleSky" />
 
-                <EditText
+                  <EditText
                     android:id="@+id/townCityInput"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/button_height"
@@ -234,6 +267,17 @@
                     android:textColorHint="@color/colorPaleSky" />
 
                 <TextView
+                    android:id="@+id/emailText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/documentTypeLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -283,6 +327,17 @@
                     android:paddingEnd="16dp"
                     android:textColorHint="@color/colorPaleSky"
                     tools:ignore="TextFields" />
+
+                <TextView
+                    android:id="@+id/documentNumberText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/expiryDateLabel"

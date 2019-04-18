@@ -80,7 +80,7 @@ class ApplicationEspressoTest {
 
         onView(ViewMatchers.withId(R.id.nav_settings)).perform(ViewActions.click())
 
-        onView(ViewMatchers.withId(R.id.clearWalletButton)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.logOutButton)).perform(ViewActions.click())
 
         onActivity(LaunchActivity::class)
     }

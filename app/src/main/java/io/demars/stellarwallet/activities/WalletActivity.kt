@@ -116,11 +116,6 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
     if (currentItemSelected != item.itemId) {
       currentItemSelected = item.itemId
       when (item.itemId) {
-        R.id.nav_start -> {
-          val startFragment = getReusedFragment(WalletFragmentType.START.name)
-            ?: StartFragment.newInstance()
-          replaceFragment(startFragment, WalletFragmentType.START)
-        }
         R.id.nav_wallet -> {
           val walletFragment = getReusedFragment(WalletFragmentType.WALLET.name)
             ?: WalletFragment.newInstance()

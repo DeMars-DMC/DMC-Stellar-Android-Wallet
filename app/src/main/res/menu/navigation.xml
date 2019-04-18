@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_start"
-        android:icon="@drawable/ic_start"
-        android:title="@string/nav_start"/>
-
-    <item
         android:id="@+id/nav_wallet"
         android:icon="@drawable/ic_wallet"
         android:title="@string/nav_wallet"/>

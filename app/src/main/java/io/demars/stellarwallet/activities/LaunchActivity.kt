@@ -67,8 +67,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       if (dataSnapshot.exists()) {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { dmcUser ->
-          val registrationCompleted = dmcUser.registration_completed
-          val verified = dmcUser.verified
+          val registrationCompleted = dmcUser.isRegistrationCompleted()
+          val verified = dmcUser.isVerified()
           if (registrationCompleted) {
             updateForMode(if (verified) Mode.STELLAR else Mode.VERIFYING)
           } else {
@@ -277,16 +277,14 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
           task.result?.user?.uid?.let { uid ->
+            val userToCreate = DmcUser(uid, phone)
             dmcUser?.let {
-              if (it.registration_completed) {
-                updateForMode(if (it.verified) Mode.STELLAR else Mode.VERIFYING)
+              if (it.isRegistrationCompleted()) {
+                updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
               } else {
-                startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, uid, phone),
-                  REQUEST_CREATE_USER)
+                createNewUser(userToCreate)
               }
-            }
-              ?: startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, uid, phone),
-                REQUEST_CREATE_USER)
+            } ?: createNewUser(userToCreate)
 
           } ?: onError("Something went wrong. Please try again")
         } else {
@@ -297,6 +295,11 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
           }
         }
       }
+  }
+
+  private fun createNewUser(dmcUser: DmcUser) {
+    startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, dmcUser),
+      REQUEST_CREATE_USER)
   }
 
   private fun onError(message: String?, justToast: Boolean = false) {
@@ -336,7 +339,6 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onDestroy() {
     super.onDestroy()
     clearPhoneAuthSession()
-    Firebase.removeUserListener(eventListener)
   }
 
 
@@ -354,7 +356,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     if (requestCode == REQUEST_CREATE_USER && resultCode == Activity.RESULT_OK) {
       dmcUser = data?.getSerializableExtra("user") as DmcUser?
       dmcUser?.let {
-        updateForMode(if (it.verified) Mode.STELLAR else Mode.VERIFYING)
+        updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
         Firebase.getUser(it.uid, eventListener)
       } ?: updateForMode(Mode.INITIAL)
     } else {

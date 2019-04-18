@@ -18,6 +18,8 @@ class WalletManagerActivity : AppCompatActivity() {
         VERIFY_PIN,
         DECRYPT_SECRET_SEED,
         DISPLAY_MNEMONIC,
+        DISPLAY_ACCOUNT,
+
         /**
          * These are interim action types used in the actions NEW_WALLET & RESTORE_WALLET
          */
@@ -67,6 +69,12 @@ class WalletManagerActivity : AppCompatActivity() {
             return intent
         }
 
+        fun showDmcAccount(context: Context) : Intent {
+            val intent = Intent(context, WalletManagerActivity::class.java)
+            intent.putExtra(INTENT_ARG_TYPE, ActionType.DISPLAY_ACCOUNT)
+            return intent
+        }
+
         fun getResultDataString(intent:Intent?) : String? {
             if (intent == null) return null
             return intent.getStringExtra(INTENT_RESULT_DATA)
@@ -93,6 +101,9 @@ class WalletManagerActivity : AppCompatActivity() {
             }
             ActionType.DISPLAY_MNEMONIC -> {
                 startActivityForResult(PinActivity.newInstance(this, getPinFromKeyStore(), getString(R.string.please_enter_your_pin)), ActionType.DISPLAY_MNEMONIC.ordinal)
+            }
+            ActionType.DISPLAY_ACCOUNT -> {
+                startActivityForResult(PinActivity.newInstance(this, getPinFromKeyStore(), getString(R.string.please_enter_your_pin)), ActionType.DISPLAY_ACCOUNT.ordinal)
             }
             ActionType.DECRYPT_SECRET_SEED -> {
                 startActivityForResult(PinActivity.newInstance(this, getPinFromKeyStore(), getString(R.string.please_enter_your_pin)), ActionType.DECRYPT_SECRET_SEED.ordinal)
@@ -127,7 +138,8 @@ class WalletManagerActivity : AppCompatActivity() {
                     }
                 }
             }
-            ActionType.VERIFY_PIN.ordinal -> {
+            ActionType.VERIFY_PIN.ordinal,
+            ActionType.DISPLAY_ACCOUNT.ordinal-> {
                 val pin = PinActivity.getPinFromIntent(data)
                 if (resultCode == Activity.RESULT_OK && data != null && pin != null) {
                     WalletApplication.userSession.setPin(pin)

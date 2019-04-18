@@ -7,12 +7,12 @@ import androidx.test.espresso.Espresso.onView
 
 object SettingsPage : BasePage() {
     override fun onPageLoaded(): SettingsPage {
-        onView(ViewMatchers.withId(R.id.clearWalletButton))
+        onView(ViewMatchers.withId(R.id.logOutButton))
         return this
     }
 
     fun clearWallet() : SettingsPage {
-        onView(ViewMatchers.withId(R.id.clearWalletButton)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.logOutButton)).perform(ViewActions.click())
         return this
     }
 

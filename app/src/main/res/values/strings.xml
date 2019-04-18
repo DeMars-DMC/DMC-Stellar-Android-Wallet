@@ -328,4 +328,8 @@
     <string name="contact_us">Contact us</string>
     <string name="account_verifying_message">Thank you for completing the registration. Our team are currently verifying your documentation and will be in contact with you shortly. Thereafter you will be able to create or recover a wallet.</string>
     <string name="terms_and_conditions_agree">By clicking Submit, you agree to our Terms and Conditions</string>
+    <string name="quick_start">Quick start</string>
+    <string name="account">Account</string>
+    <string name="edit_info">Edit info</string>
+    <string name="account_info">Account info</string>
 </resources>

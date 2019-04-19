@@ -28,6 +28,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
 import kotlinx.android.synthetic.main.activity_create_user.toolbar
@@ -61,7 +62,7 @@ class CreateUserActivity : BaseActivity() {
     setContentView(R.layout.activity_create_user)
 
     this.user = intent.getSerializableExtra(ARG_USER) as DmcUser
-    this.isCreating = !user.isRegistrationCompleted()
+    this.isCreating = !user.isRegistrationCompletedYo()
 
     if (isCreating) {
       showEditableView()
@@ -216,12 +217,11 @@ class CreateUserActivity : BaseActivity() {
 
     if (infoChecked) {
       user.state = DmcUser.State.VERIFYING.ordinal
+      user.created_at = System.currentTimeMillis()
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
-          val intent = Intent()
-          intent.putExtra("user", user)
-          setResult(Activity.RESULT_OK, intent)
-          finish()
+          MailHelper.notifyUserCreated(user)
+          setResultAndFinish()
         }.addOnFailureListener {
           Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
         }
@@ -229,6 +229,13 @@ class CreateUserActivity : BaseActivity() {
       Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
       scrollView.smoothScrollTo(0, 0)
     }
+  }
+
+  private fun setResultAndFinish() {
+    val intent = Intent()
+    intent.putExtra("user", user)
+    setResult(Activity.RESULT_OK, intent)
+    finish()
   }
 
   private fun addVerificationSpan(textView: TextView, verified: Boolean) {

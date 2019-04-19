@@ -67,7 +67,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       if (dataSnapshot.exists()) {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { dmcUser ->
-          val registrationCompleted = dmcUser.isRegistrationCompleted()
+          val registrationCompleted = dmcUser.isRegistrationCompletedYo()
           val verified = dmcUser.isVerified()
           if (registrationCompleted) {
             updateForMode(if (verified) Mode.STELLAR else Mode.VERIFYING)
@@ -279,7 +279,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
           task.result?.user?.uid?.let { uid ->
             val userToCreate = DmcUser(uid, phone)
             dmcUser?.let {
-              if (it.isRegistrationCompleted()) {
+              if (it.isRegistrationCompletedYo()) {
                 updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
               } else {
                 createNewUser(userToCreate)

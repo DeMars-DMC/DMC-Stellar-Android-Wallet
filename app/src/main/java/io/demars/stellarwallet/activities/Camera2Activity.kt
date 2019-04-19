@@ -352,6 +352,11 @@ class Camera2Activity : AppCompatActivity() {
           textureView.setAspectRatio(previewSize.height, previewSize.width)
         }
 
+        // Check if the flash is supported.
+        flashSupported =
+          characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+
+        // We don't use a front facing camera in this sample.
         val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
         if (cameraDirection != null &&
           cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
@@ -640,7 +645,7 @@ class Camera2Activity : AppCompatActivity() {
           CaptureRequest.CONTROL_AF_MODE,
           CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
         )
-      }
+      }?.also { setAutoFlash(it) }
 
       val captureCallback = object : CameraCaptureSession.CaptureCallback() {
 

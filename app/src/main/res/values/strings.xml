@@ -330,6 +330,5 @@
     <string name="terms_and_conditions_agree">By clicking Submit, you agree to our Terms and Conditions</string>
     <string name="quick_start">Quick start</string>
     <string name="account">Account</string>
-    <string name="edit_info">Edit info</string>
-    <string name="account_info">Account info</string>
+    <string name="personal_information">Personal information</string>
 </resources>

@@ -30,6 +30,7 @@ import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
+import kotlinx.android.synthetic.main.activity_create_user.toolbar
 import org.jetbrains.anko.textColor
 import java.util.*
 
@@ -400,7 +401,11 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun showNonEditableView() {
-    toolbar.setTitle(R.string.account_info)
+    // Enable back button in toolbar
+    setSupportActionBar(toolbar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    toolbar.setNavigationOnClickListener { onBackPressed() }
+    toolbar.setTitle(R.string.personal_information)
 
     firstNameInput.visibility = GONE
     surnameInput.visibility = GONE

@@ -80,7 +80,7 @@
                 android:id="@+id/editInfoButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account_info"
+                android:text="@string/personal_information"
                 style="@style/SettingsButton" />
 
             <TextView

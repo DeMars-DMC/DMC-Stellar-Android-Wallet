@@ -11,8 +11,8 @@ android {
         applicationId "io.demars.stellarwallet"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.0.0.6"
+        versionCode 8
+        versionName "1.0.0.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -44,8 +44,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
-        baseline file("lint-baseline.xml")
+        checkReleaseBuilds false
     }
 }
 

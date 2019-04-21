@@ -6,13 +6,21 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        release {
+            storePassword '12345678'
+            keyAlias = 'stellar'
+            keyPassword '12345678'
+            storeFile file('/Users/mrvadi/Work/StudioProjects/DMC-Test-Wallet/demars-keystore')
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.demars.stellarwallet"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.0.0.7"
+        versionCode 10
+        versionName "1.0.0.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -36,6 +44,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 

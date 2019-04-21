@@ -62,7 +62,7 @@ class CreateUserActivity : BaseActivity() {
     setContentView(R.layout.activity_create_user)
 
     this.user = intent.getSerializableExtra(ARG_USER) as DmcUser
-    this.isCreating = !user.isRegistrationCompletedYo()
+    this.isCreating = !user.isRegistrationCompleted()
 
     if (isCreating) {
       showEditableView()

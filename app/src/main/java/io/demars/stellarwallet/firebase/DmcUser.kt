@@ -28,7 +28,7 @@ data class DmcUser(
     UNCOMPLETED, VERIFYING, VERIFIED, REVERIFYING, BLOCKED, CLOSED
   }
 
-  fun isRegistrationCompletedYo(): Boolean {
+  fun isRegistrationCompleted(): Boolean {
     return state > State.UNCOMPLETED.ordinal
   }
 

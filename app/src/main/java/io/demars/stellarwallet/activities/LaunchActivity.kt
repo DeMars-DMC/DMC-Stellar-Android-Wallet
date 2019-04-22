@@ -45,6 +45,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private var dmcUser: DmcUser? = null
   private var phone: String = ""
   private var smsCode: String = ""
+  private var createUserNeeded = false
   private val smsTimer = object : CountDownTimer(SMS_TIMEOUT * 1000, 1000) {
     override fun onTick(millisUntilFinished: Long) {
       val secondsLeft = (millisUntilFinished / 1000).toInt()
@@ -72,15 +73,23 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
           if (registrationCompleted) {
             updateForMode(if (verified) Mode.STELLAR else Mode.VERIFYING)
           } else {
-            updateForMode(Mode.INITIAL)
+            checkNeedCreateUser()
           }
         }
       } else {
-        updateForMode(Mode.INITIAL)
+        checkNeedCreateUser()
       }
     }
 
     override fun onCancelled(error: DatabaseError) {
+    }
+
+    private fun checkNeedCreateUser() {
+      if (createUserNeeded && dmcUser != null) {
+        createNewUser(dmcUser!!)
+      } else {
+        updateForMode(Mode.INITIAL)
+      }
     }
   }
 
@@ -277,15 +286,13 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
           task.result?.user?.uid?.let { uid ->
-            val userToCreate = DmcUser(uid, phone)
             dmcUser?.let {
               if (it.isRegistrationCompleted()) {
                 updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
               } else {
-                createNewUser(userToCreate)
+                createNewUser(DmcUser(uid, phone))
               }
-            } ?: createNewUser(userToCreate)
-
+            } ?: createUserIfNotExists(uid)
           } ?: onError("Something went wrong. Please try again")
         } else {
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -297,9 +304,21 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       }
   }
 
+  private fun createUserIfNotExists(uid: String) {
+    createUserNeeded = true
+    dmcUser = DmcUser(uid, phone)
+    Firebase.getUser(uid, eventListener)
+  }
+
   private fun createNewUser(dmcUser: DmcUser) {
-    startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, dmcUser),
-      REQUEST_CREATE_USER)
+    createUserNeeded = false
+    if (dmcUser.isReadyToRegister()) {
+      startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, dmcUser),
+        REQUEST_CREATE_USER)
+    } else{
+      onError("Something went wrong. Please try again")
+      updateForMode(Mode.INITIAL)
+    }
   }
 
   private fun onError(message: String?, justToast: Boolean = false) {

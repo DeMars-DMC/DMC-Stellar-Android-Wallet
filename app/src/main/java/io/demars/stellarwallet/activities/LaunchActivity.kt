@@ -377,9 +377,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       dmcUser?.let {
         updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
         Firebase.getUser(it.uid, eventListener)
-      } ?: updateForMode(Mode.INITIAL)
-    } else {
-      updateForMode(Mode.INITIAL)
+      }
     }
   }
 

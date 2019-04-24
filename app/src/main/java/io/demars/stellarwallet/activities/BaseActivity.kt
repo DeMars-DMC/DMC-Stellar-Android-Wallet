@@ -10,7 +10,7 @@ import timber.log.Timber
 
 abstract class BaseActivity : AppCompatActivity() {
   companion object {
-    private const val VERIFY_PIN_REQUEST: Int = 0x01
+    const val VERIFY_PIN_REQUEST: Int = 0x01
   }
 
   override fun onResume() {
@@ -34,7 +34,9 @@ abstract class BaseActivity : AppCompatActivity() {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == VERIFY_PIN_REQUEST) {
       when (resultCode) {
-        Activity.RESULT_OK -> Timber.d("pin was successful, user will go back to the screen")
+        Activity.RESULT_OK -> {
+          Timber.d("pin was successful, user will go back to the screen")
+        }
         Activity.RESULT_CANCELED -> finish()
       }
     }

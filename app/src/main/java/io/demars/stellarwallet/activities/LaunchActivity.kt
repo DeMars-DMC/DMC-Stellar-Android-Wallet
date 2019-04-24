@@ -174,10 +174,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateViewForStellar() {
-    if (GlobalGraphHelper.isExistingWallet()) {
-      hideUI()
-      GlobalGraphHelper.launchWallet(this)
-    } else {
+    if (!GlobalGraphHelper.isExistingWallet()) {
       verificationText.visibility = View.GONE
       loginButton.visibility = View.GONE
       dialerView.visibility = View.GONE
@@ -372,11 +369,17 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == REQUEST_CREATE_USER && resultCode == Activity.RESULT_OK) {
-      dmcUser = data?.getSerializableExtra("user") as DmcUser?
-      dmcUser?.let {
-        updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
-        Firebase.getUser(it.uid, eventListener)
+    if (resultCode == Activity.RESULT_OK) {
+      if (requestCode == REQUEST_CREATE_USER) {
+        dmcUser = data?.getSerializableExtra("user") as DmcUser?
+        dmcUser?.let {
+          updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
+          Firebase.getUser(it.uid, eventListener)
+        }
+      } else if (requestCode == VERIFY_PIN_REQUEST) {
+        if (GlobalGraphHelper.isExistingWallet()) {
+          GlobalGraphHelper.launchWallet(this)
+        }
       }
     }
   }

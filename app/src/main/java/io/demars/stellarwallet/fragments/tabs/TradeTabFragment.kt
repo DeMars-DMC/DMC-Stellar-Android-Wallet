@@ -157,10 +157,11 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         if (orderType == OrderType.MARKET) {
             if (latestBid != null && dataAvailable) {
                 val value = sellingCustomSelector.editText.text.toString().toFloatOrNull()
-                val priceR = latestBid?.priceR
-                if (value != null && priceR != null) {
+                val price = latestBid?.price?.toFloatOrNull()
+                if (value != null && price != null) {
                     val floatValue : Float = value.toFloat()
-                    val stringValue = decimalFormat.format(priceR.numerator*floatValue/priceR.denominator*0.9999)
+                    val floatPrice : Float = price.toFloat()
+                    val stringValue = decimalFormat.format(floatValue * floatPrice)
                     buyingCustomSelector.editText.setText(stringValue)
                 }
             } else {

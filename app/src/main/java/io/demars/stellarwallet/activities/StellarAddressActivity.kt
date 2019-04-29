@@ -23,7 +23,7 @@ import timber.log.Timber
 
 class StellarAddressActivity : BaseActivity(), View.OnClickListener {
     enum class Mode {
-        SEND_TO, UPDATE_CONTACT, CREATE_CONTACT
+        PAY_TO, UPDATE_CONTACT, CREATE_CONTACT
     }
     private lateinit var mode : Mode
     /**
@@ -38,7 +38,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
 
         fun toSend(context: Context): Intent {
             val intent = Intent(context, StellarAddressActivity::class.java)
-            intent.putExtra(ARG_MODE, Mode.SEND_TO)
+            intent.putExtra(ARG_MODE, Mode.PAY_TO)
             return intent
         }
 
@@ -98,14 +98,14 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             when(mode) {
-                Mode.SEND_TO -> it.title = getString(R.string.button_pay)
+                Mode.PAY_TO -> it.title = getString(R.string.button_pay)
                 Mode.UPDATE_CONTACT -> it.title = getString(R.string.update_contact_title, contact.name)
                 Mode.CREATE_CONTACT -> it.title = getString(R.string.add_contact_title)
             }
         }
 
         when(mode) {
-            Mode.SEND_TO -> {
+            Mode.PAY_TO -> {
                 titleBalance.text = WalletApplication.userSession.getFormattedCurrentAvailableBalance(applicationContext)
                 bottomButton.text = getString(R.string.next_button_text)
                 sendToContactButton.visibility = View.VISIBLE
@@ -154,7 +154,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.bottomButton -> {
                 when(mode) {
-                    Mode.SEND_TO -> {
+                    Mode.PAY_TO -> {
                         if (address.length == STELLAR_ADDRESS_LENGTH && address != WalletApplication.wallet.getStellarAccountId()) {
                             startActivity(SendActivity.newIntent(this, address))
                             overridePendingTransition(R.anim.slide_in_up, R.anim.stay)

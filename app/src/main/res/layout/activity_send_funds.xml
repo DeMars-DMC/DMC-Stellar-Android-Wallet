@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
-            app:title="@string/button_send" />
+            app:title="@string/button_pay" />
 
         <TextView
             android:id="@+id/titleText"

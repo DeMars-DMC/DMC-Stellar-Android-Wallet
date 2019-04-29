@@ -50,7 +50,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/button_send"
+                    android:text="@string/button_pay"
                     android:textColor="@color/selector_color_send_button"
                     android:textSize="@dimen/text_size_large" />
 

@@ -127,7 +127,7 @@
         android:id="@+id/sendToContactButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        android:text="@string/send_to_contact"
+        android:text="@string/pay_to_contact"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bottomButton"/>

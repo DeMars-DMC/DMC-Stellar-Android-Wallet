@@ -98,7 +98,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             when(mode) {
-                Mode.SEND_TO -> it.title = getString(R.string.button_send)
+                Mode.SEND_TO -> it.title = getString(R.string.button_pay)
                 Mode.UPDATE_CONTACT -> it.title = getString(R.string.update_contact_title, contact.name)
                 Mode.CREATE_CONTACT -> it.title = getString(R.string.add_contact_title)
             }
@@ -111,7 +111,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
                 sendToContactButton.visibility = View.VISIBLE
                 contactNameText.visibility = View.GONE
                 contactNameEditText.visibility = View.GONE
-                addressTitleText.text = getString(R.string.send_to_text)
+                addressTitleText.text = getString(R.string.pay_to_text)
             }
             Mode.UPDATE_CONTACT -> {
                 titleBalance.visibility = View.GONE

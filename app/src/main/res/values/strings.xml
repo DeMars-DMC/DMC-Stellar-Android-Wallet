@@ -30,7 +30,7 @@
 
     <!--Wallet Fragment-->
     <string name="button_receive">Receive</string>
-    <string name="button_send">Send</string>
+    <string name="button_pay">Pay</string>
     <string name="logoDescription">DMC</string>
     <string name="title_activity_wallets">Wallets</string>
     <string name="title_activity_my_wallet">Wallet</string>
@@ -134,10 +134,10 @@
     <string name="your_wallet_address">Your Wallet Address</string>
     <string name="address_copied_message">Address copied</string>
 
-    <!--Send Screen-->
-    <string name="send_to_text">Send To</string>
+    <!--Pay Screen-->
+    <string name="pay_to_text">Pay To</string>
     <string name="next_button_text">Next</string>
-    <string name="send_button_text">Send</string>
+    <string name="send_button_text">Pay</string>
     <string name="to">To:</string>
     <string name="optional">(Optional)</string>
     <string name="memo">Memo:</string>
@@ -271,7 +271,7 @@
     <string name="_1_0000_xlm">1.0000 XLM</string>
     <string name="public_address">Public Address</string>
     <string name="add_asset">Add asset</string>
-    <string name="send_to_contact">Send to contact</string>
+    <string name="pay_to_contact">Pay to contact</string>
     <string name="pattern_price">Price: %s</string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="verify_phone_number">Verify phone number</string>
@@ -281,7 +281,7 @@
     <string name="code_from_sms">Code from SMS</string>
     <string name="pattern_send_new_sms">Send new SMS %s</string>
     <string name="retake">Retake</string>
-    <string name="send">Send</string>
+    <string name="pay">Pay</string>
     <string name="photo_of_id">Photo of ID</string>
     <string name="ensure_image">Ensure image is clear and legible</string>
     <string name="failed_upload_image">Failed to upload image. Please try again</string>

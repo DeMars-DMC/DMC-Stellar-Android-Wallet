@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ToolbarTheme"
-        app:title="@string/nav_settings"/>
+        app:title="@string/nav_settings" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,32 +22,32 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/SettingsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recovery"
-                style="@style/SettingsTitle"
-                android:layout_margin="@dimen/activity_vertical_margin"/>
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/recovery" />
 
             <TextView
                 android:id="@+id/viewPhraseButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_phrase"
-                style="@style/SettingsButton" />
+                android:text="@string/view_phrase" />
 
             <TextView
                 android:id="@+id/viewSeedButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_seed"
-                style="@style/SettingsButton" />
+                android:text="@string/view_seed" />
 
             <TextView
+                style="@style/SettingsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/security"
-                style="@style/SettingsTitle"
-                android:layout_margin="@dimen/activity_vertical_margin" />
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/security" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,99 +55,113 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/SettingsButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/pin_send_payments"
-                    style="@style/SettingsButton" />
+                    android:text="@string/pin_send_payments" />
 
                 <Switch
                     android:id="@+id/pinOnSendPaymentsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"/>
+                    android:layout_marginEnd="@dimen/activity_vertical_margin" />
 
             </LinearLayout>
 
             <TextView
+                style="@style/SettingsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account"
-                style="@style/SettingsTitle"
-                android:layout_margin="@dimen/activity_vertical_margin" />
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/account" />
 
             <TextView
                 android:id="@+id/editInfoButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/personal_information"
-                style="@style/SettingsButton" />
+                android:text="@string/personal_information" />
 
             <TextView
                 android:id="@+id/logOutButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/log_out"
-                style="@style/SettingsButton" />
+                android:text="@string/log_out" />
 
             <TextView
+                style="@style/SettingsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/troubleshooting"
-                style="@style/SettingsTitle"
-                android:layout_margin="@dimen/activity_vertical_margin" />
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/support" />
 
             <TextView
                 android:id="@+id/diagnosticButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bug_report"
-                style="@style/SettingsButton" />
+                android:text="@string/bug_report" />
 
             <TextView
+                android:id="@+id/supportEmailButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/about"
+                android:text="@string/support_email" />
+
+            <TextView
+                android:id="@+id/supportWhatsAppButton"
+                style="@style/SettingsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/support_whatsapp" />
+
+            <TextView
                 style="@style/SettingsTitle"
-                android:layout_margin="@dimen/activity_vertical_margin" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/about" />
 
             <TextView
                 android:id="@+id/quickStartButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/quick_start"
-                style="@style/SettingsButton" />
+                android:text="@string/quick_start" />
 
 
             <TextView
                 android:id="@+id/termsOfServiceButton"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/terms_of_service"
-                style="@style/SettingsButton" />
+                android:text="@string/terms_of_service" />
 
             <TextView
                 android:id="@+id/appVersionTitle"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_information"
-                style="@style/SettingsButton" />
+                android:text="@string/app_information" />
 
             <TextView
-                android:id="@+id/appVersionTextView"
+                android:id="@+id/appVersionText"
+                style="@style/RegularText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/RegularText"
-                android:textColor="@color/colorPaleSky"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textColor="@color/colorPaleSky" />
 
             <TextView
                 android:id="@+id/debug"
+                style="@style/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/debug_preferences"
-                style="@style/SettingsButton" />
+                android:text="@string/debug_preferences" />
 
         </LinearLayout>
     </ScrollView>

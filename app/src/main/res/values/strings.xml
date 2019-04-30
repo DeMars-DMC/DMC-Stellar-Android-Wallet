@@ -331,4 +331,10 @@
     <string name="quick_start">Quick start</string>
     <string name="account">Account</string>
     <string name="personal_information">Personal information</string>
+    <string name="support">Support</string>
+    <string name="pattern_version">Version: %s</string>
+    <string name="support_email">Email: support@demars.io</string>
+    <string name="support_whatsapp">WhatsApp: +230 5 775 8837</string>
+    <string name="email_copied_message">Email copied</string>
+    <string name="number_copied_message">Number copied</string>
 </resources>

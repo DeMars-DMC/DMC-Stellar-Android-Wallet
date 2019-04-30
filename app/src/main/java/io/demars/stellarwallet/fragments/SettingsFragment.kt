@@ -1,13 +1,15 @@
 package io.demars.stellarwallet.fragments
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -89,6 +91,16 @@ class SettingsFragment : BaseFragment() {
       startActivity(Intent(it.context, DiagnosticActivity::class.java))
     }
 
+    supportEmailButton.setOnClickListener {
+      copyToClipBoard("support@demars.io", "DMC Email",
+        getString(R.string.email_copied_message))
+    }
+
+    supportWhatsAppButton.setOnClickListener {
+      copyToClipBoard("+230 5 775 8837", "DMC WhatsApp",
+        getString(R.string.number_copied_message))
+    }
+
     quickStartButton.setOnClickListener {
       startActivity(WebViewActivity.newIntent(it.context, getString(R.string.quick_start), Constants.URL_QUICK_START))
     }
@@ -97,21 +109,15 @@ class SettingsFragment : BaseFragment() {
       startActivity(WebViewActivity.newIntent(it.context, getString(R.string.terms_of_service), Constants.URL_TERMS_AND_CONDITIONS))
     }
 
+    appVersionText.text = getString(R.string.pattern_version, DiagnosticUtils.getAppVersion())
+
     if (BuildConfig.DEBUG) {
       debug.visibility = View.VISIBLE
       debug.setOnClickListener {
         startActivity(Intent(it.context, DebugPreferenceActivity::class.java))
       }
-
     } else {
       debug.visibility = View.GONE
-    }
-
-    val appVersion = DiagnosticUtils.getAppVersion()
-
-    @SuppressLint("SetTextI18n")
-    appVersionTextView.text = "Version: $appVersion"
-    appVersionTitle.setOnClickListener {
     }
   }
 
@@ -165,5 +171,15 @@ class SettingsFragment : BaseFragment() {
 
   private fun setSavedSettings() {
     pinOnSendPaymentsButton.isChecked = WalletApplication.wallet.getShowPinOnSend()
+  }
+
+  private fun copyToClipBoard(data: String, label: String, toastMessage: String) {
+    activity?.let {
+      val clipboard = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+      val clip = ClipData.newPlainText(label, data)
+      clipboard.primaryClip = clip
+
+      Toast.makeText(it, toastMessage, Toast.LENGTH_LONG).show()
+    }
   }
 }

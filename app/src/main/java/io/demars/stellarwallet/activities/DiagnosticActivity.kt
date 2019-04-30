@@ -37,7 +37,7 @@ class DiagnosticActivity : BaseActivity() {
         deviceModelTextView.text = DiagnosticUtils.getDeviceName()
         androidVersionTextView.text = DiagnosticUtils.getAndroidVersion()
         localeTextView.text = DiagnosticUtils.getLocale()
-        appVersionTextView.text = DiagnosticUtils.getAppVersion()
+        appVersionText.text = DiagnosticUtils.getAppVersion()
         publicAddressTextView.text = WalletApplication.wallet.getStellarAccountId()
         passphraseUsedTextView.text = isPassphrase.toString()
         recoveryTypeTextView.text = recoveryType
@@ -55,7 +55,7 @@ class DiagnosticActivity : BaseActivity() {
     private fun sendDiagnostic(isPassphrase:Boolean) {
         val diagnosticModel = Diagnostic(
                 Values(
-                        appVersionTextView.text.toString(),
+                        appVersionText.text.toString(),
                         deviceModelTextView.text.toString(),
                         localeTextView.text.toString(),
                         "Android ${androidVersionTextView.text}",

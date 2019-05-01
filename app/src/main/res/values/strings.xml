@@ -314,6 +314,7 @@
     <string name="expiry_date">Expiry date</string>
     <string name="personal_id">Personal ID</string>
     <string name="upload_id_photo_tip">Upload a clear picture of your ID document</string>
+    <string name="upload_id_back_tip">Upload a clear picture of your Second Page/Back of ID(Optional)</string>
     <string name="upload_selfie_tip">Upload a clear selfie holding your ID doc next to your face</string>
     <string name="select_nationality">Select nationality</string>
     <string name="select_country">Select country</string>
@@ -337,4 +338,6 @@
     <string name="support_whatsapp">WhatsApp: +230 5 775 8837</string>
     <string name="email_copied_message">Email copied</string>
     <string name="number_copied_message">Number copied</string>
+    <string name="front_of_id">Front of ID</string>
+    <string name="back_of_id">Back of ID</string>
 </resources>

@@ -125,22 +125,18 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
               asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
+                  viewHolder.assetName.text = asset.name
                   Picasso.get().load(Constants.ZAR_IMAGE_RES).into(viewHolder.assetImage)
-              }
-              asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
-                  viewHolder.defaultImage.visibility = View.GONE
-                  viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.RTGS_IMAGE_RES).into(viewHolder.assetImage)
               }
               asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
                   Picasso.get().load(Constants.DMC_IMAGE_RES).into(viewHolder.assetImage)
               }
-              asset.code.equals(Constants.USD_ASSET_TYPE, true) -> {
+              asset.code.equals(Constants.EURT_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.USD_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get().load(Constants.EURT_IMAGE_RES).into(viewHolder.assetImage)
               }
               else -> {
                   viewHolder.defaultImage.text = asset.name[0].toString()

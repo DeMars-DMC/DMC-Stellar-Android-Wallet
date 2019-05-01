@@ -8,6 +8,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import io.demars.stellarwallet.enums.CameraMode
 
 object Firebase {
   //region Storage
@@ -23,8 +24,13 @@ object Firebase {
     return getCurrentUser()?.uid
   }
 
-  fun uploadBytes(bytes: ByteArray, forSelfie: Boolean, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
-    val fileName = if (forSelfie) "id_selfie.jpg" else "id_photo.jpg"
+  fun uploadBytes(bytes: ByteArray, cameraMode: CameraMode, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
+    val fileName = when (cameraMode) {
+      CameraMode.ID_FRONT -> "id_front.jpg"
+      CameraMode.ID_BACK -> "id_back.jpg"
+      else -> "id_selfie.jpg"
+    }
+
     getCurrentUser()?.let {
       getStorageReference()
         .child("images/users/${it.uid}")

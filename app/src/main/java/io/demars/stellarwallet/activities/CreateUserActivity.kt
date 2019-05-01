@@ -26,6 +26,7 @@ import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
@@ -45,8 +46,9 @@ class CreateUserActivity : BaseActivity() {
   private var infoCheckedOnce = false
 
   companion object {
-    private const val REQUEST_CODE_CAMERA_ID = 111
-    private const val REQUEST_CODE_CAMERA_SELFIE = 222
+    private const val REQUEST_CODE_CAMERA_ID_FRONT = 111
+    private const val REQUEST_CODE_CAMERA_ID_BACK = 222
+    private const val REQUEST_CODE_CAMERA_SELFIE = 333
     private const val ARG_USER = "ARG_USER"
 
     fun newInstance(context: Context, user: DmcUser): Intent {
@@ -119,19 +121,28 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun openCameraActivity(requestCode: Int) {
-    val useFrontCamera = requestCode == REQUEST_CODE_CAMERA_SELFIE
+    val cameraMode = when (requestCode) {
+      REQUEST_CODE_CAMERA_ID_FRONT -> CameraMode.ID_FRONT
+      REQUEST_CODE_CAMERA_ID_BACK -> CameraMode.ID_BACK
+      else -> CameraMode.ID_SELFIE
+    }
+
     val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, useFrontCamera)
-    else CameraActivity.newInstance(this, useFrontCamera), requestCode)
+    startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, cameraMode)
+    else CameraActivity.newInstance(this, cameraMode), requestCode)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK) {
       when (requestCode) {
-        REQUEST_CODE_CAMERA_ID -> {
+        REQUEST_CODE_CAMERA_ID_FRONT -> {
           user.id_photo_uploaded = true
           idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+        }
+        REQUEST_CODE_CAMERA_ID_BACK -> {
+          user.id_back_uploaded = true
+          idBackCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
         REQUEST_CODE_CAMERA_SELFIE -> {
           user.id_selfie_uploaded = true
@@ -383,7 +394,11 @@ class CreateUserActivity : BaseActivity() {
     }
 
     idPhotoContainer.setOnClickListener {
-      openCameraActivity(REQUEST_CODE_CAMERA_ID)
+      openCameraActivity(REQUEST_CODE_CAMERA_ID_FRONT)
+    }
+
+    idBackContainer.setOnClickListener {
+      openCameraActivity(REQUEST_CODE_CAMERA_ID_BACK)
     }
 
     idSelfieContainer.setOnClickListener {

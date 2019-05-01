@@ -153,22 +153,17 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
           Constants.ZAR_ASSET_ISSUER, "100000000000",
           Constants.ZAR_ASSET_NAME, "", "", null, null, null)
 
-        val rtgs = SupportedAsset(1, Constants.RTGS_ASSET_TYPE, Constants.RTGS_IMAGE_RES,
-          Constants.RTGS_ASSET_ISSUER, "100000000000",
-          Constants.RTGS_ASSET_NAME, "", "", null, null, null)
-
-        val dmc = SupportedAsset(2, Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
+        val dmc = SupportedAsset(1, Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
           Constants.DMC_ASSET_ISSUER, "100000000000",
           Constants.DMC_ASSET_NAME, "", "", null, null, null)
 
-        val usd = SupportedAsset(3, Constants.USD_ASSET_TYPE, Constants.USD_IMAGE_RES,
-          Constants.USD_ASSET_ISSUER, "100000000000",
-          Constants.USD_ASSET_NAME, "", "", null, null, null)
+        val eurt = SupportedAsset(2, Constants.EURT_ASSET_TYPE, Constants.EURT_IMAGE_RES,
+          Constants.EURT_ASSET_ISSUER, "100000000000",
+          Constants.EURT_ASSET_NAME, "", "", null, null, null)
 
         map[Constants.ZAR_ASSET_TYPE] = zar
-        map[Constants.RTGS_ASSET_TYPE] = rtgs
         map[Constants.DMC_ASSET_TYPE] = dmc
-        map[Constants.USD_ASSET_TYPE] = usd
+        map[Constants.EURT_ASSET_TYPE] = eurt
 
         updateAdapter()
     }

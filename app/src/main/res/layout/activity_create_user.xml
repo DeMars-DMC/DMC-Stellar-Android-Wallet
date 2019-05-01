@@ -421,6 +421,50 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/idBackContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/idBackImage"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_id"
+                        android:tint="@color/colorPaleSky" />
+
+                    <TextView
+                        android:id="@+id/idBackText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/idBackCheck"
+                        android:layout_toEndOf="@id/idBackImage"
+                        android:text="@string/upload_id_back_tip"
+                        android:textColor="@color/colorPaleSky" />
+
+                    <ImageView
+                        android:id="@+id/idBackCheck"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_circle_outline_palesky_24dp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/idSelfieContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -25,20 +25,15 @@ class Constants {
     const val ZAR_ASSET_ISSUER = "GBW4A2PFL6Y2PMFDR2V6F4X4VSJYBZHPL53AI7YXF65VLCUNQ73WTJ6Q"
     const val ZAR_IMAGE_RES = R.drawable.ic_logo_zar
 
-    const val RTGS_ASSET_TYPE = "RTGS"
-    const val RTGS_ASSET_NAME = "Zimbabwean Dollars"
-    const val RTGS_ASSET_ISSUER = "GANVBQ5JXPMDXH7QKNM3FRFBO23VJYQAQ42ZNXDWUZHLEIOK7JNPOCN3"
-    const val RTGS_IMAGE_RES = R.drawable.ic_logo_rtgs
-
     const val DMC_ASSET_TYPE = "DMC"
     const val DMC_ASSET_NAME = "DéMars Coins"
     const val DMC_ASSET_ISSUER = "GALRZBMCK47XLHQQXQSPCNJ375NGB6LP6RCBIGPXQAWIE2A4UCDTGQ52"
     const val DMC_IMAGE_RES = R.drawable.ic_main_logo
 
-    const val USD_ASSET_TYPE = "USD"
-    const val USD_ASSET_NAME = "US Dollars"
-    const val USD_ASSET_ISSUER = "GBXKY77EBFFUM35EDEMU3BB4YW6TFPMHOQLDED5C2LAIMIADQJADT4IP"
-    const val USD_IMAGE_RES = R.drawable.ic_logo_usd
+    const val EURT_ASSET_TYPE = "EURT"
+    const val EURT_ASSET_NAME = "Euro"
+    const val EURT_ASSET_ISSUER = "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
+    const val EURT_IMAGE_RES = R.drawable.ic_logo_eurt
 
     // Maximum double representation in string ((2^63)-1)/(10^7)
     const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"

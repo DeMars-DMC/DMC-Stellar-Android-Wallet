@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.R
+import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.views.AutoFitTextureView
 import kotlinx.android.synthetic.main.activity_camera2.*
@@ -60,7 +61,7 @@ class Camera2Activity : AppCompatActivity() {
    * ID of the current [CameraDevice].
    */
   private lateinit var cameraId: String
-  private var forSelfie = false
+  private var cameraMode = CameraMode.ID_FRONT
 
   /**
    * An [AutoFitTextureView] for camera preview.
@@ -360,7 +361,7 @@ class Camera2Activity : AppCompatActivity() {
         val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
         if (cameraDirection != null &&
           cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
-          if (forSelfie) {
+          if (cameraMode == CameraMode.ID_SELFIE) {
             this.autoFocusSupported = cameraAutoFocus
             this.cameraId = cameraId
             return
@@ -813,10 +814,10 @@ class Camera2Activity : AppCompatActivity() {
       }
     }
 
-    private const val ARG_FOR_SELFIE = "ARG_FOR_SELFIE"
-    fun newInstance(context: Context, forSelfie: Boolean): Intent {
+    private const val ARG_CAMERA_MODE = "ARG_CAMERA_MODE"
+    fun newInstance(context: Context, cameraMode: CameraMode): Intent {
       val intent = Intent(context, Camera2Activity::class.java)
-      intent.putExtra(ARG_FOR_SELFIE, forSelfie)
+      intent.putExtra(ARG_CAMERA_MODE, cameraMode)
       return intent
     }
   }
@@ -824,7 +825,7 @@ class Camera2Activity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_camera2)
-    forSelfie = intent.getBooleanExtra(ARG_FOR_SELFIE, false)
+    cameraMode = intent.getSerializableExtra(ARG_CAMERA_MODE) as CameraMode
     textureView = findViewById(R.id.texture)
 
     updateView()
@@ -854,7 +855,11 @@ class Camera2Activity : AppCompatActivity() {
       cameraButton.visibility = VISIBLE
       galleryButton.visibility = VISIBLE
 
-      mainTitle.setText(if (forSelfie) R.string.selfie_with_id else R.string.photo_of_id)
+      mainTitle.text = when (cameraMode) {
+        CameraMode.ID_FRONT -> getString(R.string.front_of_id)
+        CameraMode.ID_BACK -> getString(R.string.back_of_id)
+        else -> getString(R.string.selfie_with_id)
+      }
 
       imagePreview.setImageDrawable(null)
       textureView.visibility = VISIBLE
@@ -888,7 +893,7 @@ class Camera2Activity : AppCompatActivity() {
   private fun sendPictureToFirebase() {
     pictureBytes?.let { bytes ->
       showUploadingView()
-      Firebase.uploadBytes(bytes, forSelfie,
+      Firebase.uploadBytes(bytes, cameraMode,
         OnSuccessListener {
           setResult(Activity.RESULT_OK)
           finish()

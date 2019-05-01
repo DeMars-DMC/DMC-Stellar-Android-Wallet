@@ -22,26 +22,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 
 @Suppress("DEPRECATION")
 class CameraActivity : AppCompatActivity() {
   companion object {
     private const val REQUEST_GALLERY = 111
-    private const val ARG_FOR_SELFIE = "ARG_FOR_SELFIE"
+    private const val ARG_CAMERA_MODE = "ARG_CAMERA_MODE"
     private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
-    fun newInstance(context: Context, forSelfie: Boolean): Intent {
+    fun newInstance(context: Context, cameraMode: CameraMode): Intent {
       val intent = Intent(context, CameraActivity::class.java)
-      intent.putExtra(ARG_FOR_SELFIE, forSelfie)
+      intent.putExtra(ARG_CAMERA_MODE, cameraMode)
       return intent
     }
   }
 
   private lateinit var file: File
   private var camera: Camera? = null
+  private var cameraMode = CameraMode.ID_FRONT
   private var pictureBytes: ByteArray? = null
   private var hasCamera = false
-  private var forSelfie = false
   private var frontCameraIndex = -1
   private var useFront = false
   private val picture = Camera.PictureCallback { data, _ ->
@@ -53,7 +54,7 @@ class CameraActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_camera)
 
-    forSelfie = intent.getBooleanExtra(ARG_FOR_SELFIE, false)
+    cameraMode = intent.getSerializableExtra(ARG_CAMERA_MODE) as CameraMode
 
     file = File(getExternalFilesDir(null), PIC_FILE_NAME)
     hasCamera = checkCameraHardware(this)
@@ -84,7 +85,7 @@ class CameraActivity : AppCompatActivity() {
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
 
-      mainTitle.setText(if (forSelfie) R.string.selfie_with_id else R.string.photo_of_id)
+      mainTitle.text = title
 
       if (hasCamera) {
         cameraButton.visibility = VISIBLE
@@ -140,7 +141,7 @@ class CameraActivity : AppCompatActivity() {
   private fun sendPictureToFirebase() {
     pictureBytes?.let { bytes ->
       showUploadingView()
-      Firebase.uploadBytes(bytes, forSelfie,
+      Firebase.uploadBytes(bytes, cameraMode,
         OnSuccessListener {
           setResult(Activity.RESULT_OK)
           finish()
@@ -159,7 +160,7 @@ class CameraActivity : AppCompatActivity() {
   /** Check if this device has a frontal camera */
   private fun checkFrontCamera(): Boolean {
     try {
-      if (hasCamera && forSelfie) {
+      if (hasCamera && cameraMode == CameraMode.ID_SELFIE) {
         var cameraCount = 0
         val cameraInfo = Camera.CameraInfo()
         cameraCount = Camera.getNumberOfCameras()

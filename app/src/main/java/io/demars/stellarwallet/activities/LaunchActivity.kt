@@ -3,6 +3,7 @@ package io.demars.stellarwallet.activities
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.helpers.MailHelper
+import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.views.pin.PinLockView
 
 
@@ -36,7 +39,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private enum class Mode {
-    INITIAL, CODE, VERIFYING, STELLAR
+    INITIAL, CODE, VERIFYING, STELLAR, NO_INTERNET
   }
 
   private var mode = Mode.INITIAL
@@ -67,14 +70,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       if (dataSnapshot.exists()) {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
-        dmcUser?.let { dmcUser ->
-          val registrationCompleted = dmcUser.isRegistrationCompleted()
-          val verified = dmcUser.isVerified()
-          if (registrationCompleted) {
-            updateForMode(if (verified) Mode.STELLAR else Mode.VERIFYING)
-          } else {
-            checkNeedCreateUser()
-          }
+        dmcUser?.let { _ ->
+          updateForMode(Mode.STELLAR)
         }
       } else {
         checkNeedCreateUser()
@@ -96,11 +93,23 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
+
+    // First of all check the internet connection
+    if (!NetworkUtils(this).isNetworkAvailable()) {
+      // No internet showing message and retry button
+      updateForMode(Mode.NO_INTERNET)
+      return
+    }
+
+    initFirebase()
+  }
+
+  private fun initFirebase() {
     FirebaseAuth.getInstance().useAppLanguage()
 
     // Initial check if user already signed in
     Firebase.getCurrentUser()?.let { user ->
-      Firebase.getUser(user.uid, eventListener)
+      Firebase.getUser(eventListener)
     } ?: updateForMode(Mode.INITIAL)
   }
 
@@ -111,6 +120,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       Mode.CODE -> updateViewForCode()
       Mode.VERIFYING -> updateViewForVerifying()
       Mode.STELLAR -> updateViewForStellar()
+      Mode.NO_INTERNET -> updateViewForNoInternet()
     }
   }
 
@@ -206,21 +216,33 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
+  private fun updateViewForNoInternet() {
+    verificationText.visibility = View.GONE
+    dialerView.visibility = View.GONE
+    loginMessage.visibility = View.GONE
+    createWalletButton.visibility = View.GONE
+    recoverWalletButton.visibility = View.GONE
+
+    verificationLabel.visibility = View.VISIBLE
+    verificationLabel.text = getString(R.string.no_internet_message)
+
+    loginButton.visibility = View.VISIBLE
+    loginButton.setText(R.string.try_again)
+    loginButton.setOnClickListener {
+      if (NetworkUtils(this).isNetworkAvailable()) {
+        initFirebase()
+      }
+    }
+  }
+
   private fun showCreateDialog() {
     val builder = AlertDialog.Builder(this@LaunchActivity)
-    val walletLengthList = listOf(getString(R.string.create_word_option_1), getString(R.string.create_word_option_2)).toTypedArray()
     builder.setTitle(getString(R.string.create_wallet))
-      .setItems(walletLengthList) { _, which ->
-        // The 'which' argument contains the index position
-        // of the selected item
-
-        val walletLength = if (which == 0) {
-          MnemonicType.WORD_12
-        } else {
-          MnemonicType.WORD_24
-        }
-
-        startActivity(MnemonicActivity.newCreateMnemonicIntent(this, walletLength))
+      .setMessage(R.string.create_wallet_message)
+      .setPositiveButton(R.string.create_word_option_1) { _, _ ->
+        startActivity(MnemonicActivity.newCreateMnemonicIntent(this, MnemonicType.WORD_12))
+      }.setNegativeButton(R.string.create_word_option_2) { _, _ ->
+        startActivity(MnemonicActivity.newCreateMnemonicIntent(this, MnemonicType.WORD_24))
       }.show()
   }
 
@@ -284,11 +306,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         if (task.isSuccessful) {
           task.result?.user?.uid?.let { uid ->
             dmcUser?.let {
-              if (it.isRegistrationCompleted()) {
-                updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
-              } else {
-                createNewUser(DmcUser(uid, phone))
-              }
+              updateForMode(Mode.STELLAR)
             } ?: createUserIfNotExists(uid)
           } ?: onError("Something went wrong. Please try again")
         } else {
@@ -304,15 +322,19 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private fun createUserIfNotExists(uid: String) {
     createUserNeeded = true
     dmcUser = DmcUser(uid, phone)
-    Firebase.getUser(uid, eventListener)
+    Firebase.getUser(eventListener)
   }
 
   private fun createNewUser(dmcUser: DmcUser) {
     createUserNeeded = false
     if (dmcUser.isReadyToRegister()) {
-      startActivityForResult(CreateUserActivity.newInstance(this@LaunchActivity, dmcUser),
-        REQUEST_CREATE_USER)
-    } else{
+      Firebase.getDatabaseReference().child("users")
+        .child(Firebase.getCurrentUserUid()!!).setValue(dmcUser).addOnSuccessListener {
+          updateForMode(Mode.STELLAR)
+        }.addOnFailureListener {
+          Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
+        }
+    } else {
       onError("Something went wrong. Please try again")
       updateForMode(Mode.INITIAL)
     }
@@ -370,13 +392,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (resultCode == Activity.RESULT_OK) {
-      if (requestCode == REQUEST_CREATE_USER) {
-        dmcUser = data?.getSerializableExtra("user") as DmcUser?
-        dmcUser?.let {
-          updateForMode(if (it.isVerified()) Mode.STELLAR else Mode.VERIFYING)
-          Firebase.getUser(it.uid, eventListener)
-        }
-      } else if (requestCode == VERIFY_PIN_REQUEST) {
+      if (requestCode == VERIFY_PIN_REQUEST) {
         if (GlobalGraphHelper.isExistingWallet()) {
           GlobalGraphHelper.launchWallet(this)
         }

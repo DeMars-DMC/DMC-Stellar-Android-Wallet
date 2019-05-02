@@ -706,4 +706,11 @@
         <item>National ID</item>
         <item>Passport</item>
     </string-array>
+    <string-array name="communication_type">
+        <item>Email</item>
+        <item>WhatsApp</item>
+        <item>In-app notifications</item>
+        <item>Do not contact me</item>
+    </string-array>
+
 </resources>

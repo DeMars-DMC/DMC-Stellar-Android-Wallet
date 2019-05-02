@@ -164,9 +164,21 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:paddingLeft="@dimen/padding_vertical"
-                android:paddingTop="@dimen/padding_horizontal"
                 android:paddingRight="@dimen/padding_vertical"
                 android:text="@string/fund_account_string" />
+
+            <Button
+                android:id="@+id/openAccountButton"
+                style="@style/ButtonAccentStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_height"
+                android:text="@string/create_dmc_account"
+                android:layout_gravity="center_horizontal"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:layout_marginBottom="@dimen/padding_mini"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -11,10 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.activities.AssetsActivity
-import io.demars.stellarwallet.activities.BalanceSummaryActivity
-import io.demars.stellarwallet.activities.ReceiveActivity
-import io.demars.stellarwallet.activities.StellarAddressActivity
 import io.demars.stellarwallet.adapters.WalletRecyclerViewAdapter
 import io.demars.stellarwallet.mvvm.WalletViewState
 import com.google.zxing.BarcodeFormat
@@ -30,6 +26,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.activities.*
+import io.demars.stellarwallet.firebase.DmcUser
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.WalletViewModelPolling
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
@@ -275,6 +277,23 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE
+            Firebase.getUser(object : ValueEventListener {
+              override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val dmcUser = dataSnapshot.getValue(DmcUser::class.java)
+                if (dmcUser != null && dmcUser.isRegistrationCompleted()) {
+                  openAccountButton.visibility = View.GONE
+                } else {
+                  openAccountButton.visibility = View.VISIBLE
+                  openAccountButton.setOnClickListener {
+                    startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
+                  }
+                }
+              }
+
+              override fun onCancelled(p0: DatabaseError) {
+
+              }
+            })
           }
           WalletState.ERROR -> {
             noTransactionsTextView.visibility = View.GONE

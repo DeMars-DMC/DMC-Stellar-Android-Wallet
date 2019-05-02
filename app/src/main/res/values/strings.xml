@@ -44,6 +44,8 @@
     <!-- Login Strings -->
     <string name="create_new_wallet">Create new wallet</string>
     <string name="create_wallet">Create Wallet</string>
+    <string name="create_wallet_message">The App will now create an account number (public key) for your wallet on the Stellar network.\n\nRemember to write down your 12 or 24 word seed phase and keep it somewhere safe, as it is the only way you will be able to restore your wallet if you lose your phone.\n\nAfter you have written down this phase and activated your account, you’ll be presented with a screen asking you to deposit lumens into your account.\n\nDeposit lumens to get started, or proceed to the DMC account opening page.\n\nAll DMC account holders are rewarded with 5 Stellar Lumens (XLM) on successful account validation.
+</string>
     <string name="recover_wallet">Recover wallet</string>
     <string name="phrase_warning">Please write down and safely store this phrase. It\'s the ONLY WAY to retrieve your wallet.</string>
     <string name="no_mnemonic_set">Your wallet was recovered using a secret key and does not use a mnemonic.</string>
@@ -54,8 +56,8 @@
     <string name="secret_phrase">Secret Phrase</string>
     <string name="invalid_input_for_phrase">Invalid number of words (must be one of the followings: %s).</string>
     <string name="invalid_input_for_secret">Invalid secret key.</string>
-    <string name="create_word_option_1">Use a 12 word recovery phrase</string>
-    <string name="create_word_option_2">Use a 24 word recovery phrase</string>
+    <string name="create_word_option_1">Create 12 word recovery phrase</string>
+    <string name="create_word_option_2">Create 24 word recovery phrase</string>
     <string name="recover_from_phrase">Recover from phrase</string>
     <string name="recover_from_seed">Recover from secret key</string>
     <string name="passphrase_hint">Enter passphrase</string>
@@ -261,7 +263,7 @@
     <string name="exchange_alert_message">You must have at least one Stellar asset in addition to Lumens(XLM) in order to exchange.</string>
     <string name="exchange_alert_positive_button">Add asset</string>
     <string name="exchange_alert_negative_button">Not now</string>
-    <string name="fund_account_string">This account requires activation. Send at least 1 XLM to fund and activate the account</string>
+    <string name="fund_account_string">This account requires activation. Send at least 1 XLM to fund and activate the account\nOr create a DMC account and RECEIVE 5 LUMENS on successful verification</string>
     <string name="fetching_account_state">Fetching account transactions, please wait</string>
     <string name="nav_start">Start</string>
     <string name="learn_about_stellar">Learn about Stellar &amp; DMC</string>
@@ -314,14 +316,14 @@
     <string name="expiry_date">Expiry date</string>
     <string name="personal_id">Personal ID</string>
     <string name="upload_id_photo_tip">Upload a clear picture of your ID document</string>
-    <string name="upload_id_back_tip">Upload a clear picture of your Second Page/Back of ID(Optional)</string>
+    <string name="upload_id_back_tip">Upload the back of your ID document (Optional)</string>
     <string name="upload_selfie_tip">Upload a clear selfie holding your ID doc next to your face</string>
     <string name="select_nationality">Select nationality</string>
     <string name="select_country">Select country</string>
     <string name="select_document_type">Select Document type</string>
     <string name="use">Use</string>
     <string name="selfie_with_id">Selfie with ID</string>
-    <string name="attach_wallet_message">Your documents were verified. Now please create new Stellar wallet or recover existent if you have one already. This Stellar wallet will be attached to your DMC account</string>
+    <string name="attach_wallet_message">Now please create new Stellar wallet or recover existent if you have one already. This Stellar wallet will be attached to your DMC account</string>
     <string name="recover_wallet_message">Recover wallet attached to your DMC account</string>
     <string name="try_again">Try again</string>
     <string name="non_matching_wallet_message">You can only use wallet that was attached to your DMC account after registration. If you don\'t have access to that wallet anymore or want to change your attached Stellar Wallet - you can contact our support team</string>
@@ -340,4 +342,7 @@
     <string name="number_copied_message">Number copied</string>
     <string name="front_of_id">Front of ID</string>
     <string name="back_of_id">Back of ID</string>
+    <string name="no_internet_message">There is no internet connection. Please check your network and try again.</string>
+    <string name="communication_preference">Communication Preference</string>
+    <string name="select_preferred_communication">Select preferred communication</string>
 </resources>

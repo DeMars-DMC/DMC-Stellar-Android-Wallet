@@ -278,6 +278,33 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/communicationLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_mini"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/communication_preference"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/communicationPicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_arrow_drop_down_palesky_24dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/select_preferred_communication"
+                    android:textColor="@color/colorPaleSky"
+                    android:textSize="18sp" />
+
+
+                <TextView
                     android:id="@+id/documentTypeLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

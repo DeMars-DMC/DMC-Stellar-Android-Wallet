@@ -55,11 +55,13 @@ object Firebase {
   fun getStellarAddressRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("stellar_address")
 
-  fun getUser(uid: String, listener: ValueEventListener) {
-    getDatabaseReference().child("users")
-      .child(uid).removeEventListener(listener)
-    getDatabaseReference().child("users")
-      .child(uid).addValueEventListener(listener)
+  fun getUser(listener: ValueEventListener) {
+    getCurrentUserUid()?.let { uid ->
+      getDatabaseReference().child("users")
+        .child(uid).removeEventListener(listener)
+      getDatabaseReference().child("users")
+        .child(uid).addValueEventListener(listener)
+    }
   }
 
   fun removeUserListener(listener: ValueEventListener) {

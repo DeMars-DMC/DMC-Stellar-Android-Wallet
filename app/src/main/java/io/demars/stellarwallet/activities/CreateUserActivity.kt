@@ -25,6 +25,7 @@ import android.text.style.StyleSpan
 import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
@@ -37,7 +38,7 @@ import org.jetbrains.anko.textColor
 import java.util.*
 
 
-class CreateUserActivity : BaseActivity() {
+class CreateUserActivity : AppCompatActivity() {
   lateinit var user: DmcUser
   private var isCreating = true
   private var birthDateDialog: DatePickerDialog? = null
@@ -65,6 +66,10 @@ class CreateUserActivity : BaseActivity() {
 
     this.user = intent.getSerializableExtra(ARG_USER) as DmcUser
     this.isCreating = !user.isRegistrationCompleted()
+
+    setSupportActionBar(toolbar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    toolbar.setNavigationOnClickListener { onBackPressed() }
 
     if (isCreating) {
       showEditableView()
@@ -371,6 +376,18 @@ class CreateUserActivity : BaseActivity() {
       }
     })
 
+    communicationPicker.setOnClickListener {
+      val communicationTypes = resources.getStringArray(R.array.communication_type)
+      AlertDialog.Builder(this).setTitle(getString(R.string.select_preferred_communication))
+        .setItems(communicationTypes) { _, which ->
+          val communicationType = communicationTypes[which]
+          communicationPicker.setTextColor(Color.BLACK)
+          communicationPicker.text = communicationType
+          user.communication_type = communicationType
+        }.show()
+
+    }
+
     documentTypePicker.setOnClickListener {
       val documentTypes = resources.getStringArray(R.array.document_type)
       AlertDialog.Builder(this).setTitle(getString(R.string.select_document_type))
@@ -423,10 +440,6 @@ class CreateUserActivity : BaseActivity() {
   }
 
   private fun showNonEditableView() {
-    // Enable back button in toolbar
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
     toolbar.setTitle(R.string.personal_information)
 
     firstNameInput.visibility = GONE
@@ -474,6 +487,8 @@ class CreateUserActivity : BaseActivity() {
     expiryDatePicker.textColor = Color.BLACK
 
     idPhotoCheck.setImageResource(if (user.id_photo_uploaded)
+      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+    idBackCheck.setImageResource(if (user.id_back_uploaded)
       R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
     idSelfieCheck.setImageResource(if (user.id_selfie_uploaded)
       R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)

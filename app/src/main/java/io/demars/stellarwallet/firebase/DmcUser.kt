@@ -16,6 +16,7 @@ data class DmcUser(
   var address = Address()
   var email_address = ""
   var stellar_address = ""
+  var communication_type = ""
   var document_type = ""
   var document_number = ""
   var id_expiry_date = ""

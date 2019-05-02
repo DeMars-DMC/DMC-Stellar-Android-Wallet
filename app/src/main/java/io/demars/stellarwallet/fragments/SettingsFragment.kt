@@ -33,8 +33,11 @@ class SettingsFragment : BaseFragment() {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       dmcUser = dataSnapshot.getValue(DmcUser::class.java)
       dmcUser?.let {
-        Firebase.removeUserListener(this)
-        startActivity(CreateUserActivity.newInstance(context!!, it))
+        if (it.isRegistrationCompleted()) {
+          editInfoButton.setText(R.string.personal_information)
+        } else {
+          editInfoButton.setText(R.string.create_dmc_account)
+        }
       }
     }
 
@@ -50,6 +53,7 @@ class SettingsFragment : BaseFragment() {
     inflater.inflate(R.layout.fragment_settings, container, false)
 
   companion object {
+    const val RC_CREATE_DMC_ACCOUNT = 111
     fun newInstance(): SettingsFragment = SettingsFragment()
   }
 
@@ -57,6 +61,10 @@ class SettingsFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     appContext = view.context.applicationContext
     setupUI()
+
+    Firebase.getCurrentUser()?.let { user ->
+      Firebase.getUser(eventListener)
+    }
   }
 
   //region User Interface
@@ -149,9 +157,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         SettingsAction.SHOW_ACCOUNT.ordinal -> {
-          Firebase.getCurrentUser()?.let { user ->
-            Firebase.getUser(user.uid, eventListener)
-          }
+          startActivityForResult(CreateUserActivity.newInstance(context!!, dmcUser!!), RC_CREATE_DMC_ACCOUNT)
         }
 
 

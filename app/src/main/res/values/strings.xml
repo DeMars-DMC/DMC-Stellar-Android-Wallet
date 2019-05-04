@@ -263,7 +263,7 @@
     <string name="exchange_alert_message">You must have at least one Stellar asset in addition to Lumens(XLM) in order to exchange.</string>
     <string name="exchange_alert_positive_button">Add asset</string>
     <string name="exchange_alert_negative_button">Not now</string>
-    <string name="fund_account_string">This account requires activation. Send at least 1 XLM to fund and activate the account\nOr create a DMC account and RECEIVE 5 LUMENS on successful verification</string>
+    <string name="fund_account_string">Receive 1 XLM or create DMC account and get 5 XLM for FREE</string>
     <string name="fetching_account_state">Fetching account transactions, please wait</string>
     <string name="nav_start">Start</string>
     <string name="learn_about_stellar">Learn about Stellar &amp; DMC</string>
@@ -345,4 +345,8 @@
     <string name="no_internet_message">There is no internet connection. Please check your network and try again.</string>
     <string name="communication_preference">Communication Preference</string>
     <string name="select_preferred_communication">Select preferred communication</string>
+    <string name="thank_you">Thank you</string>
+    <string name="new_user_message">For completing the new account application. We\'ll verify your account within the next 24 hours and deposit 5 Lumens (XLM) on successful verification.</string>
+    <string name="proceed_to_wallet">Proceed to wallet</string>
+    <string name="send">Send</string>
 </resources>

@@ -48,6 +48,24 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
   private var stellarContacts: ArrayList<Contact> = ArrayList()
 
+  private val userListener = object : ValueEventListener {
+    override fun onDataChange(dataSnapshot: DataSnapshot) {
+      val dmcUser = dataSnapshot.getValue(DmcUser::class.java)
+      if (dmcUser != null && dmcUser.isRegistrationCompleted()) {
+        openAccountButton.visibility = View.GONE
+      } else {
+        openAccountButton.visibility = View.VISIBLE
+        openAccountButton.setOnClickListener {
+          startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
+        }
+      }
+    }
+
+    override fun onCancelled(p0: DatabaseError) {
+
+    }
+  }
+
   companion object {
     private const val REFRESH_EFFECT_DELAY = 400L
 
@@ -97,8 +115,8 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       }
     }
 
-    sendButton.setOnClickListener {
-      sendButton.isEnabled = false
+    payButton.setOnClickListener {
+      payButton.isEnabled = false
       activity?.let { activityContext ->
         startActivity(StellarAddressActivity.toSend(it.context))
         activityContext.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
@@ -122,6 +140,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   override fun onDestroyView() {
     super.onDestroyView()
     qrRendered = false
+    Firebase.removeUserListener(userListener)
   }
 
   private fun generateQRCode(data: String, imageView: ImageView, size: Int) {
@@ -169,7 +188,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     super.onResume()
     if (state == WalletState.ACTIVE) {
       receiveButton.isEnabled = true
-      sendButton.isEnabled = true
+      payButton.isEnabled = true
     }
     viewModel.moveToForeGround()
 
@@ -271,33 +290,17 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       if (!it.isFinishing) {
         when (newState) {
           WalletState.NOT_FUNDED -> {
-            sendButton.isEnabled = false
+            payButton.isEnabled = false
             receiveButton.isEnabled = true
             swipeRefresh.isRefreshing = false
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE
-            Firebase.getUser(object : ValueEventListener {
-              override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val dmcUser = dataSnapshot.getValue(DmcUser::class.java)
-                if (dmcUser != null && dmcUser.isRegistrationCompleted()) {
-                  openAccountButton.visibility = View.GONE
-                } else {
-                  openAccountButton.visibility = View.VISIBLE
-                  openAccountButton.setOnClickListener {
-                    startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
-                  }
-                }
-              }
-
-              override fun onCancelled(p0: DatabaseError) {
-
-              }
-            })
+            Firebase.getUser(userListener)
           }
           WalletState.ERROR -> {
             noTransactionsTextView.visibility = View.GONE
-            sendButton.isEnabled = false
+            payButton.isEnabled = false
             receiveButton.isEnabled = false
             swipeRefresh.isRefreshing = false
             fetchingState.visibility = View.VISIBLE
@@ -305,14 +308,14 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
           }
           WalletState.UPDATING -> {
             noTransactionsTextView.visibility = View.GONE
-            sendButton.isEnabled = false
+            payButton.isEnabled = false
             receiveButton.isEnabled = false
             swipeRefresh.isRefreshing = true
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
           WalletState.ACTIVE -> {
-            sendButton.isEnabled = true
+            payButton.isEnabled = true
             receiveButton.isEnabled = true
             swipeRefresh.isRefreshing = false
             noTransactionsTextView.visibility = View.GONE

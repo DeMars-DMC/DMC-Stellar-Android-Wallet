@@ -119,24 +119,40 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         if (asset.image != 0) {
             viewHolder.defaultImage.visibility = View.GONE
             viewHolder.assetImage.visibility = View.VISIBLE
-            Picasso.get().load(asset.image).into(viewHolder.assetImage)
+            Picasso.get()
+              .load(asset.image)
+              .resize(256,256)
+              .onlyScaleDown()
+              .into(viewHolder.assetImage)
         } else {
             when {
               asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
                   viewHolder.assetName.text = asset.name
-                  Picasso.get().load(Constants.ZAR_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get()
+                    .load(Constants.ZAR_IMAGE_RES)
+                    .resize(256,256)
+                    .onlyScaleDown()
+                    .into(viewHolder.assetImage)
               }
               asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.DMC_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get()
+                    .load(Constants.DMC_IMAGE_RES)
+                    .resize(256,256)
+                    .onlyScaleDown()
+                    .into(viewHolder.assetImage)
               }
               asset.code.equals(Constants.EURT_ASSET_TYPE, true) -> {
                   viewHolder.defaultImage.visibility = View.GONE
                   viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get().load(Constants.EURT_IMAGE_RES).into(viewHolder.assetImage)
+                  Picasso.get()
+                    .load(Constants.EURT_IMAGE_RES)
+                    .resize(256,256)
+                    .onlyScaleDown()
+                    .into(viewHolder.assetImage)
               }
               else -> {
                   viewHolder.defaultImage.text = asset.name[0].toString()
@@ -194,7 +210,11 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
         viewHolder.assetAmount.visibility = View.GONE
         viewHolder.defaultImage.visibility = View.GONE
 
-        Picasso.get().load(asset.image).into(viewHolder.assetImage)
+        Picasso.get()
+          .load(asset.image)
+          .resize(256,256)
+          .onlyScaleDown()
+          .into(viewHolder.assetImage)
 
         viewHolder.assetButton.text = context.getString(R.string.add_asset)
         viewHolder.assetButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent)

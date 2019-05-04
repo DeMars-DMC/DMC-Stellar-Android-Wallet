@@ -29,7 +29,7 @@ import timber.log.Timber
 class SettingsFragment : BaseFragment() {
   private lateinit var appContext: Context
   private var dmcUser: DmcUser? = null
-  private val eventListener = object : ValueEventListener {
+  private val userListener = object : ValueEventListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       dmcUser = dataSnapshot.getValue(DmcUser::class.java)
       dmcUser?.let {
@@ -63,7 +63,7 @@ class SettingsFragment : BaseFragment() {
     setupUI()
 
     Firebase.getCurrentUser()?.let { user ->
-      Firebase.getUser(eventListener)
+      Firebase.getUser(userListener)
     }
   }
 
@@ -84,7 +84,11 @@ class SettingsFragment : BaseFragment() {
     }
 
     editInfoButton.setOnClickListener {
-      startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
+      if (dmcUser != null && dmcUser?.isRegistrationCompleted()!!) {
+        startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
+      } else {
+        startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
+      }
     }
 
     logOutButton.setOnClickListener {
@@ -160,7 +164,6 @@ class SettingsFragment : BaseFragment() {
           startActivityForResult(CreateUserActivity.newInstance(context!!, dmcUser!!), RC_CREATE_DMC_ACCOUNT)
         }
 
-
         SettingsAction.LOG_OUT.ordinal -> {
           GlobalGraphHelper.wipeAndRestart(activity as FragmentActivity)
         }
@@ -187,5 +190,10 @@ class SettingsFragment : BaseFragment() {
 
       Toast.makeText(it, toastMessage, Toast.LENGTH_LONG).show()
     }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    Firebase.removeUserListener(userListener)
   }
 }

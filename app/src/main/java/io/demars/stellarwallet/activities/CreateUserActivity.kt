@@ -114,17 +114,6 @@ class CreateUserActivity : AppCompatActivity() {
     }
   }
 
-  private fun hideWelcomeDialog() {
-    val padding = resources.getDimension(R.dimen.padding_vertical)
-    dialogBg.animate().alpha(0F)
-    welcomeDialog.animate().translationY(-padding).setDuration(100).withEndAction {
-      welcomeDialog.animate().translationY(padding * 100).setDuration(500).withEndAction {
-        welcomeDialog.visibility = GONE
-        dialogBg.visibility = GONE
-      }
-    }
-  }
-
   private fun openCameraActivity(requestCode: Int) {
     val cameraMode = when (requestCode) {
       REQUEST_CODE_CAMERA_ID_FRONT -> CameraMode.ID_FRONT
@@ -237,7 +226,14 @@ class CreateUserActivity : AppCompatActivity() {
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           MailHelper.notifyUserCreated(user)
-          setResultAndFinish()
+          AlertDialog.Builder(this)
+            .setCancelable(false)
+            .setTitle(R.string.thank_you)
+            .setMessage(R.string.new_user_message)
+            .setPositiveButton(R.string.proceed_to_wallet) { dialog, which ->
+              dialog.dismiss()
+              setResultAndFinish()
+            }.show()
         }.addOnFailureListener {
           Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
         }
@@ -271,11 +267,6 @@ class CreateUserActivity : AppCompatActivity() {
 
   private fun showEditableView() {
     toolbar.setTitle(R.string.create_dmc_account)
-
-    dialogButton.setOnClickListener {
-      hideWelcomeDialog()
-      ViewUtils.showKeyboard(this, firstNameInput)
-    }
 
     firstNameText.visibility = GONE
     surnameText.visibility = GONE
@@ -453,8 +444,6 @@ class CreateUserActivity : AppCompatActivity() {
     documentNumberInput.visibility = GONE
     submitButton.visibility = GONE
     termsConditions.visibility = GONE
-    dialogBg.visibility = GONE
-    welcomeDialog.visibility = GONE
 
     dateOfBirthPicker.setOnClickListener(null)
     nationalityPicker.setOnClickListener(null)
@@ -476,6 +465,7 @@ class CreateUserActivity : AppCompatActivity() {
     nationalityPicker.text = user.nationality
     addressText.text = user.address.toString()
     emailText.text = user.email_address
+    communicationPicker.text = user.communication_type
     documentTypePicker.text = user.document_type
     documentNumberText.text = user.document_number
     expiryDatePicker.text = user.id_expiry_date
@@ -483,6 +473,7 @@ class CreateUserActivity : AppCompatActivity() {
     dateOfBirthPicker.textColor = Color.BLACK
     nationalityPicker.textColor = Color.BLACK
     countryPicker.textColor = Color.BLACK
+    communicationPicker.textColor = Color.BLACK
     documentTypePicker.textColor = Color.BLACK
     expiryDatePicker.textColor = Color.BLACK
 

@@ -377,6 +377,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onDestroy() {
     super.onDestroy()
     clearPhoneAuthSession()
+    Firebase.removeUserListener(eventListener)
   }
 
 

@@ -34,7 +34,10 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val appContext = label.context.applicationContext
         label.text = contact.name
         image.visibility = View.INVISIBLE
-        Picasso.get().load(contact.profilePic).into(image, object : Callback {
+        Picasso.get().load(contact.profilePic)
+          .resize(256,256)
+          .onlyScaleDown()
+          .into(image, object : Callback {
             override fun onSuccess() {
                 letter.text = null
                 image.visibility = View.VISIBLE

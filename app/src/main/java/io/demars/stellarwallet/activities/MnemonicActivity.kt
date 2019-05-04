@@ -33,8 +33,8 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
 
         fun newDisplayMnemonicIntent(context: Context, mnemonic: String, passphrase : String?): Intent {
             val intent = Intent(context, MnemonicActivity::class.java)
-            intent.putExtra(MnemonicActivity.MNEMONIC_PHRASE, mnemonic)
-            intent.putExtra(MnemonicActivity.PASS_PHRASE, passphrase)
+            intent.putExtra(MNEMONIC_PHRASE, mnemonic)
+            intent.putExtra(PASS_PHRASE, passphrase)
             return intent
         }
     }
@@ -64,8 +64,7 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
 
     //region User Interface
     override fun onClick(v: View) {
-        val itemId = v.id
-        when (itemId) {
+        when (v.id) {
             R.id.confirmButton -> startActivityForResult(WalletManagerActivity.createWallet(v.context, mnemonicString, passphraseToCreate), CREATE_WALLET_REQUEST)
             R.id.passphraseButton -> {
                 val builder = PassphraseDialogHelper(this, object: PassphraseDialogHelper.PassphraseDialogListener {

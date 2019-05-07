@@ -617,7 +617,7 @@ object Horizon : HorizonTasks {
   private const val HORIZON_SUBMIT_TIMEOUT = 60L
 
   private fun getServer(): Server {
-    checkNotNull(HORIZON_SERVER, lazyMessage = { "Horizon server has not been initialized, please call {${this::class.java}#init(..)" })
+    checkNotNull(HORIZON_SERVER, lazyMessage = { "Horizon server has not been initialized, please call {${this::class.java}#initFcm(..)" })
     return HORIZON_SERVER
   }
 

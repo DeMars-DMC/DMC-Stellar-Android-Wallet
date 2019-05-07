@@ -349,4 +349,6 @@
     <string name="new_user_message">For completing the new account application. We\'ll verify your account within the next 24 hours and deposit 5 Lumens (XLM) on successful verification.</string>
     <string name="proceed_to_wallet">Proceed to wallet</string>
     <string name="send">Send</string>
+    <string name="account_activity">Account activity</string>
+    <string name="channel_description">You will be notified about changes of your account with this channel</string>
 </resources>

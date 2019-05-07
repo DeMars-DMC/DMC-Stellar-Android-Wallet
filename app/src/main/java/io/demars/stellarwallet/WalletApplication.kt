@@ -1,9 +1,13 @@
 package io.demars.stellarwallet
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
 import io.demars.stellarwallet.helpers.LocalStoreImpl
 import io.demars.stellarwallet.helpers.WalletLifecycleListener
 import io.demars.stellarwallet.interfaces.WalletStore
@@ -22,6 +26,8 @@ import java.util.logging.Logger
 
 class WalletApplication : MultiDexApplication() {
     companion object {
+        const val CHANNEL_ID_ACC = "CHANNEL_ID_ACC"
+
         // Use LocalStoreImpl for SharedPreferences
         lateinit var wallet: WalletStore
 
@@ -51,11 +57,15 @@ class WalletApplication : MultiDexApplication() {
         super.onCreate()
         Logger.getLogger(OkHttpClient::class.java.name).level = Level.FINE
 
+        Stetho.initializeWithDefaults(this)
+
         PRNGFixes.apply()
 
         AndroidThreeTen.init(this)
 
         setupLifecycleListener()
+
+        createNotificationChannels()
 
         wallet = DmcWallet(LocalStoreImpl(applicationContext))
 
@@ -66,11 +76,11 @@ class WalletApplication : MultiDexApplication() {
                 Timber.d("Enabling leak canary")
                 if (LeakCanary.isInAnalyzerProcess(this)) {
                     // This process is dedicated to LeakCanary for heap analysis.
-                    // You should not init your app in this process.
+                    // You should not initFcm your app in this process.
                     return
                 }
                 LeakCanary.install(this)
-                // Normal app init code...
+                // Normal app initFcm code...
             } else {
                 Timber.d("Leak canary is disabled")
             }
@@ -86,6 +96,24 @@ class WalletApplication : MultiDexApplication() {
 
         // exchange providers addresses are not very likely to change but let's refresh them during application startup.
         ExchangeRepository(this).getAllExchangeProviders(true)
+    }
+
+    private fun createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            val name = getString(R.string.account_activity)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel(CHANNEL_ID_ACC, name, importance)
+            mChannel.description = descriptionText
+            mChannel.lightColor = getColor(R.color.colorAccent)
+            mChannel.setShowBadge(true)
+
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
     }
 
     private fun setupLifecycleListener() {

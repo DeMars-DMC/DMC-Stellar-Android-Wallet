@@ -8,6 +8,7 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.mvvm.local.EffectsRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
@@ -16,7 +17,7 @@ import io.demars.stellarwallet.mvvm.local.TransactionsRepository
 class GlobalGraphHelper {
   companion object {
     fun wipeAndRestart(activity: FragmentActivity) {
-      FirebaseAuth.getInstance().signOut()
+      Firebase.signOut()
       wipe(activity.applicationContext)
       restart(activity)
     }

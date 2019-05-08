@@ -32,7 +32,6 @@ import io.demars.stellarwallet.views.pin.PinLockView
 
 class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
-    private const val REQUEST_CREATE_USER = 111
     private const val SMS_TIMEOUT = 60L
   }
 
@@ -44,9 +43,9 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private var token: PhoneAuthProvider.ForceResendingToken? = null
   private var verificationId: String? = null
   private var dmcUser: DmcUser? = null
+  private var uid: String = ""
   private var phone: String = ""
   private var smsCode: String = ""
-  private var createUserNeeded = false
   private val smsTimer = object : CountDownTimer(SMS_TIMEOUT * 1000, 1000) {
     override fun onTick(millisUntilFinished: Long) {
       val secondsLeft = (millisUntilFinished / 1000).toInt()
@@ -71,21 +70,11 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         dmcUser?.let { user ->
           Firebase.initFcm(user.uid, "create")
           updateForMode(Mode.STELLAR)
-        }
-      } else {
-        checkNeedCreateUser()
-      }
+        } ?: createNewUser()
+      } else createNewUser()
     }
 
     override fun onCancelled(error: DatabaseError) {
-    }
-
-    private fun checkNeedCreateUser() {
-      if (createUserNeeded && dmcUser != null) {
-        createNewUser(dmcUser!!)
-      } else {
-        updateForMode(Mode.INITIAL)
-      }
     }
   }
 
@@ -97,17 +86,15 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     if (!NetworkUtils(this).isNetworkAvailable()) {
       // No internet showing message and retry button
       updateForMode(Mode.NO_INTERNET)
-      return
+    } else {
+      initFirebase()
     }
-
-    initFirebase()
   }
 
   private fun initFirebase() {
-    FirebaseAuth.getInstance().useAppLanguage()
-
     // Initial check if user already signed in
     Firebase.getCurrentUser()?.let { user ->
+      uid = user.uid
       Firebase.getUser(userListener)
     } ?: updateForMode(Mode.INITIAL)
   }
@@ -228,9 +215,13 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     loginButton.visibility = View.VISIBLE
     loginButton.setText(R.string.try_again)
     loginButton.setOnClickListener {
-      if (NetworkUtils(this).isNetworkAvailable()) {
-        initFirebase()
-      }
+      login()
+    }
+  }
+
+  private fun login() {
+    if (NetworkUtils(this).isNetworkAvailable()) {
+      initFirebase()
     }
   }
 
@@ -305,10 +296,12 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) {
           task.result?.user?.let { user ->
-            Firebase.initFcm(user.uid, "create")
-            dmcUser?.let {
+            uid = user.uid
+            if (dmcUser == null) {
+              Firebase.getUser(userListener)
+            } else {
               updateForMode(Mode.STELLAR)
-            } ?: checkIsNewUser(user.uid)
+            }
           } ?: onError("Something went wrong. Please try again")
         } else {
           if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -320,24 +313,23 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       }
   }
 
-  private fun checkIsNewUser(uid: String) {
-    createUserNeeded = true
-    dmcUser = DmcUser(uid, phone)
-    Firebase.getUser(userListener)
-  }
+  private fun createNewUser() {
+    val userToCreate = dmcUser?.let { user ->
+      user.apply {
+        this.uid = this@LaunchActivity.uid
+        this.phone = this@LaunchActivity.phone
+      }
+    } ?: DmcUser(uid, phone)
 
-  private fun createNewUser(dmcUser: DmcUser) {
-    createUserNeeded = false
-    if (dmcUser.isReadyToRegister()) {
+    if (userToCreate.isReadyToRegister()) {
       Firebase.getDatabaseReference().child("users")
-        .child(Firebase.getCurrentUserUid()!!).setValue(dmcUser).addOnSuccessListener {
+        .child(userToCreate.uid).setValue(userToCreate).addOnSuccessListener {
           updateForMode(Mode.STELLAR)
         }.addOnFailureListener {
-          Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
+          onError("Something went wrong. Please try again")
         }
     } else {
       onError("Something went wrong. Please try again")
-      updateForMode(Mode.INITIAL)
     }
   }
 
@@ -465,9 +457,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
-  override fun onDot() {
-
-  }
+  override fun onDot() {}
 
   private fun formatSmsCode(): String {
     return when (smsCode.length) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
+import com.google.firebase.auth.FirebaseAuth
 import io.demars.stellarwallet.helpers.LocalStoreImpl
 import io.demars.stellarwallet.helpers.WalletLifecycleListener
 import io.demars.stellarwallet.interfaces.WalletStore
@@ -56,6 +57,8 @@ class WalletApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         Logger.getLogger(OkHttpClient::class.java.name).level = Level.FINE
+
+        FirebaseAuth.getInstance().useAppLanguage()
 
         Stetho.initializeWithDefaults(this)
 

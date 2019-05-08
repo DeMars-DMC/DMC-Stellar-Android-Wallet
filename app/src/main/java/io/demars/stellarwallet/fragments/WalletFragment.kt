@@ -56,7 +56,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       } else {
         openAccountButton.visibility = View.VISIBLE
         openAccountButton.setOnClickListener {
-          startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
+          startActivity(CreateUserActivity.newInstance(context!!))
         }
       }
     }

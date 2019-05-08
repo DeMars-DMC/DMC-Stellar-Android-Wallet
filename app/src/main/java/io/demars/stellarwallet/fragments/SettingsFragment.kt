@@ -87,7 +87,7 @@ class SettingsFragment : BaseFragment() {
       if (dmcUser != null && dmcUser?.isRegistrationCompleted()!!) {
         startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
       } else {
-        startActivity(CreateUserActivity.newInstance(context!!, dmcUser!!))
+        startActivity(CreateUserActivity.newInstance(context!!))
       }
     }
 
@@ -161,7 +161,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         SettingsAction.SHOW_ACCOUNT.ordinal -> {
-          startActivityForResult(CreateUserActivity.newInstance(context!!, dmcUser!!), RC_CREATE_DMC_ACCOUNT)
+          startActivityForResult(CreateUserActivity.newInstance(context!!), RC_CREATE_DMC_ACCOUNT)
         }
 
         SettingsAction.LOG_OUT.ordinal -> {

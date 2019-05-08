@@ -27,6 +27,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
@@ -39,7 +42,7 @@ import java.util.*
 
 
 class CreateUserActivity : AppCompatActivity() {
-  lateinit var user: DmcUser
+  private var user: DmcUser? = null
   private var isCreating = true
   private var birthDateDialog: DatePickerDialog? = null
   private var expiryDateDialog: DatePickerDialog? = null
@@ -52,10 +55,17 @@ class CreateUserActivity : AppCompatActivity() {
     private const val REQUEST_CODE_CAMERA_SELFIE = 333
     private const val ARG_USER = "ARG_USER"
 
-    fun newInstance(context: Context, user: DmcUser): Intent {
-      val intent = Intent(context, CreateUserActivity::class.java)
-      intent.putExtra(ARG_USER, user)
-      return intent
+    fun newInstance(context: Context): Intent = Intent(context, CreateUserActivity::class.java)
+  }
+
+  private val userListener = object : ValueEventListener {
+    override fun onCancelled(p0: DatabaseError) {}
+    override fun onDataChange(dataSnapshot: DataSnapshot) {
+      user = dataSnapshot.getValue(DmcUser::class.java)
+      user?.let {
+        isCreating = !it.isRegistrationCompleted()
+        initUI()
+      } ?: finish()
     }
   }
 
@@ -64,20 +74,20 @@ class CreateUserActivity : AppCompatActivity() {
     ViewUtils.setTransparentStatusBar(this)
     setContentView(R.layout.activity_create_user)
 
-    this.user = intent.getSerializableExtra(ARG_USER) as DmcUser
-    this.isCreating = !user.isRegistrationCompleted()
+    Firebase.getUser(userListener)
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.setNavigationOnClickListener { onBackPressed() }
+  }
 
+  private fun initUI() {
     if (isCreating) {
       showEditableView()
     } else {
       showNonEditableView()
     }
   }
-
   private fun showExpiryDateDialog() {
     if (expiryDateDialog == null) {
       val today = Calendar.getInstance()
@@ -86,7 +96,7 @@ class CreateUserActivity : AppCompatActivity() {
           val expiryDate = "$year-${month + 1}-$dayOfMonth"
           expiryDatePicker.setTextColor(Color.BLACK)
           expiryDatePicker.text = expiryDate
-          user.id_expiry_date = expiryDate
+          user?.id_expiry_date = expiryDate
         }, today[Calendar.YEAR], today[Calendar.MONTH], today[Calendar.DAY_OF_MONTH])
       expiryDateDialog?.datePicker?.minDate = today.timeInMillis
       expiryDateDialog?.show()
@@ -103,7 +113,7 @@ class CreateUserActivity : AppCompatActivity() {
         val birthDate = "$year-${month + 1}-$dayOfMonth"
         dateOfBirthPicker.setTextColor(Color.BLACK)
         dateOfBirthPicker.text = birthDate
-        user.birth_date = birthDate
+        user?.birth_date = birthDate
       }, eighteenYearsBack[Calendar.YEAR],
         eighteenYearsBack[Calendar.MONTH],
         eighteenYearsBack[Calendar.DAY_OF_MONTH])
@@ -131,15 +141,15 @@ class CreateUserActivity : AppCompatActivity() {
     if (resultCode == Activity.RESULT_OK) {
       when (requestCode) {
         REQUEST_CODE_CAMERA_ID_FRONT -> {
-          user.id_photo_uploaded = true
+          user?.id_photo_uploaded = true
           idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
         REQUEST_CODE_CAMERA_ID_BACK -> {
-          user.id_back_uploaded = true
+          user?.id_back_uploaded = true
           idBackCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
         REQUEST_CODE_CAMERA_SELFIE -> {
-          user.id_selfie_uploaded = true
+          user?.id_selfie_uploaded = true
           idSelfieCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
       }
@@ -148,6 +158,7 @@ class CreateUserActivity : AppCompatActivity() {
 
   private fun verifyAndCreateNewUser() {
     var infoChecked = true
+    val user = this.user as DmcUser
     if (user.first_name.isNotBlank()) {
       addVerificationSpan(firstNameLabel, true)
     } else {
@@ -283,6 +294,8 @@ class CreateUserActivity : AppCompatActivity() {
     emailInput.visibility = VISIBLE
     documentNumberInput.visibility = VISIBLE
     submitButton.visibility = VISIBLE
+
+    val user = this.user as DmcUser
 
     firstNameInput.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
@@ -459,6 +472,8 @@ class CreateUserActivity : AppCompatActivity() {
     emailText.visibility = VISIBLE
     documentNumberText.visibility = VISIBLE
 
+    val user = this.user as DmcUser
+
     firstNameText.text = user.first_name
     surnameText.text = user.last_name
     dateOfBirthPicker.text = user.birth_date
@@ -483,5 +498,10 @@ class CreateUserActivity : AppCompatActivity() {
       R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
     idSelfieCheck.setImageResource(if (user.id_selfie_uploaded)
       R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Firebase.removeUserListener(userListener)
   }
 }

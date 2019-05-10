@@ -67,19 +67,19 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.confirmButton -> startActivityForResult(WalletManagerActivity.createWallet(v.context, mnemonicString, passphraseToCreate), CREATE_WALLET_REQUEST)
             R.id.passphraseButton -> {
-                val builder = PassphraseDialogHelper(this, object: PassphraseDialogHelper.PassphraseDialogListener {
+                PassphraseDialogHelper(this, object: PassphraseDialogHelper.PassphraseDialogListener {
                     override fun onOK(phrase: String) {
                         passphraseToCreate = phrase
                         passphraseButton.text = getString(R.string.passphrase_applied)
                     }
-                })
-                builder.show()
+                }).showForCreating()
+
             }
         }
     }
 
     private fun setupUI() {
-        if (!mnemonicString.isEmpty()) {
+        if (mnemonicString.isNotEmpty()) {
             // Show chips UI
             confirmButton.visibility = View.GONE
             passphraseButton.visibility = View.GONE
@@ -92,11 +92,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
         } else {
             // Create chips UI
             qrImageView.visibility = View.GONE
-
-            // TODO: Problem linked to setting isRecoveryPhrase before it is confirmed in
-            // RecoveryWalletActivity.kt for a secret seed, so that needs to be refactored to
-            // after the account is created in PinActivity.kt
-            WalletApplication.wallet.getIsRecoveryPhrase()
         }
         setupActionBar()
         setupMnemonicView()

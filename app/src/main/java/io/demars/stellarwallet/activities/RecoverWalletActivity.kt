@@ -84,13 +84,12 @@ class RecoverWalletActivity : BaseActivity() {
         }
 
         passphraseButton.setOnClickListener {
-            val builder = PassphraseDialogHelper(this, object: PassphraseDialogHelper.PassphraseDialogListener {
+            PassphraseDialogHelper(this, object: PassphraseDialogHelper.PassphraseDialogListener {
                 override fun onOK(phrase: String) {
                     passphrase = phrase
                     passphraseButton.text = getString(R.string.passphrase_applied)
                 }
-            })
-            builder.show()
+            }).showForRecovery()
         }
 
         phraseEditText.addTextChangedListener(object : OnTextChanged() {

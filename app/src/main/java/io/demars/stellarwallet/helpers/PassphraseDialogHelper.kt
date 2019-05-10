@@ -26,7 +26,6 @@ class PassphraseDialogHelper(private val activity: Activity, private val listene
         setView(viewInflated)
 
         setPositiveButton(context.getString(R.string.ok)) { _, _ ->
-
             listener.onOK(inputEditText!!.text.toString())
         }
         setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
@@ -34,7 +33,7 @@ class PassphraseDialogHelper(private val activity: Activity, private val listene
         }
     }
 
-    override fun show(): AlertDialog {
+    fun showForCreating(): AlertDialog {
         val dialog = super.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val phrase = inputEditText!!.text.toString()
@@ -60,6 +59,9 @@ class PassphraseDialogHelper(private val activity: Activity, private val listene
             }
         }
         return dialog
+    }
 
+    fun showForRecovery(): AlertDialog {
+        return super.show()
     }
 }

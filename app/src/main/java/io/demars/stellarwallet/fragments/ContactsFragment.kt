@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_contact_list.*
 import timber.log.Timber
 import android.net.Uri
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -117,9 +118,13 @@ class ContactsFragment : Fragment() {
         return true
       }
       R.id.refresh_contacts -> {
-        setInitialStateContacts()
-        refreshButton.isEnabled = false
-        showContacts(true)
+        if (checkNeedPermissions()) {
+          Toast.makeText(activity!!, "Please grant needed permissions to add refresh Contacts", Toast.LENGTH_LONG).show()
+        } else {
+          setInitialStateContacts()
+          refreshButton.isEnabled = false
+          showContacts(true)
+        }
         return true
       }
       R.id.search_contacts -> {
@@ -137,7 +142,11 @@ class ContactsFragment : Fragment() {
       }
       R.id.add_contact -> {
         activity?.let {
-          startActivity(StellarAddressActivity.createContact(it))
+          if (checkNeedPermissions()) {
+            Toast.makeText(activity!!, "Please grant needed permissions to add new Contact", Toast.LENGTH_LONG).show()
+          } else {
+            startActivity(StellarAddressActivity.createContact(it))
+          }
         }
         return true
       }
@@ -185,13 +194,17 @@ class ContactsFragment : Fragment() {
   }
 
   private fun requestContacts() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hasPermissions(appContext, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+    if (checkNeedPermissions()) {
       requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS), PERMISSIONS_REQUEST_CONTACTS)
     } else {
       showContacts()
     }
   }
 
+  private fun checkNeedPermissions(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+      hasPermissions(appContext, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED
+  }
 
   private fun hasPermissions(context: Context, vararg permissions: String): Int {
     for (permission in permissions) {
@@ -251,7 +264,7 @@ class ContactsFragment : Fragment() {
         }
       }
     }
-    if (!filterList.isEmpty()) {
+    if (filterList.isNotEmpty()) {
       populateList(filterList, true)
     }
   }

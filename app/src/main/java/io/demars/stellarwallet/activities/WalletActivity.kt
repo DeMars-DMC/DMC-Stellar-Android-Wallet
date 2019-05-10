@@ -127,7 +127,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
             dialogTradeAlert.show()
           }
           val tradingFragment = getReusedFragment(WalletFragmentType.EXCHANGE.name)
-            ?: TradeFragment.newInstance()
+            ?: ExchangeFragment.newInstance()
           replaceFragment(tradingFragment, WalletFragmentType.EXCHANGE)
         }
         R.id.nav_contacts -> {

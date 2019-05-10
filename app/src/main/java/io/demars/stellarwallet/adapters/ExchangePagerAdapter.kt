@@ -9,7 +9,7 @@ import io.demars.stellarwallet.fragments.tabs.TradeTabFragment
 import io.demars.stellarwallet.helpers.TradingTabs
 import io.demars.stellarwallet.helpers.TradingTabs.*
 
-class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class ExchangePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getCount(): Int {
         return TradingTabs.values().size
     }
@@ -19,7 +19,7 @@ class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
             Trade.ordinal -> TradeTabFragment()
             OrderBook.ordinal -> OrderBookTabFragment()
             MyTrades.ordinal -> MyTradesTabFragment()
-            else -> throw IllegalStateException("position not valid for" + TradingPagerAdapter::class.simpleName)
+            else -> throw IllegalStateException("position not valid for" + ExchangePagerAdapter::class.simpleName)
         }
     }
 
@@ -28,7 +28,7 @@ class TradingPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
             Trade.ordinal -> Trade.title
             OrderBook.ordinal -> OrderBook.title
             MyTrades.ordinal -> MyTrades.title
-            else -> throw IllegalStateException("position not valid for" + TradingPagerAdapter::class.simpleName)
+            else -> throw IllegalStateException("position not valid for" + ExchangePagerAdapter::class.simpleName)
         }
     }
 }

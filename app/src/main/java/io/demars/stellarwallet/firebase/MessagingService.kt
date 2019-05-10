@@ -16,6 +16,7 @@ class MessagingService : FirebaseMessagingService()  {
       .setContentText(remoteMessage?.notification?.body?:"")
       .setSmallIcon(R.drawable.ic_stat_ic_main_logo)
       .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+      .setAutoCancel(true)
       .build()
     val manager = NotificationManagerCompat.from(applicationContext)
     manager.notify(123, notification)

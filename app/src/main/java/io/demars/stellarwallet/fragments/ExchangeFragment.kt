@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.adapters.TradingPagerAdapter
+import io.demars.stellarwallet.adapters.ExchangePagerAdapter
 import io.demars.stellarwallet.interfaces.OnRefreshOrderBookListener
 import io.demars.stellarwallet.interfaces.OnTradeCurrenciesChanged
 import io.demars.stellarwallet.interfaces.OnUpdateOrderBook
@@ -15,12 +15,12 @@ import io.demars.stellarwallet.models.AssetUtil
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
-import kotlinx.android.synthetic.main.fragment_trade.*
+import kotlinx.android.synthetic.main.fragment_exchange.*
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 
-class TradeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
-  private lateinit var fragmentAdapter: TradingPagerAdapter
+class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
+  private lateinit var fragmentAdapter: ExchangePagerAdapter
 
   private var orderBookListener: OnUpdateOrderBook? = null
   private var tradeTabListener: OnUpdateTradeTab? = null
@@ -29,15 +29,15 @@ class TradeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookLi
   private var currentBuy: DataAsset? = null
 
   companion object {
-    fun newInstance(): TradeFragment = TradeFragment()
+    fun newInstance(): ExchangeFragment = ExchangeFragment()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-    inflater.inflate(R.layout.fragment_trade, container, false)
+    inflater.inflate(R.layout.fragment_exchange, container, false)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentAdapter = TradingPagerAdapter(childFragmentManager)
+    fragmentAdapter = ExchangePagerAdapter(childFragmentManager)
     viewPager.adapter = fragmentAdapter
     viewPager.offscreenPageLimit = fragmentAdapter.count
     tabs.setupWithViewPager(viewPager)

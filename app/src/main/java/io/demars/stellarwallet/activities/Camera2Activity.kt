@@ -81,7 +81,7 @@ class Camera2Activity : AppCompatActivity() {
   /**
    * The [android.util.Size] of camera preview.
    */
-  private lateinit var previewSize: Size
+  private var previewSize = Size(512, 512)
 
   /**
    * [CameraDevice.StateCallback] is called when [CameraDevice] changes its state.

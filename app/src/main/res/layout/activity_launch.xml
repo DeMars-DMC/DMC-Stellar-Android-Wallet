@@ -73,7 +73,7 @@
 
     <Button
         android:id="@+id/loginButton"
-        style="@style/ButtonFlatAccentStyle"
+        style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
@@ -102,7 +102,7 @@
 
     <Button
         android:id="@+id/createWalletButton"
-        style="@style/ButtonAccentStyle"
+        style="@style/ButtonStyleAccent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_above="@id/recoverWalletButton"
@@ -116,7 +116,7 @@
 
     <Button
         android:id="@+id/recoverWalletButton"
-        style="@style/ButtonYellowStyle"
+        style="@style/ButtonStyleYellow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"

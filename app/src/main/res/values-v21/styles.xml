@@ -21,10 +21,14 @@
         <item name="android:elevation">@dimen/elevation</item>
     </style>
 
-    <style name="ButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:elevation">@dimen/elevation</item>
+    </style>
+
+    <style name="ButtonStyleBorderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
     </style>
 
 </resources>

@@ -54,7 +54,7 @@
         android:id="@+id/assetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ButtonAccentStyle"
+        style="@style/ButtonStyleAccent"
         android:layout_alignParentEnd="true"
         android:textSize="@dimen/text_size_micro"
         android:padding="@dimen/padding_mini"

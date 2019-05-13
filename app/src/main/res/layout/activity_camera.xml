@@ -117,7 +117,7 @@
             tools:visibility="gone"/>
 
         <Button
-            style="@style/ButtonYellowStyle"
+            style="@style/ButtonStyleYellow"
             android:id="@+id/retakeButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height_big"
@@ -136,7 +136,7 @@
             android:id="@+id/guideline"/>
 
         <Button
-            style="@style/ButtonAccentStyle"
+            style="@style/ButtonStyleAccent"
             android:id="@+id/sendButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height_big"

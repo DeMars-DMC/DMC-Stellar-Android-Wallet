@@ -73,7 +73,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
                         passphraseButton.text = getString(R.string.passphrase_applied)
                     }
                 }).showForCreating()
-
             }
         }
     }
@@ -109,7 +108,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
             passphraseView.loadChips(arrayListOf(it), arrayListOf("passPhrase"))
         }
     }
-
     //endregion
 
     //region Set onClick interfaces

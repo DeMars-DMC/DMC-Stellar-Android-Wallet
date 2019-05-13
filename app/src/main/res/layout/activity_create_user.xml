@@ -547,7 +547,7 @@
 
                 <Button
                     android:id="@+id/submitButton"
-                    style="@style/ButtonAccentStyle"
+                    style="@style/ButtonStyleAccent"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/button_height_big"
                     android:layout_marginStart="16dp"

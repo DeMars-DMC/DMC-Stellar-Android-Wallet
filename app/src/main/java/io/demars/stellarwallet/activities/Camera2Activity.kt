@@ -534,8 +534,10 @@ class Camera2Activity : AppCompatActivity() {
           }
         }, null
       )
-    } catch (e: CameraAccessException) {
+    } catch (e: Exception) {
+      Toast.makeText(this, "Failed to start camera session, please try again", Toast.LENGTH_LONG).show()
       Timber.e(e.toString())
+      finish()
     }
 
   }

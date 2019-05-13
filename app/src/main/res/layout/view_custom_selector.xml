@@ -3,41 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:baselineAligned="false"
+    android:orientation="horizontal"
     android:weightSum="1">
 
     <FrameLayout
-        android:focusable="true"
-        android:clickable="true"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height_big"
-        android:layout_weight=".75">
+        android:layout_weight=".75"
+        android:clickable="true"
+        android:focusable="true">
 
         <EditText
-            android:duplicateParentState="true"
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/selector_edittext"
+            android:duplicateParentState="true"
             android:fontFamily="@font/lato_regular"
-            android:paddingStart="@dimen/margin_padding_size_medium"
-            android:paddingLeft="@dimen/margin_padding_size_medium"
-            android:paddingEnd="@dimen/margin_padding_size_medium"
-            android:paddingRight="@dimen/margin_padding_size_medium"
-            android:textColorHint="@color/selectorHint"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/button_height_big"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size"/>
+            android:textColorHint="@color/selectorHint"
+            android:textSize="@dimen/text_size" />
 
-        <View
-            android:layout_margin="1dp"
-            android:visibility="gone"
-            android:background="@color/transparent_alabaster"
-            android:id="@+id/editTextMask"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:paddingTop="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_medium"
+            android:paddingStart="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_mini" />
 
     </FrameLayout>
+
     <RelativeLayout
         android:id="@+id/spinnerContainer"
         android:layout_width="0dp"

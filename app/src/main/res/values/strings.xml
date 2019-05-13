@@ -90,9 +90,9 @@
     <string name="limit">Limit</string>
     <string name="tab_market_prices">Market Prices</string>
     <string name="tab_my_trades">My Trades</string>
-    <string name="selling_hint">I have</string>
-    <string name="buying_hint">I want</string>
-    <string name="holdings_amount">%1$s %2$s</string>
+    <string name="selling_hint">To sell</string>
+    <string name="buying_hint">To receive</string>
+    <string name="holdings_amount">Available: %1$s %2$s</string>
     <string name="tenth">10%</string>
     <string name="quarter">25%</string>
     <string name="half">50%</string>
@@ -351,4 +351,5 @@
     <string name="send">Send</string>
     <string name="account_activity">Account activity</string>
     <string name="channel_description">You will be notified about changes of your account with this channel</string>
+    <string name="no_offers">No offers</string>
 </resources>

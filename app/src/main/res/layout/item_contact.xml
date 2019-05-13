@@ -30,7 +30,7 @@
         android:layout_height="@dimen/badge_height" />
 
     <Button
-        style="@style/ButtonAccentStyle"
+        style="@style/ButtonStyleAccent"
         android:id="@+id/button_add_address"
         android:layout_width="wrap_content"
         android:layout_height="30dp"

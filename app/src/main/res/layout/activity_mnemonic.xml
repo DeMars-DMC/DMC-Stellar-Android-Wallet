@@ -89,7 +89,7 @@
 
     <Button
         android:id="@+id/confirmButton"
-        style="@style/ButtonAccentStyle"
+        style="@style/ButtonStyleAccent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"

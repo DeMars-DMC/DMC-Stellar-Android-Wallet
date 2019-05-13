@@ -144,7 +144,7 @@
 
     <Button
         android:id="@+id/send_button"
-        style="@style/ButtonFlatAccentStyle"
+        style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_send"
         android:text="@string/send_button_text"

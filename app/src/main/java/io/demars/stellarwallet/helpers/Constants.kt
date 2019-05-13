@@ -42,5 +42,14 @@ class Constants {
 
     const val URL_TERMS_AND_CONDITIONS = "https://docs.google.com/document/d/1T4QLKk0UCBMUo8v8hofGJ4CD1P35GkorLH2sE0Y1iKs/edit?usp=sharing"
     const val URL_QUICK_START = "https://docs.google.com/document/d/1qSSWxP9cxpyBLcXkB5Dv4ClIj_lam2CyfvTG9mpPgxs/edit?usp=sharing"
+
+
+    fun getImage(assetCode: String): Int = when (assetCode) {
+      LUMENS_ASSET_CODE -> LUMENS_IMAGE_RES
+      ZAR_ASSET_TYPE -> ZAR_IMAGE_RES
+      DMC_ASSET_TYPE -> DMC_IMAGE_RES
+      EURT_ASSET_TYPE -> EURT_IMAGE_RES
+      else -> 0
+    }
   }
 }

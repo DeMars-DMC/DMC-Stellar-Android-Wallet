@@ -123,7 +123,7 @@
     </LinearLayout>
 
     <Button
-        style="@style/ButtonYellowStyle"
+        style="@style/ButtonStyleYellow"
         android:id="@+id/sendToContactButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
@@ -134,7 +134,7 @@
 
     <Button
         android:id="@+id/bottomButton"
-        style="@style/ButtonAccentStyle"
+        style="@style/ButtonStyleAccent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"

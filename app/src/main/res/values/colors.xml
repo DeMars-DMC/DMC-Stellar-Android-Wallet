@@ -3,7 +3,7 @@
     <!--Theme-->
     <color name="colorPrimary">#002a55</color>
     <color name="colorPrimaryDark">#002a55</color>
-    <color name="colorPrimaryHighlight">#0151A5</color>
+    <color name="colorPrimaryHighlight">#2769AC</color>
 
     <color name="colorAccent">#EA8D0C</color>
     <color name="colorAccentHighlight">#B16B09</color>
@@ -69,11 +69,9 @@
 
     <color name="primaryButtonBg">@color/colorAccent</color>
     <color name="primaryButtonPressedBg">@color/colorAccentHighlight</color>
-    <color name="primaryButtonText">@color/white</color>
 
     <color name="secondaryButtonBg">@color/colorYellow</color>
     <color name="secondaryButtonPressedBg">@color/colorYellowHighlight</color>
-    <color name="secondaryButtonText">@color/white</color>
 
     <color name="container">@color/white</color>
     <color name="divider">@color/colorLightGrey</color>

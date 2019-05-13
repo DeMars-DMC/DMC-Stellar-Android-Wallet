@@ -26,7 +26,7 @@
 
                 <Button
                     android:id="@+id/receiveButton"
-                    style="@style/ButtonStyle"
+                    style="@style/ButtonStyleBorderless"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -45,7 +45,7 @@
 
                 <Button
                     android:id="@+id/payButton"
-                    style="@style/ButtonStyle"
+                    style="@style/ButtonStyleBorderless"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
@@ -169,7 +169,7 @@
 
             <Button
                 android:id="@+id/openAccountButton"
-                style="@style/ButtonAccentStyle"
+                style="@style/ButtonStyleAccent"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/button_height"
                 android:text="@string/create_dmc_account"

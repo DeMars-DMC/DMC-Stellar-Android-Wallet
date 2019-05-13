@@ -106,33 +106,38 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/lato_regular</item>
     </style>
 
-    <style name="ButtonAccentStyle" parent="ButtonStyle">
+    <style name="ButtonStyleBorderless" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/lato_regular</item>
+    </style>
+
+    <style name="ButtonStyleAccent" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:textColor">@color/primaryButtonText</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_accent</item>
     </style>
 
-    <style name="ButtonFlatAccentStyle" parent="ButtonStyle">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/lato_regular</item>
+    <style name="ButtonStyleAccentFlat" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:textColor">@color/primaryButtonText</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_accent_flat</item>
     </style>
 
-    <style name="ButtonYellowStyle" parent="ButtonStyle">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/lato_regular</item>
+    <style name="ButtonStyleYellow" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:textColor">@color/secondaryButtonText</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_yellow</item>
+    </style>
+
+    <style name="ButtonStyleBlue" parent="ButtonStyle">
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/button_blue</item>
     </style>
 
     <style name="HorizontalDivider">

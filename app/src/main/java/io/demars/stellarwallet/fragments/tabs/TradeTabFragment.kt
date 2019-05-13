@@ -43,7 +43,6 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   private var latestBid: OrderBookResponse.Row? = null
   private var orderType: OrderType = OrderType.MARKET
   private var dataAvailable = false
-  private var isToolTipShowing = false
   private var isShowingAdvanced = false
   private val ZERO_VALUE = "0.0"
   private val decimalFormat = DecimalFormat("0.#######")
@@ -203,7 +202,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   private fun updatePrices() {
     val price = latestBid?.price?.toFloatOrNull()
     val pricesString = if (price == null) getString(R.string.no_offers).toUpperCase() else
-      "Market price:\n1 ${selectedSellingCurrency.label} = $price ${selectedBuyingCurrency.label}" +
+      "Market Price\n1 ${selectedSellingCurrency.label} = $price ${selectedBuyingCurrency.label}" +
         "  |  1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
     prices.text = pricesString
   }

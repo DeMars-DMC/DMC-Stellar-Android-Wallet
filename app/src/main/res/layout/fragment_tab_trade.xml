@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_micro"
+                android:textColor="@color/colorPaleSky"
                 tools:text="1,000,000,000.1234567 PTS"/>
 
             <io.demars.stellarwallet.views.CustomSelector
@@ -150,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_horizontal"
                 android:layout_marginStart="@dimen/padding_micro"
+                android:textColor="@color/colorPaleSky"
                 android:gravity="center"/>
 
             <Button

@@ -154,10 +154,7 @@
                 android:layout_marginStart="@dimen/padding_micro"
                 android:textColor="@color/colorPaleSky"
                 android:layout_marginTop="@dimen/padding_horizontal"
-                android:gravity="end"
-                android:textStyle="bold"
                 tools:text="Quoted Rate\n1,000,000,000.1234567 PTS"/>
-
 
             <Button
                 android:id="@+id/submitTrade"

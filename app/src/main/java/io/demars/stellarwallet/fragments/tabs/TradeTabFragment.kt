@@ -2,6 +2,8 @@ package io.demars.stellarwallet.fragments.tabs
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.view.*
@@ -23,6 +25,12 @@ import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 import java.text.DecimalFormat
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+
 
 class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   private lateinit var appContext: Context
@@ -199,15 +207,41 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   private fun updatePrices() {
     prices?.let {
       val price = latestBid?.price?.toFloatOrNull()
-      val pricesString = if (price == null) {
-        getString(R.string.no_offers).toUpperCase()
+      val ssBuilder = SpannableStringBuilder("")
+      var indexBold = 0
+      if (price != null) {
+        val priceString = "Rate: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
+          "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n"
+        val invertedString = "1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
+
+        indexBold = priceString.length
+
+        ssBuilder.append(priceString)
+
+        val transparentString = "Rate: "
+        val indexTransparent = indexBold + transparentString.length
+
+        ssBuilder.append(transparentString)
+        ssBuilder.setSpan(
+          ForegroundColorSpan(Color.TRANSPARENT),
+          indexBold, indexTransparent,
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        ssBuilder.append(invertedString)
+        ssBuilder.setSpan(RelativeSizeSpan(0.7f),
+          indexTransparent, indexTransparent + invertedString.length,
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
       } else {
-        "Quoted Rate: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
-          "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n" +
-          "1\u00A0${selectedBuyingCurrency.label}\u00A0=\u00A0${1F / price}\u00A0${selectedSellingCurrency.label}"
+        val noOffersString = getString(R.string.no_offers).toUpperCase()
+        ssBuilder.append(noOffersString)
       }
 
-      it.text = pricesString
+      ssBuilder.setSpan(
+        StyleSpan(Typeface.BOLD),
+        0, indexBold,
+        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+      it.text = ssBuilder
     }
   }
 

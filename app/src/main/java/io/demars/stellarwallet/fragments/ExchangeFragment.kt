@@ -75,10 +75,7 @@ class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBoo
     Timber.d("Loading order book %s %s", sellingCode, buyingCode)
     Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
       override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
-        if (asks.isNotEmpty() || bids.isNotEmpty()) {
-          tradeTabListener?.onLastOrderBookUpdated(asks, bids)
-        }
-
+        tradeTabListener?.onLastOrderBookUpdated(asks, bids)
         orderBookListener?.updateOrderBook(sellingCode, buyingCode, asks, bids)
       }
 

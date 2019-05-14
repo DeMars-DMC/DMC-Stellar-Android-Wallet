@@ -1,15 +1,11 @@
 package io.demars.stellarwallet.fragments.tabs
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.view.*
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
@@ -21,7 +17,6 @@ import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
-import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import kotlinx.android.synthetic.main.fragment_tab_trade.*
 import kotlinx.android.synthetic.main.view_custom_selector.view.*
 import org.stellar.sdk.Asset
@@ -41,12 +36,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   private var holdingsAmount: Double = 0.0
   private var addedCurrencies: ArrayList<Currency> = ArrayList()
   private var latestBid: OrderBookResponse.Row? = null
-  private var orderType: OrderType = OrderType.MARKET
-  private var dataAvailable = false
+  //  private var orderType: OrderType = OrderType.MARKET
   private var isShowingAdvanced = false
   private val ZERO_VALUE = "0.0"
   private val decimalFormat = DecimalFormat("0.#######")
-
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_tab_trade, container, false)
@@ -56,7 +49,6 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     super.onViewCreated(view, savedInstanceState)
     appContext = view.context.applicationContext
     toolTip = PopupWindow(view.context)
-    setBuyingSelectorEnabled(false)
     refreshAddedCurrencies()
     setupListeners()
     updateView()
@@ -71,6 +63,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     threeQuarters.setOnClickListener(this)
     all.setOnClickListener(this)
     submitTrade.setOnClickListener(this)
+
+    sellingCustomSelector.editText.isEnabled = false
+    buyingCustomSelector.editText.isEnabled = false
 
     sellingCustomSelector.editText.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
@@ -89,19 +84,18 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
           Constants.getImage(selectedSellingCurrency.label))
 
         if (selectedSellingCurrency.label == AssetUtil.NATIVE_ASSET_CODE) {
-          val available = WalletApplication.wallet.getAvailableBalance().toDouble()
-
-          holdings.text = String.format(getString(R.string.holdings_amount),
-            decimalFormat.format(available),
-            selectedSellingCurrency.label)
-
-          holdingsAmount = available
-
-        } else {
-          holdings.text = String.format(getString(R.string.holdings_amount),
-            decimalFormat.format(holdingsAmount),
-            selectedSellingCurrency.label)
+          holdingsAmount = WalletApplication.wallet.getAvailableBalance().toDouble()
         }
+
+        val hasHoldings = holdingsAmount > 0.0
+
+        holdings.text = String.format(getString(R.string.holdings_amount),
+          decimalFormat.format(holdingsAmount),
+          selectedSellingCurrency.label)
+
+        all.visibility = if (hasHoldings) View.VISIBLE else View.GONE
+        sellingCustomSelector.editText.isEnabled = hasHoldings
+        buyingCustomSelector.editText.isEnabled = false
 
         resetBuyingCurrencies()
         buyingCurrencies.removeAt(position)
@@ -112,6 +106,11 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
       }
     }
 
+    buyingCustomSelector.editText.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        refreshSubmitTradeButton()
+      }
+    })
     buyingCustomSelector.setSelectionValues(buyingCurrencies)
     buyingCustomSelector.spinner.onItemSelectedListener = object : io.demars.stellarwallet.interfaces.OnItemSelected() {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -137,17 +136,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
       half.visibility = View.GONE
       threeQuarters.visibility = View.GONE
     }
-
-    val allText = if (isShowingAdvanced) "100%" else "Sell 100%"
-    val allWeight = if (isShowingAdvanced) 0.2f else 1.0f
-    val allParams = all.layoutParams as LinearLayout.LayoutParams
-    allParams.weight = allWeight
-    all.layoutParams = allParams
-    all.text = allText
   }
 
   private fun onSelectorChanged() {
-    dataAvailable = false
+    latestBid = null
     if (::selectedBuyingCurrency.isInitialized && ::selectedSellingCurrency.isInitialized) {
       notifyParent(selectedSellingCurrency, selectedBuyingCurrency)
     }
@@ -157,7 +149,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
 
   private fun refreshSubmitTradeButton() {
     val sellingValue = sellingCustomSelector.editText.text.toString()
-    val buyingValue = sellingCustomSelector.editText.text.toString()
+    val buyingValue = buyingCustomSelector.editText.text.toString()
 
     var numberFormatValid = true
     var sellingValueDouble = 0.toDouble()
@@ -179,13 +171,20 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
 
   private fun updateBuyingValueIfNeeded() {
     if (sellingCustomSelector == null) return
-    val stringText = sellingCustomSelector.editText.text.toString()
-    if (stringText.isEmpty()) {
+    val sellingString = sellingCustomSelector.editText.text.toString()
+    if (sellingString.isEmpty()) {
       buyingCustomSelector.editText.text.clear()
+      buyingCustomSelector.editText.isEnabled = false
       return
     }
 
-    if (latestBid != null && dataAvailable) {
+    buyingCustomSelector.editText.isEnabled = true
+
+    if (sellingString.toDouble() > holdingsAmount) {
+      sellingCustomSelector.editText.setText(holdingsAmount.toString())
+    }
+
+    if (latestBid != null) {
       val value = sellingCustomSelector.editText.text.toString().toFloatOrNull()
       val price = latestBid?.price?.toFloatOrNull()
       if (value != null && price != null) {
@@ -194,28 +193,28 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         val stringValue = decimalFormat.format(floatValue * floatPrice)
         buyingCustomSelector.editText.setText(stringValue)
       }
-    } else {
-      buyingCustomSelector.editText.setText(ZERO_VALUE)
     }
   }
 
   private fun updatePrices() {
-    val price = latestBid?.price?.toFloatOrNull()
-    val pricesString = if (price == null) getString(R.string.no_offers).toUpperCase() else
-      "Market Price\n1 ${selectedSellingCurrency.label} = $price ${selectedBuyingCurrency.label}" +
-        "  |  1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
-    prices.text = pricesString
+    prices?.let {
+      val price = latestBid?.price?.toFloatOrNull()
+      val pricesString = if (price == null) {
+        getString(R.string.no_offers).toUpperCase()
+      } else {
+        "Quoted Rate: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
+          "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n" +
+          "1\u00A0${selectedBuyingCurrency.label}\u00A0=\u00A0${1F / price}\u00A0${selectedSellingCurrency.label}"
+      }
+
+      it.text = pricesString
+    }
   }
 
   private fun notifyParent(selling: SelectionModel?, buying: SelectionModel?) {
     if (selling != null && buying != null) {
       parentListener.onCurrencyChange(selling, buying)
     }
-  }
-
-  enum class OrderType {
-    LIMIT,
-    MARKET
   }
 
   override fun onDestroyView() {
@@ -232,48 +231,27 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
       R.id.half -> sellingCustomSelector.editText.setText(decimalFormat.format(0.5 * holdingsAmount).toString())
       R.id.threeQuarters -> sellingCustomSelector.editText.setText(decimalFormat.format(0.75 * holdingsAmount).toString())
       R.id.all -> sellingCustomSelector.editText.setText(decimalFormat.format(holdingsAmount))
-      R.id.toggleMarket -> {
-        orderType = OrderType.MARKET
-        toggleMarket.setTextColor(ContextCompat.getColor(view.context, R.color.white))
-        toggleMarket.setBackgroundResource(R.drawable.left_toggle_selected)
-        toggleLimit.setBackgroundResource(R.drawable.right_toggle)
-        toggleLimit.setTextColor(ContextCompat.getColor(view.context, R.color.blueDark))
-
-        setBuyingSelectorEnabled(false)
-        updateBuyingValueIfNeeded()
-      }
-      R.id.toggleLimit -> {
-        orderType = OrderType.LIMIT
-        toggleLimit.setBackgroundResource(R.drawable.right_toggle_selected)
-        toggleLimit.setTextColor(ContextCompat.getColor(view.context, R.color.white))
-        toggleMarket.setBackgroundResource(R.drawable.left_toggle)
-        toggleMarket.setTextColor(ContextCompat.getColor(view.context, R.color.blueDark))
-        setBuyingSelectorEnabled(true)
-      }
       R.id.submitTrade -> {
-        if (buyingCustomSelector.editText.text.toString().isEmpty()) {
-          createSnackBar("Buying price can not be empty.", Snackbar.LENGTH_SHORT)?.show()
-        } else if ((orderType == OrderType.MARKET && !dataAvailable) || buyingCustomSelector.editText.text.toString() == ZERO_VALUE) {
-          // buyingEditText should be empty at this moment
+        when {
+          buyingCustomSelector.editText.text.toString().isEmpty() -> createSnackBar("Buying price can not be empty.", Snackbar.LENGTH_SHORT)?.show()
+          buyingCustomSelector.editText.text.toString() == ZERO_VALUE -> // buyingEditText should be empty at this moment
+            createSnackBar("Trade price cannot be 0. Please override limit order.", Snackbar.LENGTH_SHORT)?.show()
+          else -> {
+            val sellingText = sellingCustomSelector.editText.text.toString().replace(",", ".")
+            val buyingText = buyingCustomSelector.editText.text.toString().replace(",", ".")
 
-          createSnackBar("Trade price cannot be 0. Please override limit order.", Snackbar.LENGTH_SHORT)?.show()
+            val sellingCode = selectedSellingCurrency.label
+            val buyingCode = selectedBuyingCurrency.label
 
-        } else {
-
-          val sellingText = sellingCustomSelector.editText.text.toString().replace(",", ".")
-          val buyingText = buyingCustomSelector.editText.text.toString().replace(",", ".")
-
-          val sellingCode = selectedSellingCurrency.label
-          val buyingCode = selectedBuyingCurrency.label
-
-          AlertDialog.Builder(view.context)
-            .setTitle("Confirm Trade")
-            .setMessage("You are about to submit a trade of $sellingText $sellingCode for $buyingText $buyingCode.")
-            .setPositiveButton("Submit") { _, _ ->
-              proceedWithTrade(buyingText, sellingText, selectedBuyingCurrency.asset!!, selectedSellingCurrency.asset!!)
-            }.setNegativeButton("Cancel") { dialog, _ ->
-              dialog.dismiss()
-            }.show()
+            AlertDialog.Builder(view.context)
+              .setTitle("Confirm Trade")
+              .setMessage("You are about to submit a trade of $sellingText $sellingCode for $buyingText $buyingCode.")
+              .setPositiveButton("Submit") { _, _ ->
+                proceedWithTrade(buyingText, sellingText, selectedBuyingCurrency.asset!!, selectedSellingCurrency.asset!!)
+              }.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+              }.show()
+          }
         }
       }
     }
@@ -398,10 +376,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
   override fun onLastOrderBookUpdated(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
     if (bids.isNotEmpty()) {
       latestBid = bids[0]
-      dataAvailable = true
       updateBuyingValueIfNeeded()
     } else {
-      dataAvailable = false
+      latestBid = null
     }
 
     updatePrices()

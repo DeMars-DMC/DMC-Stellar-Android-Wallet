@@ -92,7 +92,7 @@
     <string name="tab_my_trades">My Trades</string>
     <string name="selling_hint">To sell</string>
     <string name="buying_hint">To receive</string>
-    <string name="holdings_amount">Available: %1$s %2$s</string>
+    <string name="holdings_amount">Available: %1$s\u00A0%2$s</string>
     <string name="tenth">10%</string>
     <string name="quarter">25%</string>
     <string name="half">50%</string>
@@ -100,9 +100,7 @@
     <string name="all">100%</string>
     <string name="submit">Submit</string>
     <string name="place_trade">Place Trade</string>
-    <string name="exchange_tab_notes">Your market order may not be completely filled depending
-        on amount offered. View the order book to see the amount available at the market rate.
-        Any amount larger than this will be posed as an offer.</string>
+    <string name="exchange_tab_notes">Price quoted is indicative only. Your market order may not be completely filled. View the order book to double check there are available orders to match your trade.</string>
     <string name="my_offer_empty_list">There are no offers at the moment</string>
     <string name="order_book_empty_list">Failed to retrieve the order book</string>
 
@@ -352,4 +350,6 @@
     <string name="account_activity">Account activity</string>
     <string name="channel_description">You will be notified about changes of your account with this channel</string>
     <string name="no_offers">No offers</string>
+    <string name="sell_100">Sell 100%</string>
+    <string name="apply">Apply</string>
 </resources>

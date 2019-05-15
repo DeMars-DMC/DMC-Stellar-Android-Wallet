@@ -99,6 +99,8 @@
     <string name="three_quarters">75%</string>
     <string name="all">100%</string>
     <string name="submit">Submit</string>
+    <string name="edit">Edit</string>
+    <string name="confirm">Confirm</string>
     <string name="place_trade">Place Trade</string>
     <string name="exchange_tab_notes">Price quoted is indicative only. Your market order may not be completely filled. View the order book to double check there are available orders to match your trade.</string>
     <string name="my_offer_empty_list">There are no offers at the moment</string>
@@ -352,4 +354,7 @@
     <string name="no_offers">No offers</string>
     <string name="sell_100">Sell 100%</string>
     <string name="apply">Apply</string>
+    <string name="confirm_trade_title">Please confirm the trade</string>
+    <string name="selling">Selling</string>
+    <string name="receiving">Receiving</string>
 </resources>

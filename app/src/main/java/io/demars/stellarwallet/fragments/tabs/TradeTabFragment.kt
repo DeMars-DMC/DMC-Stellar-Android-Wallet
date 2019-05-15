@@ -1,6 +1,5 @@
 package io.demars.stellarwallet.fragments.tabs
 
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
@@ -20,7 +19,6 @@ import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import kotlinx.android.synthetic.main.fragment_tab_trade.*
-import kotlinx.android.synthetic.main.view_custom_selector.view.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
@@ -30,9 +28,10 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import io.demars.stellarwallet.views.ConfirmTradeDialog
 
 
-class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
+class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, ConfirmTradeDialog.DialogListener {
   private lateinit var appContext: Context
   private lateinit var parentListener: OnTradeCurrenciesChanged
   private lateinit var selectedSellingCurrency: SelectionModel
@@ -70,7 +69,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     half.setOnClickListener(this)
     threeQuarters.setOnClickListener(this)
     all.setOnClickListener(this)
-    submitTrade.setOnClickListener(this)
+    placeTrade.setOnClickListener(this)
 
     sellingCustomSelector.editText.isEnabled = false
     buyingCustomSelector.editText.isEnabled = false
@@ -89,7 +88,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         holdingsAmount = selectedSellingCurrency.holdings
 
         sellingCustomSelector.imageView.setImageResource(
-          Constants.getImage(selectedSellingCurrency.label))
+          Constants.getLogo(selectedSellingCurrency.label))
 
         if (selectedSellingCurrency.label == AssetUtil.NATIVE_ASSET_CODE) {
           holdingsAmount = WalletApplication.wallet.getAvailableBalance().toDouble()
@@ -125,7 +124,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         selectedBuyingCurrency = buyingCurrencies[position]
 
         buyingCustomSelector.imageView.setImageResource(
-          Constants.getImage(selectedBuyingCurrency.label))
+          Constants.getLogo(selectedBuyingCurrency.label))
 
         onSelectorChanged()
       }
@@ -161,19 +160,20 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
 
     var numberFormatValid = true
     var sellingValueDouble = 0.toDouble()
+    var buyingValueDouble = 0.toDouble()
     try {
       sellingValueDouble = sellingValue.toDouble()
-      buyingValue.toDouble()
+      buyingValueDouble = buyingValue.toDouble()
     } catch (e: NumberFormatException) {
       Timber.d("selling or buying value have not a valid format")
       numberFormatValid = false
     }
 
-    if (sellingValue.isEmpty() || buyingValue.isEmpty() ||
-      !numberFormatValid || sellingValueDouble.compareTo(0) == 0) {
-      submitTrade.isEnabled = false
+    if (sellingValue.isEmpty() || buyingValue.isEmpty() || !numberFormatValid ||
+      sellingValueDouble.compareTo(0) == 0 || buyingValueDouble.compareTo(0) == 0) {
+      placeTrade.isEnabled = false
     } else if (::selectedSellingCurrency.isInitialized) {
-      submitTrade.isEnabled = sellingValue.toDouble() <= selectedSellingCurrency.holdings
+      placeTrade.isEnabled = sellingValue.toDouble() <= selectedSellingCurrency.holdings
     }
   }
 
@@ -208,15 +208,18 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     prices?.let {
       val price = latestBid?.price?.toFloatOrNull()
       val ssBuilder = SpannableStringBuilder("")
-      var indexBold = 0
       if (price != null) {
         val priceString = "Rate: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
           "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n"
         val invertedString = "1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
 
-        indexBold = priceString.length
+        val indexBold = priceString.length
 
         ssBuilder.append(priceString)
+        ssBuilder.setSpan(
+          StyleSpan(Typeface.BOLD),
+          0, indexBold,
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         val transparentString = "Rate: "
         val indexTransparent = indexBold + transparentString.length
@@ -235,11 +238,6 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         val noOffersString = getString(R.string.no_offers).toUpperCase()
         ssBuilder.append(noOffersString)
       }
-
-      ssBuilder.setSpan(
-        StyleSpan(Typeface.BOLD),
-        0, indexBold,
-        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
       it.text = ssBuilder
     }
@@ -265,30 +263,24 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
       R.id.half -> sellingCustomSelector.editText.setText(decimalFormat.format(0.5 * holdingsAmount).toString())
       R.id.threeQuarters -> sellingCustomSelector.editText.setText(decimalFormat.format(0.75 * holdingsAmount).toString())
       R.id.all -> sellingCustomSelector.editText.setText(decimalFormat.format(holdingsAmount))
-      R.id.submitTrade -> {
-        when {
-          buyingCustomSelector.editText.text.toString().isEmpty() -> createSnackBar("Buying price can not be empty.", Snackbar.LENGTH_SHORT)?.show()
-          buyingCustomSelector.editText.text.toString() == ZERO_VALUE -> // buyingEditText should be empty at this moment
-            createSnackBar("Trade price cannot be 0. Please override limit order.", Snackbar.LENGTH_SHORT)?.show()
-          else -> {
-            val sellingText = sellingCustomSelector.editText.text.toString().replace(",", ".")
-            val buyingText = buyingCustomSelector.editText.text.toString().replace(",", ".")
-
-            val sellingCode = selectedSellingCurrency.label
-            val buyingCode = selectedBuyingCurrency.label
-
-            AlertDialog.Builder(view.context)
-              .setTitle("Confirm Trade")
-              .setMessage("You are about to submit a trade of $sellingText $sellingCode for $buyingText $buyingCode.")
-              .setPositiveButton("Submit") { _, _ ->
-                proceedWithTrade(buyingText, sellingText, selectedBuyingCurrency.asset!!, selectedSellingCurrency.asset!!)
-              }.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-              }.show()
-          }
-        }
-      }
+      R.id.placeTrade -> onPlaceTrade()
     }
+  }
+
+  private fun onPlaceTrade() {
+    val sellingText = sellingCustomSelector.editText.text.toString().replace(",", ".")
+    val buyingText = buyingCustomSelector.editText.text.toString().replace(",", ".")
+
+    val sellingCode = selectedSellingCurrency.label
+    val buyingCode = selectedBuyingCurrency.label
+
+    ConfirmTradeDialog(context!!, sellingText, buyingText,
+      sellingCode, buyingCode, this).show()
+  }
+
+  override fun onConfirmed(sellingText: String, buyingText: String) {
+    proceedWithTrade(sellingText, buyingText,
+      selectedBuyingCurrency.asset!!, selectedSellingCurrency.asset!!)
   }
 
   private fun createSnackBar(text: CharSequence, duration: Int): Snackbar? {
@@ -298,8 +290,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     return null
   }
 
-  private fun proceedWithTrade(buyingAmount: String, sellingAmount: String,
-                               buyingAsset: Asset, sellingAsset: Asset) {
+  private fun proceedWithTrade(sellingAmount: String, buyingAmount: String,
+                               sellingAsset: Asset, buyingAsset: Asset) {
     val snackBar = createSnackBar("Submitting order", Snackbar.LENGTH_INDEFINITE)
     val snackView = snackBar?.view as Snackbar.SnackbarLayout
     val progress = ProgressBar(context)
@@ -313,10 +305,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
     snackView.addView(progress, params)
     snackBar.show()
 
-    submitTrade.isEnabled = false
+    placeTrade.isEnabled = false
 
-    setBuyingSelectorEnabled(false)
-    setSellingSelectorEnabled(false)
+    sellingCustomSelector.editText.isEnabled = false
+    buyingCustomSelector.editText.isEnabled = false
 
     WalletApplication.userSession.getAvailableBalance()
 
@@ -335,9 +327,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
         snackBar.dismiss()
         createSnackBar("Order executed", Snackbar.LENGTH_SHORT)?.show()
 
-        submitTrade.isEnabled = true
-        setSellingSelectorEnabled(true)
-        setBuyingSelectorEnabled(true)
+        placeTrade.isEnabled = true
+        sellingCustomSelector.editText.isEnabled = true
+        buyingCustomSelector.editText.isEnabled = true
       }
 
       override fun onFailed(errorMessage: String) {
@@ -345,21 +337,12 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab {
 
         createSnackBar("Order failed: $errorMessage", Snackbar.LENGTH_SHORT)?.show()
 
-        submitTrade.isEnabled = true
-        setSellingSelectorEnabled(false)
-        setBuyingSelectorEnabled(false)
+        placeTrade.isEnabled = true
+        sellingCustomSelector.editText.isEnabled = false
+        buyingCustomSelector.editText.isEnabled = false
       }
     }, AccountUtils.getSecretSeed(appContext), sellingAsset, buyingAsset,
       sellingAmountFormatted, priceFormatted)
-  }
-
-
-  private fun setSellingSelectorEnabled(isEnabled: Boolean) {
-    sellingCustomSelector.editText.isEnabled = isEnabled
-  }
-
-  private fun setBuyingSelectorEnabled(isEnabled: Boolean) {
-    buyingCustomSelector.editText.isEnabled = isEnabled
   }
 
   override fun onAttach(context: Context?) {

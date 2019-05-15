@@ -15,7 +15,7 @@
         android:focusable="true">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/editTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/selector_edittext"
@@ -39,7 +39,7 @@
 
     </FrameLayout>
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/spinnerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,6 +54,6 @@
             android:backgroundTint="@color/white"
             android:spinnerMode="dialog"
             tools:ignore="UnusedAttribute" />
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

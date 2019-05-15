@@ -157,7 +157,7 @@
                 tools:text="Quoted Rate\n1,000,000,000.1234567 PTS"/>
 
             <Button
-                android:id="@+id/submitTrade"
+                android:id="@+id/placeTrade"
                 style="@style/ButtonStyleAccent"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height_big"

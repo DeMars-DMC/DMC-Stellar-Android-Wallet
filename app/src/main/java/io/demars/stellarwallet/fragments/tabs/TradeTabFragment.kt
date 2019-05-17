@@ -188,7 +188,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
     buyingCustomSelector.editText.isEnabled = true
 
-    if (sellingString.toDouble() > holdingsAmount) {
+    if (sellingString.replace(",",".").toDouble() > holdingsAmount) {
       sellingCustomSelector.editText.setText(holdingsAmount.toString())
     }
 

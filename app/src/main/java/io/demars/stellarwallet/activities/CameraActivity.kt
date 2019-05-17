@@ -161,9 +161,8 @@ class CameraActivity : AppCompatActivity() {
   private fun checkFrontCamera(): Boolean {
     try {
       if (hasCamera && cameraMode == CameraMode.ID_SELFIE) {
-        var cameraCount = 0
         val cameraInfo = Camera.CameraInfo()
-        cameraCount = Camera.getNumberOfCameras()
+        val cameraCount = Camera.getNumberOfCameras()
         for (camIdx in 0..cameraCount) {
           Camera.getCameraInfo(camIdx, cameraInfo)
           if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -172,7 +171,7 @@ class CameraActivity : AppCompatActivity() {
           }
         }
       }
-    } catch (ex:Exception) {
+    } catch (ex: Exception) {
       // Do nothing and return false
     }
 

@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/button_height_big"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/white_ripple_background"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="7dp">
+    android:padding="@dimen/padding_mini">
 
     <com.github.abdularis.civ.CircleImageView
         android:id="@+id/rounded_iv_profile"

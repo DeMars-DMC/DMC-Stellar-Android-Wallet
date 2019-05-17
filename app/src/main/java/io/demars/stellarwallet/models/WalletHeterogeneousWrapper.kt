@@ -83,7 +83,7 @@ class WalletHeterogeneousWrapper {
   private fun addFilteredOperations(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>?) {
     val filteredOperations = getFilteredOperations(list, activeAsset)
     if (filteredOperations != null) {
-      array.addAll(convertResponseToOperation(activeAsset, filteredOperations))
+      array.addAll(convertResponseToOperation(filteredOperations))
     }
   }
 
@@ -97,7 +97,7 @@ class WalletHeterogeneousWrapper {
   private fun addFilteredTransactions(activeAsset: String, list: ArrayList<TransactionResponse>?) {
     val filteredTransactions = getFilteredTransactions(list, activeAsset)
     if (filteredTransactions != null) {
-      array.addAll(convertResponseToTransaction(activeAsset, filteredTransactions))
+      array.addAll(convertResponseToTransaction(filteredTransactions))
     }
   }
 
@@ -163,7 +163,9 @@ class WalletHeterogeneousWrapper {
             returnList.add(it)
           }
         }
-        is ManageOfferOperationResponse -> {
+        is ManageSellOfferOperationResponse -> {
+        }
+        is ManageBuyOfferOperationResponse -> {
         }
         else -> {}
       }
@@ -199,7 +201,7 @@ class WalletHeterogeneousWrapper {
     } as ArrayList
   }
 
-  private fun convertResponseToOperation(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>): ArrayList<Operation> {
+  private fun convertResponseToOperation(list: ArrayList<Pair<OperationResponse, String?>>): ArrayList<Operation> {
     return list.map {
       val operation = it.first
       val memo = it.second
@@ -211,7 +213,7 @@ class WalletHeterogeneousWrapper {
     } as ArrayList
   }
 
-  private fun convertResponseToTransaction(activeAsset: String, list: ArrayList<TransactionResponse>): ArrayList<Transaction> {
+  private fun convertResponseToTransaction(list: ArrayList<TransactionResponse>): ArrayList<Transaction> {
     return list.map {
       return@map Transaction("Transaction", it.createdAt, "XLM", "amount",
         convertMemo(it.memo), it.sourceAccount.accountId, it.feePaid.toString(), it.operationCount, it.isSuccessful)
@@ -234,7 +236,8 @@ class WalletHeterogeneousWrapper {
       is AccountDebitedEffectResponse -> convertAsset(response.asset)
       is PaymentOperationResponse -> convertAsset(response.asset)
       is PathPaymentOperationResponse -> convertAsset(response.asset)
-      is ManageOfferOperationResponse -> convertAsset(response.sellingAsset)
+      is ManageSellOfferOperationResponse -> convertAsset(response.sellingAsset)
+      is ManageBuyOfferOperationResponse -> convertAsset(response.sellingAsset)
       is ChangeTrustOperationResponse -> convertAsset(response.asset)
       is AllowTrustOperationResponse -> convertAsset(response.asset)
       is TrustlineCreatedEffectResponse -> (response.asset as AssetTypeCreditAlphaNum).code
@@ -252,7 +255,8 @@ class WalletHeterogeneousWrapper {
       is CreateAccountOperationResponse -> response.startingBalance
       is PaymentOperationResponse -> response.amount
       is PathPaymentOperationResponse -> response.amount
-      is ManageOfferOperationResponse -> response.amount
+      is ManageSellOfferOperationResponse -> response.amount
+      is ManageBuyOfferOperationResponse -> response.amount
       else -> null
     }
   }
@@ -289,14 +293,16 @@ class WalletHeterogeneousWrapper {
 
   private fun getCounterAssetCode(response: OperationResponse): String? {
     return when (response) {
-      is ManageOfferOperationResponse -> convertAsset(response.buyingAsset)
+      is ManageSellOfferOperationResponse -> convertAsset(response.buyingAsset)
+      is ManageBuyOfferOperationResponse -> convertAsset(response.buyingAsset)
       else -> null
     }
   }
 
   private fun getPrice(response: OperationResponse): String? {
     return when (response) {
-      is ManageOfferOperationResponse -> response.price
+      is ManageSellOfferOperationResponse -> response.price
+      is ManageBuyOfferOperationResponse -> response.price
       else -> null
     }
   }

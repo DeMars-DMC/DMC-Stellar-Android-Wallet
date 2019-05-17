@@ -73,7 +73,7 @@ object Horizon : HorizonTasks {
   override fun deleteOffer(id: Long, secretSeed: CharArray, selling: Asset, buying: Asset, price: String, listener: Horizon.OnMarketOfferListener) {
     AsyncTask.execute {
       val server = getServer()
-      val offerOperation = ManageOfferOperation.Builder(selling, buying, "0", price).setOfferId(id).build()
+      val offerOperation = ManageSellOfferOperation.Builder(selling, buying, "0", price).setOfferId(id).build()
       val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
 
       try {
@@ -163,7 +163,7 @@ object Horizon : HorizonTasks {
     AsyncTask.execute {
       try {
         val server = getServer()
-        val managedOfferOperation = ManageOfferOperation.Builder(sellingAsset, buyingAsset, amount, price).build()
+        val managedOfferOperation = ManageSellOfferOperation.Builder(sellingAsset, buyingAsset, amount, price).build()
         val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
         val sourceAccount = server.accounts().account(sourceKeyPair)
         val transaction = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE).addOperation(managedOfferOperation).build()

@@ -62,7 +62,7 @@ class SettingsFragment : BaseFragment() {
     appContext = view.context.applicationContext
     setupUI()
 
-    Firebase.getCurrentUser()?.let { user ->
+    Firebase.getCurrentUser()?.let { _ ->
       Firebase.getUser(userListener)
     }
   }

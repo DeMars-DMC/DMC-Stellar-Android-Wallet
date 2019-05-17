@@ -241,7 +241,7 @@ class CreateUserActivity : AppCompatActivity() {
             .setCancelable(false)
             .setTitle(R.string.thank_you)
             .setMessage(R.string.new_user_message)
-            .setPositiveButton(R.string.proceed_to_wallet) { dialog, which ->
+            .setPositiveButton(R.string.proceed_to_wallet) { dialog, _ ->
               dialog.dismiss()
               setResultAndFinish()
             }.show()

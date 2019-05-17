@@ -275,7 +275,7 @@ class Camera2Activity : AppCompatActivity() {
   ) {
     if (requestCode == REQUEST_CAMERA_PERMISSION) {
       if (grantResults.size != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-        Toast.makeText(this@Camera2Activity, "Permission should be granted", Toast.LENGTH_SHORT).show()
+        onError("Permission should be granted", true)
       }
     } else {
       super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -378,7 +378,7 @@ class Camera2Activity : AppCompatActivity() {
     } catch (e: NullPointerException) {
       // Currently an NPE is thrown when the Camera2API is used but not supported on the
       // device this code runs.f
-      Toast.makeText(this@Camera2Activity, "Camera error", Toast.LENGTH_SHORT).show()
+      onError("Camera error", true)
     }
 
   }
@@ -425,13 +425,14 @@ class Camera2Activity : AppCompatActivity() {
     try {
       // Wait for camera to open - 2.5 seconds is sufficient
       if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
-        throw RuntimeException("Time out waiting to lock camera opening.")
+        onError("Failed to open camera", true)
+        return
       }
       manager.openCamera(cameraId, stateCallback, backgroundHandler)
     } catch (e: CameraAccessException) {
       Timber.e(e.toString())
     } catch (e: InterruptedException) {
-      throw RuntimeException("Interrupted while trying to lock camera opening.", e)
+      onError("Interrupted while trying to lock camera opening.", true)
     }
 
   }
@@ -449,7 +450,7 @@ class Camera2Activity : AppCompatActivity() {
       imageReader?.close()
       imageReader = null
     } catch (e: InterruptedException) {
-      throw RuntimeException("Interrupted while trying to lock camera closing.", e)
+      onError("Interrupted while trying to lock camera closing.", true)
     } finally {
       cameraOpenCloseLock.release()
     }
@@ -530,14 +531,12 @@ class Camera2Activity : AppCompatActivity() {
           }
 
           override fun onConfigureFailed(session: CameraCaptureSession) {
-            Toast.makeText(this@Camera2Activity, "failed", Toast.LENGTH_SHORT).show()
+            onError("Camera configuring failed", true)
           }
         }, null
       )
     } catch (e: Exception) {
-      Toast.makeText(this, "Failed to start camera session, please try again", Toast.LENGTH_LONG).show()
-      Timber.e(e.toString())
-      finish()
+      onError("Failed to start camera session, please try again", true)
     }
 
   }
@@ -900,10 +899,7 @@ class Camera2Activity : AppCompatActivity() {
           setResult(Activity.RESULT_OK)
           finish()
         }, OnFailureListener {
-        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
-        mainHandler.post {
-          hideUploadingView()
-        }
+        onError(it.localizedMessage, false)
       })
     }
   }
@@ -958,6 +954,11 @@ class Camera2Activity : AppCompatActivity() {
 
     retakeButton.visibility = VISIBLE
     sendButton.visibility = VISIBLE
+  }
+
+  private fun onError(message: String, finish: Boolean) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    if (finish) finish()
   }
 
   internal class CompareSizesByArea : Comparator<Size> {

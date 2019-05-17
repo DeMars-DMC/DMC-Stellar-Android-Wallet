@@ -117,8 +117,16 @@ class CameraActivity : AppCompatActivity() {
       }
 
       cameraPreview.setOnClickListener {
-        camera?.autoFocus(null)
+        autoFocus()
       }
+    }
+  }
+
+  private fun autoFocus() {
+    try {
+      camera?.autoFocus(null)
+    } catch (ex:Exception) {
+      // Auto-focus failed for some reason, just ignore
     }
   }
 

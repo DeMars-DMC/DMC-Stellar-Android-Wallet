@@ -280,7 +280,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   override fun onConfirmed(sellingText: String, buyingText: String) {
     proceedWithTrade(sellingText, buyingText,
-      selectedBuyingCurrency.asset!!, selectedSellingCurrency.asset!!)
+      selectedSellingCurrency.asset!!, selectedBuyingCurrency.asset!!)
   }
 
   private fun createSnackBar(text: CharSequence, duration: Int): Snackbar? {

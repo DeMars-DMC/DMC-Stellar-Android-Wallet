@@ -159,7 +159,12 @@ object Horizon : HorizonTasks {
     return null
   }
 
-  override fun getCreateMarketOffer(listener: OnMarketOfferListener, secretSeed: CharArray, sellingAsset: Asset, buyingAsset: Asset, amount: String, price: String) {
+  override fun getCreateMarketOffer(listener: OnMarketOfferListener,
+                                    secretSeed: CharArray,
+                                    sellingAsset: Asset,
+                                    buyingAsset: Asset,
+                                    amount: String,
+                                    price: String) {
     AsyncTask.execute {
       try {
         val server = getServer()
@@ -174,7 +179,7 @@ object Horizon : HorizonTasks {
             listener.onExecuted()
           } else {
             val list = response.extras.resultCodes.operationsResultCodes
-            if (list != null && !list.isEmpty()) {
+            if (list != null && list.isNotEmpty()) {
               listener.onFailed(list[0].toString())
             }
           }
@@ -202,7 +207,7 @@ object Horizon : HorizonTasks {
         error.message?.let {
           listener.onFailed(it)
         } ?: run {
-          listener.onFailed("fail to get the order book")
+          listener.onFailed("Failed to get the order book")
         }
 
       }

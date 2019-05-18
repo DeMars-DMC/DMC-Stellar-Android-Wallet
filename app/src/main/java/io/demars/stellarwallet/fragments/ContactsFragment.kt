@@ -187,10 +187,10 @@ class ContactsFragment : Fragment() {
 
   private fun setInitialStateContacts() {
     setMenuItemsEnable(true)
-    rv_contact_list.visibility = View.GONE
-    empty_view.visibility = View.GONE
-    progress_view.visibility = View.VISIBLE
-    enable_permissions.visibility = View.GONE
+    rv_contact_list?.visibility = View.GONE
+    empty_view?.visibility = View.GONE
+    progress_view?.visibility = View.VISIBLE
+    enable_permissions?.visibility = View.GONE
   }
 
   private fun requestContacts() {
@@ -271,25 +271,25 @@ class ContactsFragment : Fragment() {
 
 
   private fun populateList(list: ArrayList<Contact>, isFilteredList: Boolean = false) {
-    rv_contact_list.adapter = ContactsAdapter(list)
-    when (rv_contact_list.itemDecorationCount) {
-      0 -> rv_contact_list.addItemDecoration(DividerItemDecoration(rv_contact_list.context, DividerItemDecoration.VERTICAL))
-      2 -> rv_contact_list.removeItemDecorationAt(1)
+    rv_contact_list?.adapter = ContactsAdapter(list)
+    when (rv_contact_list?.itemDecorationCount) {
+      0 -> rv_contact_list?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+      2 -> rv_contact_list?.removeItemDecorationAt(1)
     }
-    val item = RecyclerSectionItemDecoration(appContext.resources.getDimension(R.dimen.padding_vertical_double).toInt(), true, getSectionCallback(list))
-    rv_contact_list.addItemDecoration(item)
-    progress_view.visibility = View.GONE
+    val item = RecyclerSectionItemDecoration(resources.getDimension(R.dimen.padding_vertical_double).toInt(), true, getSectionCallback(list))
+    rv_contact_list?.addItemDecoration(item)
+    progress_view?.visibility = View.GONE
     if (list.size == 0) {
       if (isFilteredList) {
-        empty_view.text = getString(R.string.no_results_found)
+        empty_view?.text = getString(R.string.no_results_found)
       } else {
-        empty_view.text = getString(R.string.no_contacts_found)
+        empty_view?.text = getString(R.string.no_contacts_found)
       }
-      empty_view.visibility = View.VISIBLE
-      rv_contact_list.visibility = View.GONE
+      empty_view?.visibility = View.VISIBLE
+      rv_contact_list?.visibility = View.GONE
     } else {
-      empty_view.visibility = View.GONE
-      rv_contact_list.visibility = View.VISIBLE
+      empty_view?.visibility = View.GONE
+      rv_contact_list?.visibility = View.VISIBLE
     }
   }
 

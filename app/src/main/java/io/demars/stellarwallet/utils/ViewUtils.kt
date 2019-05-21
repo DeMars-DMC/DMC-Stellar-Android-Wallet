@@ -61,12 +61,12 @@ object ViewUtils {
   //region Status bar
   @JvmStatic
   fun setTransparentStatusBar(activity: Activity) {
-    if (Build.VERSION.SDK_INT in 19..20) {
-      activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    }
     if (Build.VERSION.SDK_INT >= 19) {
       activity.window.decorView.systemUiVisibility =
         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    }
+    if (Build.VERSION.SDK_INT in 19..20) {
+      activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     }
     if (Build.VERSION.SDK_INT >= 21) {
       activity.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)

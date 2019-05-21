@@ -7,14 +7,12 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.NativeAssetAvailability
 import io.demars.stellarwallet.mvvm.balance.BalanceViewModel
-import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_balance_summary.*
-import kotlinx.android.synthetic.main.activity_send_funds.*
+import kotlinx.android.synthetic.main.activity_balance_summary.toolbar
+import kotlinx.android.synthetic.main.activity_create_user.*
 
 class BalanceSummaryActivity : BasePopupActivity() {
 
@@ -48,6 +46,7 @@ class BalanceSummaryActivity : BasePopupActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
 
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         setupUI()

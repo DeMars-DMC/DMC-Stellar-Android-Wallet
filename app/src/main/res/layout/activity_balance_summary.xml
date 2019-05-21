@@ -8,7 +8,7 @@
     tools:context=".activities.BalanceSummaryActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar_summary"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ToolbarTheme"

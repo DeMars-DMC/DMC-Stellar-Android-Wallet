@@ -5,4 +5,4 @@ package io.demars.stellarwallet.models
  * @constructor Sets all properties of the AvailableBalance
  * @property balance the available balance displayed on WalletFragment
  */
-data class AvailableBalance (var assetCode: String, var balance: String)
+data class AvailableBalance(var assetCode: String, var issuer:String?, var balance: String)

@@ -19,5 +19,4 @@ abstract class BasePopupActivity : BaseActivity() {
     }
 
     abstract fun setContent() : Int
-
 }

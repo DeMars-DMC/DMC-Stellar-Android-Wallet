@@ -84,7 +84,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" />
         <activity
-            android:name=".activities.SendActivity"
+            android:name=".activities.PayActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"
             android:theme="@style/AppTheme" />

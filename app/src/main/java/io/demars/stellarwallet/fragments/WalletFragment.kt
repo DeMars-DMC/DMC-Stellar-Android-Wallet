@@ -176,7 +176,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     val time = System.currentTimeMillis()
     val list = WalletHeterogeneousWrapper()
     list.array.add(TotalBalance(WalletState.UPDATING, "Refreshing Wallet", "", "Updating..."))
-    list.array.add(AvailableBalance("XLM", "-1"))
+    list.array.add(AvailableBalance("XLM", null, "-1"))
     list.array.add(Pair("Activity", "Amount"))
     list.hideAvailableBalance()
     val delta = System.currentTimeMillis() - time
@@ -261,8 +261,8 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         activity?.let {
           if (!it.isFinishing && walletRecyclerView != null) {
             if (!qrRendered && viewState != null && qrCode != null) {
-              generateQRCode(viewState.accountId, qrCode, 500)
-              initAdressCopyButton(viewState.accountId)
+              generateQRCode(viewState.accountId!!, qrCode, 500)
+              initAdressCopyButton(viewState.accountId!!)
 
               qrRendered = true
             }
@@ -344,11 +344,14 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       }
     })
     adapter.setOnLearnMoreButtonListener(object : WalletRecyclerViewAdapter.OnLearnMoreButtonListener {
-      override fun onLearnMoreButtonClicked(view: View, position: Int) {
+      override fun onLearnMoreButtonClicked(view: View, assetCode: String, issuer: String?, position: Int) {
         val context = view.context
-        startActivity(Intent(context, BalanceSummaryActivity::class.java))
-        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
-      }
+        if (assetCode == "native" || issuer == null || issuer.isBlank()) {
+          startActivity(BalanceSummaryActivity.newNativeAssetIntent(context))
+        } else {
+          startActivity(BalanceSummaryActivity.newIntent(context, assetCode, issuer))
+        }
+        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay) }
     })
     return adapter
   }
@@ -358,6 +361,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                                  totalAssetBalance: TotalBalance): WalletHeterogeneousWrapper {
     val time = System.currentTimeMillis()
     val list = createListWrapper()
+    list.showAvailableBalance(availableBalance)
     list.updateTotalBalance(totalAssetBalance)
     list.updateAvailableBalance(availableBalance)
     list.updateOperationsList(activeAsset, operations)

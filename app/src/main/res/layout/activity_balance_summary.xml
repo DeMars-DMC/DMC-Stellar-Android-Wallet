@@ -73,7 +73,7 @@
         android:layout_margin="@dimen/activity_vertical_margin"
         android:stretchColumns="0,1,2">
 
-        <TableRow>
+        <TableRow android:id="@+id/row1">
 
             <TextView
                 style="@style/NavTitleText"
@@ -102,7 +102,7 @@
                 android:textSize="@dimen/text_size" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:id="@+id/row2">
 
             <TextView
                 style="@style/RegularText"
@@ -128,7 +128,7 @@
                 android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:id="@+id/row3">
 
             <TextView
                 style="@style/RegularText"
@@ -154,7 +154,7 @@
                 android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:id="@+id/row4">
 
             <TextView
                 style="@style/RegularText"
@@ -180,7 +180,7 @@
                 android:padding="@dimen/activity_vertical_margin" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:id="@+id/row5">
 
             <TextView
                 style="@style/RegularText"
@@ -207,31 +207,27 @@
         </TableRow>
 
         <TableRow>
-
-            <TextView
-                style="@style/NavTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/activity_vertical_margin"
-                android:text="@string/minimum_balance"
-                android:textSize="@dimen/text_size_small" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:text="@string/posted_for_trade"
+                style="@style/RegularText"
                 android:padding="@dimen/activity_vertical_margin" />
-
             <TextView
-                android:id="@+id/minimumBalanceTextView"
-                style="@style/NavTitleText"
+                android:id="@+id/tradedAmountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/activity_vertical_margin"
-                android:textSize="@dimen/text_size_small" />
+                style="@style/RegularText" />
+            <TextView
+                android:id="@+id/tradedXLMTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_vertical_margin"
+                style="@style/RegularText" />
         </TableRow>
-
     </TableLayout>
 
 </LinearLayout>

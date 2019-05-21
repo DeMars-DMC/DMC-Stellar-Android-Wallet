@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.activities.SendActivity
+import io.demars.stellarwallet.activities.PayActivity
 import io.demars.stellarwallet.activities.StellarAddressActivity
 import io.demars.stellarwallet.models.Contact
 import com.github.abdularis.civ.CircleImageView
@@ -69,7 +69,7 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         button.setOnClickListener {
             val context = it.context
             stellarAddress?.let { that ->
-                context.startActivity(SendActivity.newIntent(context, that))
+                context.startActivity(PayActivity.newIntent(context, that))
             } ?: run {
                 context.startActivity(StellarAddressActivity.updateContact(context, contact))
             }

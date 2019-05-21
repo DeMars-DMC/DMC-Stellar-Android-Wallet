@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.utils.ViewUtils
 
 @Suppress("DEPRECATION")
 class CameraActivity : AppCompatActivity() {
@@ -106,7 +107,12 @@ class CameraActivity : AppCompatActivity() {
 
       imagePreview.setImageDrawable(null)
       cameraPreview.visibility = VISIBLE
-      camera?.startPreview()
+
+      try {
+        camera?.startPreview()
+      } catch (ex: Exception) {
+        onError("Failed to start Camera preview, please try again", true)
+      }
 
       cameraButton.setOnClickListener {
         takePicture()
@@ -154,7 +160,7 @@ class CameraActivity : AppCompatActivity() {
           setResult(Activity.RESULT_OK)
           finish()
         }, OnFailureListener {
-        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+        onError(it.localizedMessage, false)
         hideUploadingView()
       })
     }
@@ -322,5 +328,10 @@ class CameraActivity : AppCompatActivity() {
 
     retakeButton.visibility = VISIBLE
     sendButton.visibility = VISIBLE
+  }
+
+  private fun onError(message: String, finish: Boolean) {
+    ViewUtils.showToast(this, message)
+    if (finish) finish()
   }
 }

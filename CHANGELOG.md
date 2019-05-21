@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Internal-2.0.2] 2018-12-14
 ## Fixed
 - Re-fix: Market trade amount in second text field is not a dark enough font color
-- Added generic error for all horizon exceptions sending funds on SendActivity.kt  
+- Added generic error for all horizon exceptions sending funds on PayActivity.kt
 
 ## [Internal-2.0.1] 2018-12-14
 ## Fixed

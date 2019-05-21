@@ -31,15 +31,8 @@ class WalletHeterogeneousWrapper {
 
   fun updateAvailableBalance(balance: AvailableBalance) {
     if (WalletApplication.userSession.getSessionAsset().assetCode == Constants.LUMENS_ASSET_TYPE) {
-      if (availableBalanceOffset != 0) {
-        availableBalanceOffset = 0
-        array.add(AVAILABLE_INDEX, balance)
-      } else {
-        array.removeAt(AVAILABLE_INDEX)
-        array.add(AVAILABLE_INDEX, balance)
-      }
-    } else {
-      hideAvailableBalance()
+      array.removeAt(AVAILABLE_INDEX)
+      array.add(AVAILABLE_INDEX, balance)
     }
   }
 
@@ -77,6 +70,13 @@ class WalletHeterogeneousWrapper {
     if (availableBalanceOffset == 0) {
       array.removeAt(AVAILABLE_INDEX)
       availableBalanceOffset = 1
+    }
+  }
+
+  fun showAvailableBalance(balance: AvailableBalance) {
+    if (availableBalanceOffset != 0) {
+      availableBalanceOffset = 0
+      array.add(AVAILABLE_INDEX, balance)
     }
   }
 
@@ -167,7 +167,8 @@ class WalletHeterogeneousWrapper {
         }
         is ManageBuyOfferOperationResponse -> {
         }
-        else -> {}
+        else -> {
+        }
       }
     }
 

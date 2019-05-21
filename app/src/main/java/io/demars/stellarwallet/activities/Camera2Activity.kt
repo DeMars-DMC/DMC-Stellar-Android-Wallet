@@ -900,6 +900,7 @@ class Camera2Activity : AppCompatActivity() {
           finish()
         }, OnFailureListener {
         onError(it.localizedMessage, false)
+        hideUploadingView()
       })
     }
   }

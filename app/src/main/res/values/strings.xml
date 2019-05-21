@@ -223,6 +223,7 @@
     <!--Operation Result Codes-->
     <string name="technical_op_underfunded">op_underfunded</string>
     <string name="readable_op_underfunded">Payment is underfunded</string>
+    <string name="readable_op_underfunded_trade">Unable to execute trade, as open bids or offers exist. Please cancel any open bids or offers and re-execute.</string>
 
     <string name="technical_op_low_reserve">op_low_reserve</string>
     <string name="readable_op_low_reserve">You don\'t have enough Lumens to add another trust line</string>
@@ -357,4 +358,5 @@
     <string name="confirm_trade_title">Please confirm the trade</string>
     <string name="selling">Selling</string>
     <string name="receiving">Receiving</string>
+    <string name="posted_for_trade">Posted for trade</string>
 </resources>

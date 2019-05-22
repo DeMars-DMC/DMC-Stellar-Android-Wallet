@@ -53,8 +53,8 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
     }
 
     operationsRepository.loadList(false).observeForever {
-      Timber.d("effects repository, observer triggered")
-      if (it != null) {
+      Timber.d("operations repository, observer triggered")
+      if (it != null && operationsListResponse?.size != it.size) {
         operationsListResponse = it
         state = WalletState.ACTIVE
         notifyViewState()
@@ -62,26 +62,23 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
     }
 
     tradesRepository.loadList(false).observeForever {
-      Timber.d("effects repository, observer triggered")
-      if (it != null) {
+      Timber.d("trades repository, observer triggered")
+      if (it != null && tradesListResponse?.size != it.size) {
         tradesListResponse = it
-        if (stellarAccount != null && operationsListResponse != null) {
-          state = WalletState.ACTIVE
-          notifyViewState()
-        }
+        state = WalletState.ACTIVE
+        notifyViewState()
       }
     }
 
     BalanceRepository.loadBalance().observeForever {
       balance = it
-      if (it != null && operationsListResponse != null) {
+      if (it != null) {
         Timber.d("new balance received")
         state = WalletState.ACTIVE
         notifyViewState()
       }
-      Timber.d("new balance --> Refreshing Effects")
-      //TODO: PROBABLY THIS WHY TIMELINE IS NOT UPDATING
-//      EffectsRepository.getInstance().forceRefresh()
+      OperationsRepository.getInstance().forceRefresh()
+      TradesRepository.getInstance().forceRefresh()
     }
   }
 
@@ -97,6 +94,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
     if (forceRefresh) {
       forceRefresh()
     }
+
     return walletViewState
   }
 
@@ -112,10 +110,8 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
                 || immutableAccount.basicHashCode() != it.stellarAccount.basicHashCode()
                 || state != WalletState.ACTIVE) {
                 stellarAccount = it.stellarAccount
-                if (operationsListResponse != null && tradesListResponse != null) {
-                  state = WalletState.ACTIVE
-                  notifyViewState()
-                }
+                state = WalletState.ACTIVE
+                notifyViewState()
               } else {
                 //let's ignore this response
                 Timber.d("ignoring account response")
@@ -125,15 +121,12 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
               stellarAccount = it.stellarAccount
               state = WalletState.NOT_FUNDED
               notifyViewState()
-              if (!pollingStarted) {
-                startPolling()
-              }
+              startPolling()
             }
             else -> {
               state = WalletState.ERROR
-              if (!pollingStarted) {
-                startPolling()
-              }
+              notifyViewState()
+              startPolling()
             }
           }
         }
@@ -143,7 +136,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
 
   private fun notifyViewState() {
     Timber.d("Notifying state {$state}")
-    stellarAccount?.let {
+    stellarAccount?.let { account ->
       when (state) {
         WalletState.ACTIVE -> {
           balance?.let {
@@ -156,14 +149,14 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
         }
         WalletState.ERROR -> {
           walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.ERROR,
-            it.getAccountId(), sessionAsset.assetCode,
+            account.getAccountId(), sessionAsset.assetCode,
             null, null, null, null))
         }
         WalletState.NOT_FUNDED -> {
           val availableBalance = AvailableBalance("XLM", null, DEFAULT_ACCOUNT_BALANCE)
           val totalAvailableBalance = TotalBalance(state, "Lumens", "XLM", DEFAULT_ACCOUNT_BALANCE)
           walletViewState.postValue(WalletViewState(WalletViewState.AccountStatus.UNFUNDED,
-            it.getAccountId(), sessionAsset.assetCode, availableBalance, totalAvailableBalance,
+            account.getAccountId(), sessionAsset.assetCode, availableBalance, totalAvailableBalance,
             null, null))
         }
         else -> {
@@ -188,12 +181,15 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
     return TotalBalance(WalletState.ACTIVE, sessionAsset.assetName, sessionAsset.assetCode, assetBalance)
   }
 
-
   fun moveToForeGround() {
     startPolling()
   }
 
   fun moveToBackground() {
+    stopPolling()
+  }
+
+  private fun stopPolling() {
     Timber.d("disabling polling")
     synchronized(this) {
       handler.removeCallbacks(runnableCode)

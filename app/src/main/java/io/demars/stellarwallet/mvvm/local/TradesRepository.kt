@@ -34,7 +34,7 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
       return
     }
     isBusy = true
-    fetchTransactionsList(true)
+    fetchTradesList(true)
   }
 
   fun clear() {
@@ -50,9 +50,9 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
    * Makes a call to the webservice. Keep it private since the view/viewModel should be 100% abstracted
    * from the data sources implementation.
    */
-  private fun fetchTransactionsList(notifyFirsTime: Boolean = false) {
+  private fun fetchTradesList(notifyFirsTime: Boolean = false) {
     var cursor = ""
-    if (!tradesList.isEmpty()) {
+    if (tradesList.isNotEmpty()) {
       cursor = tradesList.last().pagingToken
       if (notifyFirsTime) {
         notifyLiveData(tradesList)
@@ -67,13 +67,13 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
       override fun onLoadTrades(result: ArrayList<TradeResponse>?) {
         Timber.d("fetched ${result?.size} trades from cursor $cursor")
         if (result != null) {
-          if (!result.isEmpty()) {
+          if (result.isNotEmpty()) {
             //is the first time let's notify the ui
             val isFirstTime = tradesList.isEmpty()
             tradesList.addAll(result)
             if (isFirstTime) notifyLiveData(tradesList)
             Timber.d("recursive call to getTrades")
-            fetchTransactionsList()
+            fetchTradesList()
           } else {
             if (cursor != currentCursor) {
               if (ENABLE_STREAM) {

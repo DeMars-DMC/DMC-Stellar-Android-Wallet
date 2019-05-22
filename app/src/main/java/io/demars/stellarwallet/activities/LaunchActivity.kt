@@ -385,11 +385,13 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (resultCode == Activity.RESULT_OK) {
-      if (requestCode == VERIFY_PIN_REQUEST) {
+    if (requestCode == VERIFY_PIN_REQUEST) {
+      if (resultCode == Activity.RESULT_OK) {
         if (GlobalGraphHelper.isExistingWallet()) {
           GlobalGraphHelper.launchWallet(this)
         }
+      } else {
+        finish()
       }
     }
   }

@@ -50,7 +50,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   private var amount: Double = 0.0
   private var address: String = ""
   private var exchange: ExchangeApiModel? = null
-  private var amountAvailable : Double = 0.0
+  private var amountAvailable: Double = 0.0
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_send_funds)
@@ -96,9 +96,9 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   @SuppressLint("SetTextI18n")
   private fun loadBalance() {
     BalanceRepository.loadBalance().observe(this, Observer {
-      if(it!=null) {
+      if (it != null) {
         val asset = it.getActiveAssetAvailability()
-        amountAvailable = asset.totalAvailable-0.0001
+        amountAvailable = asset.totalAvailable - 0.0001
         if (amountAvailable < 0) {
           titleText.text = "< 0.0001"
         } else {
@@ -123,8 +123,6 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     if (requestCode == REQUEST_PIN) {
       if (resultCode == Activity.RESULT_OK) {
         sendPayment()
-      } else {
-        finish()
       }
     }
   }

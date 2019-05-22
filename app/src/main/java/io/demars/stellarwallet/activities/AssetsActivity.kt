@@ -104,7 +104,7 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
                                              supportedAssetsMap: Map<String, SupportedAsset>): List<SupportedAsset> {
 
     val lumenSupportedAsset = SupportedAsset(0, Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
-      "", "", Constants.LUMENS_ASSET_NAME, "", "",
+      "", "", Constants.LUMENS_ASSET_CODE, "", "",
       "0", SupportedAssetType.ADDED, null)
 
     val list = ArrayList<SupportedAsset>()
@@ -153,16 +153,11 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
       Constants.DMC_ASSET_ISSUER, "100000000000",
       Constants.DMC_ASSET_NAME, "", "", null, null, null)
 
-    val eurt = SupportedAsset(1, Constants.EURT_ASSET_TYPE, Constants.EURT_IMAGE_RES,
-      Constants.EURT_ASSET_ISSUER, "100000000000",
-      Constants.EURT_ASSET_NAME, "", "", null, null, null)
-
-    val zar = SupportedAsset(2, Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
+    val zar = SupportedAsset(1, Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
       Constants.ZAR_ASSET_ISSUER, "100000000000",
       Constants.ZAR_ASSET_NAME, "", "", null, null, null)
 
     map[Constants.DMC_ASSET_TYPE] = dmc
-    map[Constants.EURT_ASSET_TYPE] = eurt
     map[Constants.ZAR_ASSET_TYPE] = zar
 
     updateAdapter()

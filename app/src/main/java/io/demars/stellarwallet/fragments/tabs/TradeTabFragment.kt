@@ -157,7 +157,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       availableForTrading = applyNativeFees(holding)
     }
 
-    var string = String.format(getString(R.string.holdings_amount),
+    val string = String.format(getString(R.string.holdings_amount),
       decimalFormat.format(availableForTrading),
       selectedSellingCurrency.label)
 

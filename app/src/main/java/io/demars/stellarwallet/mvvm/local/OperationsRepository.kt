@@ -18,10 +18,11 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
   private var eventSource: SSEStream<OperationResponse>? = null
   private var isBusy = false
   private var currentCursor: String = ""
+
   /**
-   * Returns an observable for ALL the effects table changes
+   * Returns an observable for ALL the operations table changes
    */
-  fun loadList(forceRefresh: Boolean): LiveData<ArrayList<Pair<OperationResponse, String?>>> {
+  fun loadList(forceRefresh: Boolean = false): LiveData<ArrayList<Pair<OperationResponse, String?>>> {
     if (forceRefresh || operationsList.isEmpty()) {
       forceRefresh()
     }
@@ -30,7 +31,7 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
 
   @Synchronized
   fun forceRefresh() {
-    Timber.d("Force refresh effects")
+    Timber.d("Force refresh operations")
     if (isBusy) {
       Timber.d("ignoring force refresh, it is busy.")
       return
@@ -54,7 +55,7 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
    */
   private fun fetchOperationsList(notifyFirsTime: Boolean = false) {
     var cursor = ""
-    if (!operationsList.isEmpty()) {
+    if (operationsList.isNotEmpty()) {
       cursor = operationsList.last().first.pagingToken
       if (notifyFirsTime) {
         notifyLiveData(operationsList)
@@ -67,14 +68,14 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
       }
 
       override fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?) {
-        Timber.d("fetched ${result?.size} effects from cursor $cursor")
+        Timber.d("fetched ${result?.size} operations from cursor $cursor")
         if (result != null) {
-          if (!result.isEmpty()) {
+          if (result.isNotEmpty()) {
             //is the first time let's notify the ui
             val isFirstTime = operationsList.isEmpty()
             operationsList.addAll(result)
             if (isFirstTime) notifyLiveData(operationsList)
-            Timber.d("recursive call to getEffects")
+            Timber.d("recursive call to getOperations")
             fetchOperationsList()
           } else {
             if (cursor != currentCursor) {

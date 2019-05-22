@@ -113,8 +113,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
 
         viewHolder.assetButton.visibility = View.VISIBLE
         viewHolder.assetName.text = asset.name
-        viewHolder.assetAmount.text = String.format(context.getString(R.string.balance_template),
-                StringFormat.truncateDecimalPlaces(asset.amount), asset.code.toUpperCase())
+        viewHolder.assetAmount.text = StringFormat.truncateDecimalPlaces(asset.amount)
 
         if (asset.image != 0) {
             viewHolder.defaultImage.visibility = View.GONE
@@ -141,15 +140,6 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
                   viewHolder.assetImage.visibility = View.VISIBLE
                   Picasso.get()
                     .load(Constants.DMC_IMAGE_RES)
-                    .resize(256,256)
-                    .onlyScaleDown()
-                    .into(viewHolder.assetImage)
-              }
-              asset.code.equals(Constants.EURT_ASSET_TYPE, true) -> {
-                  viewHolder.defaultImage.visibility = View.GONE
-                  viewHolder.assetImage.visibility = View.VISIBLE
-                  Picasso.get()
-                    .load(Constants.EURT_IMAGE_RES)
                     .resize(256,256)
                     .onlyScaleDown()
                     .into(viewHolder.assetImage)

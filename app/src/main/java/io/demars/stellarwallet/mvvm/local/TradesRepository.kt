@@ -19,7 +19,7 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
   /**
    * Returns an observable for ALL the trades table changes
    */
-  fun loadList(forceRefresh: Boolean): LiveData<ArrayList<TradeResponse>> {
+  fun loadList(forceRefresh: Boolean = false): LiveData<ArrayList<TradeResponse>> {
     if (forceRefresh || tradesList.isEmpty()) {
       forceRefresh()
     }

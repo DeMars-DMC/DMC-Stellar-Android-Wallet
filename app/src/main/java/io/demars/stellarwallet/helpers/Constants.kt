@@ -17,7 +17,6 @@ class Constants {
 
     const val LUMENS_ASSET_TYPE = "native"
     const val LUMENS_ASSET_CODE = "XLM"
-    const val LUMENS_ASSET_NAME = "Stellar Lumens"
     const val LUMENS_IMAGE_RES = R.drawable.ic_logo_stellar
 
     const val ZAR_ASSET_TYPE = "ZAR"
@@ -29,11 +28,6 @@ class Constants {
     const val DMC_ASSET_NAME = "DéMars Coins"
     const val DMC_ASSET_ISSUER = "GALRZBMCK47XLHQQXQSPCNJ375NGB6LP6RCBIGPXQAWIE2A4UCDTGQ52"
     const val DMC_IMAGE_RES = R.drawable.ic_main_logo
-
-    const val EURT_ASSET_TYPE = "EURT"
-    const val EURT_ASSET_NAME = "Euro"
-    const val EURT_ASSET_ISSUER = "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
-    const val EURT_IMAGE_RES = R.drawable.ic_logo_eurt
 
     // Maximum double representation in string ((2^63)-1)/(10^7)
     const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"
@@ -47,7 +41,6 @@ class Constants {
       LUMENS_ASSET_CODE -> LUMENS_IMAGE_RES
       ZAR_ASSET_TYPE -> ZAR_IMAGE_RES
       DMC_ASSET_TYPE -> DMC_IMAGE_RES
-      EURT_ASSET_TYPE -> EURT_IMAGE_RES
       else -> 0
     }
   }

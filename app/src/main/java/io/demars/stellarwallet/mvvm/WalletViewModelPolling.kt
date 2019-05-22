@@ -52,7 +52,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
       }
     }
 
-    operationsRepository.loadList(false).observeForever {
+    operationsRepository.loadList().observeForever {
       Timber.d("operations repository, observer triggered")
       if (it != null && operationsListResponse?.size != it.size) {
         operationsListResponse = it
@@ -61,7 +61,7 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
       }
     }
 
-    tradesRepository.loadList(false).observeForever {
+    tradesRepository.loadList().observeForever {
       Timber.d("trades repository, observer triggered")
       if (it != null && tradesListResponse?.size != it.size) {
         tradesListResponse = it

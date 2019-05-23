@@ -11,7 +11,7 @@ import io.demars.stellarwallet.interfaces.OnRefreshOrderBookListener
 import io.demars.stellarwallet.interfaces.OnTradeCurrenciesChanged
 import io.demars.stellarwallet.interfaces.OnUpdateOrderBook
 import io.demars.stellarwallet.interfaces.OnUpdateTradeTab
-import io.demars.stellarwallet.models.AssetUtil
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
@@ -56,8 +56,8 @@ class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBoo
   }
 
   override fun onCurrencyChange(selling: SelectionModel, buying: SelectionModel) {
-    currentSell = AssetUtil.toDataAssetFrom(selling)
-    currentBuy = AssetUtil.toDataAssetFrom(buying)
+    currentSell = AssetUtils.toDataAssetFrom(selling)
+    currentBuy = AssetUtils.toDataAssetFrom(buying)
     onRefreshOrderBook()
   }
 

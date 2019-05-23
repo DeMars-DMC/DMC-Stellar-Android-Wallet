@@ -7,12 +7,12 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.demars.stellarwallet.R
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.NativeAssetAvailability
 import io.demars.stellarwallet.mvvm.balance.BalanceViewModel
 import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_balance_summary.*
 import kotlinx.android.synthetic.main.activity_balance_summary.toolbar
-import kotlinx.android.synthetic.main.activity_create_user.*
 
 class BalanceSummaryActivity : BasePopupActivity() {
 
@@ -68,9 +68,10 @@ class BalanceSummaryActivity : BasePopupActivity() {
                 } else {
                     assetCode?.let{ asset -> issuer?.let { issuer ->
                         val assetAv = it.getAssetAvailability(asset, issuer)
-                        totalBalanceTextView.text = StringFormat.truncateDecimalPlaces(assetAv.total.toString())
-                        availableBalanceTextView.text = StringFormat.truncateDecimalPlaces(assetAv.totalAvailable.toString())
-                        tradedXLMTextView.text = StringFormat.truncateDecimalPlaces(assetAv.postedForTradeAmount.toString())
+                        val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+                        totalBalanceTextView.text = StringFormat.truncateDecimalPlaces(assetAv.total.toString(), decimalPlaces)
+                        availableBalanceTextView.text = StringFormat.truncateDecimalPlaces(assetAv.totalAvailable.toString(), decimalPlaces)
+                        tradedXLMTextView.text = StringFormat.truncateDecimalPlaces(assetAv.postedForTradeAmount.toString(), decimalPlaces)
                     }}
 
                     tradedAmountTextView.text = "-"
@@ -85,8 +86,8 @@ class BalanceSummaryActivity : BasePopupActivity() {
     }
 
     private fun renderNativeAsset(native : NativeAssetAvailability){
-        totalBalanceTextView.text = StringFormat.truncateDecimalPlaces(native.total.toString())
-        availableBalanceTextView.text = StringFormat.truncateDecimalPlaces(native.totalAvailable.toString())
+        totalBalanceTextView.text = StringFormat.truncateDecimalPlaces(native.total.toString(), 7)
+        availableBalanceTextView.text = StringFormat.truncateDecimalPlaces(native.totalAvailable.toString(), 7)
 
         baseReserveAmountTextView.text = 1.toString()
         baseReserveXLMTextView.text = native.baseAmount.toString()

@@ -131,8 +131,8 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun updateTradingCurrencies(sellingModel: SelectionModel, buyingModel: SelectionModel) {
-        val selling =  AssetUtil.toDataAssetFrom(sellingModel)
-        val buying = AssetUtil.toDataAssetFrom(buyingModel)
+        val selling =  AssetUtils.toDataAssetFrom(sellingModel)
+        val buying = AssetUtils.toDataAssetFrom(buyingModel)
 
         buyingAsset = buying
         sellingAsset = selling

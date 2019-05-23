@@ -214,7 +214,7 @@ class WalletManagerActivity : AppCompatActivity() {
         finish()
     }
     private fun getPinFromKeyStore() : String {
-        return KeyStoreWrapper(applicationContext).getAliases().first()
+        return KeyStoreWrapper(applicationContext).getAliases().firstOrNull() ?: ""
     }
 
     private fun generateWallet(data:Intent?, secret: String) : Boolean {

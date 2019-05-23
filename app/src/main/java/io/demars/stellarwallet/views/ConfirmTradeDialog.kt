@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.models.AssetUtils
 
 class ConfirmTradeDialog(context: Context,
                          private val sellingText: String,
@@ -25,8 +25,8 @@ class ConfirmTradeDialog(context: Context,
     findViewById<TextView>(R.id.sellingCode)?.text = sellingCode
     findViewById<TextView>(R.id.buyingCode)?.text = buyingCode
 
-    findViewById<ImageView>(R.id.sellingLogo)?.setImageResource(Constants.getLogo(sellingCode))
-    findViewById<ImageView>(R.id.buyingLogo)?.setImageResource(Constants.getLogo(buyingCode))
+    findViewById<ImageView>(R.id.sellingLogo)?.setImageResource(AssetUtils.getLogo(sellingCode))
+    findViewById<ImageView>(R.id.buyingLogo)?.setImageResource(AssetUtils.getLogo(buyingCode))
 
     findViewById<Button>(R.id.negativeButton)?.setOnClickListener {
       dismiss()

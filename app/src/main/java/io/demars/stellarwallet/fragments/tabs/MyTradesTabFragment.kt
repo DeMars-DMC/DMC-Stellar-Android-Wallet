@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.MyOffersAdapter
 import io.demars.stellarwallet.interfaces.OnDeleteRequest
-import io.demars.stellarwallet.models.AssetUtil
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.MyOffer
 import io.demars.stellarwallet.remote.Horizon
@@ -72,9 +72,9 @@ class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
                 offerResponses = offers
                 myOffers.clear()
                 offers.forEach {
-                    val buyingCode : String = AssetUtil.getCode(it.buying)!!
+                    val buyingCode : String = AssetUtils.getCode(it.buying)!!
                     val currencyBuy = Currency(1, buyingCode, "$buyingCode COIN", 0.0, null)
-                    val sellingCode : String = AssetUtil.getCode(it.selling)!!
+                    val sellingCode : String = AssetUtils.getCode(it.selling)!!
                     val currencySelling = Currency(2, sellingCode, "$sellingCode COIN", 0.0, null)
                     myOffers.add(MyOffer(it.id.toInt(), Date(), currencySelling, currencyBuy, it.amount.toFloat(), it.amount.toFloat() * it.price.toFloat()))
                     id++

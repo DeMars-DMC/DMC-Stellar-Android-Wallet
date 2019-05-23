@@ -16,9 +16,9 @@ class StringFormat {
       return formatter.format(Instant.parse(str))
     }
 
-    fun truncateDecimalPlaces(string: String?): String =
+    fun truncateDecimalPlaces(string: String?, places: Int): String =
       if (string == null) Constants.DEFAULT_ACCOUNT_BALANCE
-      else String.format(Locale.ENGLISH, "%.4f", string.toDouble())
+      else String.format(Locale.ENGLISH, "%.${places}f", string.toDouble())
 
     /**
      * Calculate the number of decimals of a string.

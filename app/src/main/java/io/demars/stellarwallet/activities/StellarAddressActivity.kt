@@ -20,6 +20,7 @@ import io.demars.stellarwallet.interfaces.ContactsRepository.ContactOperationSta
 import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import com.google.zxing.integration.android.IntentIntegrator
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.mvvm.balance.BalanceRepository
 import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_stellar_address.*
@@ -147,11 +148,11 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
       if (it != null) {
         val asset = it.getActiveAssetAvailability()
         val amount = asset.totalAvailable - 0.0001
-        if (amount < 0) {
-          titleBalance.text = "< 0.0001"
-        } else {
-          titleBalance.text = "${StringFormat.truncateDecimalPlaces(amount.toString())} ${asset.assetCode}"
-        }
+        val decimalPlaces = AssetUtils.getDecimalPlaces(asset.assetCode)
+
+        titleBalance.text = "${StringFormat.truncateDecimalPlaces(if (amount < 0) "0.00"
+        else amount.toString(), decimalPlaces)} ${asset.assetCode}"
+
       }
     })
   }

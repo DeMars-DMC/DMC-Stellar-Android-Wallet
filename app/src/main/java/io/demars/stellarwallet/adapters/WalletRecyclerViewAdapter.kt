@@ -38,7 +38,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
   }
 
   interface OnLearnMoreButtonListener {
-    fun onLearnMoreButtonClicked(view : View, assetCode:String, issuer:String?, position : Int)
+    fun onLearnMoreButtonClicked(view: View, assetCode: String, issuer: String?, position: Int)
   }
 
   enum class TransactionViewType(val value: Int) {
@@ -243,13 +243,12 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     }
   }
 
-  private fun configureAvailableBalanceViewHolder(viewHolder : AvailableBalanceViewHolder, position : Int) {
+  private fun configureAvailableBalanceViewHolder(viewHolder: AvailableBalanceViewHolder, position: Int) {
     val availableBalance = items!![position] as AvailableBalance
     @SuppressLint("SetTextI18n")
     viewHolder.balance.text = "${availableBalance.balance} ${getVisibleAssetCode(availableBalance.assetCode)}"
     viewHolder.learnMoreButton.setOnClickListener { view ->
-      onLearnMoreListener?.
-        onLearnMoreButtonClicked(view, availableBalance.assetCode, availableBalance.issuer, position)
+      onLearnMoreListener?.onLearnMoreButtonClicked(view, availableBalance.assetCode, availableBalance.issuer, position)
     }
   }
 
@@ -267,11 +266,11 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.amountTextView.text = pair.second.toString()
   }
 
-  private fun formatNumber4Decimals(amount: String?): String? {
+  private fun formatNumber4Decimals(amount: String?, asset: String): String? {
     if (amount == null) return "--"
-    val displayAmount = truncateDecimalPlaces(amount)
+    val displayAmount = truncateDecimalPlaces(amount, AssetUtils.getDecimalPlaces(asset))
     if (displayAmount.toFloat() == 0f) {
-      return "< 0.0001"
+      return "< 0.0001000"
     }
     return displayAmount
   }
@@ -292,7 +291,8 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
   private fun configureAccountEffectViewHolder(viewHolder: OperationViewHolder, position: Int) {
     val transaction = items!![position] as AccountEffect
 
-    viewHolder.amount.text = formatNumber4Decimals(transaction.amount)
+    viewHolder.amount.text = formatNumber4Decimals(transaction.amount,
+      transaction.assetCode ?: "XLM")
     viewHolder.date.text = getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
@@ -343,17 +343,19 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
       StringFormat.formatAssetCode(trade.soldAsset), StringFormat.formatAssetCode(trade.boughtAsset))
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     if (WalletApplication.userSession.getSessionAsset().assetCode == trade.boughtAsset) {
-      viewHolder.amount.text = truncateDecimalPlaces(trade.boughtAmount)
+      viewHolder.amount.text = truncateDecimalPlaces(trade.boughtAmount,
+        AssetUtils.getDecimalPlaces(trade.boughtAsset))
     } else {
       viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
-        truncateDecimalPlaces(trade.soldAmount))
+        truncateDecimalPlaces(trade.soldAmount,
+          AssetUtils.getDecimalPlaces(trade.soldAsset)))
     }
     viewHolder.date.text = getFormattedDateTime(trade.createdAt,
       DateFormat.is24HourFormat(context))
 
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
-    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) View.VISIBLE else View.GONE
-    viewHolder.info.visibility = View.GONE
+    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
+    viewHolder.info.visibility = GONE
   }
 
   @SuppressLint("SetTextI18n")
@@ -385,9 +387,10 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     if (WalletApplication.userSession.getSessionAsset().assetCode == trade.baseAsset) {
       viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
-        truncateDecimalPlaces(trade.baseAmount))
+        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getDecimalPlaces(trade.baseAsset)))
     } else {
-      viewHolder.amount.text = truncateDecimalPlaces(trade.counterAmount)
+      viewHolder.amount.text = truncateDecimalPlaces(trade.counterAmount,
+        AssetUtils.getDecimalPlaces(trade.counterAsset))
     }
     viewHolder.date.text = getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
@@ -405,7 +408,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
     viewHolder.info.visibility = GONE
 
-    viewHolder.amount.text = formatNumber4Decimals(operation.amount)
+    viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset?: "XLM")
     viewHolder.date.text = getFormattedDateTime(operation.createdAt,
       DateFormat.is24HourFormat(context))
 
@@ -448,15 +451,18 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         val amountDouble = operation.amount?.toDouble()
         val priceDouble = operation.price?.toDouble()
         val totalAmount = (amountDouble!! * priceDouble!!).toString()
-        if (WalletApplication.userSession.getSessionAsset().assetCode == operation.asset) {
+        val sessionAsset = WalletApplication.userSession.getSessionAsset().assetCode
+        val decimalPlaces = AssetUtils.getDecimalPlaces(sessionAsset)
+        if (sessionAsset == operation.asset) {
           viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
-            truncateDecimalPlaces(totalAmount))
+            truncateDecimalPlaces(totalAmount, decimalPlaces))
         } else {
-          viewHolder.amount.text = truncateDecimalPlaces(totalAmount)
+          viewHolder.amount.text = truncateDecimalPlaces(totalAmount, decimalPlaces)
         }
 
         viewHolder.info.visibility = VISIBLE
-        viewHolder.info.text = "Amount: ${truncateDecimalPlaces(operation.amount)}\nPrice: ${truncateDecimalPlaces(operation.price)}"
+        viewHolder.info.text = "Amount: ${truncateDecimalPlaces(operation.amount, decimalPlaces)}" +
+          "\nPrice: ${truncateDecimalPlaces(operation.price, decimalPlaces)}"
       }
       Operation.OperationType.PASSIVE_OFFER.value -> {
       }

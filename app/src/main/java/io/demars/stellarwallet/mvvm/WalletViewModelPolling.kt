@@ -167,17 +167,20 @@ class WalletViewModelPolling(application: Application) : AndroidViewModel(applic
   }
 
   private fun getAvailableBalance(balance: BalanceAvailability): AvailableBalance {
-    val totalAvailable = if (sessionAsset.assetCode == "native") {
-      truncateDecimalPlaces(balance.getNativeAssetAvailability().totalAvailable.toString())
+    val assetCode = sessionAsset.assetCode
+    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+    val totalAvailable = if (assetCode == "native") {
+      truncateDecimalPlaces(balance.getNativeAssetAvailability().totalAvailable.toString(), decimalPlaces)
     } else {
-      truncateDecimalPlaces(balance.getAssetAvailability(sessionAsset.assetCode, sessionAsset.assetIssuer).totalAvailable.toString())
+      truncateDecimalPlaces(balance.getAssetAvailability(assetCode, sessionAsset.assetIssuer).totalAvailable.toString(), decimalPlaces)
     }
-    return AvailableBalance(sessionAsset.assetCode, sessionAsset.assetIssuer, totalAvailable)
+    return AvailableBalance(assetCode, sessionAsset.assetIssuer, totalAvailable)
   }
 
   private fun getTotalAssetBalance(): TotalBalance {
     val currAsset = sessionAsset.assetCode
-    val assetBalance = truncateDecimalPlaces(AccountUtils.getTotalBalance(currAsset))
+    val decimalPlaces = AssetUtils.getDecimalPlaces(currAsset)
+    val assetBalance = truncateDecimalPlaces(AccountUtils.getTotalBalance(currAsset), decimalPlaces)
     return TotalBalance(WalletState.ACTIVE, sessionAsset.assetName, sessionAsset.assetCode, assetBalance)
   }
 

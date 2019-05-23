@@ -17,13 +17,10 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.InflationActivity
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.ChangeTrustlineListener
-import io.demars.stellarwallet.models.DefaultAsset
-import io.demars.stellarwallet.models.SessionAssetImpl
-import io.demars.stellarwallet.models.SupportedAsset
-import io.demars.stellarwallet.models.SupportedAssetType
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
+import io.demars.stellarwallet.models.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 
@@ -113,7 +110,8 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
 
         viewHolder.assetButton.visibility = View.VISIBLE
         viewHolder.assetName.text = asset.name
-        viewHolder.assetAmount.text = StringFormat.truncateDecimalPlaces(asset.amount)
+        viewHolder.assetAmount.text = StringFormat.truncateDecimalPlaces(asset.amount,
+          AssetUtils.getDecimalPlaces(asset.code))
 
         if (asset.image != 0) {
             viewHolder.defaultImage.visibility = View.GONE

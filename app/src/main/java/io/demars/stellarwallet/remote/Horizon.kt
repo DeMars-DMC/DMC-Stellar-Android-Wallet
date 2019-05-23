@@ -6,7 +6,7 @@ import android.os.Looper
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.*
-import io.demars.stellarwallet.models.AssetUtil
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.models.Operation
@@ -195,8 +195,8 @@ object Horizon : HorizonTasks {
   override fun getOrderBook(listener: OnOrderBookListener, buyingAsset: DataAsset, sellingAsset: DataAsset) {
     AsyncTask.execute {
       val server = getServer()
-      val buying: Asset = AssetUtil.toAssetFrom(buyingAsset)
-      val selling: Asset = AssetUtil.toAssetFrom(sellingAsset)
+      val buying: Asset = AssetUtils.toAssetFrom(buyingAsset)
+      val selling: Asset = AssetUtils.toAssetFrom(sellingAsset)
 
       try {
         val response = server.orderBook().buyingAsset(buying).sellingAsset(selling).execute()

@@ -1,7 +1,6 @@
 package io.demars.stellarwallet.fragments.tabs
 
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -12,9 +11,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.*
-import io.demars.stellarwallet.models.AssetUtil
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
@@ -23,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_tab_trade.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
-import java.text.DecimalFormat
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -32,6 +29,7 @@ import android.text.style.StyleSpan
 import androidx.lifecycle.Observer
 import io.demars.stellarwallet.models.BalanceAvailability
 import io.demars.stellarwallet.mvvm.balance.BalanceRepository
+import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.views.ConfirmTradeDialog
 
@@ -51,7 +49,6 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   //  private var orderType: OrderType = OrderType.MARKET
   private var isShowingAdvanced = false
   private val ZERO_VALUE = "0.0"
-  private val decimalFormat = DecimalFormat("0.#######")
   private var balance: BalanceAvailability? = null
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_tab_trade, container, false)
@@ -125,7 +122,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
         refreshBalance(selectedSellingCurrency.holdings)
 
         sellingCustomSelector.imageView.setImageResource(
-          Constants.getLogo(selectedSellingCurrency.label))
+          AssetUtils.getLogo(selectedSellingCurrency.label))
 
         resetBuyingCurrencies()
         buyingCurrencies.removeAt(position)
@@ -144,7 +141,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
         selectedBuyingCurrency = buyingCurrencies[position]
 
         buyingCustomSelector.imageView.setImageResource(
-          Constants.getLogo(selectedBuyingCurrency.label))
+          AssetUtils.getLogo(selectedBuyingCurrency.label))
 
         onSelectorChanged()
       }
@@ -157,9 +154,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       availableForTrading = applyNativeFees(holding)
     }
 
-    val string = String.format(getString(R.string.holdings_amount),
-      decimalFormat.format(availableForTrading),
-      selectedSellingCurrency.label)
+    val assetCode = selectedSellingCurrency.label
+    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+    val string = String.format(getString(R.string.holdings_amount), StringFormat.truncateDecimalPlaces(
+        availableForTrading.toString(), decimalPlaces), assetCode)
 
     holdings.text = string
 
@@ -167,10 +165,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
     val hasHoldings = holdingsAmount > 0.0
 
-    holdings.text = String.format(getString(R.string.holdings_amount),
-      decimalFormat.format(holdingsAmount),
-      selectedSellingCurrency.label)
-
+    holdings.text = string
     all.visibility = if (hasHoldings) View.VISIBLE else View.GONE
     sellingCustomSelector.editText.isEnabled = hasHoldings
     buyingCustomSelector.editText.isEnabled = false
@@ -241,7 +236,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     buyingCustomSelector.editText.isEnabled = true
 
     if (sellingString.replace(",", ".").toDouble() > holdingsAmount) {
-      sellingCustomSelector.editText.setText(holdingsAmount.toString())
+      sellingCustomSelector.editText.setText(
+        StringFormat.truncateDecimalPlaces(holdingsAmount.toString(),
+          AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
     }
 
     if (latestBid != null) {
@@ -250,7 +247,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       if (value != null && price != null) {
         val floatValue: Float = value.toFloat()
         val floatPrice: Float = price.toFloat()
-        val stringValue = decimalFormat.format(floatValue * floatPrice)
+        val stringValue = StringFormat.truncateDecimalPlaces((floatValue * floatPrice).toString(),
+          AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label))
         buyingCustomSelector.editText.setText(stringValue)
       }
     }
@@ -310,11 +308,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   override fun onClick(view: View) {
     when (view.id) {
-      R.id.tenth -> sellingCustomSelector.editText.setText(decimalFormat.format(0.1 * holdingsAmount).toString())
-      R.id.quarter -> sellingCustomSelector.editText.setText(decimalFormat.format(0.25 * holdingsAmount).toString())
-      R.id.half -> sellingCustomSelector.editText.setText(decimalFormat.format(0.5 * holdingsAmount).toString())
-      R.id.threeQuarters -> sellingCustomSelector.editText.setText(decimalFormat.format(0.75 * holdingsAmount).toString())
-      R.id.all -> sellingCustomSelector.editText.setText(decimalFormat.format(holdingsAmount))
+      R.id.all -> sellingCustomSelector.editText.setText(
+        StringFormat.truncateDecimalPlaces(holdingsAmount.toString(),
+          AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
       R.id.placeTrade -> onPlaceTrade()
     }
   }
@@ -367,8 +363,11 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     val sellingAmountFormatted: String
     val priceFormatted: String
     try {
-      sellingAmountFormatted = decimalFormat.format(sellingAmount.toDouble())
-      priceFormatted = decimalFormat.format(buyingAmount.toDouble() / sellingAmount.toDouble())
+      sellingAmountFormatted = StringFormat.truncateDecimalPlaces(sellingAmount,
+        AssetUtils.getDecimalPlaces(selectedSellingCurrency.label))
+      val priceString = (buyingAmount.toDouble() / sellingAmount.toDouble()).toString()
+      priceFormatted = StringFormat.truncateDecimalPlaces(priceString,
+        AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label))
     } catch (ex: NumberFormatException) {
       ViewUtils.showToast(activity, "Wrong numbers format")
       return
@@ -423,7 +422,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     balance?.let {
       it.getAllBalances().forEach { that ->
         val currency = if (that.assetCode == "XLM") {
-          native = Currency(i, AssetUtil.NATIVE_ASSET_CODE, "LUMEN", that.totalAvailable.toDouble(), that.asset)
+          native = Currency(i, AssetUtils.NATIVE_ASSET_CODE, "LUMEN", that.totalAvailable.toDouble(), that.asset)
           native as Currency
         } else {
           Currency(i, that.assetCode, that.assetCode, that.totalAvailable.toDouble(), that.asset)

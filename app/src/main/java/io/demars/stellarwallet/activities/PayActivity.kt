@@ -12,12 +12,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.ExchangeApiModel
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.mvvm.balance.BalanceRepository
@@ -37,6 +37,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   companion object {
     private const val MAX_ALLOWED_DECIMALS = 7
     private const val ARG_ADDRESS_DATA = "ARG_ADDRESS_DATA"
+    private const val ARG_DECIMAL_PLACES = "ARG_DECIMAL_PLACES"
     private const val REQUEST_PIN = 0x0
 
     fun newIntent(context: Context, address: String): Intent {
@@ -46,11 +47,15 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     }
   }
 
-  private var amountText: String = ""
-  private var amount: Double = 0.0
+  private var amount = 0.0
+  private var amountAvailable = 0.0
+  private var decimalPlaces = 7
+
   private var address: String = ""
+  private var amountText: String = ""
+
   private var exchange: ExchangeApiModel? = null
-  private var amountAvailable: Double = 0.0
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_send_funds)
@@ -70,6 +75,10 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
     if (intent.hasExtra(ARG_ADDRESS_DATA)) {
       address = intent.getStringExtra(ARG_ADDRESS_DATA)
+    }
+
+    if (intent.hasExtra(ARG_DECIMAL_PLACES)) {
+      decimalPlaces = intent.getIntExtra(ARG_DECIMAL_PLACES, 7)
     }
 
     addressEditText.text = address
@@ -99,11 +108,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
       if (it != null) {
         val asset = it.getActiveAssetAvailability()
         amountAvailable = asset.totalAvailable - 0.0001
-        if (amountAvailable < 0) {
-          titleText.text = "< 0.0001"
-        } else {
-          titleText.text = "${StringFormat.truncateDecimalPlaces(amountAvailable.toString())} ${asset.assetCode}"
-        }
+        decimalPlaces = AssetUtils.getDecimalPlaces(asset.assetCode)
+
+        titleText.text = "${StringFormat.truncateDecimalPlaces(if (amountAvailable < 0) "0.00"
+            else amountAvailable.toString(), decimalPlaces)} ${asset.assetCode}"
+
       }
     })
   }
@@ -178,7 +187,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   private fun showAmount(amount: String) {
     val amountToUse = when {
       amount.isEmpty() -> "0"
-      amount.toDouble() > amountAvailable -> StringFormat.truncateDecimalPlaces(amountAvailable.toString())
+      amount.toDouble() > amountAvailable -> StringFormat.truncateDecimalPlaces(amountAvailable.toString(), decimalPlaces)
       else -> amount
     }
 

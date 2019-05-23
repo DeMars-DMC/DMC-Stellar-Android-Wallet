@@ -363,19 +363,19 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     val transaction = items!![position] as Transaction
 
     viewHolder.transactionType.text = "Transaction"
-    viewHolder.amount.text = transaction.amount
-//      formatNumber4Decimals(transaction.amount)
+    viewHolder.amount.text = truncateDecimalPlaces(transaction.amount,
+      AssetUtils.getDecimalPlaces(transaction.assetCode ?: "XLM"))
     viewHolder.date.text = getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
     if (transaction.memo != null) {
-      viewHolder.info.visibility = View.VISIBLE
+      viewHolder.info.visibility = VISIBLE
       viewHolder.info.text = transaction.memo
     } else {
-      viewHolder.info.visibility = View.GONE
+      viewHolder.info.visibility = GONE
     }
 
-    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) View.VISIBLE else View.GONE
+    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
   }
 
   @SuppressLint("SetTextI18n")
@@ -395,9 +395,10 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.date.text = getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
-    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) View.VISIBLE else View.GONE
-    viewHolder.info.visibility = View.VISIBLE
-    viewHolder.info.text = context.getString(R.string.pattern_price, trade.price)
+    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
+    viewHolder.info.visibility = VISIBLE
+    viewHolder.info.text = context.getString(R.string.pattern_price,
+      truncateDecimalPlaces(trade.price, 7))
   }
 
   @SuppressLint("SetTextI18n")
@@ -408,7 +409,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
     viewHolder.info.visibility = GONE
 
-    viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset?: "XLM")
+    viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
     viewHolder.date.text = getFormattedDateTime(operation.createdAt,
       DateFormat.is24HourFormat(context))
 

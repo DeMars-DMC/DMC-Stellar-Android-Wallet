@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.ExchangePagerAdapter
+import io.demars.stellarwallet.fragments.tabs.TradeTabFragment
 import io.demars.stellarwallet.interfaces.OnRefreshOrderBookListener
 import io.demars.stellarwallet.interfaces.OnTradeCurrenciesChanged
 import io.demars.stellarwallet.interfaces.OnUpdateOrderBook
@@ -19,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_exchange.*
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 
-class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
+class ExchangeFragment : Fragment(), ViewPager.OnPageChangeListener, OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
   private lateinit var fragmentAdapter: ExchangePagerAdapter
 
   private var orderBookListener: OnUpdateOrderBook? = null
@@ -40,6 +42,7 @@ class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBoo
     fragmentAdapter = ExchangePagerAdapter(childFragmentManager)
     viewPager.adapter = fragmentAdapter
     viewPager.offscreenPageLimit = fragmentAdapter.count
+    viewPager.addOnPageChangeListener(this)
     tabs.setupWithViewPager(viewPager)
   }
 
@@ -86,4 +89,13 @@ class ExchangeFragment : Fragment(), OnTradeCurrenciesChanged, OnRefreshOrderBoo
 
     }, buy, sell)
   }
+
+  override fun onPageScrollStateChanged(state: Int) {}
+  override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+  override fun onPageSelected(position: Int) {
+    when (position) {
+      0 -> (fragmentAdapter.getItem(position) as TradeTabFragment).updateAvailableBalance()
+    }
+  }
+
 }

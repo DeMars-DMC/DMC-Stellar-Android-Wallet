@@ -1,6 +1,6 @@
 package io.demars.stellarwallet.models
 
-class SessionAssetImpl(var type:String, var name:String, var issuer:String) : io.demars.stellarwallet.models.SessionAsset {
+class SessionAssetImpl(var type:String, var name:String, var issuer:String) : SessionAsset {
     override fun getAssetCode(): String {
       return type
     }

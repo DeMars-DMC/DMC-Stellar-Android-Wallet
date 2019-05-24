@@ -27,8 +27,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.lifecycle.Observer
-import io.demars.stellarwallet.models.BalanceAvailability
-import io.demars.stellarwallet.mvvm.balance.BalanceRepository
+import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.views.ConfirmTradeDialog
@@ -43,13 +42,11 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   private var sellingCurrencies = mutableListOf<SelectionModel>()
   private var buyingCurrencies = mutableListOf<SelectionModel>()
-  private var holdingsAmount: Double = 0.0
+  private var availableAmount: Double = 0.0
+  private var counterBalance: Double = 0.0
   private var addedCurrencies: ArrayList<Currency> = ArrayList()
   private var latestBid: OrderBookResponse.Row? = null
-  //  private var orderType: OrderType = OrderType.MARKET
-  private var isShowingAdvanced = false
-  private val ZERO_VALUE = "0.0"
-  private var balance: BalanceAvailability? = null
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_tab_trade, container, false)
   }
@@ -60,21 +57,24 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     toolTip = PopupWindow(view.context)
     refreshAddedCurrencies()
     setupListeners()
-    updateView()
+    setupSpinners()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    updateAvailableBalance()
   }
 
   private fun setupListeners() {
-    toggleMarket.setOnClickListener(this)
-    toggleLimit.setOnClickListener(this)
-    tenth.setOnClickListener(this)
-    quarter.setOnClickListener(this)
-    half.setOnClickListener(this)
-    threeQuarters.setOnClickListener(this)
     all.setOnClickListener(this)
     placeTrade.setOnClickListener(this)
 
     sellingCustomSelector.editText.isEnabled = false
     buyingCustomSelector.editText.isEnabled = false
+
+    swapCurrenciesButton.setOnClickListener {
+      swapCurrencies()
+    }
 
     sellingCustomSelector.editText.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
@@ -89,107 +89,93 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
         refreshSubmitTradeButton()
       }
     })
-
-
-    BalanceRepository.loadBalance().observe(this, Observer {
-      if (it != null) {
-        balance = it
-        refreshAddedCurrencies()
-        setupSpinners()
-        Timber.d("new balance")
-        if (::selectedSellingCurrency.isInitialized) {
-          sellingCurrencies.forEach { selection ->
-            if (selection.label == selectedSellingCurrency.label) {
-              refreshBalance(selection.holdings)
-            }
-          }
-          buyingCustomSelector.editText.setText("")
-          sellingCustomSelector.editText.setText("")
-          refreshSubmitTradeButton()
-          updateBuyingValueIfNeeded()
-        }
-      }
-    })
   }
 
   private fun setupSpinners() {
     sellingCustomSelector.setSelectionValues(sellingCurrencies)
     sellingCustomSelector.spinner.onItemSelectedListener = object : OnItemSelected() {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (sellingCurrencies.size <= position) return // safety
-
-        selectedSellingCurrency = sellingCurrencies[position]
-        refreshBalance(selectedSellingCurrency.holdings)
-
-        sellingCustomSelector.imageView.setImageResource(
-          AssetUtils.getLogo(selectedSellingCurrency.label))
-
-        resetBuyingCurrencies()
-        buyingCurrencies.removeAt(position)
-
-        buyingCustomSelector.setSelectionValues(buyingCurrencies)
-
-        onSelectorChanged()
+        onSellingCurrencyChanged(position)
       }
     }
 
     buyingCustomSelector.setSelectionValues(buyingCurrencies)
     buyingCustomSelector.spinner.onItemSelectedListener = object : OnItemSelected() {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (buyingCurrencies.size <= position) return // safety
-
-        selectedBuyingCurrency = buyingCurrencies[position]
-
-        buyingCustomSelector.imageView.setImageResource(
-          AssetUtils.getLogo(selectedBuyingCurrency.label))
-
-        onSelectorChanged()
+        onBuyingCurrencyChanged(position)
       }
     }
   }
 
-  private fun refreshBalance(holding: Double) {
-    var availableForTrading = holding
-    if (selectedSellingCurrency.label == "XLM") {
-      availableForTrading = applyNativeFees(holding)
-    }
+  private fun onSellingCurrencyChanged(position: Int) {
+    if (sellingCurrencies.size <= position) return // safety
 
-    val assetCode = selectedSellingCurrency.label
-    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
-    val string = String.format(getString(R.string.holdings_amount), StringFormat.truncateDecimalPlaces(
-        availableForTrading.toString(), decimalPlaces), assetCode)
+    selectedSellingCurrency = sellingCurrencies[position]
+    updateAvailableBalance()
 
-    holdings.text = string
+    sellingCustomSelector.imageView.setImageResource(
+      AssetUtils.getLogo(selectedSellingCurrency.label))
 
-    holdingsAmount = availableForTrading
+    resetBuyingCurrencies()
+    buyingCurrencies.removeAt(position)
+    buyingCustomSelector.setSelectionValues(buyingCurrencies)
 
-    val hasHoldings = holdingsAmount > 0.0
-
-    holdings.text = string
-    all.visibility = if (hasHoldings) View.VISIBLE else View.GONE
-    sellingCustomSelector.editText.isEnabled = hasHoldings
-    buyingCustomSelector.editText.isEnabled = false
+    onSelectorChanged()
   }
 
-  private fun applyNativeFees(amount: Double): Double {
-    // it will reserve double the network fee to be able to cancel the 100% open offer
-    val value = amount - 0.5 - 0.0002
-    if (value < 0) return 0.00
-    return value
+  private fun onBuyingCurrencyChanged(position: Int) {
+    if (buyingCurrencies.size <= position) return // safety
+
+    selectedBuyingCurrency = buyingCurrencies[position]
+
+    updateAvailableBalance()
+
+    buyingCustomSelector.imageView.setImageResource(
+      AssetUtils.getLogo(selectedBuyingCurrency.label))
+
+    onSelectorChanged()
   }
 
-  private fun updateView() {
-    if (isShowingAdvanced) {
-      tenth.visibility = View.VISIBLE
-      quarter.visibility = View.VISIBLE
-      half.visibility = View.VISIBLE
-      threeQuarters.visibility = View.VISIBLE
-    } else {
-      tenth.visibility = View.GONE
-      quarter.visibility = View.GONE
-      half.visibility = View.GONE
-      threeQuarters.visibility = View.GONE
-    }
+  private fun swapCurrencies() {
+    val sellingBefore = selectedSellingCurrency
+    val buyingBefore = selectedBuyingCurrency
+    val sellingPosition = sellingCurrencies.indexOf(buyingBefore)
+    sellingCustomSelector.spinner.setSelection(sellingPosition)
+    onSellingCurrencyChanged(sellingPosition)
+    val buyingPosition = buyingCurrencies.indexOf(sellingBefore)
+    buyingCustomSelector.spinner.setSelection(buyingCurrencies.indexOf(sellingBefore))
+    onBuyingCurrencyChanged(buyingPosition)
+  }
+
+  fun updateAvailableBalance() {
+    if (!(::selectedSellingCurrency.isInitialized)) return
+    if (!(::selectedBuyingCurrency.isInitialized)) return
+
+    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
+      val assetCode = selectedSellingCurrency.label
+      val available = StringFormat.truncateDecimalPlaces(
+        AccountUtils.getAvailableBalance(assetCode), AssetUtils.getDecimalPlaces(assetCode))
+      val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+
+      availableAmount = available.toDouble()
+
+      val hasHoldings = availableAmount > 0.0
+
+      val availableStr = String.format(getString(R.string.holdings_amount), StringFormat.truncateDecimalPlaces(
+        availableAmount.toString(), decimalPlaces), assetCode)
+
+      availableToSell.text = availableStr
+
+      val buyingAssetCode = selectedBuyingCurrency.label
+      val buyingDecimalPlaces = AssetUtils.getDecimalPlaces(buyingAssetCode)
+      buyingBalance.text = String.format(getString(R.string.balance_amount), StringFormat.truncateDecimalPlaces(
+        AccountUtils.getTotalBalance(buyingAssetCode), buyingDecimalPlaces), buyingAssetCode)
+
+      all.visibility = if (hasHoldings) View.VISIBLE else View.INVISIBLE
+      all.isEnabled = hasHoldings
+      sellingCustomSelector.editText.isEnabled = hasHoldings
+      buyingCustomSelector.editText.isEnabled = hasHoldings
+    })
   }
 
   private fun onSelectorChanged() {
@@ -235,23 +221,25 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
     buyingCustomSelector.editText.isEnabled = true
 
-    if (sellingString.replace(",", ".").toDouble() > holdingsAmount) {
+    if (sellingString.replace(",", ".").toDoubleOrNull() ?: 0.0 > availableAmount) {
       sellingCustomSelector.editText.setText(
-        StringFormat.truncateDecimalPlaces(holdingsAmount.toString(),
+        StringFormat.truncateDecimalPlaces(availableAmount.toString(),
           AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
     }
 
+    var stringValue = buyingCustomSelector.editText.text.toString().toDoubleOrNull() ?: 0.0
     if (latestBid != null) {
       val value = sellingCustomSelector.editText.text.toString().toFloatOrNull()
       val price = latestBid?.price?.toFloatOrNull()
       if (value != null && price != null) {
-        val floatValue: Float = value.toFloat()
-        val floatPrice: Float = price.toFloat()
-        val stringValue = StringFormat.truncateDecimalPlaces((floatValue * floatPrice).toString(),
-          AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label))
-        buyingCustomSelector.editText.setText(stringValue)
+        val floatValue: Double = value.toDouble()
+        val floatPrice: Double = price.toDouble()
+        stringValue = floatValue * floatPrice
       }
     }
+
+    buyingCustomSelector.editText.setText(StringFormat.truncateDecimalPlaces(stringValue.toString(),
+      AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label)))
   }
 
   private fun updatePrices() {
@@ -309,7 +297,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   override fun onClick(view: View) {
     when (view.id) {
       R.id.all -> sellingCustomSelector.editText.setText(
-        StringFormat.truncateDecimalPlaces(holdingsAmount.toString(),
+        StringFormat.truncateDecimalPlaces(availableAmount.toString(),
           AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
       R.id.placeTrade -> onPlaceTrade()
     }
@@ -377,7 +365,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       override fun onExecuted() {
         snackBar.dismiss()
         createSnackBar("Order executed", Snackbar.LENGTH_SHORT)?.show()
-
+        updateAvailableBalance()
         placeTrade.isEnabled = true
         sellingCustomSelector.editText.isEnabled = true
         buyingCustomSelector.editText.isEnabled = true
@@ -413,35 +401,31 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun refreshAddedCurrencies() {
-    if (balance == null) {
-      return
-    }
+    val accounts = WalletApplication.wallet.getBalances()
     addedCurrencies.clear()
     var i = 0
     var native: Currency? = null
-    balance?.let {
-      it.getAllBalances().forEach { that ->
-        val currency = if (that.assetCode == "XLM") {
-          native = Currency(i, AssetUtils.NATIVE_ASSET_CODE, "LUMEN", that.totalAvailable.toDouble(), that.asset)
-          native as Currency
-        } else {
-          Currency(i, that.assetCode, that.assetCode, that.totalAvailable.toDouble(), that.asset)
-        }
-        addedCurrencies.add(currency)
-        i++
+    accounts.forEach {
+      val currency = if (it.assetType != "native") {
+        Currency(i, it.assetCode, it.assetCode, it.balance.toDouble(), it.asset)
+      } else {
+        native = Currency(i, AssetUtils.NATIVE_ASSET_CODE, "LUMEN", it.balance.toDouble(), it.asset)
+        native as Currency
       }
+      addedCurrencies.add(currency)
+      i++
+    }
 
-      native?.let { currency ->
-        addedCurrencies.remove(currency)
-        addedCurrencies.add(0, currency)
-      }
+    native?.let {
+      addedCurrencies.remove(it)
+      addedCurrencies.add(0, it)
+    }
 
-      sellingCurrencies.clear()
-      buyingCurrencies.clear()
-      addedCurrencies.forEach { added ->
-        sellingCurrencies.add(added)
-        buyingCurrencies.add(added)
-      }
+    sellingCurrencies.clear()
+    buyingCurrencies.clear()
+    addedCurrencies.forEach {
+      sellingCurrencies.add(it)
+      buyingCurrencies.add(it)
     }
   }
 

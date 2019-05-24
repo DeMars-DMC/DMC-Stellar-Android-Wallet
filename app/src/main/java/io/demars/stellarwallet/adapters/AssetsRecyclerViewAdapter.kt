@@ -156,7 +156,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Chan
               viewHolder.assetButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent)
               viewHolder.assetButton.setOnClickListener {
                   if (WalletApplication.wallet.getBalances().isNotEmpty() &&
-                    AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_TYPE).toDouble() > 1.0) {
+                    AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
                       context.startActivity(Intent(context, InflationActivity::class.java))
                   } else {
                       showBalanceErrorDialog()

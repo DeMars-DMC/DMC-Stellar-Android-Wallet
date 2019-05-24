@@ -20,7 +20,6 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
         contactViewHolder.bind(contacts[pos])
     }
 
-    override fun getItemCount(): Int {
-        return contacts.size
-    }
+    override fun getItemCount(): Int = contacts.size
+
 }

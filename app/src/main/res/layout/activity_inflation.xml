@@ -67,7 +67,8 @@
                 android:layout_weight="0.2"
                 android:background="@drawable/background_rounded_right_button_accent"
                 android:contentDescription="@string/copy_address_content_descriptor"
-                android:src="@drawable/ic_camera" />
+                android:tint="@color/white"
+                android:src="@drawable/ic_qr_scanner" />
 
         </LinearLayout>
     </LinearLayout>

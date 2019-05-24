@@ -50,10 +50,6 @@ class UserSessionImpl : UserSession {
   }
 
   override fun getAvailableBalance(): String {
-    return if (getSessionAsset().assetCode == Constants.LUMENS_ASSET_TYPE) {
-      WalletApplication.wallet.getAvailableBalance()
-    } else {
-      AccountUtils.getTotalBalance(getFormattedCurrentAssetCode())
-    }
+    return AccountUtils.getAvailableBalance(getFormattedCurrentAssetCode())
   }
 }

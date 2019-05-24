@@ -1,6 +1,6 @@
 package io.demars.stellarwallet.models
 
-class DefaultAsset : io.demars.stellarwallet.models.SessionAsset {
+class DefaultAsset : SessionAsset {
     val LUMENS_ASSET_TYPE = "native"
     val LUMENS_ASSET_NAME = "Stellar Lumens"
 

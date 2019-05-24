@@ -33,14 +33,14 @@ import io.demars.stellarwallet.activities.*
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
-import io.demars.stellarwallet.mvvm.WalletViewModelPolling
+import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import org.stellar.sdk.responses.TradeResponse
 import org.stellar.sdk.responses.operations.OperationResponse
 
 class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var appContext: Context
-  private lateinit var viewModel: WalletViewModelPolling
+  private lateinit var viewModel: WalletViewModel
   private var state = WalletState.UNKNOWN
   private var lastOperationsListSize = 0
   private var activeAsset: String = DefaultAsset().LUMENS_ASSET_NAME
@@ -79,7 +79,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     super.onCreate(savedInstanceState)
     activity?.let {
       appContext = it.applicationContext
-      viewModel = ViewModelProviders.of(it).get(WalletViewModelPolling::class.java)
+      viewModel = ViewModelProviders.of(it).get(WalletViewModel::class.java)
     }
   }
 
@@ -150,7 +150,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(appContext, R.color.colorPaleSky)))
   }
 
-  private fun initAdressCopyButton(secretSeed: String) {
+  private fun initAddressCopyButton(secretSeed: String) {
     publicSeedTextView.text = secretSeed
     publicSeedCopyButton.setOnClickListener { copyAddressToClipBoard(secretSeed) }
   }
@@ -262,15 +262,13 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
           if (!it.isFinishing && walletRecyclerView != null) {
             if (!qrRendered && viewState != null && qrCode != null) {
               generateQRCode(viewState.accountId!!, qrCode, 500)
-              initAdressCopyButton(viewState.accountId!!)
+              initAddressCopyButton(viewState.accountId!!)
 
               qrRendered = true
             }
 
-            if (!listWrapper.array.isEmpty()) {
-              (walletRecyclerView.adapter as WalletRecyclerViewAdapter).setItems(listWrapper.array)
-              walletRecyclerView.adapter?.notifyDataSetChanged()
-            }
+            (walletRecyclerView.adapter as WalletRecyclerViewAdapter)
+              .updateData(listWrapper.array)
             updatePlaceHolders(newState)
           }
         }
@@ -351,7 +349,8 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         } else {
           startActivity(BalanceSummaryActivity.newIntent(context, assetCode, issuer))
         }
-        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay) }
+        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
+      }
     })
     return adapter
   }

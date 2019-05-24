@@ -93,6 +93,7 @@
     <string name="selling_hint">To sell</string>
     <string name="buying_hint">To receive</string>
     <string name="holdings_amount">Available: %1$s\u00A0%2$s</string>
+    <string name="balance_amount">You have %1$s\u00A0%2$s</string>
     <string name="tenth">10%</string>
     <string name="quarter">25%</string>
     <string name="half">50%</string>
@@ -137,7 +138,7 @@
     <string name="address_copied_message">Address copied</string>
 
     <!--Pay Screen-->
-    <string name="pay_to_text">Pay To</string>
+    <string name="pay_to_text">Pay to</string>
     <string name="next_button_text">Next</string>
     <string name="send_button_text">Pay</string>
     <string name="to">To:</string>

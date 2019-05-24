@@ -21,7 +21,8 @@ import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import com.google.zxing.integration.android.IntentIntegrator
 import io.demars.stellarwallet.models.AssetUtils
-import io.demars.stellarwallet.mvvm.balance.BalanceRepository
+import io.demars.stellarwallet.mvvm.account.AccountRepository
+import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_stellar_address.*
 import timber.log.Timber
@@ -80,6 +81,12 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
     setupUI()
   }
 
+  override fun onResume() {
+    super.onResume()
+
+    if (mode == Mode.PAY_TO) updateAvailableBalance()
+  }
+
   private fun initiateScan() {
     IntentIntegrator(this).setBeepEnabled(false).setDesiredBarcodeFormats(IntentIntegrator.QR_CODE).initiateScan()
   }
@@ -113,12 +120,11 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
 
     when (mode) {
       Mode.PAY_TO -> {
-        loadBalance()
         bottomButton.text = getString(R.string.next_button_text)
         sendToContactButton.visibility = View.VISIBLE
         contactNameText.visibility = View.GONE
         contactNameEditText.visibility = View.GONE
-        addressTitleText.text = getString(R.string.pay_to_text)
+        addressTitleText.visibility = View.GONE
       }
       Mode.UPDATE_CONTACT -> {
         titleBalance.visibility = View.GONE
@@ -143,17 +149,18 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
   }
 
   @SuppressLint("SetTextI18n")
-  private fun loadBalance() {
-    BalanceRepository.loadBalance().observe(this, Observer {
-      if (it != null) {
-        val asset = it.getActiveAssetAvailability()
-        val amount = asset.totalAvailable - 0.0001
-        val decimalPlaces = AssetUtils.getDecimalPlaces(asset.assetCode)
+  private fun updateAvailableBalance() {
+    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
+      var assetCode = WalletApplication.userSession.getSessionAsset().assetCode
+      assetCode = if (assetCode == "native") "XLM" else assetCode
+      val available = AccountUtils.getAvailableBalance(assetCode)
+      val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+      val availableStr = "$assetCode\n${StringFormat.truncateDecimalPlaces(available, decimalPlaces)}"
+      titleBalance.text = availableStr
 
-        titleBalance.text = "${StringFormat.truncateDecimalPlaces(if (amount < 0) "0.00"
-        else amount.toString(), decimalPlaces)} ${asset.assetCode}"
-
-      }
+      val logo = AssetUtils.getLogo(assetCode)
+      imageLogo.visibility = if (logo != 0) View.VISIBLE else View.GONE
+      imageLogo.setImageResource(logo)
     })
   }
 

@@ -6,7 +6,7 @@ import java.util.ArrayList
 
 interface OnLoadOperations {
   fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?)
-  fun onLoadTransactionForOperation(result: TransactionResponse?)
+  fun onLoadTransactions(result: ArrayList<TransactionResponse>)
   fun onError(errorMessage:String)
 
 }

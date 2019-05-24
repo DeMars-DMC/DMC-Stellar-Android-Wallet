@@ -2,6 +2,7 @@ package io.demars.stellarwallet
 
 import io.demars.stellarwallet.interfaces.LocalStore
 import io.demars.stellarwallet.interfaces.WalletStore
+import io.demars.stellarwallet.models.AvailableBalance
 import io.demars.stellarwallet.models.BasicBalance
 import org.stellar.sdk.responses.AccountResponse
 
@@ -38,12 +39,12 @@ class DmcWallet(private val localStore: LocalStore) : WalletStore {
       localStore.setBalances(balances)
     }
 
-    override fun getAvailableBalance(): String {
-      return localStore.getAvailableBalance()
+    override fun getAvailableBalances(): Array<AvailableBalance> {
+      return localStore.getAvailableBalances()
     }
 
-    override fun setAvailableBalance(availableBalance: String?) {
-       localStore.setAvailableBalance(availableBalance)
+    override fun setAvailableBalances(availableBalances: Array<AvailableBalance>?) {
+       localStore.setAvailableBalances(availableBalances)
     }
 
     override fun getIsRecoveryPhrase(): Boolean {

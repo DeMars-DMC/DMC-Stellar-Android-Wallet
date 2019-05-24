@@ -36,7 +36,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private enum class Mode {
-    INITIAL, CODE, VERIFYING, STELLAR, NO_INTERNET
+    INITIAL, CODE, VERIFYING, WALLET, NO_INTERNET
   }
 
   private var mode = Mode.INITIAL
@@ -69,7 +69,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { user ->
           Firebase.initFcm(user.uid, "create")
-          updateForMode(Mode.STELLAR)
+          updateForMode(Mode.WALLET)
         } ?: createNewUser()
       } else createNewUser()
     }
@@ -96,7 +96,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     Firebase.getCurrentUser()?.let { user ->
       uid = user.uid
       Firebase.getUser(userListener)
-    } ?: updateForMode(Mode.INITIAL)
+    } ?: updateForMode(Mode.WALLET)
   }
 
   private fun updateForMode(mode: Mode) {
@@ -105,7 +105,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       Mode.INITIAL -> updateViewForInitial()
       Mode.CODE -> updateViewForCode()
       Mode.VERIFYING -> updateViewForVerifying()
-      Mode.STELLAR -> updateViewForStellar()
+      Mode.WALLET -> updateViewForStellar()
       Mode.NO_INTERNET -> updateViewForNoInternet()
     }
   }
@@ -300,7 +300,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
             if (dmcUser == null) {
               Firebase.getUser(userListener)
             } else {
-              updateForMode(Mode.STELLAR)
+              updateForMode(Mode.WALLET)
             }
           } ?: onError("Something went wrong. Please try again")
         } else {
@@ -324,7 +324,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     if (userToCreate.isReadyToRegister()) {
       Firebase.getDatabaseReference().child("users")
         .child(userToCreate.uid).setValue(userToCreate).addOnSuccessListener {
-          updateForMode(Mode.STELLAR)
+          updateForMode(Mode.WALLET)
         }.addOnFailureListener {
           onError("Something went wrong. Please try again")
         }

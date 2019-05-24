@@ -20,9 +20,9 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
    * Returns an observable for ALL the trades table changes
    */
   fun loadList(forceRefresh: Boolean = false): LiveData<ArrayList<TradeResponse>> {
-    if (forceRefresh || tradesList.isEmpty()) {
-      forceRefresh()
-    }
+//    if (forceRefresh || tradesList.isEmpty()) {
+//      forceRefresh()
+//    }
     return tradeListLiveData
   }
 
@@ -34,7 +34,7 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
       return
     }
     isBusy = true
-    fetchTradesList(true)
+    fetch(true)
   }
 
   fun clear() {
@@ -50,14 +50,14 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
    * Makes a call to the webservice. Keep it private since the view/viewModel should be 100% abstracted
    * from the data sources implementation.
    */
-  private fun fetchTradesList(notifyFirsTime: Boolean = false) {
+  private fun fetch(notifyFirsTime: Boolean = false) {
     var cursor = ""
-    if (tradesList.isNotEmpty()) {
-      cursor = tradesList.last().pagingToken
-      if (notifyFirsTime) {
-        notifyLiveData(tradesList)
-      }
-    }
+//    if (tradesList.isNotEmpty()) {
+//      cursor = tradesList.last().pagingToken
+//      if (notifyFirsTime) {
+//        notifyLiveData(tradesList)
+//      }
+//    }
 
     remoteRepository.getTrades(cursor, 200, object : OnLoadTrades {
       override fun onError(errorMessage: String) {
@@ -70,11 +70,10 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
           if (result.isNotEmpty()) {
             //is the first time let's notify the ui
             val isFirstTime = tradesList.isEmpty()
+            tradesList.clear()
             tradesList.addAll(result)
             if (isFirstTime) notifyLiveData(tradesList)
-            Timber.d("recursive call to getTrades")
-            fetchTradesList()
-          } else {
+           } else {
             if (cursor != currentCursor) {
               if (ENABLE_STREAM) {
                 closeStream()

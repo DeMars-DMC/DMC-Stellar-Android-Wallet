@@ -2,11 +2,13 @@ package io.demars.stellarwallet.mvvm.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.demars.stellarwallet.interfaces.OnLoadOperations
 import io.demars.stellarwallet.interfaces.OnLoadTransactions
 import io.demars.stellarwallet.mvvm.remote.RemoteRepository
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream
 import org.stellar.sdk.responses.TransactionResponse
+import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
 class TransactionsRepository private constructor(private val remoteRepository: RemoteRepository) {
@@ -52,44 +54,44 @@ class TransactionsRepository private constructor(private val remoteRepository: R
    */
   private fun fetchTransactionsList(notifyFirsTime: Boolean = false) {
     var cursor = ""
-    if (!transactionsList.isEmpty()) {
-      cursor = transactionsList.last().pagingToken
-      if (notifyFirsTime) {
-        notifyLiveData(transactionsList)
-      }
-    }
+//    if (transactionsList.isNotEmpty()) {
+//      cursor = transactionsList.last().pagingToken
+//      if (notifyFirsTime) {
+//        notifyLiveData(transactionsList)
+//      }
+//    }
 
-    remoteRepository.getTransactions(cursor, 200, object : OnLoadTransactions {
+    remoteRepository.getTransactions(cursor, 200, object : OnLoadOperations {
+      override fun onLoadOperations(result: java.util.ArrayList<Pair<OperationResponse, String?>>?) = Unit
       override fun onError(errorMessage: String) {
         isBusy = false
       }
 
-      override fun onLoadTransactions(result: ArrayList<TransactionResponse>?) {
+      override fun onLoadTransactions(result: ArrayList<TransactionResponse>) {
         Timber.d("fetched ${result?.size} transactions from cursor $cursor")
-        if (result != null) {
-          if (!result.isEmpty()) {
-            //is the first time let's notify the ui
-            val isFirstTime = transactionsList.isEmpty()
-            transactionsList.addAll(result)
-            if (isFirstTime) notifyLiveData(transactionsList)
-            Timber.d("recursive call to getTransactions")
-            fetchTransactionsList()
-          } else {
-            if (cursor != currentCursor) {
-              if (ENABLE_STREAM) {
-                closeStream()
-                Timber.d("Opening the stream")
-                eventSource = remoteRepository.registerForTransactions("now", EventListener {
-                  Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-                  transactionsList.add(0, it)
-                  notifyLiveData(transactionsList)
-                })
-              }
-              currentCursor = cursor
+        if (result.isNotEmpty()) {
+          //is the first time let's notify the ui
+          val isFirstTime = transactionsList.isEmpty()
+          transactionsList.clear()
+          transactionsList.addAll(result)
+          if (isFirstTime) notifyLiveData(transactionsList)
+          Timber.d("recursive call to getTransactions")
+          fetchTransactionsList()
+        } else {
+          if (cursor != currentCursor) {
+            if (ENABLE_STREAM) {
+              closeStream()
+              Timber.d("Opening the stream")
+              eventSource = remoteRepository.registerForTransactions("now", EventListener {
+                Timber.d("Stream response {$it}, created at: ${it.createdAt}")
+                transactionsList.add(0, it)
+                notifyLiveData(transactionsList)
+              })
             }
-            isBusy = false
-            notifyLiveData(transactionsList)
+            currentCursor = cursor
           }
+          isBusy = false
+          notifyLiveData(transactionsList)
         }
       }
     })

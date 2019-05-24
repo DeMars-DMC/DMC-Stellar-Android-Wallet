@@ -43,15 +43,17 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
   enum class TransactionViewType(val value: Int) {
     TOTAL(0), AVAILABLE(1), HEADER(2),
-    ACCOUNT_EFFECT(3), TRADE_EFFECT(4), TRANSACTION(5), TRADE(6), OPERATION(7)
+    ACCOUNT_EFFECT(3), TRADE_EFFECT(4),
+    TRANSACTION(5), TRADE(6), OPERATION(7)
   }
 
   fun setContacts(contacts: ArrayList<Contact>) {
     this.contacts = contacts
   }
 
-  fun setItems(list: ArrayList<Any>) {
+  fun updateData(list: ArrayList<Any>) {
     items = list
+    notifyDataSetChanged()
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -93,11 +95,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     }
   }
 
-  override fun getItemCount(): Int {
-    if (items == null) return 0
-    return items!!.size
-  }
-
+  override fun getItemCount(): Int = if (items == null) 0 else items!!.size
   override fun getItemViewType(position: Int): Int {
     items?.let {
       return when {
@@ -210,12 +208,12 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     //TODO move this to states
     if (code.isEmpty()) {
       tintProgressBar(viewHolder.progressBar, ContextCompat.getColor(context, R.color.white))
-      viewHolder.progressBar.visibility = View.VISIBLE
-      viewHolder.assetsButton.visibility = View.GONE
+      viewHolder.progressBar.visibility = VISIBLE
+      viewHolder.assetsButton.visibility = GONE
       viewHolder.assetName.text = totalBalance.assetName
     } else {
-      viewHolder.progressBar.visibility = View.GONE
-      viewHolder.assetsButton.visibility = View.VISIBLE
+      viewHolder.progressBar.visibility = GONE
+      viewHolder.assetsButton.visibility = VISIBLE
       viewHolder.assetName.text = String.format(context.getString(io.demars.stellarwallet.R.string.asset_template),
         totalBalance.assetName, getVisibleAssetCode(totalBalance.assetCode))
     }
@@ -223,7 +221,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     when (totalBalance.state) {
       WalletState.ERROR, WalletState.NOT_FUNDED -> {
         viewHolder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.blueDark))
-        viewHolder.progressBar.visibility = View.GONE
+        viewHolder.progressBar.visibility = GONE
       }
       WalletState.ACTIVE, WalletState.UPDATING -> {
         viewHolder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
@@ -266,14 +264,8 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.amountTextView.text = pair.second.toString()
   }
 
-  private fun formatNumber4Decimals(amount: String?, asset: String): String? {
-    if (amount == null) return "--"
-    val displayAmount = truncateDecimalPlaces(amount, AssetUtils.getDecimalPlaces(asset))
-    if (displayAmount.toFloat() == 0f) {
-      return "< 0.0001000"
-    }
-    return displayAmount
-  }
+  private fun formatNumber4Decimals(amount: String?, asset: String): String? =
+    if (amount == null) "--" else truncateDecimalPlaces(amount, AssetUtils.getDecimalPlaces(asset))
 
   private fun formatAddress(address: String?): String {
     if (address == null) return "--"
@@ -332,8 +324,8 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
       else -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     }
 
-    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) View.VISIBLE else View.GONE
-    viewHolder.info.visibility = View.GONE
+    viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
+    viewHolder.info.visibility = GONE
   }
 
   private fun configureTradeEffectViewHolder(viewHolder: OperationViewHolder, position: Int) {

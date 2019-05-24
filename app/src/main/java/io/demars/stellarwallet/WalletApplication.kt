@@ -20,7 +20,6 @@ import io.demars.stellarwallet.remote.ServerType
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.demars.stellarwallet.encryption.PRNGFixes
-import io.demars.stellarwallet.mvvm.balance.BalanceRepository
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
@@ -45,12 +44,7 @@ class WalletApplication : MultiDexApplication() {
                 assetSession.postValue(sessionAsset)
             }
             override fun getPin(): String? { return impl.getPin() }
-            override fun setPin(pin: String?) {
-                impl.setPin(pin)
-                if(pin != null) {
-                    BalanceRepository.init()
-                }
-            }
+            override fun setPin(pin: String?) { impl.setPin(pin) }
             override fun getFormattedCurrentAssetCode(): String? { return impl.getFormattedCurrentAssetCode() }
             override fun getFormattedCurrentAvailableBalance(context: Context): String? { return impl.getFormattedCurrentAvailableBalance(context) }
             override fun getAvailableBalance(): String? { return impl.getAvailableBalance() }

@@ -55,6 +55,10 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+    packagingOptions {
+        exclude 'README.txt'
+    }
 }
 
 def getVersionCode() {
@@ -148,6 +152,7 @@ dependencies {
 
     implementation "androidx.preference:preference:1.0.0"
 
+    //TODO:REMOVE
     implementation 'com.github.mancj:MaterialSearchBar:0.8.1'
     implementation 'com.github.abdularis:CircularImageView:v1.2'
 

@@ -94,7 +94,6 @@ class CustomSelector @JvmOverloads constructor(
     spinner.setSelection(selected)
   }
 
-
   public override fun onSaveInstanceState(): Parcelable? {
     return super.onSaveInstanceState()?.let {
       val state = SavedState(it)

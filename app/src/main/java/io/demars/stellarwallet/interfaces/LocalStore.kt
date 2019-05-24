@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.interfaces
 
+import io.demars.stellarwallet.models.AvailableBalance
 import org.stellar.sdk.responses.AccountResponse
 
 interface LocalStore {
@@ -11,8 +12,8 @@ interface LocalStore {
     fun setStellarAccountId(accountId: String)
     fun getBalances(): Array<AccountResponse.Balance>
     fun setBalances(balances: Array<AccountResponse.Balance>?)
-    fun getAvailableBalance(): String
-    fun setAvailableBalance(availableBalance: String?)
+    fun getAvailableBalances(): Array<AvailableBalance>
+    fun setAvailableBalances(availableBalances: Array<AvailableBalance>?)
     fun getIsRecoveryPhrase(): Boolean
     fun setIsRecoveryPhrase(isRecoveryPhrase: Boolean)
     fun setShowPinOnSend(showPinOnSend: Boolean)

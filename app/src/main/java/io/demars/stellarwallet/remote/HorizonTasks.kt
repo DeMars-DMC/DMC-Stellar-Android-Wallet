@@ -22,7 +22,7 @@ interface HorizonTasks {
     fun getLoadAccountTask(listener: OnLoadAccount) : AsyncTask<Void, Void, AccountResponse>
     fun getLoadEffectsTask(cursor: String, limit: Int, listener: OnLoadEffects) : AsyncTask<Void, Void, ArrayList<EffectResponse>?>
     fun getLoadOperationsTask(cursor: String, limit: Int, listener: OnLoadOperations) : AsyncTask<Void, Void, ArrayList<Pair<OperationResponse, String?>>?>
-    fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadTransactions) : AsyncTask<Void, Void, ArrayList<TransactionResponse>?>
+    fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadOperations) : AsyncTask<Void, Void, ArrayList<TransactionResponse>>
     fun getLoadTradesTask(cursor: String, limit: Int, listener: OnLoadTrades) : AsyncTask<Void, Void, ArrayList<TradeResponse>?>
     fun getSendTask(listener: SuccessErrorCallback, destAddress: String, secretSeed: CharArray, memo: String, amount : String) : AsyncTask<Void, Void, HorizonException>
     fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest : String) : AsyncTask<Void, Void, HorizonException>

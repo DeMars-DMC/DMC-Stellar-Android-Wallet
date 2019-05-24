@@ -47,8 +47,8 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 if (contact.name.length > 1) {
                     val firstLetter = contact.name[0]
                     letter.text = firstLetter.toString()
-                    val width = appContext.resources.getDimension(R.dimen.badge_width).toInt()
-                    val height = appContext.resources.getDimension(R.dimen.badge_height).toInt()
+                    val width = appContext.resources.getDimension(R.dimen.button_height_big).toInt()
+                    val height = appContext.resources.getDimension(R.dimen.button_height_big).toInt()
                     image.setImageBitmap(createImage(width, height, getColor(appContext, firstLetter)))
                     image.visibility = View.VISIBLE
                 } else {

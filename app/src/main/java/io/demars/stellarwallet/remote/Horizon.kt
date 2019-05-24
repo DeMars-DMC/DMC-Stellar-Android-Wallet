@@ -10,6 +10,7 @@ import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.models.Operation
+import org.jetbrains.anko.doAsync
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*
@@ -46,12 +47,12 @@ object Horizon : HorizonTasks {
     return LoadOperationsTask(cursor, limit, listener)
   }
 
-  override fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadTransactions): AsyncTask<Void, Void, ArrayList<TransactionResponse>?> {
+  override fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadOperations): AsyncTask<Void, Void, ArrayList<TransactionResponse>> {
     return LoadTransactionsTask(cursor, limit, listener)
   }
 
   override fun getLoadTradesTask(cursor: String, limit: Int, listener: OnLoadTrades): AsyncTask<Void, Void, ArrayList<TradeResponse>?> {
-    return Horizon.LoadTradesTask(cursor, limit, listener)
+    return LoadTradesTask(cursor, limit, listener)
   }
 
   override fun getSendTask(listener: SuccessErrorCallback, destAddress: String, secretSeed: CharArray, memo: String, amount: String): AsyncTask<Void, Void, HorizonException> {
@@ -322,14 +323,9 @@ object Horizon : HorizonTasks {
           it.type == Operation.OperationType.CHANGE_TRUST.value ||
           it.type == Operation.OperationType.ALLOW_TRUST.value
         }?.map {
-          if (it.type == Operation.OperationType.CREATED.value ||
-            it.type == Operation.OperationType.PAYMENT.value) {
-            Handler(Looper.getMainLooper()).post {
-              LoadTransactionForOperationTask(it.transactionHash, listener).execute()
-            }
-          }
-            Pair<OperationResponse, String?>(it, null)
+          Pair<OperationResponse, String?>(it, null)
         } as ArrayList<Pair<OperationResponse, String?>>
+        getLoadTransactionsTask(cursor, limit, listener).execute()
       } catch (error: Exception) {
         Timber.e(error.message.toString())
         errorMessage = error.message.toString()
@@ -347,9 +343,9 @@ object Horizon : HorizonTasks {
     }
   }
 
-  private class LoadTransactionsTask(val cursor: String, val limit: Int, private val listener: OnLoadTransactions) : AsyncTask<Void, Void, ArrayList<TransactionResponse>?>() {
+  private class LoadTransactionsTask(val cursor: String, val limit: Int, private val listener: OnLoadOperations) : AsyncTask<Void, Void, ArrayList<TransactionResponse>>() {
     var errorMessage: String? = null
-    override fun doInBackground(vararg params: Void?): ArrayList<TransactionResponse>? {
+    override fun doInBackground(vararg params: Void?): ArrayList<TransactionResponse> {
       val server = getServer()
       var transactionResults: Page<TransactionResponse>? = null
       try {
@@ -364,40 +360,14 @@ object Horizon : HorizonTasks {
         errorMessage = error.message.toString()
       }
 
-      return transactionResults?.records
+      return transactionResults?.records ?: ArrayList()
     }
 
-    override fun onPostExecute(result: ArrayList<TransactionResponse>?) {
+    override fun onPostExecute(result: ArrayList<TransactionResponse>) {
       errorMessage?.let {
         listener.onError(it)
       } ?: run {
         listener.onLoadTransactions(result)
-      }
-    }
-  }
-
-  private class LoadTransactionForOperationTask(private val transactionHash: String,
-                                                private val listener: OnLoadOperations): AsyncTask<Void, Void, TransactionResponse>()  {
-    var errorMessage: String? = null
-    override fun doInBackground(vararg params: Void?): TransactionResponse? {
-      val server = getServer()
-      var transactionResponse: TransactionResponse? = null
-      try {
-         transactionResponse = server.transactions()
-          .transaction(transactionHash)
-      } catch (error: Exception) {
-        Timber.e(error.message.toString())
-        errorMessage = error.message.toString()
-      }
-
-      return transactionResponse
-    }
-
-    override fun onPostExecute(result: TransactionResponse?){
-      errorMessage?.let {
-        listener.onError(it)
-      } ?: run {
-        listener.onLoadTransactionForOperation(result)
       }
     }
   }

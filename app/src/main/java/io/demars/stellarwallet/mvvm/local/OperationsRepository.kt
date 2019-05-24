@@ -23,9 +23,9 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
    * Returns an observable for ALL the operations table changes
    */
   fun loadList(forceRefresh: Boolean = false): LiveData<ArrayList<Pair<OperationResponse, String?>>> {
-    if (forceRefresh || operationsList.isEmpty()) {
-      forceRefresh()
-    }
+//    if (forceRefresh || operationsList.isEmpty()) {
+//      forceRefresh()
+//    }
     return operationListLiveData
   }
 
@@ -37,7 +37,7 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
       return
     }
     isBusy = true
-    fetchOperationsList(true)
+    fetch()
   }
 
   fun clear() {
@@ -53,69 +53,63 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
    * Makes a call to the webservice. Keep it private since the view/viewModel should be 100% abstracted
    * from the data sources implementation.
    */
-  private fun fetchOperationsList(notifyFirsTime: Boolean = false) {
-    var cursor = ""
-    if (operationsList.isNotEmpty()) {
-      cursor = operationsList.last().first.pagingToken
-      if (notifyFirsTime) {
-        notifyLiveData(operationsList)
-      }
-    }
+  private fun fetch() {
+//    val cursor = if (operationsList.isEmpty()) "" else operationsList.last().first.pagingToken
+    val cursor = ""
+    remoteRepository.getOperations(cursor, 200,
+      object : OnLoadOperations {
+        override fun onError(errorMessage: String) {
+          isBusy = false
+        }
 
-    remoteRepository.getOperations(cursor, 200, object : OnLoadOperations {
-      override fun onError(errorMessage: String) {
-        isBusy = false
-      }
-
-      override fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?) {
-        Timber.d("fetched ${result?.size} operations from cursor $cursor")
-        if (result != null) {
-          if (result.isNotEmpty()) {
-            //is the first time let's notify the ui
-            val isFirstTime = operationsList.isEmpty()
-            operationsList.addAll(result)
-            if (isFirstTime) notifyLiveData(operationsList)
-            Timber.d("recursive call to getOperations")
-            fetchOperationsList()
-          } else {
-            if (cursor != currentCursor) {
-              if (ENABLE_STREAM) {
-                closeStream()
-                Timber.d("Opening the stream")
-                eventSource = remoteRepository.registerForOperations("now", EventListener {
-                  Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-                  operationsList.add(0, Pair(it, null))
-                  notifyLiveData(operationsList)
-                })
+        override fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?) {
+          Timber.d("fetched ${result?.size} operations from cursor $cursor")
+          if (result != null) {
+            if (result.isNotEmpty()) {
+              //is the first time let's notify the ui
+              val isFirstTime = operationsList.isEmpty()
+              operationsList.clear()
+              operationsList.addAll(result)
+              if (isFirstTime) notifyLiveData(operationsList)
+            } else {
+              if (cursor != currentCursor) {
+                if (ENABLE_STREAM) {
+                  closeStream()
+                  Timber.d("Opening the stream")
+                  eventSource = remoteRepository.registerForOperations("now", EventListener {
+                    Timber.d("Stream response {$it}, created at: ${it.createdAt}")
+                    operationsList.add(0, Pair(it, null))
+                    notifyLiveData(operationsList)
+                  })
+                }
+                currentCursor = cursor
               }
-              currentCursor = cursor
+              notifyLiveData(operationsList)
             }
-            isBusy = false
-            notifyLiveData(operationsList)
-          }
-        }
-      }
-
-      override fun onLoadTransactionForOperation(result: TransactionResponse?) {
-        var index = 0
-        var memo = ""
-        for (operation in operationsList) {
-          if (operation.first.transactionHash == result?.hash && result?.memo is MemoText) {
-            index = operationsList.indexOf(operation)
-            memo = (result.memo as MemoText).text
-            break
           }
         }
 
-        if (memo.isNotEmpty()) {
-          val operation = operationsList[index].first
-          operationsList.removeAt(index)
-          operationsList.add(index, Pair(operation, memo))
-        }
+        override fun onLoadTransactions(result: ArrayList<TransactionResponse>) {
+          val operationsWithMemo = ArrayList<Pair<OperationResponse, String?>>()
+          for (operation in operationsList) {
+            var memo: String? = null
+            for (transaction in result) {
+              if (transaction.memo is MemoText && operation.first.transactionHash == transaction.hash) {
+                // Found memo for operation(transaction)
+                memo = (transaction.memo as MemoText).text
+                break
+              }
+            }
 
-        notifyLiveData(operationsList)
-      }
-    })
+            operationsWithMemo.add(Pair(operation.first, memo))
+          }
+
+          operationsList = operationsWithMemo
+
+          notifyLiveData(operationsList)
+          isBusy = false
+        }
+      })
   }
 
   fun closeStream() {

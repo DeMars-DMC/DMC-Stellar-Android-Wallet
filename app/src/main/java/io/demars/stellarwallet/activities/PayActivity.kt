@@ -20,7 +20,6 @@ import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.AssetUtils
 import io.demars.stellarwallet.models.ExchangeApiModel
 import io.demars.stellarwallet.models.HorizonException
-import io.demars.stellarwallet.mvvm.balance.BalanceRepository
 import io.demars.stellarwallet.mvvm.exchange.ExchangeEntity
 import io.demars.stellarwallet.mvvm.exchange.ExchangeViewModel
 import io.demars.stellarwallet.remote.Horizon
@@ -31,13 +30,13 @@ import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint
 import io.demars.stellarwallet.views.pin.PinLockView
 import kotlinx.android.synthetic.main.activity_send_funds.*
+import java.lang.Double.parseDouble
 
 class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCallback {
 
   companion object {
     private const val MAX_ALLOWED_DECIMALS = 7
     private const val ARG_ADDRESS_DATA = "ARG_ADDRESS_DATA"
-    private const val ARG_DECIMAL_PLACES = "ARG_DECIMAL_PLACES"
     private const val REQUEST_PIN = 0x0
 
     fun newIntent(context: Context, address: String): Intent {
@@ -68,17 +67,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    loadBalance()
-
     amountTextView.text = "0"
     numberKeyboard.mDialerListener = this
 
     if (intent.hasExtra(ARG_ADDRESS_DATA)) {
       address = intent.getStringExtra(ARG_ADDRESS_DATA)
-    }
-
-    if (intent.hasExtra(ARG_DECIMAL_PLACES)) {
-      decimalPlaces = intent.getIntExtra(ARG_DECIMAL_PLACES, 7)
     }
 
     addressEditText.text = address
@@ -102,19 +95,21 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     })
   }
 
+  override fun onResume() {
+    super.onResume()
+
+    updateAvailableBalance()
+  }
+
   @SuppressLint("SetTextI18n")
-  private fun loadBalance() {
-    BalanceRepository.loadBalance().observe(this, Observer {
-      if (it != null) {
-        val asset = it.getActiveAssetAvailability()
-        amountAvailable = asset.totalAvailable - 0.0001
-        decimalPlaces = AssetUtils.getDecimalPlaces(asset.assetCode)
-
-        titleText.text = "${StringFormat.truncateDecimalPlaces(if (amountAvailable < 0) "0.00"
-            else amountAvailable.toString(), decimalPlaces)} ${asset.assetCode}"
-
-      }
-    })
+  private fun updateAvailableBalance() {
+    var assetCode = WalletApplication.userSession.getSessionAsset().assetCode
+    assetCode = if (assetCode == "native") "XLM" else assetCode
+    val available = AccountUtils.getAvailableBalance(assetCode)
+    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+    val availableStr = "${StringFormat.truncateDecimalPlaces(available, decimalPlaces)} $assetCode"
+    titleText.text = availableStr
+    amountAvailable = available.toDouble()
   }
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -176,7 +171,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   //endregion
 
   private fun updateAmount(newAmountText: String) {
-    val newAmount = if (newAmountText.isEmpty()) 0.0 else java.lang.Double.parseDouble(newAmountText)
+    val newAmount = if (newAmountText.isEmpty()) 0.0 else parseDouble(newAmountText)
     if (newAmount >= 0.0 && getNumDecimals(newAmountText) <= MAX_ALLOWED_DECIMALS) {
       amountText = newAmountText
       amount = newAmount

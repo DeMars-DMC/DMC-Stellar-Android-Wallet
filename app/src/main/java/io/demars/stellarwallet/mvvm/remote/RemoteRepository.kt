@@ -20,7 +20,7 @@ class RemoteRepository {
   }
 
 
-  fun getTransactions(cursor: String, limit: Int, listener: OnLoadTransactions) {
+  fun getTransactions(cursor: String, limit: Int, listener: OnLoadOperations) {
     Horizon.getLoadTransactionsTask(cursor, limit, listener).execute()
   }
 

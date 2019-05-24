@@ -2,6 +2,7 @@ package io.demars.stellarwallet.helpers
 
 import android.content.Context
 import io.demars.stellarwallet.interfaces.LocalStore
+import io.demars.stellarwallet.models.AvailableBalance
 import org.stellar.sdk.responses.AccountResponse
 import shadow.com.google.gson.Gson
 import shadow.com.google.gson.JsonSyntaxException
@@ -17,7 +18,7 @@ class LocalStoreImpl(context: Context) : LocalStore {
     const val KEY_PIN_DATA = "kPinData"
     const val KEY_STELLAR_ACCOUNT_PUBLIC_KEY = "kStellarAccountPublicKey"
     const val KEY_STELLAR_BALANCES_KEY = "kStellarBalancesKey"
-    const val KEY_STELLAR_AVAILABLE_BALANCE_KEY = "kAvailableBalanceKey"
+    const val KEY_STELLAR_AVAILABLE_BALANCES_KEY = "kAvailableBalancesKey"
     const val KEY_IS_RECOVERY_PHRASE = "kIsRecoveryPhrase"
     const val KEY_PIN_SETTINGS_SEND = "kPinSettingsSend"
     const val KEY_IS_PASSPHRASE_USED = "kIsPassphraseUsed"
@@ -51,20 +52,19 @@ class LocalStoreImpl(context: Context) : LocalStore {
   }
 
   override fun getBalances(): Array<AccountResponse.Balance> {
-    return get(KEY_STELLAR_BALANCES_KEY, Array<AccountResponse.Balance>::class.java)
-      ?: return arrayOf()
+    return get(KEY_STELLAR_BALANCES_KEY, Array<AccountResponse.Balance>::class.java) ?: arrayOf()
   }
 
   override fun setBalances(balances: Array<AccountResponse.Balance>?) {
     set(KEY_STELLAR_BALANCES_KEY, balances)
   }
 
-  override fun getAvailableBalance(): String {
-    return getString(KEY_STELLAR_AVAILABLE_BALANCE_KEY) ?: Constants.DEFAULT_ACCOUNT_BALANCE
+  override fun getAvailableBalances(): Array<AvailableBalance> {
+    return get(KEY_STELLAR_AVAILABLE_BALANCES_KEY, Array<AvailableBalance>::class.java) ?: arrayOf()
   }
 
-  override fun setAvailableBalance(availableBalance: String?) {
-    return set(KEY_STELLAR_AVAILABLE_BALANCE_KEY, availableBalance)
+  override fun setAvailableBalances(availableBalances: Array<AvailableBalance>?) {
+    return set(KEY_STELLAR_AVAILABLE_BALANCES_KEY, availableBalances)
   }
 
   override fun getIsRecoveryPhrase(): Boolean {
@@ -129,7 +129,7 @@ class LocalStoreImpl(context: Context) : LocalStore {
     editor.remove(KEY_PIN_DATA)
     editor.remove(KEY_STELLAR_ACCOUNT_PUBLIC_KEY)
     editor.remove(KEY_STELLAR_BALANCES_KEY)
-    editor.remove(KEY_STELLAR_AVAILABLE_BALANCE_KEY)
+    editor.remove(KEY_STELLAR_AVAILABLE_BALANCES_KEY)
     editor.remove(KEY_IS_RECOVERY_PHRASE)
     editor.remove(KEY_IS_PASSPHRASE_USED)
     return editor.commit()

@@ -3,14 +3,12 @@ package io.demars.stellarwallet.utils
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
-import com.google.firebase.auth.FirebaseAuth
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.mvvm.account.AccountRepository
-import io.demars.stellarwallet.mvvm.balance.BalanceRepository
 import io.demars.stellarwallet.mvvm.local.EffectsRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
@@ -38,7 +36,6 @@ class GlobalGraphHelper {
     fun wipe(context: Context): Boolean {
       clearSession()
       AccountRepository.clear()
-      BalanceRepository.clear()
       EffectsRepository.getInstance().clear()
       OperationsRepository.getInstance().clear()
       TransactionsRepository.getInstance().clear()

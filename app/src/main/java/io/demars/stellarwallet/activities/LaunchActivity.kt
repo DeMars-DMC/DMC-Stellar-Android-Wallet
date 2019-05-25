@@ -69,7 +69,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { user ->
           Firebase.initFcm(user.uid, "create")
-          updateForMode(Mode.WALLET)
+          updateForMode(Mode.INITIAL)
         } ?: createNewUser()
       } else createNewUser()
     }

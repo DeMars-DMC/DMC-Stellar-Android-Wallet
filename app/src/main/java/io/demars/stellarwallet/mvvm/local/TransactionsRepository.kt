@@ -3,7 +3,6 @@ package io.demars.stellarwallet.mvvm.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.interfaces.OnLoadOperations
-import io.demars.stellarwallet.interfaces.OnLoadTransactions
 import io.demars.stellarwallet.mvvm.remote.RemoteRepository
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream
@@ -21,11 +20,10 @@ class TransactionsRepository private constructor(private val remoteRepository: R
   /**
    * Returns an observable for ALL the transactions table changes
    */
-  fun loadList(forceRefresh: Boolean): LiveData<ArrayList<TransactionResponse>> {
-    if (forceRefresh || transactionsList.isEmpty()) {
-      forceRefresh()
-    }
-    return transactionListLiveData
+  fun listLiveData(): LiveData<ArrayList<TransactionResponse>> = transactionListLiveData
+  private fun notifyLiveData(data: ArrayList<TransactionResponse>) {
+    Timber.d("notifyLiveData size {${data.size}}")
+    transactionListLiveData.postValue(data)
   }
 
   @Synchronized
@@ -36,64 +34,50 @@ class TransactionsRepository private constructor(private val remoteRepository: R
       return
     }
     isBusy = true
-    fetchTransactionsList(true)
+    fetch()
   }
 
   fun clear() {
     transactionsList.clear()
   }
 
-  private fun notifyLiveData(data: ArrayList<TransactionResponse>) {
-    Timber.d("notifyLiveData size {${data.size}}")
-    transactionListLiveData.postValue(data)
-  }
-
   /**
    * Makes a call to the webservice. Keep it private since the view/viewModel should be 100% abstracted
    * from the data sources implementation.
    */
-  private fun fetchTransactionsList(notifyFirsTime: Boolean = false) {
-    var cursor = ""
-//    if (transactionsList.isNotEmpty()) {
-//      cursor = transactionsList.last().pagingToken
-//      if (notifyFirsTime) {
-//        notifyLiveData(transactionsList)
-//      }
-//    }
-
-    remoteRepository.getTransactions(cursor, 200, object : OnLoadOperations {
-      override fun onLoadOperations(result: java.util.ArrayList<Pair<OperationResponse, String?>>?) = Unit
+  private fun fetch() {
+    transactionsList.clear()
+    remoteRepository.getTransactions("", 100, object : OnLoadOperations {
+      override fun onLoadOperations(result: java.util.ArrayList<Pair<OperationResponse, String?>>?, cursor: String) = Unit
       override fun onError(errorMessage: String) {
         isBusy = false
       }
 
-      override fun onLoadTransactions(result: ArrayList<TransactionResponse>) {
-        Timber.d("fetched ${result?.size} transactions from cursor $cursor")
+      override fun onLoadTransactions(result: ArrayList<TransactionResponse>, cursor: String) {
+        Timber.d("fetched ${result.size} transactions from cursor $cursor")
         if (result.isNotEmpty()) {
-          //is the first time let's notify the ui
-          val isFirstTime = transactionsList.isEmpty()
-          transactionsList.clear()
           transactionsList.addAll(result)
-          if (isFirstTime) notifyLiveData(transactionsList)
-          Timber.d("recursive call to getTransactions")
-          fetchTransactionsList()
         } else {
+          notifyLiveData(transactionsList)
+          isBusy = false
+
           if (cursor != currentCursor) {
-            if (ENABLE_STREAM) {
-              closeStream()
-              Timber.d("Opening the stream")
-              eventSource = remoteRepository.registerForTransactions("now", EventListener {
-                Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-                transactionsList.add(0, it)
-                notifyLiveData(transactionsList)
-              })
-            }
+            openStream()
             currentCursor = cursor
           }
-          isBusy = false
-          notifyLiveData(transactionsList)
         }
       }
+    })
+  }
+
+  fun openStream() {
+    if (!ENABLE_STREAM) return
+    closeStream()
+    Timber.d("Opening the stream")
+    eventSource = remoteRepository.registerForTransactions("now", EventListener {
+      Timber.d("Stream response {$it}, created at: ${it.createdAt}")
+      transactionsList.add(0, it)
+      notifyLiveData(transactionsList)
     })
   }
 

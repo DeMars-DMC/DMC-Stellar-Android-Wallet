@@ -217,6 +217,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     Toast.makeText(applicationContext, getString(R.string.send_success_message), Toast.LENGTH_LONG).show()
     runOnUiThread {
       if (!isFinishing) {
+        setResult(RESULT_OK)
         finish()
       }
     }

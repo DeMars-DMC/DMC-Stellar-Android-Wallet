@@ -16,14 +16,13 @@ import io.demars.stellarwallet.mvvm.local.TradesRepository
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.StringFormat.Companion.truncateDecimalPlaces
-import org.jetbrains.anko.doAsync
 import org.stellar.sdk.responses.TradeResponse
 import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
   @SuppressLint("StaticFieldLeak")
-  private val applicationContext: Context = application.applicationContext
+  private val context: Context = application.applicationContext
   private var sessionAsset: SessionAsset = DefaultAsset()
 
   private val operationsRepository: OperationsRepository = OperationsRepository.getInstance()
@@ -38,6 +37,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
   private var handler = Handler()
   private var runnableCode: Runnable? = null
+  private var canRefresh = false
 
   init {
     WalletApplication.assetSession.observeForever {
@@ -47,36 +47,36 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
       }
     }
 
-    operationsRepository.loadList().observeForever {
+    operationsRepository.listLiveData().observeForever {
       Timber.d("operations repository, observer triggered")
       if (it != null) {
         operationsListResponse = it
-        state = WalletState.ACTIVE
-        TradesRepository.getInstance().forceRefresh()
-      }
-    }
-
-    tradesRepository.loadList().observeForever {
-      Timber.d("trades repository, observer triggered")
-      if (it != null) {
-        tradesListResponse = it
         state = WalletState.ACTIVE
         notifyViewState()
       }
     }
 
-    AccountRepository.refreshData().observeForever {
+    tradesRepository.listLiveData().observeForever {
+      Timber.d("trades repository, observer triggered")
       if (it != null) {
+        tradesListResponse = it
+        state = WalletState.ACTIVE
+        OperationsRepository.getInstance().forceRefresh()
+      }
+    }
+
+    AccountRepository.refreshData().observeForever {
+      if (canRefresh && it != null) {
         when (it.httpCode) {
           200 -> {
             val immutableAccount = this.stellarAccount
             if (immutableAccount == null
-              || immutableAccount.basicHashCode() != it.stellarAccount.basicHashCode()
+              || !immutableAccount.basicEquals(it.stellarAccount)
               || state != WalletState.ACTIVE) {
               stellarAccount = it.stellarAccount
               state = WalletState.ACTIVE
 
-              OperationsRepository.getInstance().forceRefresh()
+              TradesRepository.getInstance().forceRefresh()
             } else {
               //let's ignore this response
               Timber.d("ignoring account response")
@@ -100,9 +100,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     state = WalletState.UPDATING
     notifyViewState()
 
-    if (NetworkUtils(applicationContext).isNetworkAvailable()) doAsync {
-      AccountRepository.refresh()
-    }
+    if (NetworkUtils(context).isNetworkAvailable()) AccountRepository.refresh()
   }
 
   fun walletViewState(forceRefresh: Boolean): MutableLiveData<WalletViewState> {
@@ -164,28 +162,14 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
   }
 
   fun moveToForeGround() {
-    startPolling()
+    canRefresh = true
+
+    if (NetworkUtils(context).isNetworkAvailable()) AccountRepository.refresh()
   }
 
   fun moveToBackground() {
-    stopPolling()
+    canRefresh = false
   }
 
-  private fun stopPolling() {
-    Timber.d("disabling polling")
-    synchronized(this) {
-      handler.removeCallbacks(runnableCode)
-    }
-  }
 
-  private fun startPolling() {
-    synchronized(this) {
-      Timber.d("starting polling")
-      runnableCode = Runnable {
-        Timber.d("starting pulling cycle")
-        if (NetworkUtils(applicationContext).isNetworkAvailable()) AccountRepository.refresh()
-      }
-      handler.post(runnableCode)
-    }
-  }
 }

@@ -39,7 +39,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
   private lateinit var contact: Contact
 
   companion object {
-    private const val RQ_SEND_TO_CONTACT = 111
+    private const val RC_PAY = 222
     private const val ARG_MODE = "ARG_MODE"
     private const val ARG_CONTACT = "ARG_CONTACT"
 
@@ -101,7 +101,11 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         bottomButton.isEnabled = true
       }
     } else {
-      super.onActivityResult(requestCode, resultCode, data)
+      when (requestCode) {
+        ContactsActivity.RC_PAY_TO_CONTACT -> if (resultCode == RESULT_OK) finish()
+        RC_PAY -> if (resultCode == RESULT_OK) finish()
+        else -> super.onActivityResult(requestCode, resultCode, data)
+      }
     }
   }
 
@@ -179,13 +183,13 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         initiateScan()
       }
       R.id.sendToContactButton -> {
-        startActivityForResult(ContactsActivity.withKey(this), RQ_SEND_TO_CONTACT)
+        startActivityForResult(ContactsActivity.withKey(this), ContactsActivity.RC_PAY_TO_CONTACT)
       }
       R.id.bottomButton -> {
         when (mode) {
           Mode.PAY_TO -> {
             if (address.length == STELLAR_ADDRESS_LENGTH && address != WalletApplication.wallet.getStellarAccountId()) {
-              startActivity(PayActivity.newIntent(this, address))
+              startActivityForResult(PayActivity.newIntent(this, address), RC_PAY)
               overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
             } else {
               // Shake animation on the text

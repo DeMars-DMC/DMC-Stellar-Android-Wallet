@@ -15,6 +15,7 @@ import io.demars.stellarwallet.models.Contact
 import com.github.abdularis.civ.CircleImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import io.demars.stellarwallet.activities.ContactsActivity
 
 /**
  * Contains a Contact List Item
@@ -69,7 +70,8 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         button.setOnClickListener {
             val context = it.context
             stellarAddress?.let { that ->
-                context.startActivity(PayActivity.newIntent(context, that))
+                (context as ContactsActivity).startActivityForResult(
+                  PayActivity.newIntent(context, that), ContactsActivity.RC_PAY_TO_CONTACT)
             } ?: run {
                 context.startActivity(StellarAddressActivity.updateContact(context, contact))
             }

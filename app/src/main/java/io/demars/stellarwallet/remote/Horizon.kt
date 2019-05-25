@@ -319,13 +319,19 @@ object Horizon : HorizonTasks {
           .includeFailed(false)
           .forAccount(sourceKeyPair).execute()?.records?.filter {
           it.type == Operation.OperationType.CREATED.value ||
-          it.type == Operation.OperationType.PAYMENT.value ||
-          it.type == Operation.OperationType.CHANGE_TRUST.value ||
-          it.type == Operation.OperationType.ALLOW_TRUST.value
+            it.type == Operation.OperationType.PAYMENT.value ||
+            it.type == Operation.OperationType.CHANGE_TRUST.value ||
+            it.type == Operation.OperationType.ALLOW_TRUST.value
         }?.map {
           Pair<OperationResponse, String?>(it, null)
         } as ArrayList<Pair<OperationResponse, String?>>
-        getLoadTransactionsTask(cursor, limit, listener).execute()
+
+        if (operationsResult.isNotEmpty()) {
+          val newCursor = operationsResult.last().first.pagingToken
+          getLoadOperationsTask(newCursor, limit, listener).execute()
+        } else {
+          getLoadTransactionsTask("", limit, listener).execute()
+        }
       } catch (error: Exception) {
         Timber.e(error.message.toString())
         errorMessage = error.message.toString()
@@ -338,7 +344,7 @@ object Horizon : HorizonTasks {
       errorMessage?.let {
         listener.onError(it)
       } ?: run {
-        listener.onLoadOperations(result)
+        listener.onLoadOperations(result, cursor)
       }
     }
   }
@@ -347,27 +353,33 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<TransactionResponse> {
       val server = getServer()
-      var transactionResults: Page<TransactionResponse>? = null
+      var transactionResults: ArrayList<TransactionResponse> = ArrayList()
       try {
         val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         transactionResults = server.transactions().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
           .includeFailed(false)
-          .forAccount(sourceKeyPair).execute()
+          .forAccount(sourceKeyPair).execute()?.records ?: ArrayList()
+
+        if (transactionResults.isNotEmpty()) {
+          val newCursor = transactionResults.last().pagingToken
+          getLoadTransactionsTask(newCursor, limit, listener).execute()
+        }
+
       } catch (error: Exception) {
         Timber.e(error.message.toString())
         errorMessage = error.message.toString()
       }
 
-      return transactionResults?.records ?: ArrayList()
+      return transactionResults
     }
 
     override fun onPostExecute(result: ArrayList<TransactionResponse>) {
       errorMessage?.let {
         listener.onError(it)
       } ?: run {
-        listener.onLoadTransactions(result)
+        listener.onLoadTransactions(result, cursor)
       }
     }
   }
@@ -376,26 +388,32 @@ object Horizon : HorizonTasks {
     var errorMessage: String? = null
     override fun doInBackground(vararg params: Void?): ArrayList<TradeResponse>? {
       val server = getServer()
-      var tradeResults: Page<TradeResponse>? = null
+      var tradeResults: ArrayList<TradeResponse>? = ArrayList()
       try {
         val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         tradeResults = (server.trades().order(RequestBuilder.Order.DESC) as TradesRequestBuilder)
           .cursor(cursor)
           .limit(limit)
-          .forAccount(sourceKeyPair).execute()
+          .forAccount(sourceKeyPair).execute()?.records ?: ArrayList()
+
+        if (tradeResults.isNotEmpty()) {
+          val newCursor = tradeResults.last().pagingToken
+          getLoadTradesTask(newCursor, limit, listener).execute()
+        }
+
       } catch (error: Exception) {
         Timber.e(error.message.toString())
         errorMessage = error.message.toString()
       }
 
-      return tradeResults?.records
+      return tradeResults
     }
 
     override fun onPostExecute(result: ArrayList<TradeResponse>?) {
       errorMessage?.let {
         listener.onError(it)
       } ?: run {
-        listener.onLoadTrades(result)
+        listener.onLoadTrades(result, cursor)
       }
     }
   }

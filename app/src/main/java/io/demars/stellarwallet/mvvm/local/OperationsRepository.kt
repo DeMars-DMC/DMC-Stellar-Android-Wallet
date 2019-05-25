@@ -22,10 +22,7 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
   /**
    * Returns an observable for ALL the operations table changes
    */
-  fun loadList(forceRefresh: Boolean = false): LiveData<ArrayList<Pair<OperationResponse, String?>>> {
-//    if (forceRefresh || operationsList.isEmpty()) {
-//      forceRefresh()
-//    }
+  fun listLiveData(): LiveData<ArrayList<Pair<OperationResponse, String?>>> {
     return operationListLiveData
   }
 
@@ -54,42 +51,35 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
    * from the data sources implementation.
    */
   private fun fetch() {
-//    val cursor = if (operationsList.isEmpty()) "" else operationsList.last().first.pagingToken
-    val cursor = ""
-    remoteRepository.getOperations(cursor, 200,
+    operationsList.clear()
+    remoteRepository.getOperations("", 100,
       object : OnLoadOperations {
         override fun onError(errorMessage: String) {
           isBusy = false
         }
 
-        override fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?) {
+        override fun onLoadOperations(result: ArrayList<Pair<OperationResponse, String?>>?, cursor: String) {
           Timber.d("fetched ${result?.size} operations from cursor $cursor")
           if (result != null) {
             if (result.isNotEmpty()) {
-              //is the first time let's notify the ui
-              val isFirstTime = operationsList.isEmpty()
-              operationsList.clear()
               operationsList.addAll(result)
-              if (isFirstTime) notifyLiveData(operationsList)
+              notifyLiveData(operationsList)
             } else {
+              notifyLiveData(operationsList)
               if (cursor != currentCursor) {
-                if (ENABLE_STREAM) {
-                  closeStream()
-                  Timber.d("Opening the stream")
-                  eventSource = remoteRepository.registerForOperations("now", EventListener {
-                    Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-                    operationsList.add(0, Pair(it, null))
-                    notifyLiveData(operationsList)
-                  })
-                }
+                openStream()
                 currentCursor = cursor
               }
-              notifyLiveData(operationsList)
             }
           }
         }
 
-        override fun onLoadTransactions(result: ArrayList<TransactionResponse>) {
+        override fun onLoadTransactions(result: ArrayList<TransactionResponse>, cursor: String) {
+          if (result.isEmpty()) {
+            isBusy = false
+            return
+          }
+
           val operationsWithMemo = ArrayList<Pair<OperationResponse, String?>>()
           for (operation in operationsList) {
             var memo: String? = null
@@ -101,15 +91,25 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
               }
             }
 
-            operationsWithMemo.add(Pair(operation.first, memo))
+            operationsWithMemo.add(Pair(operation.first, memo ?: operation.second))
           }
 
           operationsList = operationsWithMemo
 
           notifyLiveData(operationsList)
-          isBusy = false
         }
       })
+  }
+
+  fun openStream() {
+    if (!ENABLE_STREAM) return
+    closeStream()
+    Timber.d("Opening the stream")
+    eventSource = remoteRepository.registerForOperations("now", EventListener {
+      Timber.d("Stream response {$it}, created at: ${it.createdAt}")
+      operationsList.add(0, Pair(it, null))
+      notifyLiveData(operationsList)
+    })
   }
 
   fun closeStream() {

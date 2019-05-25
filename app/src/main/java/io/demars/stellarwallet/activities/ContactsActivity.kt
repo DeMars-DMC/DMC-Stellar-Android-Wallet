@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +14,9 @@ class ContactsActivity : BaseActivity() {
 
   private lateinit var mode: Mode
   private lateinit var fragment: ContactsFragment
+
   companion object {
+    const val RC_PAY_TO_CONTACT = 111
     private const val ARG_MODE = "ARG_MODE"
 
     fun all(context: Context): Intent {
@@ -45,5 +48,15 @@ class ContactsActivity : BaseActivity() {
     val transaction = supportFragmentManager.beginTransaction()
     transaction.replace(R.id.content_container, fragment)
     transaction.commit()
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    when (requestCode) {
+      RC_PAY_TO_CONTACT -> if (resultCode == RESULT_OK) {
+        setResult(Activity.RESULT_OK)
+        finish()
+      }
+      else -> super.onActivityResult(requestCode, resultCode, data)
+    }
   }
 }

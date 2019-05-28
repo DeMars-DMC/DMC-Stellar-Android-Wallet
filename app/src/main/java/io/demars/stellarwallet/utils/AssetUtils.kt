@@ -1,7 +1,9 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.utils
 
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.models.DataAsset
+import io.demars.stellarwallet.models.SelectionModel
 import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeCreditAlphaNum12
 import org.stellar.sdk.AssetTypeCreditAlphaNum4

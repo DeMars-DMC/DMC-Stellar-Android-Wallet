@@ -7,7 +7,7 @@ import android.view.View
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_balance_summary.*

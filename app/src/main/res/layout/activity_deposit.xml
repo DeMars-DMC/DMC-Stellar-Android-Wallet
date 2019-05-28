@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -12,4 +13,98 @@
         android:theme="@style/ToolbarTheme"
         app:title="@string/deposit" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/personalInfoLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:text="@string/banking_information"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/personalInfoLabel"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/padding_horizontal"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:textColor="@color/black"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp"
+        tool:text="Ivan Ivanov" />
+
+    <TextView
+        android:id="@+id/phoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/personalInfoLabel"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/padding_horizontal"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:textColor="@color/black"
+        android:layout_alignParentEnd="true"
+        android:textSize="18sp"
+        tool:text="+1234567890" />
+
+    <TextView
+        android:id="@+id/bankAccountPicker"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:minHeight="@dimen/button_height_big"
+        android:layout_below="@id/nameText"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_add_circle_outline_white_24"
+        android:drawableTint="@color/colorPaleSky"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:text="@string/add_bank_account"
+        android:textColor="@color/colorPaleSky"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/amountTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/submitButton"
+        android:layout_below="@+id/bankAccountPicker"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="@string/default_value"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size_xbig" />
+
+    <Button
+        android:id="@+id/submitButton"
+        style="@style/ButtonStyleAccentFlat"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_send"
+        android:layout_above="@+id/numberKeyboard"
+        android:elevation="0dp"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        tool:ignore="UnusedAttribute" />
+
+    <io.demars.stellarwallet.views.pin.PinLockView
+        android:id="@+id/numberKeyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:keypadButtonSize="@dimen/button_height_big"
+        app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
+        app:keypadDotButtonDrawable="@drawable/ic_dot_decimal"
+        app:keypadShowDeleteButton="true"
+        app:keypadShowDotButton="true"
+        app:keypadTextColor="@color/colorPrimary"
+        app:keypadTextSize="@dimen/keypad_size" />
+</RelativeLayout>

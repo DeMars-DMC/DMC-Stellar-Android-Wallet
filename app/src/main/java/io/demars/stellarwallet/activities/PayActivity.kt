@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -17,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.ExchangeApiModel
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.mvvm.exchange.ExchangeEntity
@@ -29,7 +28,7 @@ import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint
 import io.demars.stellarwallet.views.pin.PinLockView
-import kotlinx.android.synthetic.main.activity_send_funds.*
+import kotlinx.android.synthetic.main.activity_pay.*
 import java.lang.Double.parseDouble
 
 class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCallback {
@@ -57,7 +56,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_send_funds)
+    setContentView(R.layout.activity_pay)
     setupUI()
   }
 

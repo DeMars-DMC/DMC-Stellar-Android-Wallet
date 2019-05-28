@@ -271,7 +271,7 @@
     <string name="learn_about_stellar">Learn about Stellar &amp; DMC</string>
     <string name="search">Search</string>
     <string name="dmc_asset">DMC Asset</string>
-    <string name="available">Available:\u0020</string>
+    <string name="pattern_available">Available: %s</string>
     <string name="public_address">Public Address</string>
     <string name="add_asset">Add asset</string>
     <string name="pay_to_contact">Pay to contact</string>
@@ -362,4 +362,8 @@
     <string name="buy">Buy</string>
     <string name="deposit">Deposit</string>
     <string name="trade">Trade</string>
+    <string name="balance">Balance</string>
+    <string name="select_bank_account">Select bank account</string>
+    <string name="banking_information">Banking information</string>
+    <string name="add_bank_account">Add Bank Account</string>
 </resources>

@@ -13,7 +13,7 @@ import io.demars.stellarwallet.interfaces.OnRefreshOrderBookListener
 import io.demars.stellarwallet.interfaces.OnTradeCurrenciesChanged
 import io.demars.stellarwallet.interfaces.OnUpdateOrderBook
 import io.demars.stellarwallet.interfaces.OnUpdateTradeTab
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon

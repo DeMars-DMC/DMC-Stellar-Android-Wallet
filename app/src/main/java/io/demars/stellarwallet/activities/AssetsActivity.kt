@@ -184,7 +184,7 @@ class AssetsActivity : BaseActivity(), AssertListener {
   }
 
   override fun depositZAR() {
-    startActivity(Intent(this, DepositActivity::class.java))
+    startActivity(DepositActivity.newInstance(this, "ZAR"))
   }
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {

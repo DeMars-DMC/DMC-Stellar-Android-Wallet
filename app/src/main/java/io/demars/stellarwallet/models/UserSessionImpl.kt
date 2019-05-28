@@ -1,9 +1,8 @@
 package io.demars.stellarwallet.models
 
 import android.content.Context
-import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.utils.AccountUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.StringFormat
 
 class UserSessionImpl : UserSession {

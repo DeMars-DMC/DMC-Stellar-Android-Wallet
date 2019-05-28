@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 
 class ConfirmTradeDialog(context: Context,
                          private val sellingText: String,

@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.*
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon

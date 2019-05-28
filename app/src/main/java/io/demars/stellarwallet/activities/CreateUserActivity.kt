@@ -53,7 +53,6 @@ class CreateUserActivity : AppCompatActivity() {
     private const val REQUEST_CODE_CAMERA_ID_FRONT = 111
     private const val REQUEST_CODE_CAMERA_ID_BACK = 222
     private const val REQUEST_CODE_CAMERA_SELFIE = 333
-    private const val ARG_USER = "ARG_USER"
 
     fun newInstance(context: Context): Intent = Intent(context, CreateUserActivity::class.java)
   }

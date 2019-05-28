@@ -20,7 +20,7 @@ import io.demars.stellarwallet.interfaces.ContactsRepository.ContactOperationSta
 import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import com.google.zxing.integration.android.IntentIntegrator
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.StringFormat

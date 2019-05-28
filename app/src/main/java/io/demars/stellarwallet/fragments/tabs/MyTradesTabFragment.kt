@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.MyOffersAdapter
 import io.demars.stellarwallet.interfaces.OnDeleteRequest
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.MyOffer
 import io.demars.stellarwallet.remote.Horizon

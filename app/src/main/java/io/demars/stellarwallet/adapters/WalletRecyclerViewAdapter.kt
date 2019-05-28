@@ -24,6 +24,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.demars.stellarwallet.utils.AssetUtils
 
 
 class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -242,7 +243,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
   private fun configureAvailableBalanceViewHolder(viewHolder: AvailableBalanceViewHolder, position: Int) {
     val availableBalance = items!![position] as AvailableBalance
     @SuppressLint("SetTextI18n")
-    viewHolder.balance.text = availableBalance.balance
+    viewHolder.balance.text = context.getString(R.string.pattern_available, availableBalance.balance)
     viewHolder.learnMoreButton.setOnClickListener { view ->
       onLearnMoreListener?.onLearnMoreButtonClicked(view, availableBalance.assetCode, availableBalance.issuer, position)
     }

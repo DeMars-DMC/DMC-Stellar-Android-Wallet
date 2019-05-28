@@ -15,6 +15,7 @@ import io.demars.stellarwallet.interfaces.AssertListener
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
 import io.demars.stellarwallet.models.*
+import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 

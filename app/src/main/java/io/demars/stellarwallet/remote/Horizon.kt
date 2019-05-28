@@ -6,11 +6,10 @@ import android.os.Looper
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.*
-import io.demars.stellarwallet.models.AssetUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.HorizonException
 import io.demars.stellarwallet.models.Operation
-import org.jetbrains.anko.doAsync
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*

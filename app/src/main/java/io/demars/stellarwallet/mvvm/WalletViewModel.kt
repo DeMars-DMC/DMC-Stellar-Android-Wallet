@@ -14,6 +14,7 @@ import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
 import io.demars.stellarwallet.utils.AccountUtils
+import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.StringFormat.Companion.truncateDecimalPlaces
 import org.stellar.sdk.responses.TradeResponse

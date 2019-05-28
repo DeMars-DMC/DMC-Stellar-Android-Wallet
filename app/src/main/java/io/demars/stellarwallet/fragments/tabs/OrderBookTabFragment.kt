@@ -15,6 +15,7 @@ import io.demars.stellarwallet.interfaces.OnRefreshOrderBookListener
 import io.demars.stellarwallet.interfaces.OnUpdateOrderBook
 import io.demars.stellarwallet.models.*
 import com.brandongogetap.stickyheaders.StickyLayoutManager
+import io.demars.stellarwallet.utils.AssetUtils
 import kotlinx.android.synthetic.main.fragment_tab_order_book.*
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.stellar.sdk.responses.OrderBookResponse

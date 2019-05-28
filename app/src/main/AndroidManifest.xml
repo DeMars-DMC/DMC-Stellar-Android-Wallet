@@ -124,6 +124,10 @@
             android:name=".activities.DebugPreferenceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.DepositActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activities.WalletManagerActivity"

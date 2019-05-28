@@ -107,14 +107,4 @@ class DiagnosticActivity : BaseActivity() {
             Toast.makeText(applicationContext, "There are no email clients installed.", Toast.LENGTH_SHORT).show()
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            if (item.itemId == android.R.id.home) {
-                finish()
-                return true
-            }
-        }
-        return false
-    }
 }

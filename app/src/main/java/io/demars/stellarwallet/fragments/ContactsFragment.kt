@@ -113,10 +113,6 @@ class ContactsFragment : Fragment() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     // Handle presses on the action bar menu items
     when (item.itemId) {
-      android.R.id.home -> {
-        activity?.onBackPressed()
-        return true
-      }
       R.id.refresh_contacts -> {
         if (checkNeedPermissions()) {
           Toast.makeText(activity!!, "Please grant needed permissions to add refresh Contacts", Toast.LENGTH_LONG).show()
@@ -150,8 +146,8 @@ class ContactsFragment : Fragment() {
         }
         return true
       }
+      else -> return super.onOptionsItemSelected(item)
     }
-    return super.onOptionsItemSelected(item)
   }
 
   private fun setEnablePermissionsState(shouldShowRationale: Boolean) {

@@ -98,16 +98,6 @@ class AssetsActivity : BaseActivity(), AssertListener {
     progressBar.visibility = View.GONE
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    if (item != null) {
-      if (item.itemId == android.R.id.home) {
-        finish()
-        return true
-      }
-    }
-    return false
-  }
-
   override fun onRestart() {
     super.onRestart()
     reloadDataForAdapter()
@@ -194,6 +184,7 @@ class AssetsActivity : BaseActivity(), AssertListener {
   }
 
   override fun depositZAR() {
+    startActivity(Intent(this, DepositActivity::class.java))
   }
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {

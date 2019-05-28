@@ -112,16 +112,6 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     amountAvailable = available.toDouble()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    if (item != null) {
-      if (item.itemId == android.R.id.home) {
-        finish()
-        return true
-      }
-    }
-    return false
-  }
-
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_PIN) {

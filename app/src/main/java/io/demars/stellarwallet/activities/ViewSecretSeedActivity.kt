@@ -43,14 +43,4 @@ class ViewSecretSeedActivity : BaseActivity() {
 
         Toast.makeText(this, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()
     }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            if (item.itemId == android.R.id.home) {
-                finish()
-                return true
-            }
-        }
-        return false
-    }
 }

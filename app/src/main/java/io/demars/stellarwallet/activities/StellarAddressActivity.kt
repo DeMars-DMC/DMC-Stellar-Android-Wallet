@@ -238,10 +238,6 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
     if (item != null) {
-      if (item.itemId == android.R.id.home) {
-        finish()
-        return true
-      }
       if (item.itemId == R.id.nav_open_contact) {
         val intent = Intent(Intent.ACTION_VIEW)
         val uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contact.id.toString())
@@ -251,7 +247,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         return true
       }
     }
-    return false
+    return super.onOptionsItemSelected(item)
   }
 
 

@@ -68,14 +68,4 @@ class AddAssetActivity : BaseActivity() {
             progressBar.visibility = View.GONE
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            if (item.itemId == android.R.id.home) {
-                finish()
-                return true
-            }
-        }
-        return false
-    }
 }

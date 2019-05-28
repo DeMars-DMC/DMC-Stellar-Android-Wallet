@@ -40,16 +40,6 @@ class WebViewActivity : BaseActivity() {
     }
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    if (item != null) {
-      if (item.itemId == android.R.id.home) {
-        finish()
-        return true
-      }
-    }
-    return false
-  }
-
   private fun setupContent(url: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       webview.webViewClient = object : WebViewClient() {

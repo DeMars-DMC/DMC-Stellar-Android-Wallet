@@ -48,16 +48,6 @@ class RecoverWalletActivity : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            if (item.itemId == android.R.id.home) {
-                finish()
-                return true
-            }
-        }
-        return false
-    }
-
     //region User Interface
     private fun setupUI() {
         setupToolbar()

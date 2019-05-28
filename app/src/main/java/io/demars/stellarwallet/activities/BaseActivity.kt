@@ -2,6 +2,7 @@ package io.demars.stellarwallet.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
@@ -40,5 +41,15 @@ abstract class BaseActivity : AppCompatActivity() {
         Activity.RESULT_CANCELED -> finish()
       }
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    if (item != null) {
+      if (item.itemId == android.R.id.home) {
+        finish()
+        return true
+      }
+    }
+    return false
   }
 }

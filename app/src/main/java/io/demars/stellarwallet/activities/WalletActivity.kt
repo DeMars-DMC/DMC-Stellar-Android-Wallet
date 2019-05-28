@@ -17,6 +17,7 @@ import io.demars.stellarwallet.utils.GlobalGraphHelper
 import io.demars.stellarwallet.utils.KeyboardUtils
 import timber.log.Timber
 import android.content.Intent
+import io.demars.stellarwallet.activities.AssetsActivity.Companion.RC_ASSETS
 
 class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener {
   private enum class WalletFragmentType {
@@ -121,7 +122,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
             ?: WalletFragment.newInstance()
           replaceFragment(walletFragment, WalletFragmentType.WALLET)
         }
-        R.id.nav_trading -> {
+        R.id.nav_exchange -> {
           // minimum two trades
           if (!enoughAssetsToTrade()) {
             dialogTradeAlert.show()
@@ -150,7 +151,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
     transaction.replace(R.id.content_container, fragment, type.name)
     //This is complete necessary to be able to reuse the fragments using the supportFragmentManager
     transaction.addToBackStack(null)
-    transaction.commit()
+    transaction.commitAllowingStateLoss()
   }
 
   private fun setupUI() {
@@ -165,7 +166,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
   override fun onResume() {
     super.onResume()
 
-    if (bottomNavigation.selectedItemId == R.id.nav_trading) {
+    if (bottomNavigation.selectedItemId == R.id.nav_exchange) {
       if (!enoughAssetsToTrade()) {
         dialogTradeAlert.show()
       }
@@ -207,6 +208,13 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
       bottomNavigation.selectedItemId = R.id.nav_wallet
     } else {
       finish()
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    when {
+      requestCode == RC_ASSETS && resultCode == RESULT_OK -> bottomNavigation.selectedItemId = R.id.nav_exchange
+      else -> super.onActivityResult(requestCode, resultCode, data)
     }
   }
 }

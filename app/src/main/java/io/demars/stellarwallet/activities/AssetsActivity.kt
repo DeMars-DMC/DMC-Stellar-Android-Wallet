@@ -1,10 +1,10 @@
 package io.demars.stellarwallet.activities
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -13,13 +13,10 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.interfaces.ChangeTrustlineListener
+import io.demars.stellarwallet.interfaces.AssertListener
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.DefaultAsset
-import io.demars.stellarwallet.models.HorizonException
-import io.demars.stellarwallet.models.SupportedAsset
-import io.demars.stellarwallet.models.SupportedAssetType
+import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
@@ -30,14 +27,14 @@ import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse
 
 
-class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
-
+class AssetsActivity : BaseActivity(), AssertListener {
   private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
   private lateinit var context: Context
   private lateinit var adapter: AssetsRecyclerViewAdapter
 
   companion object {
+    const val RC_ASSETS = 111
     fun newInstance(context: Context): Intent {
       return Intent(context, AssetsActivity::class.java)
     }
@@ -60,6 +57,24 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
     manuallyAddAssetButton.setOnClickListener {
       startActivity(Intent(this@AssetsActivity, AddAssetActivity::class.java))
     }
+
+    setInflationButton.setOnClickListener {
+      if (WalletApplication.wallet.getBalances().isNotEmpty() &&
+        AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
+        context.startActivity(Intent(context, InflationActivity::class.java))
+      } else {
+        showBalanceErrorDialog()
+      }
+    }
+  }
+
+  private fun showBalanceErrorDialog() {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(context.getString(R.string.no_balance_dialog_title))
+      .setMessage(context.getString(R.string.no_balance_text_message))
+      .setPositiveButton(context.getString(R.string.ok)) { _, _ -> }
+    val dialog = builder.create()
+    dialog.show()
   }
 
   //region User Interface
@@ -164,6 +179,22 @@ class AssetsActivity : BaseActivity(), ChangeTrustlineListener {
   }
 
   //region Call backs
+  override fun assetSelected(sessionAsset: SessionAsset) {
+    WalletApplication.userSession.setSessionAsset(sessionAsset)
+    finish()
+  }
+
+  override fun buyXLM() {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
+  }
+
+  override fun tradeDMC() {
+    setResult(RESULT_OK)
+    finish()
+  }
+
+  override fun depositZAR() {
+  }
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {
     progressBar.visibility = View.VISIBLE

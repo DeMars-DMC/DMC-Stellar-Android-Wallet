@@ -153,7 +153,7 @@
     <string name="asset_title_text">Assets</string>
     <string name="error_supported_assets_message">There was an error fetching supported assets.</string>
     <string name="supported_assets_header">DMC Assets</string>
-    <string name="set_inflation_message">Set inflation</string>
+    <string name="set_inflation">Set inflation</string>
     <string name="remove_asset_message">Remove asset</string>
     <string name="no_balance_dialog_title">Minimum balance error</string>
     <string name="no_balance_text_message">You must have more than 1 Lumen (XLM) to perform this action.</string>
@@ -272,7 +272,6 @@
     <string name="search">Search</string>
     <string name="dmc_asset">DMC Asset</string>
     <string name="available">Available:\u0020</string>
-    <string name="_1_0000_xlm">1.0000 XLM</string>
     <string name="public_address">Public Address</string>
     <string name="add_asset">Add asset</string>
     <string name="pay_to_contact">Pay to contact</string>
@@ -360,4 +359,7 @@
     <string name="selling">Selling</string>
     <string name="receiving">Receiving</string>
     <string name="posted_for_trade">Posted for trade</string>
+    <string name="buy">Buy</string>
+    <string name="deposit">Deposit</string>
+    <string name="trade">Trade</string>
 </resources>

@@ -252,6 +252,7 @@ object Horizon : HorizonTasks {
   }
 
   private class LoadAccountTask(private val listener: OnLoadAccount) : AsyncTask<Void, Void, AccountResponse>() {
+    var error: ErrorResponse? = null
     override fun doInBackground(vararg params: Void?): AccountResponse? {
       var account: AccountResponse? = null
       try {
@@ -259,14 +260,11 @@ object Horizon : HorizonTasks {
         val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
         account = server.accounts().account(sourceKeyPair)
 
-      } catch (error: Exception) {
-        if (error !is NullPointerException) {
-          Timber.d(error.message.toString())
-          if (error is ErrorResponse) {
-            listener.onError(error)
-          } else {
-            listener.onError(ErrorResponse(Constants.UNKNOWN_ERROR, error.message))
-          }
+      } catch (ex: Exception) {
+        if (ex !is NullPointerException) {
+          Timber.d(ex.message.toString())
+          error = if (ex is ErrorResponse) ex
+          else ErrorResponse(Constants.UNKNOWN_ERROR, ex.message)
         }
       }
 
@@ -274,7 +272,11 @@ object Horizon : HorizonTasks {
     }
 
     override fun onPostExecute(result: AccountResponse?) {
-      listener.onLoadAccount(result)
+      error?.let {
+        listener.onError(it)
+      } ?: run {
+        listener.onLoadAccount(result)
+      }
     }
   }
 

@@ -81,22 +81,17 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_launch)
-
-    // First of all check the internet connection
-    if (!NetworkUtils(this).isNetworkAvailable()) {
-      // No internet showing message and retry button
-      updateForMode(Mode.NO_INTERNET)
-    } else {
-      initFirebase()
-    }
+    initFirebase()
   }
 
   private fun initFirebase() {
-    // Initial check if user already signed in
-    Firebase.getCurrentUser()?.let { user ->
-      uid = user.uid
-      Firebase.getUser(userListener)
-    } ?: updateForMode(Mode.INITIAL)
+    if (NetworkUtils(this).isNetworkAvailable()) {
+      // Initial check if user already signed in
+      Firebase.getCurrentUser()?.let { user ->
+        uid = user.uid
+        Firebase.getUser(userListener)
+      } ?: updateForMode(Mode.INITIAL)
+    } else updateForMode(Mode.NO_INTERNET)
   }
 
   private fun updateForMode(mode: Mode) {
@@ -220,9 +215,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun login() {
-    if (NetworkUtils(this).isNetworkAvailable()) {
-      initFirebase()
-    }
+    initFirebase()
   }
 
   private fun showCreateDialog() {

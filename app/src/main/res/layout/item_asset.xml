@@ -1,70 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/selectableItemBackground"
-    android:layout_width="match_parent" android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/assetImageView"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="@dimen/activity_vertical_margin" />
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_height"
+        android:layout_margin="@dimen/padding_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/defaultAssetView"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_centerVertical="true"
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_height"
+        android:layout_margin="@dimen/padding_horizontal"
         android:background="@drawable/bg_rounded_button_grey"
-        android:textColor="@color/white"
         android:gravity="center"
+        android:textColor="@color/white"
         android:textSize="@dimen/text_size"
-        android:layout_margin="@dimen/activity_vertical_margin" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_marginStart="52dp"
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/assetNameTextView"
+        style="@style/BoldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:padding="@dimen/activity_vertical_margin"
-        tools:ignore="RelativeOverlap">
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/assetAmountTextView"
+        app:layout_constraintStart_toEndOf="@+id/assetImageView"
+        app:layout_constraintTop_toTopOf="@+id/assetImageView"
+        tools:text="XLM" />
 
-        <TextView
-            android:id="@+id/assetNameTextView"
-            tools:text="Stellar Lumens"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/BoldText"
-            android:textSize="@dimen/text_size" />
+    <TextView
+        android:id="@+id/assetAmountTextView"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:textColor="@color/regularTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/assetImageView"
+        app:layout_constraintStart_toEndOf="@+id/assetImageView"
+        tools:text="16.0000 XLM" />
 
-        <TextView
-            android:id="@+id/assetAmountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/RegularText"
-            android:layout_marginTop="@dimen/margin_padding_size_small"
-            android:textColor="@color/regularTextColor"
-            tools:text="16.0000 XLM" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/assetIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="@dimen/padding_micro"
+        android:src="@drawable/dot_filled"
+        android:tint="@color/colorGreen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/assetNameTextView"
+        app:layout_constraintStart_toEndOf="@+id/assetNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/assetNameTextView" />
 
     <Button
+        android:id="@+id/buyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="end|center_vertical"
+        android:padding="@dimen/padding_horizontal"
+        android:text="@string/buy"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/assetButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
         android:id="@+id/assetButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/ButtonStyleAccent"
-        android:layout_alignParentEnd="true"
-        android:textSize="@dimen/text_size_micro"
-        android:padding="@dimen/padding_mini"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:paddingTop="@dimen/padding_horizontal"
+        android:paddingBottom="@dimen/padding_horizontal"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_medium"
+        android:src="@drawable/ic_add"
         android:text="@string/add_asset"
-        android:layout_centerVertical="true"
-        android:layout_margin="@dimen/padding_horizontal"/>
+        android:textSize="@dimen/text_size_micro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <View style="@style/HorizontalDivider"
-        android:layout_alignParentBottom="true" />
+    <View
+        style="@style/HorizontalDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

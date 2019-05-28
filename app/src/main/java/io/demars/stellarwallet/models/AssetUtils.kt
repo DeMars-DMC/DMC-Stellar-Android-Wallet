@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.models
 
+import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.remote.Horizon
 import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeCreditAlphaNum12
 import org.stellar.sdk.AssetTypeCreditAlphaNum4
@@ -83,5 +83,11 @@ class AssetUtils {
       assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
       else -> 7
     }
+
+    fun isSessionAsset(assetCode: String) : Boolean = xlmAsNative(assetCode).equals(
+      WalletApplication.userSession.getSessionAsset().assetCode, true)
+
+    private fun xlmAsNative(assetCode: String) : String =
+      if (assetCode == Constants.LUMENS_ASSET_CODE) Constants.LUMENS_ASSET_TYPE else assetCode
   }
 }

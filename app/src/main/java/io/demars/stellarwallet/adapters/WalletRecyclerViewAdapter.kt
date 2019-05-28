@@ -205,7 +205,6 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.balance.text = totalBalance.balance
     val code = getVisibleAssetCode(totalBalance.assetCode)
 
-    //TODO move this to states
     if (code.isEmpty()) {
       tintProgressBar(viewHolder.progressBar, ContextCompat.getColor(context, R.color.white))
       viewHolder.progressBar.visibility = VISIBLE
@@ -214,8 +213,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     } else {
       viewHolder.progressBar.visibility = GONE
       viewHolder.assetsButton.visibility = VISIBLE
-      viewHolder.assetName.text = String.format(context.getString(io.demars.stellarwallet.R.string.asset_template),
-        totalBalance.assetName, getVisibleAssetCode(totalBalance.assetCode))
+      viewHolder.assetName.text = getVisibleAssetCode(totalBalance.assetCode)
     }
 
     when (totalBalance.state) {
@@ -244,7 +242,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
   private fun configureAvailableBalanceViewHolder(viewHolder: AvailableBalanceViewHolder, position: Int) {
     val availableBalance = items!![position] as AvailableBalance
     @SuppressLint("SetTextI18n")
-    viewHolder.balance.text = "${availableBalance.balance} ${getVisibleAssetCode(availableBalance.assetCode)}"
+    viewHolder.balance.text = availableBalance.balance
     viewHolder.learnMoreButton.setOnClickListener { view ->
       onLearnMoreListener?.onLearnMoreButtonClicked(view, availableBalance.assetCode, availableBalance.issuer, position)
     }

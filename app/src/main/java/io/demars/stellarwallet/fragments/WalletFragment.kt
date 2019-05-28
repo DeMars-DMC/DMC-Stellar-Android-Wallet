@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.activities.*
+import io.demars.stellarwallet.activities.AssetsActivity.Companion.RC_ASSETS
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
@@ -67,8 +68,6 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   }
 
   companion object {
-    private const val REFRESH_EFFECT_DELAY = 400L
-
     fun newInstance(): WalletFragment = WalletFragment()
   }
 
@@ -128,13 +127,11 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
   override fun onRefresh() {
     updateState(WalletState.UPDATING)
-    swipeRefresh.postDelayed({
-      activity?.let {
-        if (!it.isFinishing) {
-          viewModel.forceRefresh()
-        }
+    activity?.let {
+      if (!it.isFinishing) {
+        viewModel.forceRefresh()
       }
-    }, REFRESH_EFFECT_DELAY)
+    }
   }
 
   override fun onDestroyView() {
@@ -308,7 +305,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             noTransactionsTextView.visibility = View.GONE
             payButton.isEnabled = false
             receiveButton.isEnabled = false
-            swipeRefresh.isRefreshing = true
+            swipeRefresh.isRefreshing = false
             fetchingState.visibility = View.VISIBLE
             fundingState.visibility = View.GONE
           }
@@ -337,14 +334,14 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     adapter.setOnAssetDropdownListener(object : WalletRecyclerViewAdapter.OnAssetDropdownListener {
       override fun onAssetDropdownClicked(view: View, position: Int) {
         val context = view.context
-        startActivity(Intent(context, AssetsActivity::class.java))
-        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
+        activity?.startActivityForResult(Intent(context, AssetsActivity::class.java), RC_ASSETS)
+        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
       }
     })
     adapter.setOnLearnMoreButtonListener(object : WalletRecyclerViewAdapter.OnLearnMoreButtonListener {
       override fun onLearnMoreButtonClicked(view: View, assetCode: String, issuer: String?, position: Int) {
         val context = view.context
-        if (assetCode == "native" || issuer == null || issuer.isBlank()) {
+        if (assetCode == "native" || issuer.isNullOrBlank()) {
           startActivity(BalanceSummaryActivity.newNativeAssetIntent(context))
         } else {
           startActivity(BalanceSummaryActivity.newIntent(context, assetCode, issuer))

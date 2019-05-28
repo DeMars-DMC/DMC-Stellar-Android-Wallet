@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,6 +11,16 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ToolbarTheme"
         app:title="@string/asset_title_text" />
+
+    <Button
+        android:id="@+id/setInflationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/set_inflation"
+        android:textColor="@color/white"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/padding_horizontal"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assetsRecyclerView"
@@ -31,11 +40,10 @@
 
     <Button
         android:id="@+id/manuallyAddAssetButton"
-        style="@style/ButtonStyleAccent"
+        style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_vertical_margin"
         android:text="@string/add_asset" />
 
 </RelativeLayout>

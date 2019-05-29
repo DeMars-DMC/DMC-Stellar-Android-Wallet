@@ -48,7 +48,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:dotDiameter="@dimen/dot_diameter"
-                app:dotEmptyBackground="@drawable/dot_empty_background"
                 app:dotFilledBackground="@drawable/dot_filled"
                 app:dotSpacing="@dimen/dot_spacing" />
 

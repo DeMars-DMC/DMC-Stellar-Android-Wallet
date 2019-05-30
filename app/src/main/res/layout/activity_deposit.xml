@@ -211,6 +211,7 @@
         android:layout_above="@+id/submitButton"
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
+        android:paddingTop="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_mini"
         android:text="@string/zar_deposit_limit_message"
         android:visibility="gone" />

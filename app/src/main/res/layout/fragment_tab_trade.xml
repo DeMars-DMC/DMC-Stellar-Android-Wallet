@@ -108,19 +108,14 @@
                 android:enabled="false"
                 android:text="@string/place_trade" />
 
+            <TextView
+                style="@style/LongDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_mini"
+                android:paddingBottom="@dimen/padding_mini"
+                android:text="@string/exchange_tab_notes" />
+
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider"
-            android:background="@color/divider" />
-
-        <TextView
-            style="@style/LongDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_horizontal"
-            android:text="@string/exchange_tab_notes" />
-
     </LinearLayout>
 </ScrollView>

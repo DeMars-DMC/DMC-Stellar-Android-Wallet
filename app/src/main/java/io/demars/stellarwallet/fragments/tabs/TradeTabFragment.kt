@@ -154,8 +154,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
       val assetCode = selectedSellingCurrency.label
       val available = StringFormat.truncateDecimalPlaces(
-        AccountUtils.getAvailableBalance(assetCode), AssetUtils.getDecimalPlaces(assetCode))
-      val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+        AccountUtils.getAvailableBalance(assetCode), AssetUtils.getMaxDecimals(assetCode))
+      val decimalPlaces = AssetUtils.getMaxDecimals(assetCode)
 
       availableAmount = available.toDouble()
 
@@ -167,7 +167,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       availableToSell.text = availableStr
 
       val buyingAssetCode = selectedBuyingCurrency.label
-      val buyingDecimalPlaces = AssetUtils.getDecimalPlaces(buyingAssetCode)
+      val buyingDecimalPlaces = AssetUtils.getMaxDecimals(buyingAssetCode)
       buyingBalance.text = String.format(getString(R.string.balance_amount), StringFormat.truncateDecimalPlaces(
         AccountUtils.getTotalBalance(buyingAssetCode), buyingDecimalPlaces), buyingAssetCode)
 
@@ -224,7 +224,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     if (sellingString.replace(",", ".").toDoubleOrNull() ?: 0.0 > availableAmount) {
       sellingCustomSelector.editText.setText(
         StringFormat.truncateDecimalPlaces(availableAmount.toString(),
-          AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
+          AssetUtils.getMaxDecimals(selectedSellingCurrency.label)))
     }
 
     var stringValue = buyingCustomSelector.editText.text.toString().toDoubleOrNull() ?: 0.0
@@ -239,7 +239,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     }
 
     buyingCustomSelector.editText.setText(StringFormat.truncateDecimalPlaces(stringValue.toString(),
-      AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label)))
+      AssetUtils.getMaxDecimals(selectedBuyingCurrency.label)))
   }
 
   private fun updatePrices() {
@@ -298,7 +298,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     when (view.id) {
       R.id.all -> sellingCustomSelector.editText.setText(
         StringFormat.truncateDecimalPlaces(availableAmount.toString(),
-          AssetUtils.getDecimalPlaces(selectedSellingCurrency.label)))
+          AssetUtils.getMaxDecimals(selectedSellingCurrency.label)))
       R.id.placeTrade -> onPlaceTrade()
     }
   }
@@ -352,10 +352,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     val priceFormatted: String
     try {
       sellingAmountFormatted = StringFormat.truncateDecimalPlaces(sellingAmount,
-        AssetUtils.getDecimalPlaces(selectedSellingCurrency.label))
+        AssetUtils.getMaxDecimals(selectedSellingCurrency.label))
       val priceString = (buyingAmount.toDouble() / sellingAmount.toDouble()).toString()
       priceFormatted = StringFormat.truncateDecimalPlaces(priceString,
-        AssetUtils.getDecimalPlaces(selectedBuyingCurrency.label))
+        AssetUtils.getMaxDecimals(selectedBuyingCurrency.label))
     } catch (ex: NumberFormatException) {
       ViewUtils.showToast(activity, "Wrong numbers format")
       return

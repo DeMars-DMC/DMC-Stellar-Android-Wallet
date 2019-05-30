@@ -29,12 +29,10 @@ import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint
 import io.demars.stellarwallet.views.pin.PinLockView
 import kotlinx.android.synthetic.main.activity_pay.*
-import java.lang.Double.parseDouble
 
 class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCallback {
 
   companion object {
-    private const val MAX_ALLOWED_DECIMALS = 7
     private const val ARG_ADDRESS_DATA = "ARG_ADDRESS_DATA"
     private const val REQUEST_PIN = 0x0
 
@@ -47,10 +45,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   private var amount = 0.0
   private var amountAvailable = 0.0
-  private var decimalPlaces = 7
 
+  private var assetCode = "XLM"
   private var address: String = ""
   private var amountText: String = ""
+  private var amountAvailableText = "0.0"
 
   private var exchange: ExchangeApiModel? = null
 
@@ -76,7 +75,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     addressEditText.text = address
 
     send_button.setOnClickListener {
-      if (isAmountValid()) {
+      if (amount <= amountAvailable && amount != 0.0) {
         if (WalletApplication.wallet.getShowPinOnSend()) {
           startActivityForResult(WalletManagerActivity.verifyPin(it.context), REQUEST_PIN)
         } else {
@@ -102,13 +101,14 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   @SuppressLint("SetTextI18n")
   private fun updateAvailableBalance() {
-    var assetCode = WalletApplication.userSession.getSessionAsset().assetCode
+    assetCode = WalletApplication.userSession.getSessionAsset().assetCode
     assetCode = if (assetCode == "native") "XLM" else assetCode
     val available = AccountUtils.getAvailableBalance(assetCode)
-    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
-    val availableStr = "${StringFormat.truncateDecimalPlaces(available, decimalPlaces)} $assetCode"
-    titleText.text = availableStr
-    amountAvailable = available.toDouble()
+    val maxDecimals = AssetUtils.getMaxDecimals(assetCode)
+    val availableFormatted = StringFormat.truncateDecimalPlaces(available, maxDecimals)
+    amountAvailable = availableFormatted.toDouble()
+    amountAvailableText = availableFormatted
+    titleText.text = getString(R.string.pattern_available, "$availableFormatted $assetCode")
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -160,10 +160,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   //endregion
 
   private fun updateAmount(newAmountText: String) {
-    val newAmount = if (newAmountText.isEmpty()) 0.0 else parseDouble(newAmountText)
-    if (newAmount >= 0.0 && getNumDecimals(newAmountText) <= MAX_ALLOWED_DECIMALS) {
-      amountText = newAmountText
-      amount = newAmount
+    val newAmount = if (newAmountText.isEmpty()) 0.0 else newAmountText.toDouble()
+    val maxDecimals = AssetUtils.getMaxDecimals(assetCode)
+    if (newAmount >= 0.0 && getNumDecimals(newAmountText) <= maxDecimals) {
+      amountText = if (newAmount > amountAvailable) amountAvailableText else newAmountText
+      amount = if (newAmount > amountAvailable) amountAvailable else newAmount
       showAmount(amountText)
     }
   }
@@ -171,14 +172,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   private fun showAmount(amount: String) {
     val amountToUse = when {
       amount.isEmpty() -> "0"
-      amount.toDouble() > amountAvailable -> StringFormat.truncateDecimalPlaces(amountAvailable.toString(), decimalPlaces)
       else -> amount
     }
 
-    amountTextView.text = amountToUse
+    amountTextView?.text = amountToUse
   }
-
-  private fun isAmountValid(): Boolean = amount <= amountAvailable && amount != 0.0
   //endregion
 
   private fun sendPayment() {

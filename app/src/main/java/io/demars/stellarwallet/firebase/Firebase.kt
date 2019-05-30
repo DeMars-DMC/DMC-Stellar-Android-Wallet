@@ -93,12 +93,9 @@ object Firebase {
   fun getNotificationKeyRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("notification_key")
 
-  fun getNotificationKey(listener: ValueEventListener) {
-    getCurrentUserUid()?.let { uid ->
-      getNotificationKeyRef(uid)
-        .addValueEventListener(listener)
-    }
-  }
+
+  fun getBanksZARRef(uid:String) : DatabaseReference = getDatabaseReference().child("users")
+    .child(uid).child("banksZAR")
 
   fun getUser(listener: ValueEventListener) {
     getCurrentUserUid()?.let { uid ->

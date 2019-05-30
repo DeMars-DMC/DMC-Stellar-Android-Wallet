@@ -712,5 +712,78 @@
         <item>In-app notifications</item>
         <item>Do not contact me</item>
     </string-array>
+    <string-array name="banks_zar">
+        <item>FNB/RMB</item>
+        <item>Absa Bank</item>
+        <item>Capitec Bank</item>
+        <item>Nedbank Limited</item>
+        <item>Standard Bank</item>
+        <item>African Bank</item>
+        <item>Albaraka Bank</item>
+        <item>BNP Paribas</item>
+        <item>Bank Zero</item>
+        <item>Bidvest Bank</item>
+        <item>CitiBank</item>
+        <item>Discovery Bank</item>
+        <item>FinBond Mutual Bank</item>
+        <item>Finbond EPE</item>
+        <item>Grobank Ltd</item>
+        <item>Grindrod Bank</item>
+        <item>HSBC Bank</item>
+        <item>Investec Bank</item>
+        <item>JP Morgan Chase</item>
+        <item>Mercantile Bank</item>
+        <item>Olympus Mobile</item>
+        <item>Peoples Bank Ltd</item>
+        <item>PostBank</item>
+        <item>SASFIN Bank</item>
+        <item>Societe Generale</item>
+        <item>Standard Chartered Bank</item>
+        <item>State Bank of India</item>
+        <item>TymeBank</item>
+        <item>UBank Limited</item>
+        <item>Unibank</item>
+        <item>VBS Mutual Bank</item>
+    </string-array>
+    <string-array name="branches_zar">
+        <item>250655</item>
+        <item>632005</item>
+        <item>470010</item>
+        <item>198765</item>
+        <item>051001</item>
+        <item>430000</item>
+        <item>800000</item>
+        <item>688000</item>
+        <item>888000</item>
+        <item>462005</item>
+        <item>350005</item>
+        <item>679000</item>
+        <item>589000</item>
+        <item>591000</item>
+        <item>410105</item>
+        <item>584000</item>
+        <item>587000</item>
+        <item>580105</item>
+        <item>432000</item>
+        <item>450105</item>
+        <item>585001</item>
+        <item>720026</item>
+        <item>460005</item>
+        <item>683000</item>
+        <item>351005</item>
+        <item>730020</item>
+        <item>801000</item>
+        <item>678910</item>
+        <item>431010</item>
+        <item>790005</item>
+        <item>588000</item>
+    </string-array>
+        <string-array name="bank_account_types">
+        <item>Current/Cheque Account</item>
+        <item>Savings Account</item>
+        <item>Transmission Account</item>
+        <item>Bond Account</item>
+        <item>Credit Card Account</item>
+    </string-array>
 
 </resources>

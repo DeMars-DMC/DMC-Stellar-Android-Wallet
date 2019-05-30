@@ -366,4 +366,12 @@
     <string name="select_bank_account">Select bank account</string>
     <string name="banking_information">Banking information</string>
     <string name="add_bank_account">Add Bank Account</string>
+    <string name="pattern_deposit">Deposit %s</string>
+    <string name="select_bank">Select Bank</string>
+    <string name="account_number">Account number</string>
+    <string name="account_type">Account type</string>
+    <string name="bank_account_explain">You may only make a deposit or withdrawal to an account in your name. For compliance purposes no third party deposit or withdrawal are permitted.</string>
+    <string name="select_account_type">Select account type</string>
+    <string name="pattern_branch_number">Branch number: %s</string>
+    <string name="zar_deposit_limit_message">Limit: R5,000 per deposit and R25,000 per month</string>
 </resources>

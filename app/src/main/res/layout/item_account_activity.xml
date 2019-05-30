@@ -60,14 +60,13 @@
     <TextView
         android:id="@+id/dateTextView"
         style="@style/LongDescription"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorDisabled"
         android:paddingTop="@dimen/padding_mini"
         android:paddingBottom="@dimen/padding_vertical"
         android:layout_marginEnd="@dimen/padding_horizontal"
         tools:text="Sep 12, 2018 11:22"
-        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
         app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
         app:layout_constraintTop_toBottomOf="@+id/transactionInfoTextView" />
 

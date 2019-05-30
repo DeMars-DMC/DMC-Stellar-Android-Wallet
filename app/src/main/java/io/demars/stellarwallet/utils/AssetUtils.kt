@@ -81,7 +81,7 @@ class AssetUtils {
       else -> 0
     }
 
-    fun getDecimalPlaces(assetCode: String): Int = when {
+    fun getMaxDecimals(assetCode: String): Int = when {
       assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
       else -> 7
     }

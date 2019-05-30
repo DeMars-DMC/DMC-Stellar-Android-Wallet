@@ -109,7 +109,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Asse
     viewHolder.assetButton.visibility = View.VISIBLE
     viewHolder.assetName.text = asset.name
     viewHolder.assetAmount.text = StringFormat.truncateDecimalPlaces(asset.amount,
-      AssetUtils.getDecimalPlaces(asset.code))
+      AssetUtils.getMaxDecimals(asset.code))
     viewHolder.assetIndicator.visibility = if (AssetUtils.isSessionAsset(asset.code))
       View.VISIBLE else View.GONE
     // Buttons

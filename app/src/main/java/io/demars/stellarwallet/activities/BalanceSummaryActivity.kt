@@ -51,7 +51,7 @@ class BalanceSummaryActivity : BasePopupActivity() {
     val isNative = intent.getBooleanExtra(ARG_EXTRA_IS_NATIVE, false)
     val assetCode: String = intent.getStringExtra(ARG_EXTRA_ASSET) ?: "XLM"
     val issuer: String? = intent.getStringExtra(ARG_EXTRA_ISSUER)
-    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+    val decimalPlaces = AssetUtils.getMaxDecimals(assetCode)
 
     totalBalanceTextView.text = StringFormat.truncateDecimalPlaces(
       AccountUtils.getTotalBalance(assetCode), decimalPlaces)

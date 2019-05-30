@@ -264,7 +264,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
   }
 
   private fun formatNumber4Decimals(amount: String?, asset: String): String? =
-    if (amount == null) "--" else truncateDecimalPlaces(amount, AssetUtils.getDecimalPlaces(asset))
+    if (amount == null) "--" else truncateDecimalPlaces(amount, AssetUtils.getMaxDecimals(asset))
 
   private fun formatAddress(address: String?): String {
     if (address == null) return "--"
@@ -335,11 +335,11 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     if (WalletApplication.userSession.getSessionAsset().assetCode == trade.boughtAsset) {
       viewHolder.amount.text = truncateDecimalPlaces(trade.boughtAmount,
-        AssetUtils.getDecimalPlaces(trade.boughtAsset))
+        AssetUtils.getMaxDecimals(trade.boughtAsset))
     } else {
       viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
         truncateDecimalPlaces(trade.soldAmount,
-          AssetUtils.getDecimalPlaces(trade.soldAsset)))
+          AssetUtils.getMaxDecimals(trade.soldAsset)))
     }
     viewHolder.date.text = getFormattedDateTime(trade.createdAt,
       DateFormat.is24HourFormat(context))
@@ -355,7 +355,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
     viewHolder.transactionType.text = "Transaction"
     viewHolder.amount.text = truncateDecimalPlaces(transaction.amount,
-      AssetUtils.getDecimalPlaces(transaction.assetCode ?: "XLM"))
+      AssetUtils.getMaxDecimals(transaction.assetCode ?: "XLM"))
     viewHolder.date.text = getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
@@ -378,10 +378,10 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     if (WalletApplication.userSession.getSessionAsset().assetCode == trade.baseAsset) {
       viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
-        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getDecimalPlaces(trade.baseAsset)))
+        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)))
     } else {
       viewHolder.amount.text = truncateDecimalPlaces(trade.counterAmount,
-        AssetUtils.getDecimalPlaces(trade.counterAsset))
+        AssetUtils.getMaxDecimals(trade.counterAsset))
     }
     viewHolder.date.text = getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
@@ -444,7 +444,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         val priceDouble = operation.price?.toDouble()
         val totalAmount = (amountDouble!! * priceDouble!!).toString()
         val sessionAsset = WalletApplication.userSession.getSessionAsset().assetCode
-        val decimalPlaces = AssetUtils.getDecimalPlaces(sessionAsset)
+        val decimalPlaces = AssetUtils.getMaxDecimals(sessionAsset)
         if (sessionAsset == operation.asset) {
           viewHolder.amount.text = String.format(context.getString(R.string.bracket_template),
             truncateDecimalPlaces(totalAmount, decimalPlaces))

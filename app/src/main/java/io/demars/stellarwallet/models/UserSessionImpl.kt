@@ -43,7 +43,7 @@ class UserSessionImpl : UserSession {
   @Suppress("UNUSED_PARAMETER")
   override fun getFormattedCurrentAvailableBalance(context: Context): String {
     val assetCode = getFormattedCurrentAssetCode()
-    val decimalNumbers = AssetUtils.getDecimalPlaces(assetCode)
+    val decimalNumbers = AssetUtils.getMaxDecimals(assetCode)
     return StringFormat.truncateDecimalPlaces(getAvailableBalance(), decimalNumbers) +
       " " + getFormattedCurrentAssetCode()
   }

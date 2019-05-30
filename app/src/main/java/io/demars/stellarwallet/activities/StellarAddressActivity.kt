@@ -158,7 +158,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
       var assetCode = WalletApplication.userSession.getSessionAsset().assetCode
       assetCode = if (assetCode == "native") "XLM" else assetCode
       val available = AccountUtils.getAvailableBalance(assetCode)
-      val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+      val decimalPlaces = AssetUtils.getMaxDecimals(assetCode)
       val availableStr = "$assetCode\n${StringFormat.truncateDecimalPlaces(available, decimalPlaces)}"
       titleBalance.text = availableStr
 

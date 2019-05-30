@@ -149,7 +149,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
   private fun getAvailableBalance(): AvailableBalance {
     val assetCode = if (sessionAsset.assetCode == "native") "XLM" else sessionAsset.assetCode
-    val decimalPlaces = AssetUtils.getDecimalPlaces(assetCode)
+    val decimalPlaces = AssetUtils.getMaxDecimals(assetCode)
     val available = AccountUtils.getAvailableBalance(assetCode)
     val totalAvailable = truncateDecimalPlaces(available, decimalPlaces)
     return AvailableBalance(assetCode, sessionAsset.assetIssuer, totalAvailable)
@@ -157,7 +157,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
   private fun getTotalAssetBalance(): TotalBalance {
     val currAsset = if (sessionAsset.assetCode == "native") "XLM" else sessionAsset.assetCode
-    val decimalPlaces = AssetUtils.getDecimalPlaces(currAsset)
+    val decimalPlaces = AssetUtils.getMaxDecimals(currAsset)
     val assetBalance = truncateDecimalPlaces(AccountUtils.getTotalBalance(currAsset), decimalPlaces)
     return TotalBalance(WalletState.ACTIVE, sessionAsset.assetName, sessionAsset.assetCode, assetBalance)
   }

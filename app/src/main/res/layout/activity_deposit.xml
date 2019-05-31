@@ -108,6 +108,106 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/depositAmountContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selectedBankContainer"
+        android:visibility="gone"
+        tool:visibility="visible">
+
+        <TextView
+            android:id="@+id/depositAmountLabel"
+            style="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:text="@string/deposit_amount"
+            android:textColor="@color/colorPrimaryDark" />
+
+
+        <TextView
+            android:id="@+id/editAmountButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/other_amount"
+            android:textAllCaps="true"
+            android:textColor="@color/colorApricot" />
+
+        <TextView
+            android:id="@+id/depositAmountText"
+            style="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/depositAmountLabel"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingTop="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size"
+            tool:text="5000.00 ZAR" />
+
+        <TextView
+            android:id="@+id/depositConfirmExplain"
+            style="@style/LongDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/depositAmountText"
+            android:gravity="start"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:text="@string/deposit_confirm_massage" />
+
+        <CheckBox
+            android:id="@+id/agreeCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/depositConfirmExplain"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_micro"
+            android:theme="@style/CheckBoxTheme" />
+
+        <TextView
+            android:id="@+id/agreeText"
+            style="@style/LongDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/agreeCheckBox"
+            android:gravity="start"
+            android:layout_toEndOf="@+id/agreeCheckBox"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingBottom="@dimen/padding_mini"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/agree_deposit_terms" />
+
+        <Button
+            android:id="@+id/confirmButton"
+            style="@style/ButtonStyleAccent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_below="@+id/agreeText"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_mini"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:enabled="false"
+            android:text="@string/confirm_and_submit" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/addBankContainer"
         android:layout_width="match_parent"
@@ -170,7 +270,7 @@
             android:id="@+id/addBankButton"
             style="@style/ButtonStyleAccent"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:layout_marginEnd="@dimen/padding_horizontal"
@@ -204,14 +304,14 @@
         android:visibility="gone" />
 
     <TextView
-        style="@style/LongDescription"
         android:id="@+id/depositLimitText"
+        style="@style/LongDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/submitButton"
         android:paddingStart="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
         android:paddingTop="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_mini"
         android:text="@string/zar_deposit_limit_message"
         android:visibility="gone" />
@@ -223,6 +323,7 @@
         android:layout_height="@dimen/button_height_send"
         android:layout_above="@+id/numberKeyboard"
         android:elevation="0dp"
+        android:enabled="false"
         android:text="@string/submit"
         android:textColor="@color/white"
         android:visibility="gone"

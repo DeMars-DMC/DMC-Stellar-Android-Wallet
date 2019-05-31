@@ -1,4 +1,3 @@
 package io.demars.stellarwallet.models
 
-class Deposit {
-}
+data class Deposit(val assetCode: String, val amount: String, val bankAccount: BankAccount)

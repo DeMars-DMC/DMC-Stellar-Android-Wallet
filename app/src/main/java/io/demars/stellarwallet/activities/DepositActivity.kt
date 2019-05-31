@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
+import android.text.style.ClickableSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.database.DataSnapshot
@@ -23,6 +24,13 @@ import kotlinx.android.synthetic.main.activity_deposit.*
 import kotlinx.android.synthetic.main.activity_deposit.amountTextView
 import kotlinx.android.synthetic.main.activity_deposit.numberKeyboard
 import kotlinx.android.synthetic.main.activity_deposit.toolbar
+import androidx.core.content.ContextCompat
+import android.text.TextPaint
+import android.text.Spanned
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
+import io.demars.stellarwallet.helpers.MailHelper
+import io.demars.stellarwallet.models.Deposit
 
 class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
@@ -35,13 +43,14 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
+  private lateinit var dmcUser: DmcUser
+
   private var assetCode = ""
-  private var dmcUser: DmcUser? = null
   private var bankAccounts = ArrayList<BankAccount>()
   private var bankToAdd = BankAccount()
   private var amount = 0.0
   private var maxAmount = 0.0
-  private var amountText = ""
+  private var amountText = "0"
   private var maxAmountText = "0.0"
   private val userListener = object : ValueEventListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -82,7 +91,105 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     numberKeyboard.mDialerListener = this
 
     submitButton.setOnClickListener {
-      submitDeposit()
+      hideAmountInput()
+      showDepositAmount()
+    }
+
+    bankPicker?.setOnClickListener {
+      val banks = resources.getStringArray(R.array.banks_zar)
+      val branchCodes = resources.getStringArray(R.array.branches_zar)
+      AlertDialog.Builder(this)
+        .setTitle(R.string.select_bank)
+        .setItems(banks) { _, which ->
+          val bankName = banks[which]
+          val branchCode = branchCodes[which]
+          bankPicker?.setTextColor(Color.BLACK)
+          bankPicker?.text = bankName
+
+          bankToAdd.name = bankName
+          bankToAdd.branch = branchCode
+
+          if (bankToAdd.number.isEmpty()) {
+            ViewUtils.showKeyboard(this, accountNumberInput)
+          }
+
+          checkAddBankButton()
+        }.show()
+    }
+
+    accountNumberInput.addTextChangedListener(object : AfterTextChanged() {
+      override fun afterTextChanged(editable: Editable) {
+        bankToAdd.number = editable.trim().toString()
+        checkAddBankButton()
+      }
+    })
+
+    accountTypePicker?.setOnClickListener {
+      val accountTypes = resources.getStringArray(R.array.bank_account_types)
+      AlertDialog.Builder(this)
+        .setTitle(R.string.select_account_type)
+        .setItems(accountTypes) { _, which ->
+          val accountType = accountTypes[which]
+          accountTypePicker?.setTextColor(Color.BLACK)
+          accountTypePicker?.text = accountType
+
+          bankToAdd.type = accountType
+
+          if (bankToAdd.isValid()) {
+            //hide keyboard if user already filled all the fields needed to add new bank
+            ViewUtils.hideKeyboard(this)
+          }
+
+          checkAddBankButton()
+        }.show()
+    }
+
+    addBankButton.setOnClickListener {
+      addBank()
+    }
+
+    agreeCheckBox.setOnCheckedChangeListener { _, isChecked ->
+      confirmButton.isEnabled = isChecked
+    }
+
+    // Agree Terms & Conditions clickable text
+    val clickableSpan = object : ClickableSpan() {
+      override fun onClick(widget: View) {
+        AlertDialog.Builder(this@DepositActivity)
+          .setTitle(R.string.dialog_deposit_terms_title)
+          .setMessage(R.string.dialog_deposit_terms_message)
+          .setPositiveButton(R.string.back_to_deposit) { _, _ -> }
+          .show()
+      }
+
+      override fun updateDrawState(ds: TextPaint) {
+        super.updateDrawState(ds)
+        val color = ContextCompat.getColor(this@DepositActivity, R.color.colorPrimary)
+        ds.color = color
+        ds.isFakeBoldText = true
+        ds.isUnderlineText = false
+      }
+    }
+
+    // initialize a new SpannableStringBuilder instance
+    val agreeStr = agreeText.text
+    val strForSpan = "Terms and Conditions"
+    val ssBuilder = SpannableStringBuilder(agreeStr)
+
+    ssBuilder.setSpan(clickableSpan, agreeStr.indexOf(strForSpan),
+      agreeStr.indexOf(strForSpan) + strForSpan.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    agreeText.text = ssBuilder
+    agreeText.movementMethod = LinkMovementMethod.getInstance()
+    agreeText.highlightColor = Color.TRANSPARENT
+
+    editAmountButton.setOnClickListener {
+      hideDepositAmount()
+      showAmountInput()
+      updateAmount("0")
+    }
+
+    confirmButton.setOnClickListener {
+      confirmDeposit()
     }
   }
 
@@ -122,50 +229,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun showAddBankView() {
     addBankContainer?.visibility = View.VISIBLE
-
-    bankPicker?.setOnClickListener {
-      val banks = resources.getStringArray(R.array.banks_zar)
-      val branchCodes = resources.getStringArray(R.array.branches_zar)
-      AlertDialog.Builder(this)
-        .setTitle(R.string.select_bank)
-        .setItems(banks) { _, which ->
-          val bankName = banks[which]
-          val branchCode = branchCodes[which]
-          bankPicker?.setTextColor(Color.BLACK)
-          bankPicker?.text = bankName
-
-          bankToAdd.name = bankName
-          bankToAdd.branch = branchCode
-
-          checkAddBankButton()
-        }.show()
-    }
-
-    accountNumberInput.addTextChangedListener(object : AfterTextChanged() {
-      override fun afterTextChanged(editable: Editable) {
-        bankToAdd.number = editable.trim().toString()
-        checkAddBankButton()
-      }
-    })
-
-    accountTypePicker?.setOnClickListener {
-      val accountTypes = resources.getStringArray(R.array.bank_account_types)
-      AlertDialog.Builder(this)
-        .setTitle(R.string.select_account_type)
-        .setItems(accountTypes) { _, which ->
-          val accountType = accountTypes[which]
-          accountTypePicker?.setTextColor(Color.BLACK)
-          accountTypePicker?.text = accountType
-
-          bankToAdd.type = accountType
-
-          checkAddBankButton()
-        }.show()
-    }
-
-    addBankButton.setOnClickListener {
-      addBank()
-    }
   }
 
   private fun hideAddBankView() {
@@ -199,49 +262,48 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     bankAccounts.add(bankToAdd)
     updateView()
 
-    dmcUser?.let {
-      Firebase.getBanksZARRef(it.uid).setValue(bankAccounts)
-    }
+    Firebase.getBanksZARRef(dmcUser.uid).setValue(bankAccounts)
   }
 
-  private fun submitDeposit() {
+  private fun showDepositAmount() {
+    depositAmountContainer.visibility = View.VISIBLE
+    depositAmountText.text = String.format("%s %s", StringFormat.truncateDecimalPlaces(
+      amount.toString(), AssetUtils.getMaxDecimals(assetCode)), assetCode)
+  }
 
+  private fun hideDepositAmount() {
+    depositAmountContainer.visibility = View.GONE
   }
 
   //region Dialer
   override fun onDial(number: Int) {
-    if (amountText.isEmpty() && number == 0) {
-      return
-    }
-    updateAmount(amountText + number)
+    if (amountText == "0" && number == 0) return
+    updateAmount(if (amountText == "0") "$number" else "$amountText$number")
   }
 
   override fun onDelete() {
-    if (amountText.isEmpty()) return
+    if (amountText == "0") return
 
     var newAmountText: String
     if (amountText.length <= 1) {
-      newAmountText = ""
+      newAmountText = "0"
     } else {
       newAmountText = amountText.substring(0, amountText.length - 1)
       if (newAmountText[newAmountText.length - 1] == '.') {
         newAmountText = newAmountText.substring(0, newAmountText.length - 1)
-      }
-      if ("0" == newAmountText) {
-        newAmountText = ""
       }
     }
     updateAmount(newAmountText)
   }
 
   override fun onDeleteAll() {
-    if (amountText.isEmpty()) return
-    updateAmount("")
+    if (amountText == "0") return
+    updateAmount("0")
   }
 
   override fun onDot() {
     if (!StringFormat.hasDecimalPoint(amountText)) {
-      amountText = if (amountText.isEmpty()) "0." else "$amountText."
+      amountText = if (amountText == "0") "0." else "$amountText."
       showAmount(amountText)
     }
   }
@@ -256,27 +318,31 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
-  private fun showAmount(amount: String) {
-    val amountToUse = when {
-      amount.isEmpty() -> "0"
-      else -> amount
-    }
-
+  private fun showAmount(amountToUse: String) {
     amountTextView?.text = amountToUse
+    submitButton.isEnabled = this.amount > 0
   }
   //endregion
+
+  private fun confirmDeposit() {
+    confirmButton.isEnabled = false
+
+    val amount = depositAmountText.text.toString()
+    val deposit = Deposit(assetCode, amount, bankAccounts[0])
+
+    MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
+    ViewUtils.showToast(this, "TEST: Thank you, deposit request successfully sent")
+    finish()
+  }
+
   private fun openBankActivity() {
     // We will probably use it in future
     startActivityForResult(BankAccountActivity.newInstance(this), RC_BANK_ACCOUNT)
   }
 
   private fun onError(message: String) {
-    dmcUser = DmcUser("dadasd", "+131231221312")
-    dmcUser?.first_name = "Alex"
-    dmcUser?.last_name = "Kurbetiev"
-    onUserFetched(dmcUser!!)
-//    ViewUtils.showToast(this, message)
-//    finish()
+    ViewUtils.showToast(this, message)
+    finish()
   }
 
   override fun onDestroy() {

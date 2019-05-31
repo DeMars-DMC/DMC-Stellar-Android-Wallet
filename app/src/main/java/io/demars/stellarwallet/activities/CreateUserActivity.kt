@@ -235,7 +235,7 @@ class CreateUserActivity : AppCompatActivity() {
       user.created_at = System.currentTimeMillis()
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
-          MailHelper.notifyUserCreated(user)
+          MailHelper.notifyAboutNewUser(user)
           AlertDialog.Builder(this)
             .setCancelable(false)
             .setTitle(R.string.thank_you)

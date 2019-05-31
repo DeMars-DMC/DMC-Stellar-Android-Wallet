@@ -18,7 +18,11 @@ class StringFormat {
 
     fun truncateDecimalPlaces(string: String?, places: Int): String =
       if (string == null) Constants.DEFAULT_ACCOUNT_BALANCE
-      else String.format(Locale.ENGLISH, "%.${places}f", string.toDouble())
+      else truncateDecimalPlaces(string.toDouble(), places)
+
+    fun truncateDecimalPlaces(string: Double?, places: Int): String =
+      if (string == null) Constants.DEFAULT_ACCOUNT_BALANCE
+      else String.format(Locale.ENGLISH, "%.${places}f", string)
 
     /**
      * Calculate the number of decimals of a string.

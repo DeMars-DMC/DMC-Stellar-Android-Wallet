@@ -26,13 +26,13 @@ object ViewUtils {
   @JvmStatic
   fun showToast(context: Context?, message: String) {
     if (context == null) return
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
   }
 
   @JvmStatic
   fun showToast(context: Context?, messageRes: Int) {
     if (context == null) return
-    Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, messageRes, Toast.LENGTH_LONG).show()
   }
   //endregion
 

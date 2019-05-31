@@ -36,6 +36,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     private const val RC_BANK_ACCOUNT = 111
+    private const val MAX_DECIMALS = 2
     fun newInstance(context: Context, assetCode: String): Intent {
       val intent = Intent(context, DepositActivity::class.java)
       intent.putExtra(ARG_ASSET_CODE, assetCode)
@@ -268,7 +269,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun showDepositAmount() {
     depositAmountContainer.visibility = View.VISIBLE
     depositAmountText.text = String.format("%s %s", StringFormat.truncateDecimalPlaces(
-      amount.toString(), AssetUtils.getMaxDecimals(assetCode)), assetCode)
+      amount, MAX_DECIMALS), assetCode)
   }
 
   private fun hideDepositAmount() {
@@ -327,7 +328,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun confirmDeposit() {
     confirmButton.isEnabled = false
 
-    val amount = depositAmountText.text.toString()
+    val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
     val deposit = Deposit(assetCode, amount, bankAccounts[0])
 
     MailHelper.notifyAboutNewDeposit(dmcUser, deposit)

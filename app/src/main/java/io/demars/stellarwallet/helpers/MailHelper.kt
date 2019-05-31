@@ -75,7 +75,7 @@ object MailHelper {
     sendMailAsync(user.email_address,"New ${deposit.assetCode} Deposit",
       "Please deposit ${deposit.amount} ${deposit.assetCode} at any ABSA\n" +
       "DMC Rand (Pty) Ltd\n" +
-      "Account Number: ${deposit.bankAccount.number}" +
+      "Account Number: ${deposit.bankAccount.number}\n" +
       "Branch Code: ${deposit.bankAccount.branch}\n" +
       "Reference: stellar account number\n\n" +
       "Note cash deposits may attract additional deposit fees.\n")

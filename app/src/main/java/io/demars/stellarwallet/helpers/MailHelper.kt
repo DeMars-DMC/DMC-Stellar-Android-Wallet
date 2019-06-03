@@ -71,7 +71,7 @@ object MailHelper {
   fun notifyAboutNewDeposit(user: DmcUser, deposit: Deposit) {
     // Notifying Back office
     sendMailAsync(EMAIL_OFFICE,"New ${deposit.assetCode} Deposit", "New deposit(${deposit.assetCode}) was just created:$deposit.\n\nUser:$user")
-    // Notifying User
+    // Notifying User with deposit payment information
     sendMailAsync(user.email_address,"New ${deposit.assetCode} Deposit",
       "Please deposit ${deposit.amount} ${deposit.assetCode} at any ABSA\n" +
       "DMC Rand (Pty) Ltd\n" +

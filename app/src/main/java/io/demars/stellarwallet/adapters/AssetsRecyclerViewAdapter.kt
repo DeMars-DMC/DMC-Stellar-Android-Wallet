@@ -14,12 +14,15 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssertListener
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 
-class AssetsRecyclerViewAdapter(var context: Context, private var listener: AssertListener, private var items: ArrayList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AssetsRecyclerViewAdapter(private var context: Context,
+                                private var listener: AssertListener,
+                                private var items: ArrayList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   companion object {
     const val TYPE_ASSET = 0
     const val TYPE_HEADER = 1
@@ -82,7 +85,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Asse
     val defaultImage: TextView = v.findViewById(R.id.defaultAssetView)
     val assetName: TextView = v.findViewById(R.id.assetNameTextView)
     val assetAmount: TextView = v.findViewById(R.id.assetAmountTextView)
-    val assetIndicator : ImageView = v.findViewById(R.id.assetIndicator)
+    val assetIndicator: ImageView = v.findViewById(R.id.assetIndicator)
     val assetButton: ImageButton = v.findViewById(R.id.assetButton)
     val buyButton: Button = v.findViewById(R.id.buyButton)
   }
@@ -128,7 +131,7 @@ class AssetsRecyclerViewAdapter(var context: Context, private var listener: Asse
           listener.tradeDMC()
         }
       }
-      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
+      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) && Firebase.canDeposit() -> {
         viewHolder.buyButton.visibility = View.VISIBLE
         viewHolder.buyButton.setText(R.string.deposit)
         viewHolder.buyButton.setOnClickListener {

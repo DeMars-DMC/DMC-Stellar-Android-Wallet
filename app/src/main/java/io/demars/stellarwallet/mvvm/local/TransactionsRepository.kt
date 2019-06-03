@@ -2,6 +2,7 @@ package io.demars.stellarwallet.mvvm.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.OnLoadOperations
 import io.demars.stellarwallet.mvvm.remote.RemoteRepository
 import org.stellar.sdk.requests.EventListener
@@ -47,7 +48,7 @@ class TransactionsRepository private constructor(private val remoteRepository: R
    */
   private fun fetch() {
     transactionsList.clear()
-    remoteRepository.getTransactions("", 100, object : OnLoadOperations {
+    remoteRepository.getTransactions("", Constants.DEFAULT_ITEMS_LIMIT, object : OnLoadOperations {
       override fun onLoadOperations(result: java.util.ArrayList<Pair<OperationResponse, String?>>?, cursor: String) = Unit
       override fun onError(errorMessage: String) {
         isBusy = false

@@ -137,6 +137,9 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun swapCurrencies() {
+    if (!(::selectedSellingCurrency.isInitialized)) return
+    if (!(::selectedBuyingCurrency.isInitialized)) return
+
     val sellingBefore = selectedSellingCurrency
     val buyingBefore = selectedBuyingCurrency
     val sellingPosition = sellingCurrencies.indexOf(buyingBefore)

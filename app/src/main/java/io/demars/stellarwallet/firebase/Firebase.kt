@@ -28,10 +28,22 @@ object Firebase {
   private var notificationKey = ""
   private var initialized = false
   private var operationWhenInit = ""
+  private var dmcUserCached: DmcUser? = null
+  private val globalUserListener = object: ValueEventListener {
+    override fun onDataChange(data: DataSnapshot) {
+      dmcUserCached = data.getValue(DmcUser::class.java)
+    }
+
+    override fun onCancelled(error: DatabaseError) {
+      // Not sure about this for now
+    }
+  }
+
 
   //region Init
   fun signOut() {
     removeFromFcmGroup()
+    removeUserListener(globalUserListener)
     FirebaseAuth.getInstance().signOut()
   }
 
@@ -94,7 +106,7 @@ object Firebase {
     .child(uid).child("notification_key")
 
 
-  fun getBanksZARRef(uid:String) : DatabaseReference = getDatabaseReference().child("users")
+  fun getBanksZARRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("banksZAR")
 
   fun getUser(listener: ValueEventListener) {
@@ -143,6 +155,7 @@ object Firebase {
   fun initFcm(uid: String, operationWhenInit: String = "") {
     this.uid = uid
     this.operationWhenInit = operationWhenInit
+    Firebase.getUser(globalUserListener)
     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(instanceIdListener)
     FirebaseAuth.getInstance().currentUser?.getIdToken(false)?.addOnSuccessListener(idTokenListener)
   }
@@ -200,4 +213,6 @@ object Firebase {
     getNotificationKeyRef(uid).setValue(notificationKey)
   }
   //endregion
+
+  fun canDeposit() = dmcUserCached?.isVerified() ?: false
 }

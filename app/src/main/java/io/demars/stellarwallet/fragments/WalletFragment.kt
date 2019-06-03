@@ -53,10 +53,10 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       val dmcUser = dataSnapshot.getValue(DmcUser::class.java)
       if (dmcUser != null && dmcUser.isRegistrationCompleted()) {
-        openAccountButton.visibility = View.GONE
+        openAccountButton?.visibility = View.GONE
       } else {
-        openAccountButton.visibility = View.VISIBLE
-        openAccountButton.setOnClickListener {
+        openAccountButton?.visibility = View.VISIBLE
+        openAccountButton?.setOnClickListener {
           startActivity(CreateUserActivity.newInstance(context!!))
         }
       }

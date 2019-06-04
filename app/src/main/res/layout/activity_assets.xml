@@ -16,11 +16,11 @@
         android:id="@+id/setInflationButton"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        android:text="@string/set_inflation"
-        android:textColor="@color/white"
-        android:background="?attr/selectableItemBackground"
         android:layout_alignParentEnd="true"
-        android:padding="@dimen/padding_horizontal"/>
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/padding_horizontal"
+        android:text="@string/set_inflation"
+        android:textColor="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assetsRecyclerView"
@@ -37,6 +37,17 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
+
+    <Button
+        android:id="@+id/openAccountButton"
+        style="@style/ButtonStyleAccentFlat"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_above="@id/manuallyAddAssetButton"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:text="@string/open_account"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/manuallyAddAssetButton"

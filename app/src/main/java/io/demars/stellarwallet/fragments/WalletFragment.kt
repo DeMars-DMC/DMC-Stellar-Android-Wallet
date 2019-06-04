@@ -30,7 +30,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.activities.*
-import io.demars.stellarwallet.activities.AssetsActivity.Companion.RC_ASSETS
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
@@ -333,9 +332,9 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     adapter.setContacts(stellarContacts)
     adapter.setOnAssetDropdownListener(object : WalletRecyclerViewAdapter.OnAssetDropdownListener {
       override fun onAssetDropdownClicked(view: View, position: Int) {
-        val context = view.context
-        activity?.startActivityForResult(Intent(context, AssetsActivity::class.java), RC_ASSETS)
-        activity?.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
+        activity?.let {
+          (it as WalletActivity).openAssetsActivity()
+        }
       }
     })
     adapter.setOnLearnMoreButtonListener(object : WalletRecyclerViewAdapter.OnLearnMoreButtonListener {

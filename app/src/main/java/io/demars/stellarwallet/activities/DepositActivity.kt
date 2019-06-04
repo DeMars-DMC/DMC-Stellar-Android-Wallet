@@ -165,7 +165,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       override fun updateDrawState(ds: TextPaint) {
         super.updateDrawState(ds)
-        val color = ContextCompat.getColor(this@DepositActivity, R.color.colorPrimary)
+        val color = ContextCompat.getColor(this@DepositActivity, R.color.colorAccent)
         ds.color = color
         ds.isFakeBoldText = true
         ds.isUnderlineText = false
@@ -332,13 +332,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     val deposit = Deposit(assetCode, amount, bankAccounts[0])
 
     MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-    ViewUtils.showToast(this, "TEST: Thank you, deposit request successfully sent")
+    ViewUtils.showToast(this, R.string.deposit_sent_message)
     finish()
-  }
-
-  private fun openBankActivity() {
-    // We will probably use it in future
-    startActivityForResult(BankAccountActivity.newInstance(this), RC_BANK_ACCOUNT)
   }
 
   private fun onError(message: String) {

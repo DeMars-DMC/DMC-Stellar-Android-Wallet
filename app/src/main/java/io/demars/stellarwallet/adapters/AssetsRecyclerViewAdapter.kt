@@ -131,7 +131,7 @@ class AssetsRecyclerViewAdapter(private var context: Context,
           listener.tradeDMC()
         }
       }
-      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) && Firebase.canDeposit() -> {
+      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) && Firebase.isRegistered() -> {
         viewHolder.buyButton.visibility = View.VISIBLE
         viewHolder.buyButton.setText(R.string.deposit)
         viewHolder.buyButton.setOnClickListener {

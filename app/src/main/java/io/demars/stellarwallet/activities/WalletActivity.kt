@@ -17,7 +17,6 @@ import io.demars.stellarwallet.utils.GlobalGraphHelper
 import io.demars.stellarwallet.utils.KeyboardUtils
 import timber.log.Timber
 import android.content.Intent
-import io.demars.stellarwallet.activities.AssetsActivity.Companion.RC_ASSETS
 
 class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener {
   private enum class WalletFragmentType {
@@ -26,6 +25,10 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
     EXCHANGE,
     CONTACTS,
     SETTING
+  }
+
+  companion object {
+    const val RC_ASSETS = 111
   }
 
   private lateinit var dialogTradeAlert: Dialog
@@ -216,5 +219,10 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
       requestCode == RC_ASSETS && resultCode == RESULT_OK -> bottomNavigation.selectedItemId = R.id.nav_exchange
       else -> super.onActivityResult(requestCode, resultCode, data)
     }
+  }
+
+  fun openAssetsActivity() {
+    startActivityForResult(Intent(this, AssetsActivity::class.java), RC_ASSETS)
+    overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
   }
 }

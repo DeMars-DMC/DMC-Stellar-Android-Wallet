@@ -172,7 +172,7 @@
                 style="@style/ButtonStyleAccent"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/button_height"
-                android:text="@string/create_dmc_account"
+                android:text="@string/open_account"
                 android:layout_gravity="center_horizontal"
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"

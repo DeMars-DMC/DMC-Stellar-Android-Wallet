@@ -65,19 +65,19 @@ object MailHelper {
   // Sends needed emails when new user is created
   fun notifyAboutNewUser(user: DmcUser) {
     // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE,"New Account created", "New account was just created - $user")
+    sendMailAsync(EMAIL_OFFICE, "New Account created", "New account was just created - $user")
   }
 
   fun notifyAboutNewDeposit(user: DmcUser, deposit: Deposit) {
     // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE,"New ${deposit.assetCode} Deposit", "New deposit(${deposit.assetCode}) was just created:$deposit.\n\nUser:$user")
+    sendMailAsync(EMAIL_OFFICE, "New ${deposit.assetCode} Deposit Request", "New deposit(${deposit.assetCode}) was just requested\n\n$deposit\n\n$user")
     // Notifying User with deposit payment information
-    sendMailAsync(user.email_address,"New ${deposit.assetCode} Deposit",
-      "Please deposit ${deposit.amount} ${deposit.assetCode} at any ABSA\n" +
-      "DMC Rand (Pty) Ltd\n" +
-      "Account Number: ${deposit.bankAccount.number}\n" +
-      "Branch Code: ${deposit.bankAccount.branch}\n" +
-      "Reference: stellar account number\n\n" +
-      "Note cash deposits may attract additional deposit fees.\n")
+    sendMailAsync(user.email_address, "New ${deposit.assetCode} Deposit",
+      "Please deposit ${deposit.amount} ${deposit.assetCode} at any FNB\n" +
+        "DMC Rand (Pty) Ltd\n" +
+        "Branch Code:  250655\n" +
+        "Account Number: 62756496496\n" +
+        "Type: Current/Cheque Account\n" +
+        "Reference: ${user.email_address}*demars.io")
   }
 }

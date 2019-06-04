@@ -36,7 +36,7 @@ class SettingsFragment : BaseFragment() {
         if (it.isRegistrationCompleted()) {
           editInfoButton.setText(R.string.personal_information)
         } else {
-          editInfoButton.setText(R.string.create_dmc_account)
+          editInfoButton.setText(R.string.open_account)
         }
       }
     }

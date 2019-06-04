@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssertListener
 import io.demars.stellarwallet.interfaces.OnLoadAccount
@@ -21,6 +23,7 @@ import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_assets.*
+import org.jetbrains.anko.above
 import org.stellar.sdk.Asset
 import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse
@@ -33,7 +36,7 @@ class AssetsActivity : BaseActivity(), AssertListener {
   private lateinit var adapter: AssetsRecyclerViewAdapter
 
   companion object {
-    const val RC_ASSETS = 111
+    const val RC_OPEN_ACCOUNT = 111
     fun newInstance(context: Context): Intent {
       return Intent(context, AssetsActivity::class.java)
     }
@@ -53,6 +56,12 @@ class AssetsActivity : BaseActivity(), AssertListener {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     progressBar.visibility = View.VISIBLE
     bindAdapter()
+    updateOpenAccountButton()
+
+    openAccountButton.setOnClickListener {
+      startActivityForResult(CreateUserActivity.newInstance(context), RC_OPEN_ACCOUNT)
+    }
+
     manuallyAddAssetButton.setOnClickListener {
       startActivity(Intent(this@AssetsActivity, AddAssetActivity::class.java))
     }
@@ -65,6 +74,20 @@ class AssetsActivity : BaseActivity(), AssertListener {
         showBalanceErrorDialog()
       }
     }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    when {
+      requestCode == RC_OPEN_ACCOUNT && resultCode == RESULT_OK -> updateOpenAccountButton()
+      else -> super.onActivityResult(requestCode, resultCode, data)
+    }
+  }
+
+  private fun updateOpenAccountButton() {
+    val isRegistered = Firebase.isRegistered()
+    openAccountButton.visibility = if (isRegistered) View.GONE else View.VISIBLE
+    (assetsRecyclerView.layoutParams as RelativeLayout.LayoutParams)
+      .above(if (isRegistered) R.id.manuallyAddAssetButton else R.id.openAccountButton)
   }
 
   private fun showBalanceErrorDialog() {
@@ -101,7 +124,6 @@ class AssetsActivity : BaseActivity(), AssertListener {
     super.onRestart()
     reloadDataForAdapter()
   }
-
   //endregion
 
   private fun convertBalanceToSupportedAsset(balances: Array<AccountResponse.Balance>,
@@ -183,7 +205,11 @@ class AssetsActivity : BaseActivity(), AssertListener {
   }
 
   override fun depositZAR() {
-    startActivity(DepositActivity.newInstance(this, "ZAR"))
+    if (Firebase.canDeposit()) {
+      startActivity(DepositActivity.newInstance(this, "ZAR"))
+    } else {
+      ViewUtils.showToast(this, R.string.deposit_not_verified)
+    }
   }
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {

@@ -214,5 +214,6 @@ object Firebase {
   }
   //endregion
 
+  fun isRegistered() = dmcUserCached?.isRegistrationCompleted()?:false
   fun canDeposit() = dmcUserCached?.isVerified() ?: false
 }

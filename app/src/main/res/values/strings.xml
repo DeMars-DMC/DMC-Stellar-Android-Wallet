@@ -292,15 +292,13 @@
     <string name="uploading_photo_error">Something went wrong. Please try again</string>
     <string name="no_camera_message">No camera detected\nplease add from gallery</string>
     <string name="log_in">Log in</string>
-    <string name="open_a_new_account">Open a new account</string>
     <string name="log_in_message">If this number is not attached to any DMC account, you will be able to create a new one</string>
     <string name="symbol_plus">+</string>
     <string name="enter_code_from_sms">Enter code from SMS</string>
     <string name="welcome_message">Congratulations for downloading the DMC App. Soon you\'ll be able to move money instantly across borders for fractions of a cent.\n\nIn order make a deposit or a withdrawal we require some basic information.\n\nIt will only take a couple of minute to complete. As soon as your account has been verified you\'ll receive a FREE deposit of  5 Stellar Lumens.\n\nEarn while you type :-)</string>
     <string name="welcome">Welcome</string>
-    <string name="create_account">Create account</string>
     <string name="continue_str">Continue</string>
-    <string name="create_dmc_account">Create DMC account</string>
+    <string name="open_account">Open account</string>
     <string name="nationality">Nationality</string>
     <string name="country">Country</string>
     <string name="first_name">First name</string>
@@ -375,11 +373,13 @@
     <string name="pattern_branch_number">Branch number: %s</string>
     <string name="zar_deposit_limit_message">Limit: R5,000 per deposit and R25,000 per month</string>
     <string name="deposit_amount">Deposit amount</string>
-    <string name="deposit_confirm_massage">Deposit requests not matched in 3 days are discarded and will need to be re-sent.\nExchanges within the DMC wallet are virtual free, though all deposits and withdrawals  attract a 1% transaction fee.</string>
+    <string name="deposit_confirm_massage">Deposit requests not matched in 3 days are discarded</string>
     <string name="agree_deposit_terms">I hereby agree to the deposit Terms and Conditions</string>
     <string name="confirm_and_submit">Confirm &amp; Submit</string>
     <string name="dialog_deposit_terms_title">South African Rand (ZAR)\nDeposit/Withdrawal T&amp;C\'s</string>
     <string name="dialog_deposit_terms_message">The following terms and conditions apply to all South African Rand Deposits and Withdrawals\n\n1. Transaction limits\nAll deposits and withdrawals are limited to R5,000 per transaction and R25,000 per month\n\n2. Fees &amp; Cash\nAll deposits and withdrawals attract a 1% DMC transaction fee. Cash deposits may attract additional bank cash handling fees. No cash withdrawals are permitted\n\n3. Processing time\nPlease allow at least 1 business day for same bank deposits and withdrawals and 2 business days for other banks. Note that unmatched deposit instructions more than 3 business days old will be discarded.</string>
     <string name="back_to_deposit">Back to deposit</string>
     <string name="other_amount">Other amount</string>
+    <string name="deposit_not_verified">You\'ll be able to deposit once your account is verified</string>
+    <string name="deposit_sent_message">Thank you, deposit request successfully sent</string>
 </resources>

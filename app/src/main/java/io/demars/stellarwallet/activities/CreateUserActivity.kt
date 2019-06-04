@@ -254,9 +254,7 @@ class CreateUserActivity : AppCompatActivity() {
   }
 
   private fun setResultAndFinish() {
-    val intent = Intent()
-    intent.putExtra("user", user)
-    setResult(Activity.RESULT_OK, intent)
+    setResult(Activity.RESULT_OK)
     finish()
   }
 
@@ -276,7 +274,7 @@ class CreateUserActivity : AppCompatActivity() {
   }
 
   private fun showEditableView() {
-    toolbar.setTitle(R.string.create_dmc_account)
+    toolbar.setTitle(R.string.open_account)
 
     firstNameText.visibility = GONE
     surnameText.visibility = GONE

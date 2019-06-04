@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
-            app:title="@string/create_dmc_account" />
+            app:title="@string/open_account" />
 
         <ScrollView
             android:id="@+id/scrollView"

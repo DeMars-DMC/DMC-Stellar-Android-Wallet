@@ -19,8 +19,8 @@ android {
         applicationId "io.demars.stellarwallet"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 17
-        versionName "1.1.6"
+        versionCode 18
+        versionName "1.1.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -102,16 +102,16 @@ dependencies {
     implementation "com.journeyapps:zxing-android-embedded:$zxingAndroidVersion"
     implementation "com.brandongogetap:stickyheaders:$stickyheadersVersion"
     testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation "androidx.test.ext:junit:1.1.0"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.1.1"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
+    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     androidTestImplementation "androidx.annotation:annotation:1.0.2"
-    androidTestImplementation "androidx.test:rules:1.1.1"
+    androidTestImplementation "androidx.test:rules:1.2.0"
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "org.jetbrains.anko:anko:$anko_version"
@@ -166,5 +166,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:17.0.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

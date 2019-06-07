@@ -17,8 +17,8 @@ abstract class BaseActivity : AppCompatActivity() {
   override fun onResume() {
     super.onResume()
     val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
-    if (WalletApplication.appReturnedFromBackground && askForPin) {
-      WalletApplication.appReturnedFromBackground = false
+    if (WalletApplication.showPin && askForPin) {
+      WalletApplication.showPin = false
 
       if (GlobalGraphHelper.isExistingWallet()) {
         Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")

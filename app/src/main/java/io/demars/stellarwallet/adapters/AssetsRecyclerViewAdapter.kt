@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.interfaces.AssertListener
+import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
 import io.demars.stellarwallet.firebase.Firebase
@@ -21,7 +21,7 @@ import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 
 class AssetsRecyclerViewAdapter(private var context: Context,
-                                private var listener: AssertListener,
+                                private var listener: AssetListener,
                                 private var items: ArrayList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   companion object {
     const val TYPE_ASSET = 0

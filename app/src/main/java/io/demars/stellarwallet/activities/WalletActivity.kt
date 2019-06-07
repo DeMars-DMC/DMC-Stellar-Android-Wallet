@@ -163,7 +163,6 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
     bottomNavigation.selectedItemId = R.id.nav_wallet
   }
 
-
   //endregion
 
   override fun onResume() {

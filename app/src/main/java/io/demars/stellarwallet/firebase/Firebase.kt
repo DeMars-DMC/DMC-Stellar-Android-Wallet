@@ -42,6 +42,7 @@ object Firebase {
 
   //region Init
   fun signOut() {
+    dmcUserCached = null
     removeFromFcmGroup()
     removeUserListener(globalUserListener)
     FirebaseAuth.getInstance().signOut()

@@ -126,7 +126,7 @@ class SettingsFragment : BaseFragment() {
     if (BuildConfig.DEBUG) {
       debug.visibility = View.VISIBLE
       debug.setOnClickListener {
-        startActivity(Intent(it.context, DebugPreferenceActivity::class.java))
+        startActivity(Intent(it.context, DebugActivity::class.java))
       }
     } else {
       debug.visibility = View.GONE

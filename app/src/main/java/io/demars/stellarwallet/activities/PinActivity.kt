@@ -12,6 +12,7 @@ import io.demars.stellarwallet.utils.GlobalGraphHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import timber.log.Timber
 import androidx.appcompat.app.AppCompatActivity
+import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.OnPinLockCompleteListener
 
 class PinActivity : AppCompatActivity() {

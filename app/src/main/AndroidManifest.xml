@@ -121,7 +121,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.DebugPreferenceActivity"
+            android:name=".activities.DebugActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity

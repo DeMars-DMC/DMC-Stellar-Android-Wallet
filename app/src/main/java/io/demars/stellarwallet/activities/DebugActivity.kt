@@ -6,7 +6,7 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.fragments.DebugFragment
 import kotlinx.android.synthetic.main.activity_debug_preference.*
 
-class DebugPreferenceActivity : AppCompatActivity() {
+class DebugActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debug_preference)

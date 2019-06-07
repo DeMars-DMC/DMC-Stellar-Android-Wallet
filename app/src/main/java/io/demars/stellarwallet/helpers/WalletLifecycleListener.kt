@@ -13,7 +13,7 @@ class WalletLifecycleListener(val context: Context) : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
-        WalletApplication.appReturnedFromBackground = true
+        WalletApplication.showPin = true
 
     }
 
@@ -22,7 +22,7 @@ class WalletLifecycleListener(val context: Context) : LifecycleObserver {
         if (BuildConfig.DEBUG && DebugPreferencesHelper(context).isPinDisabled) {
             // in debug builds it is possible to disable pin in the session
         } else {
-            WalletApplication.appReturnedFromBackground = false
+            WalletApplication.showPin = false
             GlobalGraphHelper.clearSession()
         }
     }

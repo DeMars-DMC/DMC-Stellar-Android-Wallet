@@ -17,7 +17,6 @@ import io.demars.stellarwallet.mvvm.local.TransactionsRepository
 class GlobalGraphHelper {
   companion object {
     fun wipeAndRestart(activity: FragmentActivity) {
-      Firebase.signOut()
       wipe(activity.applicationContext)
       restart(activity)
     }
@@ -35,6 +34,7 @@ class GlobalGraphHelper {
 
     fun wipe(context: Context): Boolean {
       clearSession()
+      Firebase.signOut()
       AccountRepository.clear()
       EffectsRepository.getInstance().clear()
       OperationsRepository.getInstance().clear()
@@ -45,6 +45,7 @@ class GlobalGraphHelper {
     }
 
     fun restart(activity: FragmentActivity) {
+      WalletApplication.showPin = true
       val intent = Intent(activity, LaunchActivity::class.java)
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
       activity.startActivity(intent)

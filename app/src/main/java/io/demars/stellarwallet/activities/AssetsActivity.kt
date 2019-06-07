@@ -14,7 +14,7 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.interfaces.AssertListener
+import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.*
@@ -29,7 +29,7 @@ import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse
 
 
-class AssetsActivity : BaseActivity(), AssertListener {
+class AssetsActivity : BaseActivity(), AssetListener {
   private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
   private lateinit var context: Context

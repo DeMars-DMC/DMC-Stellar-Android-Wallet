@@ -30,6 +30,12 @@ class Constants {
     const val DMC_ASSET_ISSUER = "GALRZBMCK47XLHQQXQSPCNJ375NGB6LP6RCBIGPXQAWIE2A4UCDTGQ52"
     const val DMC_IMAGE_RES = R.drawable.ic_main_logo
 
+    // TODO: Switch to production when app is ready
+    const val RTGS_ASSET_TYPE = "RTGSTEST"
+    const val RTGS_ASSET_NAME = "Zimbabwean Dollars"
+    const val RTGS_ASSET_ISSUER = "GANTABE3SPS3PR3FOJMSPMOF667XGNTKML5CYQAQOL3SHVVDDNUJAPLG"
+    const val RTGS_IMAGE_RES = R.drawable.ic_logo_rtgs
+
     // Maximum double representation in string ((2^63)-1)/(10^7)
     const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"
 

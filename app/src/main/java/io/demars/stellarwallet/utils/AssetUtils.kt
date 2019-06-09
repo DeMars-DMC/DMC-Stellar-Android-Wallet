@@ -78,11 +78,13 @@ class AssetUtils {
       Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_IMAGE_RES
       Constants.DMC_ASSET_TYPE -> Constants.DMC_IMAGE_RES
+      Constants.RTGS_ASSET_TYPE -> Constants.RTGS_IMAGE_RES
       else -> 0
     }
 
     fun getMaxDecimals(assetCode: String): Int = when {
       assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
+      assetCode.equals(Constants.RTGS_ASSET_TYPE, true) -> 2
       else -> 7
     }
 

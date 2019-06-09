@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -70,7 +71,7 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         button.setOnClickListener {
             val context = it.context
             stellarAddress?.let { that ->
-                (context as ContactsActivity).startActivityForResult(
+                (context as Activity).startActivityForResult(
                   PayActivity.newIntent(context, that), ContactsActivity.RC_PAY_TO_CONTACT)
             } ?: run {
                 context.startActivity(StellarAddressActivity.updateContact(context, contact))

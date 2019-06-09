@@ -9,4 +9,5 @@ interface AssetListener {
     fun buyXLM()
     fun tradeDMC()
     fun depositZAR()
+    fun withdrawRTGS()
 }

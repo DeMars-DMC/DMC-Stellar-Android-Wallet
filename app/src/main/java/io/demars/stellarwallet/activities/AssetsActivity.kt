@@ -183,8 +183,13 @@ class AssetsActivity : BaseActivity(), AssetListener {
       Constants.ZAR_ASSET_ISSUER, "100000000000",
       Constants.ZAR_ASSET_NAME, "", "", null, null, null)
 
+    val rtgs = SupportedAsset(2, Constants.RTGS_ASSET_TYPE, Constants.RTGS_IMAGE_RES,
+      Constants.RTGS_ASSET_ISSUER, "100000000000",
+      Constants.RTGS_ASSET_NAME, "", "", null, null, null)
+
     map[Constants.DMC_ASSET_TYPE] = dmc
     map[Constants.ZAR_ASSET_TYPE] = zar
+    map[Constants.RTGS_ASSET_TYPE] = rtgs
 
     updateAdapter()
   }
@@ -205,8 +210,16 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   override fun depositZAR() {
-    if (Firebase.canDeposit()) {
-      startActivity(DepositActivity.newInstance(this, "ZAR"))
+    if (Firebase.isVerified()) {
+      startActivity(DepositActivity.newInstance(this, Constants.ZAR_ASSET_TYPE))
+    } else {
+      ViewUtils.showToast(this, R.string.deposit_not_verified)
+    }
+  }
+
+  override fun withdrawRTGS() {
+    if (Firebase.isVerified()) {
+      startActivity(WithdrawActivity.newInstance(this, Constants.RTGS_ASSET_TYPE))
     } else {
       ViewUtils.showToast(this, R.string.deposit_not_verified)
     }

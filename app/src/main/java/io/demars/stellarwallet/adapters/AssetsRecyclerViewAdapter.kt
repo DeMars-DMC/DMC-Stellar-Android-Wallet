@@ -138,6 +138,14 @@ class AssetsRecyclerViewAdapter(private var context: Context,
           listener.depositZAR()
         }
       }
+
+      asset.code.equals(Constants.RTGS_ASSET_TYPE, true) && Firebase.isRegistered() -> {
+        viewHolder.buyButton.visibility = View.VISIBLE
+        viewHolder.buyButton.setText(R.string.withdraw)
+        viewHolder.buyButton.setOnClickListener {
+          listener.withdrawRTGS()
+        }
+      }
       else -> viewHolder.buyButton.visibility = View.GONE
     }
 
@@ -164,6 +172,15 @@ class AssetsRecyclerViewAdapter(private var context: Context,
           viewHolder.defaultImage.visibility = View.GONE
           Picasso.get()
             .load(Constants.DMC_IMAGE_RES)
+            .resize(256, 256)
+            .onlyScaleDown()
+            .into(viewHolder.assetImage)
+        }
+        asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
+          viewHolder.defaultImage.visibility = View.GONE
+          viewHolder.assetName.text = asset.name
+          Picasso.get()
+            .load(Constants.RTGS_IMAGE_RES)
             .resize(256, 256)
             .onlyScaleDown()
             .into(viewHolder.assetImage)

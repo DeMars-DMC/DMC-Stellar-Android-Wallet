@@ -35,7 +35,6 @@ import io.demars.stellarwallet.models.Deposit
 class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
-    private const val RC_BANK_ACCOUNT = 111
     private const val MAX_DECIMALS = 2
     fun newInstance(context: Context, assetCode: String): Intent {
       val intent = Intent(context, DepositActivity::class.java)

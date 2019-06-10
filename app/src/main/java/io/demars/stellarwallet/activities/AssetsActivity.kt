@@ -211,7 +211,8 @@ class AssetsActivity : BaseActivity(), AssetListener {
 
   override fun depositZAR() {
     if (Firebase.isVerified()) {
-      startActivity(DepositActivity.newInstance(this, Constants.ZAR_ASSET_TYPE))
+      startActivity(DepositActivity.newInstance(
+        this, DepositActivity.Mode.DEPOSIT, Constants.ZAR_ASSET_TYPE))
     } else {
       ViewUtils.showToast(this, R.string.deposit_not_verified)
     }
@@ -219,9 +220,10 @@ class AssetsActivity : BaseActivity(), AssetListener {
 
   override fun withdrawRTGS() {
     if (Firebase.isVerified()) {
-      startActivity(WithdrawActivity.newInstance(this, Constants.RTGS_ASSET_TYPE))
+      startActivity(DepositActivity.newInstance(
+        this, DepositActivity.Mode.WITHDRAW, Constants.RTGS_ASSET_TYPE))
     } else {
-      ViewUtils.showToast(this, R.string.deposit_not_verified)
+      ViewUtils.showToast(this, R.string.withdraw_not_verified)
     }
   }
 

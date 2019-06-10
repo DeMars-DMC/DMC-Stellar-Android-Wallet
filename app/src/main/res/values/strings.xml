@@ -364,7 +364,6 @@
     <string name="select_bank_account">Select bank account</string>
     <string name="banking_information">Banking information</string>
     <string name="add_bank_account">Add Bank Account</string>
-    <string name="pattern_deposit">Deposit %s</string>
     <string name="select_bank">Select Bank</string>
     <string name="account_number">Account number</string>
     <string name="account_type">Account type</string>
@@ -372,15 +371,17 @@
     <string name="select_account_type">Select account type</string>
     <string name="pattern_branch_number">Branch number: %s</string>
     <string name="zar_deposit_limit_message">Limit: R5,000 per deposit and R25,000 per month</string>
-    <string name="deposit_amount">Deposit amount</string>
+    <string name="request_amount">%s amount</string>
     <string name="deposit_confirm_massage">Deposit requests not matched in 3 days are discarded</string>
-    <string name="agree_deposit_terms">I hereby agree to the deposit Terms and Conditions</string>
+    <string name="agree_request_terms">I hereby agree to the %s Terms and Conditions</string>
     <string name="confirm_and_submit">Confirm &amp; Submit</string>
     <string name="dialog_deposit_terms_title">South African Rand (ZAR)\nDeposit/Withdrawal T&amp;C\'s</string>
     <string name="dialog_deposit_terms_message">The following terms and conditions apply to all South African Rand Deposits and Withdrawals\n\n1. Transaction limits\nAll deposits and withdrawals are limited to R5,000 per transaction and R25,000 per month\n\n2. Fees &amp; Cash\nAll withdrawals attract a 1% DMC transaction fee. Cash deposits may attract additional bank cash handling fees. No cash withdrawals are permitted\n\n3. Processing time\nPlease allow at least 1 business day for same bank deposits and withdrawals and 2 business days for other banks. Note that unmatched deposit instructions more than 3 business days old will be discarded.</string>
     <string name="back_to_deposit">Back to deposit</string>
     <string name="other_amount">Other amount</string>
     <string name="deposit_not_verified">You\'ll be able to deposit once your account is verified</string>
-    <string name="deposit_sent_message">Thank you, deposit request successfully sent</string>
+    <string name="withdraw_not_verified">You\'ll be able to withdraw once your account is verified</string>
+    <string name="request_sent_message">Thank you, %s request successfully sent</string>
     <string name="withdraw">Withdraw</string>
+    <string name="withdrawal">Withdrawal</string>
 </resources>

@@ -58,6 +58,9 @@ object Horizon : HorizonTasks {
     return SendTask(listener, destAddress, secretSeed, memo, amount)
   }
 
+  override fun getWithdrawTask(listener: SuccessErrorCallback, assetCode: String, secretSeed: CharArray, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
+    return WithdrawTask(listener, assetCode, secretSeed, amount, fee)
+  }
   override fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest: String): AsyncTask<Void, Void, HorizonException> {
     return JoinInflationDestination(listener, secretSeed, inflationDest)
   }
@@ -483,6 +486,57 @@ object Horizon : HorizonTasks {
     }
   }
 
+  private class WithdrawTask(private val listener: SuccessErrorCallback,
+                             private val assetCode: String,
+                             private val secretSeed: CharArray,
+                             private val amount: String,
+                             private val fee: String)
+    : AsyncTask<Void, Void, HorizonException>() {
+
+    override fun doInBackground(vararg params: Void?): HorizonException? {
+      try {
+        val server = getServer()
+        val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val issuerKeyPair = KeyPair.fromAccountId(Constants.RTGS_ASSET_ISSUER)
+        val feeKeyPair = KeyPair.fromAccountId(Constants.FEE_ACCOUNT)
+
+        val asset = Asset.createNonNativeAsset(assetCode, issuerKeyPair)
+
+        val sourceAccount = server.accounts().account(sourceKeyPair)
+
+        val transactionBuilder = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
+        // Burn amount(99% of withdrawal) sending it to Issuing Account
+        transactionBuilder.addOperation(PaymentOperation.Builder(issuerKeyPair, asset, amount).build())
+        // Send fee(1%) to Fee Account
+        transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
+
+        val transaction = transactionBuilder.build()
+        transaction.sign(sourceKeyPair)
+
+        val response = server.submitTransaction(transaction)
+        if (!response.isSuccess) {
+          return HorizonException(response.extras.resultCodes.transactionResultCode,
+            response.extras.resultCodes.operationsResultCodes,
+            HorizonException.HorizonExceptionType.SEND)
+        }
+      } catch (error: Exception) {
+        Timber.d(error.message.toString())
+        return HorizonException(Constants.DEFAULT_TRANSACTION_FAILED_CODE,
+          arrayListOf(error.message.toString()),
+          HorizonException.HorizonExceptionType.SEND)
+      }
+      return null
+    }
+
+    override fun onPostExecute(result: HorizonException?) {
+      if (result != null) {
+        listener.onError(result)
+      } else {
+        listener.onSuccess()
+      }
+    }
+  }
+
   private class JoinInflationDestination(private val listener: SuccessErrorCallback,
                                          private val secretSeed: CharArray,
                                          private val inflationDest: String)
@@ -611,7 +665,6 @@ object Horizon : HorizonTasks {
   private const val HORIZON_SUBMIT_TIMEOUT = 60L
 
   private fun getServer(): Server {
-    checkNotNull(HORIZON_SERVER, lazyMessage = { "Horizon server has not been initialized, please call {${this::class.java}#initFcm(..)" })
     return HORIZON_SERVER
   }
 

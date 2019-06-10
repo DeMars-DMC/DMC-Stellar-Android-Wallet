@@ -129,15 +129,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.WithdrawActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activities.BankAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <activity
             android:name=".activities.WalletManagerActivity"
             android:theme="@style/TransparentTheme" />
 

@@ -2,6 +2,7 @@ package io.demars.stellarwallet.helpers
 
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.models.Deposit
+import io.demars.stellarwallet.models.Withdrawal
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
 import javax.mail.Message
@@ -80,4 +81,9 @@ object MailHelper {
         "Type: Current/Cheque Account\n" +
         "Reference: ${user.email_address}*demars.io")
   }
+
+  fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {
+    // Notifying Back office
+    sendMailAsync(user.email_address, "New ${withdrawal.assetCode} Withdrawal Request", "New withdrawal(${withdrawal.assetCode}) was just requested\n\n$withdrawal\n\n$user")
+   }
 }

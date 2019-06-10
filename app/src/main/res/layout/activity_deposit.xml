@@ -116,13 +116,13 @@
         tool:visibility="visible">
 
         <TextView
-            android:id="@+id/depositAmountLabel"
+            android:id="@+id/amountLabel"
             style="@style/BoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
-            android:text="@string/deposit_amount"
+            android:text="@string/request_amount"
             android:textColor="@color/colorPrimaryDark" />
 
 
@@ -144,7 +144,7 @@
             style="@style/BoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/depositAmountLabel"
+            android:layout_below="@+id/amountLabel"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingTop="@dimen/padding_horizontal"
@@ -178,7 +178,7 @@
             android:paddingBottom="@dimen/padding_mini"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_small"
-            android:text="@string/agree_deposit_terms" />
+            android:text="@string/agree_request_terms" />
 
         <Button
             android:id="@+id/confirmButton"

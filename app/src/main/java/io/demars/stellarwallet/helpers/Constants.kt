@@ -36,6 +36,8 @@ class Constants {
     const val RTGS_ASSET_ISSUER = "GANTABE3SPS3PR3FOJMSPMOF667XGNTKML5CYQAQOL3SHVVDDNUJAPLG"
     const val RTGS_IMAGE_RES = R.drawable.ic_logo_rtgs
 
+    const val FEE_ACCOUNT = "GDXYQD3YPBLRZF7D3LKSFXBFSG5JXRRZHTWMPPTUWEA337RPZZYDO4QF"
+
     // Maximum double representation in string ((2^63)-1)/(10^7)
     const val MAX_ASSET_STRING_VALUE = "922337203685.4775807"
 

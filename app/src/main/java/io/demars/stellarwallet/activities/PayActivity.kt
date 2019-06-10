@@ -51,8 +51,6 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   private var amountText: String = ""
   private var amountAvailableText = "0.0"
 
-  private var exchange: ExchangeApiModel? = null
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pay)
@@ -180,21 +178,15 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   //endregion
 
   private fun sendPayment() {
-    exchange.let {
-      if (it != null && memoTextView.text.isEmpty()) {
-        Toast.makeText(applicationContext, "you must write a {${it.memo}}", Toast.LENGTH_SHORT).show()
-      } else {
-        if (NetworkUtils(applicationContext).isNetworkAvailable()) {
-          progressBar.visibility = View.VISIBLE
+    if (NetworkUtils(applicationContext).isNetworkAvailable()) {
+      progressBar.visibility = View.VISIBLE
 
-          val secretSeed = AccountUtils.getSecretSeed(applicationContext)
+      val secretSeed = AccountUtils.getSecretSeed(applicationContext)
 
-          Horizon.getSendTask(this, address, secretSeed,
-            memoTextView.text.toString(), amountText).execute()
-        } else {
-          NetworkUtils(applicationContext).displayNoNetwork()
-        }
-      }
+      Horizon.getSendTask(this, address, secretSeed,
+        memoTextView.text.toString(), amountText).execute()
+    } else {
+      NetworkUtils(applicationContext).displayNoNetwork()
     }
   }
 
@@ -217,7 +209,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     // Let's add a generic message for now for any error sending funds.
     Toast.makeText(applicationContext, getString(HorizonException.HorizonExceptionType.SEND.value), Toast.LENGTH_LONG).show()
   }
-  //endregion
+//endregion
 
   @Suppress("DEPRECATION")
   private fun fromHtml(html: String): Spanned {

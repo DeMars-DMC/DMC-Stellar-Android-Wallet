@@ -25,6 +25,7 @@ interface HorizonTasks {
     fun getLoadTransactionsTask(cursor: String, limit: Int, listener: OnLoadOperations) : AsyncTask<Void, Void, ArrayList<TransactionResponse>>
     fun getLoadTradesTask(cursor: String, limit: Int, listener: OnLoadTrades) : AsyncTask<Void, Void, ArrayList<TradeResponse>?>
     fun getSendTask(listener: SuccessErrorCallback, destAddress: String, secretSeed: CharArray, memo: String, amount : String) : AsyncTask<Void, Void, HorizonException>
+    fun getWithdrawTask(listener: SuccessErrorCallback, assetCode: String, secretSeed: CharArray, amount: String, fee: String) : AsyncTask<Void, Void, HorizonException>
     fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest : String) : AsyncTask<Void, Void, HorizonException>
     fun getChangeTrust(listener: SuccessErrorCallback, asset: Asset, removeTrust: Boolean, secretSeed: CharArray) : AsyncTask<Void, Void, HorizonException?>
     fun getCreateMarketOffer(listener: Horizon.OnMarketOfferListener, secretSeed: CharArray, sellingAsset: Asset, buyingAsset: Asset, amount : String, price : String)

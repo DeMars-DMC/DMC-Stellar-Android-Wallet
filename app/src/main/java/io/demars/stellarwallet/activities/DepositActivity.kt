@@ -16,9 +16,6 @@ import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.interfaces.AfterTextChanged
 import io.demars.stellarwallet.models.BankAccount
-import io.demars.stellarwallet.utils.AssetUtils
-import io.demars.stellarwallet.utils.StringFormat
-import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.views.pin.PinLockView
 import kotlinx.android.synthetic.main.activity_deposit.*
 import kotlinx.android.synthetic.main.activity_deposit.amountTextView
@@ -30,21 +27,33 @@ import android.text.Spanned
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import io.demars.stellarwallet.helpers.MailHelper
+import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.Deposit
+import io.demars.stellarwallet.models.HorizonException
+import io.demars.stellarwallet.models.Withdrawal
+import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.utils.*
 
 class DepositActivity : BaseActivity(), PinLockView.DialerListener {
+  enum class Mode {
+    DEPOSIT, WITHDRAW
+  }
+
   companion object {
+    private const val ARG_MODE = "ARG_MODE"
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     private const val MAX_DECIMALS = 2
-    fun newInstance(context: Context, assetCode: String): Intent {
+    fun newInstance(context: Context, mode: Mode, assetCode: String): Intent {
       val intent = Intent(context, DepositActivity::class.java)
+      intent.putExtra(ARG_MODE, mode)
       intent.putExtra(ARG_ASSET_CODE, assetCode)
       return intent
     }
   }
 
   private lateinit var dmcUser: DmcUser
-
+  private var mode = Mode.DEPOSIT
+  private var modeString = ""
   private var assetCode = ""
   private var bankAccounts = ArrayList<BankAccount>()
   private var bankToAdd = BankAccount()
@@ -56,11 +65,11 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       dataSnapshot.getValue(DmcUser::class.java)?.let { user ->
         onUserFetched(user)
-      } ?: onError("Can't find user. Please try again")
+      } ?: finishWithToast("Can't find user. Please try again")
     }
 
     override fun onCancelled(error: DatabaseError) {
-      onError(error.message)
+      finishWithToast(error.message)
     }
   }
 
@@ -72,11 +81,15 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     Firebase.getCurrentUser()?.let { _ ->
       Firebase.getUser(userListener)
-    } ?: onError("Can't find user. Please try again")
+    } ?: finishWithToast("Can't find user. Please try again")
   }
 
   private fun checkIntent() {
     intent?.extras?.let {
+      mode = it.get(ARG_MODE) as Mode
+      modeString = getString(if (mode == Mode.DEPOSIT)
+        R.string.deposit else R.string.withdraw)
+
       assetCode = it.getString(ARG_ASSET_CODE, "")
       maxAmount = 5000.0 // later we can change it to constants
       maxAmountText = "5000.00"
@@ -86,7 +99,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun setupUI() {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.title = getString(R.string.pattern_deposit, assetCode)
+    supportActionBar?.title = "$modeString $assetCode"
 
     numberKeyboard.mDialerListener = this
 
@@ -172,7 +185,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     // initialize a new SpannableStringBuilder instance
-    val agreeStr = agreeText.text
+    val requestType = if (mode == Mode.WITHDRAW) getString(R.string.withdrawal) else modeString
+    val agreeStr = getString(R.string.agree_request_terms, requestType.toLowerCase())
     val strForSpan = "Terms and Conditions"
     val ssBuilder = SpannableStringBuilder(agreeStr)
 
@@ -182,6 +196,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     agreeText.movementMethod = LinkMovementMethod.getInstance()
     agreeText.highlightColor = Color.TRANSPARENT
 
+    amountLabel.text = getString(R.string.request_amount, requestType)
     editAmountButton.setOnClickListener {
       hideDepositAmount()
       showAmountInput()
@@ -189,7 +204,10 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     confirmButton.setOnClickListener {
-      confirmDeposit()
+      when (mode) {
+        Mode.DEPOSIT -> confirmDeposit()
+        Mode.WITHDRAW -> confirmWithdrawal()
+      }
     }
   }
 
@@ -331,11 +349,40 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     val deposit = Deposit(assetCode, amount, bankAccounts[0])
 
     MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-    ViewUtils.showToast(this, R.string.deposit_sent_message)
-    finish()
+    finishWithToast(getString(R.string.request_sent_message, modeString))
   }
 
-  private fun onError(message: String) {
+  private fun confirmWithdrawal() {
+    confirmButton.isEnabled = false
+
+    val fee = StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)
+    val amount = StringFormat.truncateDecimalPlaces(amount * 0.99, MAX_DECIMALS)
+
+    if (NetworkUtils(applicationContext).isNetworkAvailable()) {
+//      progressBar.visibility = View.VISIBLE
+
+      val secretSeed = AccountUtils.getSecretSeed(applicationContext)
+
+      Horizon.getWithdrawTask(object: SuccessErrorCallback{
+        override fun onSuccess() {
+          val withdrawal = Withdrawal(assetCode, amount, fee, bankAccounts[0])
+
+          MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+          finishWithToast(getString(R.string.request_sent_message, modeString))
+        }
+
+        override fun onError(error: HorizonException) {
+          finishWithToast(error.localizedMessage)
+        }
+      }, assetCode, secretSeed, amount, fee).execute()
+   } else {
+      NetworkUtils(applicationContext).displayNoNetwork()
+    }
+
+  }
+
+  private fun finishWithToast(message: String) {
     ViewUtils.showToast(this, message)
     finish()
   }

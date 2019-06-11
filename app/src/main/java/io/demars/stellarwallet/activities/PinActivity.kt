@@ -118,16 +118,4 @@ class PinActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
     }
     //endregion
-
-    //region Biometrics
-//    @TargetApi(Build.VERSION_CODES.P)
-//    private fun displayBiometricPrompt(biometricCallback: BiometricPrompt.AuthenticationCallback) {
-//        BiometricPrompt.Builder(this)
-//          .setTitle("Title")
-//          .setSubtitle("Subtitle")
-//          .setDescription("Description")
-//          .setNegativeButton("Cancel", mainExecutor, DialogInterface.OnClickListener { _, _ -> })
-//          .build()
-//    }
-    //endregion
 }

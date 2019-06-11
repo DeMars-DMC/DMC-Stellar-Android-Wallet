@@ -101,6 +101,10 @@ class AccountUtils {
       }?.balance ?: Constants.DEFAULT_ACCOUNT_BALANCE
     }
 
+    fun hasAvailableAssets(assetCode: String): Boolean =
+      getAvailableBalance(assetCode).toDoubleOrNull() ?: 0.0 > 0.0
+
+
     fun calculateAvailableBalances(response: AccountResponse): Array<AvailableBalance>? {
       if (response.balances.isNullOrEmpty()) return null
 

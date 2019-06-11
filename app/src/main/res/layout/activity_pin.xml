@@ -68,7 +68,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_vertical"
             android:layout_marginBottom="@dimen/padding_vertical"
-            android:src="@drawable/ic_main_logo" />
+            android:src="@drawable/ic_logo_dmc" />
 
         <io.demars.stellarwallet.views.pin.PinLockView
             android:id="@+id/pinLockView"

@@ -14,7 +14,6 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
-import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
@@ -87,7 +86,8 @@ class AssetsRecyclerViewAdapter(private var context: Context,
     val assetAmount: TextView = v.findViewById(R.id.assetAmountTextView)
     val assetIndicator: ImageView = v.findViewById(R.id.assetIndicator)
     val assetButton: ImageButton = v.findViewById(R.id.assetButton)
-    val buyButton: Button = v.findViewById(R.id.buyButton)
+    val depositButton: Button = v.findViewById(R.id.depositButton)
+    val withdrawButton: Button = v.findViewById(R.id.withdrawButton)
   }
 
   class AssetHeaderViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -118,35 +118,50 @@ class AssetsRecyclerViewAdapter(private var context: Context,
     // Buttons
     when {
       asset.code == Constants.LUMENS_ASSET_CODE -> {
-        viewHolder.buyButton.visibility = View.VISIBLE
-        viewHolder.buyButton.setText(R.string.buy)
-        viewHolder.buyButton.setOnClickListener {
-          listener.buyXLM()
-        }
+        viewHolder.depositButton.visibility = View.VISIBLE
+        viewHolder.depositButton.setText(R.string.buy)
+
+        viewHolder.withdrawButton.visibility = View.GONE
       }
       asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
-        viewHolder.buyButton.visibility = View.VISIBLE
-        viewHolder.buyButton.setText(R.string.trade)
-        viewHolder.buyButton.setOnClickListener {
-          listener.tradeDMC()
-        }
-      }
-      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) && Firebase.isRegistered() -> {
-        viewHolder.buyButton.visibility = View.VISIBLE
-        viewHolder.buyButton.setText(R.string.deposit)
-        viewHolder.buyButton.setOnClickListener {
-          listener.depositZAR()
-        }
+        viewHolder.depositButton.visibility = View.VISIBLE
+        viewHolder.depositButton.setText(R.string.trade)
+
+        viewHolder.withdrawButton.visibility = View.GONE
       }
 
-      asset.code.equals(Constants.RTGS_ASSET_TYPE, true) && Firebase.isRegistered() -> {
-        viewHolder.buyButton.visibility = View.VISIBLE
-        viewHolder.buyButton.setText(R.string.withdraw)
-        viewHolder.buyButton.setOnClickListener {
-          listener.withdrawRTGS()
-        }
+      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
+        viewHolder.depositButton.visibility = View.VISIBLE
+        viewHolder.depositButton.setText(R.string.deposit)
+
+        viewHolder.withdrawButton.visibility = View.GONE
       }
-      else -> viewHolder.buyButton.visibility = View.GONE
+
+      asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
+        viewHolder.depositButton.visibility = View.GONE
+
+        viewHolder.withdrawButton.visibility = View.VISIBLE
+        viewHolder.withdrawButton.setText(R.string.withdraw)
+      }
+      asset.code.equals(Constants.NGNT_ASSET_TYPE, true) -> {
+        viewHolder.depositButton.visibility = View.VISIBLE
+        viewHolder.depositButton.setText(R.string.deposit)
+
+        viewHolder.withdrawButton.visibility = View.VISIBLE
+        viewHolder.withdrawButton.setText(R.string.withdraw)
+      }
+      else -> {
+        viewHolder.depositButton.visibility = View.GONE
+        viewHolder.withdrawButton.visibility = View.GONE
+      }
+    }
+
+    viewHolder.depositButton.setOnClickListener {
+      listener.deposit(asset.code)
+    }
+
+    viewHolder.withdrawButton.setOnClickListener {
+      listener.withdraw(asset.code)
     }
 
     // Image

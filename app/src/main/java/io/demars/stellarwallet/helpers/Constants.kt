@@ -28,13 +28,18 @@ class Constants {
     const val DMC_ASSET_TYPE = "DMC"
     const val DMC_ASSET_NAME = "DéMars Coins"
     const val DMC_ASSET_ISSUER = "GALRZBMCK47XLHQQXQSPCNJ375NGB6LP6RCBIGPXQAWIE2A4UCDTGQ52"
-    const val DMC_IMAGE_RES = R.drawable.ic_main_logo
+    const val DMC_IMAGE_RES = R.drawable.ic_logo_dmc
 
     // TODO: Switch to production when app is ready
     const val RTGS_ASSET_TYPE = "RTGSTEST"
     const val RTGS_ASSET_NAME = "Zimbabwean Dollars"
     const val RTGS_ASSET_ISSUER = "GANTABE3SPS3PR3FOJMSPMOF667XGNTKML5CYQAQOL3SHVVDDNUJAPLG"
     const val RTGS_IMAGE_RES = R.drawable.ic_logo_rtgs
+
+    const val NGNT_ASSET_TYPE = "NGNT"
+    const val NGNT_ASSET_NAME = "Nigerian Naira"
+    const val NGNT_ASSET_ISSUER = "GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD"
+    const val NGNT_IMAGE_RES = R.drawable.ic_logo_ngnt
 
     const val FEE_ACCOUNT = "GDXYQD3YPBLRZF7D3LKSFXBFSG5JXRRZHTWMPPTUWEA337RPZZYDO4QF"
 

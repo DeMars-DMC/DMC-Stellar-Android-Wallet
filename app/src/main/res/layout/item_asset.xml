@@ -64,13 +64,25 @@
         app:layout_constraintTop_toTopOf="@+id/assetNameTextView" />
 
     <Button
-        android:id="@+id/buyButton"
+        android:id="@+id/withdrawButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
-        android:gravity="end|center_vertical"
         android:padding="@dimen/padding_horizontal"
-        android:text="@string/buy"
+        android:text="@string/withdraw"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/depositButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/depositButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/padding_horizontal"
+        android:text="@string/deposit"
         android:textColor="@color/colorAccent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

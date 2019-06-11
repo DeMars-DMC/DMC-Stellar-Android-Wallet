@@ -144,11 +144,12 @@ class AssetsActivity : BaseActivity(), AssetListener {
             return@map null
           }
           supportedAssetsMap.containsKey(it.assetCode.toLowerCase()) -> {
-            val asset = supportedAssetsMap[it.assetCode.toLowerCase()]!!
-            asset.amount = it.balance
-            asset.type = SupportedAssetType.ADDED
-            asset.asset = it.asset
-            return@map asset
+            supportedAssetsMap[it.assetCode.toLowerCase()]?.let { asset ->
+              asset.amount = it.balance
+              asset.type = SupportedAssetType.ADDED
+              asset.asset = it.asset
+              return@map asset
+            }
           }
           else -> {
             return@map SupportedAsset(0, it.assetCode.toLowerCase(), 0,
@@ -187,9 +188,14 @@ class AssetsActivity : BaseActivity(), AssetListener {
       Constants.RTGS_ASSET_ISSUER, "100000000000",
       Constants.RTGS_ASSET_NAME, "", "", null, null, null)
 
+    val ngnt = SupportedAsset(3, Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
+      Constants.NGNT_ASSET_ISSUER, "100000000000",
+      Constants.NGNT_ASSET_NAME, "", "", null, null, null)
+
     map[Constants.DMC_ASSET_TYPE] = dmc
     map[Constants.ZAR_ASSET_TYPE] = zar
     map[Constants.RTGS_ASSET_TYPE] = rtgs
+    map[Constants.NGNT_ASSET_TYPE] = ngnt
 
     updateAdapter()
   }
@@ -200,28 +206,30 @@ class AssetsActivity : BaseActivity(), AssetListener {
     finish()
   }
 
-  override fun buyXLM() {
-    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
-  }
-
-  override fun tradeDMC() {
-    setResult(RESULT_OK)
-    finish()
-  }
-
-  override fun depositZAR() {
-    if (Firebase.isVerified()) {
-      startActivity(DepositActivity.newInstance(
-        this, DepositActivity.Mode.DEPOSIT, Constants.ZAR_ASSET_TYPE))
-    } else {
-      ViewUtils.showToast(this, R.string.deposit_not_verified)
+  override fun deposit(assetCode: String) {
+    when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
+      }
+      Constants.DMC_ASSET_TYPE -> {
+        setResult(RESULT_OK)
+        finish()
+      }
+      else -> {
+        if (Firebase.isVerified()) {
+          startActivity(DepositActivity.newInstance(
+            this, DepositActivity.Mode.DEPOSIT, assetCode))
+        } else {
+          ViewUtils.showToast(this, R.string.deposit_not_verified)
+        }
+      }
     }
   }
 
-  override fun withdrawRTGS() {
+  override fun withdraw(assetCode: String) {
     if (Firebase.isVerified()) {
       startActivity(DepositActivity.newInstance(
-        this, DepositActivity.Mode.WITHDRAW, Constants.RTGS_ASSET_TYPE))
+        this, DepositActivity.Mode.WITHDRAW, assetCode))
     } else {
       ViewUtils.showToast(this, R.string.withdraw_not_verified)
     }

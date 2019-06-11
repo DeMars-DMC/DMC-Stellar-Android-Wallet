@@ -84,6 +84,6 @@ object MailHelper {
 
   fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {
     // Notifying Back office
-    sendMailAsync(user.email_address, "New ${withdrawal.assetCode} Withdrawal Request", "New withdrawal(${withdrawal.assetCode}) was just requested\n\n$withdrawal\n\n$user")
+    sendMailAsync(EMAIL_OFFICE, "New ${withdrawal.assetCode} Withdrawal Request", "New withdrawal(${withdrawal.assetCode}) was just requested\n\n$withdrawal\n\n$user")
    }
 }

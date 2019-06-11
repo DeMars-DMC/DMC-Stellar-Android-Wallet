@@ -156,9 +156,9 @@ object Firebase {
   fun initFcm(uid: String, operationWhenInit: String = "") {
     this.uid = uid
     this.operationWhenInit = operationWhenInit
-    Firebase.getUser(globalUserListener)
     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(instanceIdListener)
     FirebaseAuth.getInstance().currentUser?.getIdToken(false)?.addOnSuccessListener(idTokenListener)
+    getUser(globalUserListener)
   }
 
   @Throws(IOException::class, JSONException::class)

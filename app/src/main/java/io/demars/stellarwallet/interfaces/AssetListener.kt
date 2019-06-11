@@ -6,8 +6,6 @@ import org.stellar.sdk.Asset
 interface AssetListener {
     fun changeTrustline(asset: Asset, isRemoveAsset: Boolean)
     fun assetSelected(sessionAsset: SessionAsset)
-    fun buyXLM()
-    fun tradeDMC()
-    fun depositZAR()
-    fun withdrawRTGS()
+    fun deposit(assetCode: String)
+    fun withdraw(assetCode: String)
 }

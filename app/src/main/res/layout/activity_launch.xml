@@ -15,7 +15,7 @@
         android:layout_width="@dimen/logo_width_main"
         android:layout_height="@dimen/logo_width_main"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_main_logo"
+        android:src="@drawable/ic_logo_dmc"
         app:layout_constraintBottom_toTopOf="@id/verificationLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

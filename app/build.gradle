@@ -166,5 +166,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:17.0.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:17.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

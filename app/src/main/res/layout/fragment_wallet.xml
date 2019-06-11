@@ -41,7 +41,7 @@
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/logoDescription"
                     android:padding="@dimen/margin_padding_size_small"
-                    android:src="@drawable/ic_main_logo" />
+                    android:src="@drawable/ic_logo_dmc" />
 
                 <Button
                     android:id="@+id/payButton"

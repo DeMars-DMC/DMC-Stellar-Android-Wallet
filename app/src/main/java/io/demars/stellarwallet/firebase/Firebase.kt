@@ -22,29 +22,19 @@ import java.io.IOException
 import kotlin.collections.HashMap
 
 object Firebase {
+
+  //region Properties
   private var uid: String = ""
   private var idToken: String = ""
   private var registrationToken: String = ""
   private var notificationKey = ""
   private var initialized = false
   private var operationWhenInit = ""
-  private var dmcUserCached: DmcUser? = null
-  private val globalUserListener = object: ValueEventListener {
-    override fun onDataChange(data: DataSnapshot) {
-      dmcUserCached = data.getValue(DmcUser::class.java)
-    }
-
-    override fun onCancelled(error: DatabaseError) {
-      // Not sure about this for now
-    }
-  }
-
+  //endregion
 
   //region Init
   fun signOut() {
-    dmcUserCached = null
     removeFromFcmGroup()
-    removeUserListener(globalUserListener)
     FirebaseAuth.getInstance().signOut()
   }
 
@@ -93,6 +83,7 @@ object Firebase {
   //region Real-time Database
   fun getDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance().reference
 
+  fun getUserRef(uid: String): DatabaseReference = getDatabaseReference().child("users").child(uid)
 
   fun getUserStellarAddress(listener: ValueEventListener) =
     getCurrentUserUid()?.let { uid ->
@@ -106,24 +97,35 @@ object Firebase {
   fun getNotificationKeyRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("notification_key")
 
-
-  fun getBanksZARRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
+  fun getUserBanksZarRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("banksZAR")
 
-  fun getUser(listener: ValueEventListener) {
+  fun getUserBanksNgntRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
+    .child(uid).child("banksNGNT")
+
+  fun getAssetRef(assetCode: String): DatabaseReference = getDatabaseReference().child("assets")
+    .child(assetCode)
+
+  fun getAssetFresh(assetCode: String, listener: ValueEventListener) {
+    getAssetRef(assetCode).removeEventListener(listener)
+    getAssetRef(assetCode).addValueEventListener(listener)
+  }
+
+  fun getUserFresh(listener: ValueEventListener) {
     getCurrentUserUid()?.let { uid ->
-      getDatabaseReference().child("users")
-        .child(uid).removeEventListener(listener)
-      getDatabaseReference().child("users")
-        .child(uid).addValueEventListener(listener)
+      getUserRef(uid).removeEventListener(listener)
+      getUserRef(uid).addValueEventListener(listener)
     }
   }
 
   fun removeUserListener(listener: ValueEventListener) {
     getCurrentUserUid()?.let { uid ->
-      getDatabaseReference().child("users")
-        .child(uid).removeEventListener(listener)
+      getUserRef(uid).removeEventListener(listener)
     }
+  }
+
+  fun removeAssetListener(assetCode: String, listener: ValueEventListener) {
+    getAssetRef(assetCode).removeEventListener(listener)
   }
   //endregion
 
@@ -158,7 +160,6 @@ object Firebase {
     this.operationWhenInit = operationWhenInit
     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(instanceIdListener)
     FirebaseAuth.getInstance().currentUser?.getIdToken(false)?.addOnSuccessListener(idTokenListener)
-    getUser(globalUserListener)
   }
 
   @Throws(IOException::class, JSONException::class)
@@ -213,8 +214,5 @@ object Firebase {
     // Updating value in database every time so we can use it to send messages from web
     getNotificationKeyRef(uid).setValue(notificationKey)
   }
-  //endregion
-
-  fun isRegistered() = dmcUserCached?.isRegistrationCompleted()?:false
-  fun isVerified() = dmcUserCached?.isVerified() ?: false
+//endregion
 }

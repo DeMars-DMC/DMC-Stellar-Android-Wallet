@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
@@ -62,6 +63,7 @@ class CreateUserActivity : AppCompatActivity() {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       user = dataSnapshot.getValue(DmcUser::class.java)
       user?.let {
+        WalletApplication.wallet.setUserState(it.state)
         isCreating = !it.isRegistrationCompleted()
         initUI()
       } ?: finish()
@@ -73,7 +75,7 @@ class CreateUserActivity : AppCompatActivity() {
     ViewUtils.setTransparentStatusBar(this)
     setContentView(R.layout.activity_create_user)
 
-    Firebase.getUser(userListener)
+    Firebase.getUserFresh(userListener)
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -87,6 +89,7 @@ class CreateUserActivity : AppCompatActivity() {
       showNonEditableView()
     }
   }
+
   private fun showExpiryDateDialog() {
     if (expiryDateDialog == null) {
       val today = Calendar.getInstance()
@@ -233,6 +236,11 @@ class CreateUserActivity : AppCompatActivity() {
     if (infoChecked) {
       user.state = DmcUser.State.VERIFYING.ordinal
       user.created_at = System.currentTimeMillis()
+
+      // Update locally
+      WalletApplication.wallet.setUserState(user.state)
+
+      // Update remote firebase
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           MailHelper.notifyAboutNewUser(user)

@@ -22,6 +22,7 @@ class LocalStoreImpl(context: Context) : LocalStore {
     const val KEY_IS_RECOVERY_PHRASE = "kIsRecoveryPhrase"
     const val KEY_PIN_SETTINGS_SEND = "kPinSettingsSend"
     const val KEY_IS_PASSPHRASE_USED = "kIsPassphraseUsed"
+    const val KEY_USER_STATE = "kUserState"
   }
 
   private val sharedPreferences = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
@@ -83,12 +84,28 @@ class LocalStoreImpl(context: Context) : LocalStore {
     return getBoolean(KEY_PIN_SETTINGS_SEND, true)
   }
 
+  override fun getUserState(): Int {
+    return getInt(KEY_USER_STATE)
+  }
+
+  override fun setUserState(state: Int) {
+    set(KEY_USER_STATE, state)
+  }
+
+  override fun isRegistered(): Boolean = getUserState() > 0
+
+  override fun isVerified(): Boolean = getUserState() > 1
+
   private operator fun set(key: String, value: String?) {
     sharedPreferences.edit().putString(key, value).apply()
   }
 
   private operator fun set(key: String, value: Boolean) {
     sharedPreferences.edit().putBoolean(key, value).apply()
+  }
+
+  private operator fun set(key: String, value: Int) {
+    sharedPreferences.edit().putInt(key, value).apply()
   }
 
   private operator fun <T> set(key: String, obj: T) {
@@ -110,6 +127,14 @@ class LocalStoreImpl(context: Context) : LocalStore {
 
   private fun getBoolean(key: String): Boolean {
     return getBoolean(key, false)
+  }
+
+  private fun getInt(key: String, defValue: Int): Int {
+    return sharedPreferences.getInt(key, defValue)
+  }
+
+  private fun getInt(key: String): Int {
+    return getInt(key, 0)
   }
 
   private operator fun <T> get(key: String, klass: Class<T>): T? {

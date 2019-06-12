@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
+import io.demars.stellarwallet.utils.ViewUtils
 import timber.log.Timber
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -51,5 +52,15 @@ abstract class BaseActivity : AppCompatActivity() {
       }
     }
     return false
+  }
+
+  fun finishWithToast(message : String) {
+    ViewUtils.showToast(this, message)
+    finish()
+  }
+
+  fun finishWithToast(messageRes: Int) {
+    ViewUtils.showToast(this, messageRes)
+    finish()
   }
 }

@@ -8,9 +8,6 @@ import android.text.Editable
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
@@ -26,6 +23,11 @@ import android.text.TextPaint
 import android.text.Spanned
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.firebase.DmcAsset
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.Deposit
@@ -55,7 +57,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var mode = Mode.DEPOSIT
   private var modeString = ""
   private var assetCode = ""
-  private var bankAccounts = ArrayList<BankAccount>()
+  private var userBankAccounts = ArrayList<BankAccount>()
+  private var supportedBanks = HashMap<String, String>()
   private var bankToAdd = BankAccount()
   private var amount = 0.0
   private var maxAmount = 0.0
@@ -73,6 +76,19 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
+  private val assetListener = object : ValueEventListener {
+    override fun onDataChange(data: DataSnapshot) {
+      data.getValue(DmcAsset::class.java)?.let {
+        supportedBanks = it.banks
+        updateView()
+      } ?: finishWithToast("Can't fetch banks for $assetCode")
+    }
+
+    override fun onCancelled(error: DatabaseError) {
+      finishWithToast(error.message)
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_deposit)
@@ -80,7 +96,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     setupUI()
 
     Firebase.getCurrentUser()?.let { _ ->
-      Firebase.getUser(userListener)
+      Firebase.getUserFresh(userListener)
+      Firebase.getAssetFresh(assetCode, assetListener)
     } ?: finishWithToast("Can't find user. Please try again")
   }
 
@@ -109,8 +126,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     bankPicker?.setOnClickListener {
-      val banks = resources.getStringArray(R.array.banks_zar)
-      val branchCodes = resources.getStringArray(R.array.branches_zar)
+      val banks = supportedBanks.values.toTypedArray()
+      val branchCodes = supportedBanks.keys.toTypedArray()
+
       AlertDialog.Builder(this)
         .setTitle(R.string.select_bank)
         .setItems(banks) { _, which ->
@@ -213,7 +231,12 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun onUserFetched(user: DmcUser) {
     dmcUser = user
-    bankAccounts = user.banksZAR
+
+    when (assetCode) {
+      Constants.ZAR_ASSET_TYPE -> userBankAccounts = user.banksZAR
+      Constants.NGNT_ASSET_TYPE -> userBankAccounts = user.banksNGNT
+    }
+
     val fullNameString = "${user.first_name} ${user.last_name}"
     nameText?.text = fullNameString
     phoneText?.text = user.phone
@@ -221,7 +244,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateView() {
-    if (bankAccounts.isEmpty()) {
+    if (userBankAccounts.isEmpty()) {
       showAddBankView()
       hideSelectedBankView()
       hideAmountInput()
@@ -233,7 +256,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun showSelectedBankView() {
-    val selectedBankAccount = bankAccounts[0]
+    val selectedBankAccount = userBankAccounts[0]
     selectedBankName?.text = selectedBankAccount.name
     selectedBankBranch?.text = getString(R.string.pattern_branch_number, selectedBankAccount.branch)
     selectedBankAccountNumber?.text = selectedBankAccount.number
@@ -277,10 +300,16 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     ViewUtils.hideKeyboard(this)
 
-    bankAccounts.add(bankToAdd)
+    userBankAccounts.add(bankToAdd)
     updateView()
 
-    Firebase.getBanksZARRef(dmcUser.uid).setValue(bankAccounts)
+    when (assetCode) {
+      Constants.ZAR_ASSET_TYPE ->
+        Firebase.getUserBanksZarRef(dmcUser.uid).setValue(userBankAccounts)
+      Constants.NGNT_ASSET_TYPE ->
+        Firebase.getUserBanksNgntRef(dmcUser.uid).setValue(userBankAccounts)
+    }
+
   }
 
   private fun showDepositAmount() {
@@ -346,7 +375,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     confirmButton.isEnabled = false
 
     val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
-    val deposit = Deposit(assetCode, amount, bankAccounts[0])
+    val deposit = Deposit(assetCode, amount, userBankAccounts[0])
 
     MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
     finishWithToast(getString(R.string.request_sent_message, modeString))
@@ -363,9 +392,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       val secretSeed = AccountUtils.getSecretSeed(applicationContext)
 
-      Horizon.getWithdrawTask(object: SuccessErrorCallback{
+      Horizon.getWithdrawTask(object : SuccessErrorCallback {
         override fun onSuccess() {
-          val withdrawal = Withdrawal(assetCode, amount, fee, bankAccounts[0])
+          val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
 
           MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
 
@@ -376,19 +405,14 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           finishWithToast(error.localizedMessage)
         }
       }, assetCode, secretSeed, amount, fee).execute()
-   } else {
+    } else {
       NetworkUtils(applicationContext).displayNoNetwork()
     }
-
-  }
-
-  private fun finishWithToast(message: String) {
-    ViewUtils.showToast(this, message)
-    finish()
   }
 
   override fun onDestroy() {
     super.onDestroy()
     Firebase.removeUserListener(userListener)
+    Firebase.removeAssetListener(assetCode, assetListener)
   }
 }

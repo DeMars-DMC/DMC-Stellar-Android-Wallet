@@ -32,7 +32,6 @@ import org.stellar.sdk.responses.AccountResponse
 class AssetsActivity : BaseActivity(), AssetListener {
   private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
-  private lateinit var context: Context
   private lateinit var adapter: AssetsRecyclerViewAdapter
 
   companion object {
@@ -48,7 +47,6 @@ class AssetsActivity : BaseActivity(), AssetListener {
 
     setupUI()
     loadSupportedAssets()
-    context = applicationContext
   }
 
   private fun setupUI() {
@@ -59,17 +57,17 @@ class AssetsActivity : BaseActivity(), AssetListener {
     updateOpenAccountButton()
 
     openAccountButton.setOnClickListener {
-      startActivityForResult(CreateUserActivity.newInstance(context), RC_OPEN_ACCOUNT)
+      startActivityForResult(CreateUserActivity.newInstance(this), RC_OPEN_ACCOUNT)
     }
 
     manuallyAddAssetButton.setOnClickListener {
-      startActivity(Intent(this@AssetsActivity, AddAssetActivity::class.java))
+      startActivity(Intent(this, AddAssetActivity::class.java))
     }
 
     setInflationButton.setOnClickListener {
       if (WalletApplication.wallet.getBalances().isNotEmpty() &&
         AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
-        context.startActivity(Intent(context, InflationActivity::class.java))
+        startActivity(Intent(this, InflationActivity::class.java))
       } else {
         showBalanceErrorDialog()
       }
@@ -84,19 +82,17 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   private fun updateOpenAccountButton() {
-    val isRegistered = Firebase.isRegistered()
+    val isRegistered = WalletApplication.wallet.isRegistered()
     openAccountButton.visibility = if (isRegistered) View.GONE else View.VISIBLE
     (assetsRecyclerView.layoutParams as RelativeLayout.LayoutParams)
       .above(if (isRegistered) R.id.manuallyAddAssetButton else R.id.openAccountButton)
   }
 
   private fun showBalanceErrorDialog() {
-    val builder = AlertDialog.Builder(context)
-    builder.setTitle(context.getString(R.string.no_balance_dialog_title))
-      .setMessage(context.getString(R.string.no_balance_text_message))
-      .setPositiveButton(context.getString(R.string.ok)) { _, _ -> }
-    val dialog = builder.create()
-    dialog.show()
+    AlertDialog.Builder(this)
+      .setTitle(getString(R.string.no_balance_dialog_title))
+      .setMessage(getString(R.string.no_balance_text_message))
+      .setPositiveButton(getString(R.string.ok)) { _, _ -> }.show()
   }
 
   //region User Interface
@@ -216,7 +212,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
         finish()
       }
       else -> {
-        if (Firebase.isVerified()) {
+        if (WalletApplication.wallet.isVerified()) {
           startActivity(DepositActivity.newInstance(
             this, DepositActivity.Mode.DEPOSIT, assetCode))
         } else {
@@ -227,7 +223,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   override fun withdraw(assetCode: String) {
-    if (Firebase.isVerified()) {
+    if (WalletApplication.wallet.isVerified()) {
       startActivity(DepositActivity.newInstance(
         this, DepositActivity.Mode.WITHDRAW, assetCode))
     } else {
@@ -237,7 +233,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {
     progressBar.visibility = View.VISIBLE
-    val secretSeed = AccountUtils.getSecretSeed(context)
+    val secretSeed = AccountUtils.getSecretSeed(this)
     changeTrustLine(secretSeed, asset, isRemoveAsset)
   }
 
@@ -280,7 +276,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
         }
 
         override fun onError(error: ErrorResponse) {
-          ViewUtils.showToast(context, R.string.error_supported_assets_message)
+          ViewUtils.showToast(this@AssetsActivity, R.string.error_supported_assets_message)
         }
       }).execute()
     }

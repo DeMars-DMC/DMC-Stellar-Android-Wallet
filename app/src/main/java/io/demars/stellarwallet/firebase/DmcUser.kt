@@ -29,6 +29,7 @@ data class DmcUser(
   var state = State.UNCOMPLETED.ordinal
   var notification_key = ""
   val banksZAR = ArrayList<BankAccount>()
+  val banksNGNT = ArrayList<BankAccount>()
 
   enum class State {
     UNCOMPLETED, VERIFYING, VERIFIED, REVERIFYING, BLOCKED, CLOSED

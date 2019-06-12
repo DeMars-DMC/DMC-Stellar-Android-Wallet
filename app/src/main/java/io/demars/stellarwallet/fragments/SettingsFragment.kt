@@ -28,22 +28,6 @@ import timber.log.Timber
 
 class SettingsFragment : BaseFragment() {
   private lateinit var appContext: Context
-  private var dmcUser: DmcUser? = null
-  private val userListener = object : ValueEventListener {
-    override fun onDataChange(dataSnapshot: DataSnapshot) {
-      dmcUser = dataSnapshot.getValue(DmcUser::class.java)
-      dmcUser?.let {
-        if (it.isRegistrationCompleted()) {
-          editInfoButton.setText(R.string.personal_information)
-        } else {
-          editInfoButton.setText(R.string.open_account)
-        }
-      }
-    }
-
-    override fun onCancelled(p0: DatabaseError) {
-    }
-  }
 
   enum class SettingsAction {
     SHOW_MNEMONIC, SHOW_SECRET_SEED, SHOW_ACCOUNT, LOG_OUT, TOGGLE_PIN_ON_SENDING, TOGGLE_ENABLE_WEAR_APP
@@ -61,10 +45,6 @@ class SettingsFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     appContext = view.context.applicationContext
     setupUI()
-
-    Firebase.getCurrentUser()?.let { _ ->
-      Firebase.getUser(userListener)
-    }
   }
 
   //region User Interface
@@ -72,23 +52,17 @@ class SettingsFragment : BaseFragment() {
   override fun onResume() {
     super.onResume()
     setSavedSettings()
+    updatePersonalInfo()
   }
 
   private fun setupUI() {
+    updatePersonalInfo()
     viewPhraseButton.setOnClickListener {
       startActivityForResult(WalletManagerActivity.showMnemonic(it.context), SettingsAction.SHOW_MNEMONIC.ordinal)
     }
 
     viewSeedButton.setOnClickListener {
       startActivityForResult(WalletManagerActivity.showSecretSeed(it.context), SettingsAction.SHOW_SECRET_SEED.ordinal)
-    }
-
-    editInfoButton.setOnClickListener {
-      if (dmcUser != null && dmcUser?.isRegistrationCompleted()!!) {
-        startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
-      } else {
-        startActivity(CreateUserActivity.newInstance(context!!))
-      }
     }
 
     logOutButton.setOnClickListener {
@@ -130,6 +104,18 @@ class SettingsFragment : BaseFragment() {
       }
     } else {
       debug.visibility = View.GONE
+    }
+  }
+
+  private fun updatePersonalInfo() {
+    val isRegistered = WalletApplication.wallet.isRegistered()
+    editInfoButton.setText(if (isRegistered) R.string.personal_information else R.string.open_account)
+    editInfoButton.setOnClickListener {
+      if (isRegistered) {
+        startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
+      } else {
+        startActivity(CreateUserActivity.newInstance(it.context))
+      }
     }
   }
 
@@ -190,10 +176,5 @@ class SettingsFragment : BaseFragment() {
 
       Toast.makeText(it, toastMessage, Toast.LENGTH_LONG).show()
     }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    Firebase.removeUserListener(userListener)
   }
 }

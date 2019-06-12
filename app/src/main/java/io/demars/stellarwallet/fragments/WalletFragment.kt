@@ -26,12 +26,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.activities.*
-import io.demars.stellarwallet.firebase.DmcUser
-import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
@@ -39,7 +35,6 @@ import org.stellar.sdk.responses.TradeResponse
 import org.stellar.sdk.responses.operations.OperationResponse
 
 class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
-  private lateinit var appContext: Context
   private lateinit var viewModel: WalletViewModel
   private var state = WalletState.UNKNOWN
   private var lastOperationsListSize = 0
@@ -47,24 +42,6 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private var qrRendered = false
 
   private var stellarContacts: ArrayList<Contact> = ArrayList()
-
-  private val userListener = object : ValueEventListener {
-    override fun onDataChange(dataSnapshot: DataSnapshot) {
-      val dmcUser = dataSnapshot.getValue(DmcUser::class.java)
-      if (dmcUser != null && dmcUser.isRegistrationCompleted()) {
-        openAccountButton?.visibility = View.GONE
-      } else {
-        openAccountButton?.visibility = View.VISIBLE
-        openAccountButton?.setOnClickListener {
-          startActivity(CreateUserActivity.newInstance(context!!))
-        }
-      }
-    }
-
-    override fun onCancelled(p0: DatabaseError) {
-
-    }
-  }
 
   companion object {
     fun newInstance(): WalletFragment = WalletFragment()
@@ -76,7 +53,6 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activity?.let {
-      appContext = it.applicationContext
       viewModel = ViewModelProviders.of(it).get(WalletViewModel::class.java)
     }
   }
@@ -93,7 +69,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
       })
 
-    walletRecyclerView.layoutManager = LinearLayoutManager(appContext)
+    walletRecyclerView.layoutManager = LinearLayoutManager(context)
     walletRecyclerView.adapter = createAdapter()
 
     updateState(WalletState.UPDATING)
@@ -121,7 +97,9 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
       }
     }
 
-    fetching_wallet_image.setColorFilter(ContextCompat.getColor(appContext, R.color.colorPaleSky), PorterDuff.Mode.SRC_ATOP)
+    activity?.let {
+      fetching_wallet_image.setColorFilter(ContextCompat.getColor(it, R.color.colorPaleSky), PorterDuff.Mode.SRC_ATOP)
+    }
   }
 
   override fun onRefresh() {
@@ -136,14 +114,15 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   override fun onDestroyView() {
     super.onDestroyView()
     qrRendered = false
-    Firebase.removeUserListener(userListener)
   }
 
   private fun generateQRCode(data: String, imageView: ImageView, size: Int) {
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
 
-    imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(appContext, R.color.colorPaleSky)))
+    activity?.let {
+      imageView.setImageBitmap(tintImage(bitmap, ContextCompat.getColor(it, R.color.colorPaleSky)))
+    }
   }
 
   private fun initAddressCopyButton(secretSeed: String) {
@@ -152,11 +131,13 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   }
 
   private fun copyAddressToClipBoard(data: String) {
-    val clipboard = (appContext.getSystemService(Context.CLIPBOARD_SERVICE)) as ClipboardManager
-    val clip = ClipData.newPlainText("DMC Address", data)
-    clipboard.primaryClip = clip
+    activity?.let {
+      val clipboard = (it.getSystemService(Context.CLIPBOARD_SERVICE)) as ClipboardManager
+      val clip = ClipData.newPlainText("DMC Address", data)
+      clipboard.primaryClip = clip
 
-    Toast.makeText(appContext, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()
+      Toast.makeText(it, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()
+    }
   }
 
   private fun tintImage(bitmap: Bitmap, color: Int): Bitmap {
@@ -290,7 +271,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             noTransactionsTextView.visibility = View.GONE
             fetchingState.visibility = View.GONE
             fundingState.visibility = View.VISIBLE
-            Firebase.getUser(userListener)
+            updateOpenAccountButton()
           }
           WalletState.ERROR -> {
             noTransactionsTextView.visibility = View.GONE
@@ -324,6 +305,17 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
   }
 
+  private fun updateOpenAccountButton() {
+    if (WalletApplication.wallet.isRegistered()) {
+      openAccountButton?.visibility = View.GONE
+    } else {
+      openAccountButton?.visibility = View.VISIBLE
+      openAccountButton?.setOnClickListener {
+        startActivity(CreateUserActivity.newInstance(context!!))
+      }
+    }
+  }
+
   /**
    * It will reset the array list.
    */
@@ -339,13 +331,14 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     })
     adapter.setOnLearnMoreButtonListener(object : WalletRecyclerViewAdapter.OnLearnMoreButtonListener {
       override fun onLearnMoreButtonClicked(view: View, assetCode: String, issuer: String?, position: Int) {
-        val context = view.context
-        if (assetCode == "native" || issuer.isNullOrBlank()) {
-          startActivity(BalanceSummaryActivity.newNativeAssetIntent(context))
-        } else {
-          startActivity(BalanceSummaryActivity.newIntent(context, assetCode, issuer))
+        activity?.let {
+          if (assetCode == "native" || issuer.isNullOrBlank()) {
+            startActivity(BalanceSummaryActivity.newNativeAssetIntent(it))
+          } else {
+            startActivity(BalanceSummaryActivity.newIntent(it, assetCode, issuer))
+          }
+          it.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
         }
-        (context as Activity).overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
       }
     })
     return adapter

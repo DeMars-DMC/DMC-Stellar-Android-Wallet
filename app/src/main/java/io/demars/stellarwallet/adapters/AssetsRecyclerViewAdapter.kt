@@ -15,6 +15,7 @@ import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.utils.StringFormat
 import com.squareup.picasso.Picasso
 import io.demars.stellarwallet.models.*
+import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
@@ -147,7 +148,9 @@ class AssetsRecyclerViewAdapter(private var context: Context,
         viewHolder.depositButton.visibility = View.VISIBLE
         viewHolder.depositButton.setText(R.string.deposit)
 
-        viewHolder.withdrawButton.visibility = View.VISIBLE
+        val hasNGNT = AccountUtils.hasAvailableAssets(asset.code)
+
+        viewHolder.withdrawButton.visibility = if (hasNGNT) View.VISIBLE else View.GONE
         viewHolder.withdrawButton.setText(R.string.withdraw)
       }
       else -> {
@@ -157,11 +160,11 @@ class AssetsRecyclerViewAdapter(private var context: Context,
     }
 
     viewHolder.depositButton.setOnClickListener {
-      listener.deposit(asset.code)
+      listener.deposit(asset.code.toUpperCase())
     }
 
     viewHolder.withdrawButton.setOnClickListener {
-      listener.withdraw(asset.code)
+      listener.withdraw(asset.code.toUpperCase())
     }
 
     // Image
@@ -185,6 +188,7 @@ class AssetsRecyclerViewAdapter(private var context: Context,
         }
         asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
           viewHolder.defaultImage.visibility = View.GONE
+          viewHolder.assetName.text = asset.name
           Picasso.get()
             .load(Constants.DMC_IMAGE_RES)
             .resize(256, 256)
@@ -196,6 +200,15 @@ class AssetsRecyclerViewAdapter(private var context: Context,
           viewHolder.assetName.text = asset.name
           Picasso.get()
             .load(Constants.RTGS_IMAGE_RES)
+            .resize(256, 256)
+            .onlyScaleDown()
+            .into(viewHolder.assetImage)
+        }
+        asset.code.equals(Constants.NGNT_ASSET_TYPE, true) -> {
+          viewHolder.defaultImage.visibility = View.GONE
+          viewHolder.assetName.text = asset.name
+          Picasso.get()
+            .load(Constants.NGNT_IMAGE_RES)
             .resize(256, 256)
             .onlyScaleDown()
             .into(viewHolder.assetImage)

@@ -16,7 +16,11 @@ interface LocalStore {
     fun setAvailableBalances(availableBalances: Array<AvailableBalance>?)
     fun getIsRecoveryPhrase(): Boolean
     fun setIsRecoveryPhrase(isRecoveryPhrase: Boolean)
+    fun getUserState(): Int
+    fun setUserState(state: Int)
     fun setShowPinOnSend(showPinOnSend: Boolean)
     fun getShowPinOnSend(): Boolean
     fun clearLocalStore():  Boolean
+    fun isRegistered(): Boolean
+    fun isVerified(): Boolean
 }

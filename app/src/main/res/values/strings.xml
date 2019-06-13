@@ -381,7 +381,7 @@
     <string name="other_amount">Other amount</string>
     <string name="deposit_not_verified">You\'ll be able to deposit once your account is verified</string>
     <string name="withdraw_not_verified">You\'ll be able to withdraw once your account is verified</string>
-    <string name="request_sent_message">Thank you, %s request successfully sent</string>
+    <string name="request_sent_message">Thank you. %s request successfully sent</string>
     <string name="withdraw">Withdraw</string>
     <string name="withdrawal">Withdrawal</string>
 </resources>

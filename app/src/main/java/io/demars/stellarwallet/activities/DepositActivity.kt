@@ -115,7 +115,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         R.string.deposit else R.string.withdraw)
 
       assetCode = it.getString(ARG_ASSET_CODE, "")
-      when(mode) {
+      when (mode) {
         Mode.DEPOSIT -> {
           maxAmount = 5000.0
           maxAmountText = "5000.00"
@@ -393,32 +393,49 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     amountTextView?.text = amountToUse
     submitButton.isEnabled = this.amount > 0
   }
+
+  private fun showProgressBar() {
+    progressBar?.visibility = View.VISIBLE
+  }
+
+  private fun hideProgressBar() {
+    progressBar?.visibility = View.GONE
+  }
   //endregion
 
   private fun confirmDeposit() {
     confirmButton.isEnabled = false
 
     if (NetworkUtils(applicationContext).isNetworkAvailable()) {
-      val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
-      val deposit = Deposit(assetCode, amount, userBankAccounts[0])
+      showProgressBar()
 
+      val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
       when (assetCode) {
         Constants.NGNT_ASSET_TYPE -> {
           // Use Cowrie exchange api to request deposit NGNT
           CowrieRetrofit.create().ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
             override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
-//            MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-              finishWithToast(getString(R.string.request_sent_message, modeString))
+              response.body()?.let {
+                val anchorBank = BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
+                val deposit = Deposit(assetCode, amount, it.depositRef, anchorBank, userBankAccounts[0])
+                MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
+                finishWithToast(getString(R.string.request_sent_message, modeString))
+              }
             }
 
             override fun onFailure(call: Call<DepositResponse>, t: Throwable) {
               Timber.e(t)
-              ViewUtils.showToast(this@DepositActivity, t.localizedMessage)
+              toast(t.localizedMessage)
+              hideProgressBar()
             }
           })
         }
         Constants.ZAR_ASSET_TYPE -> {
           // Notify user with our ZAR banking info
+          val anchorBank = BankAccount("DMC Rand (Pty) Ltd", "250655",
+            "Current/Cheque Account", "62756496496", "FNB")
+          val depositRef = "${dmcUser.email_address}*demars.io"
+          val deposit = Deposit(assetCode, amount, depositRef, anchorBank, userBankAccounts[0])
           MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
           finishWithToast(getString(R.string.request_sent_message, modeString))
         }
@@ -437,7 +454,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     val secretSeed = AccountUtils.getSecretSeed(applicationContext)
 
     if (NetworkUtils(applicationContext).isNetworkAvailable()) {
-//      progressBar.visibility = View.VISIBLE
+      showProgressBar()
 
       when (assetCode) {
         Constants.NGNT_ASSET_TYPE -> {
@@ -459,6 +476,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
         if (!response.isSuccessful) {
           toast("Error requesting $assetCode withdrawal")
+          hideProgressBar()
           return
         }
 
@@ -469,7 +487,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
               MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
 
-              finishWithToast(getString(R.string.request_sent_message, modeString))
+              finishWithToast(getString(R.string.request_sent_message,
+                getString(R.string.withdrawal)))
             }
 
             override fun onError(error: HorizonException) {
@@ -482,6 +501,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
         Timber.e(t)
         toast(t.localizedMessage)
+        hideProgressBar()
       }
     })
   }
@@ -493,11 +513,13 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
         MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
 
-        finishWithToast(getString(R.string.request_sent_message, modeString))
+        finishWithToast(getString(R.string.request_sent_message,
+          getString(R.string.withdrawal)))
       }
 
       override fun onError(error: HorizonException) {
         finishWithToast(error.localizedMessage)
+        hideProgressBar()
       }
     }, assetCode, secretSeed, Constants.RTGS_ASSET_ISSUER, "", amount, fee).execute()
   }

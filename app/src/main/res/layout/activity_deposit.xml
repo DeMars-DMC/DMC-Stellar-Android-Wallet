@@ -130,11 +130,11 @@
             android:id="@+id/editAmountButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:background="?attr/selectableItemBackground"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
             android:text="@string/other_amount"
             android:textAllCaps="true"
             android:textColor="@color/colorApricot" />
@@ -172,13 +172,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/agreeCheckBox"
-            android:gravity="start"
             android:layout_toEndOf="@+id/agreeCheckBox"
+            android:gravity="start"
             android:paddingTop="@dimen/padding_mini"
             android:paddingBottom="@dimen/padding_mini"
+            android:text="@string/agree_request_terms"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_small"
-            android:text="@string/agree_request_terms" />
+            android:textSize="@dimen/text_size_small" />
 
         <Button
             android:id="@+id/confirmButton"
@@ -203,6 +203,14 @@
             android:paddingEnd="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_mini"
             android:text="@string/deposit_confirm_massage" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_below="@id/depositConfirmExplain"
+            android:layout_margin="@dimen/padding_mini"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

@@ -25,13 +25,14 @@ abstract class BaseActivity : AppCompatActivity() {
       WalletApplication.showPin = false
 
       when {
-        Firebase.getCurrentUser() == null -> {
-          Timber.d("Firebase user is null, wiping wallet")
-          GlobalGraphHelper.wipeAndRestart(this)
-        }
         GlobalGraphHelper.isExistingWallet() -> {
-          Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
-          startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
+          if (Firebase.getCurrentUser() == null) {
+            Timber.d("Firebase user is null, wiping wallet")
+            GlobalGraphHelper.wipeAndRestart(this)
+          } else {
+            Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
+            startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
+          }
         }
         else -> {
           Timber.d("Bad state, wiping wallet")
@@ -72,7 +73,7 @@ abstract class BaseActivity : AppCompatActivity() {
     ViewUtils.showToast(this, messageRes)
   }
 
-  fun finishWithToast(message : String) {
+  fun finishWithToast(message: String) {
     toast(message)
     finish()
   }

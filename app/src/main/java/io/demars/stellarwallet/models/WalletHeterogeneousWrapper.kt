@@ -2,6 +2,12 @@ package io.demars.stellarwallet.models
 
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.models.stellar.Effect
+import io.demars.stellarwallet.models.stellar.EffectType
+import io.demars.stellarwallet.models.stellar.Operation
+import io.demars.stellarwallet.models.stellar.Trade
+import io.demars.stellarwallet.models.stellar.TradeEffect
+import io.demars.stellarwallet.models.stellar.Transaction
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.Response
 import org.stellar.sdk.responses.TradeResponse
@@ -197,7 +203,7 @@ class WalletHeterogeneousWrapper {
         return@map TradeEffect(activeAsset, it.type, it.createdAt, convertAsset(it.boughtAsset), convertAsset(it.soldAsset),
           it.boughtAmount, it.soldAmount)
       } else {
-        return@map AccountEffect(it.type, it.createdAt, getAssetCode(it), getAmount(it))
+        return@map Effect(it.type, it.createdAt, getAssetCode(it), getAmount(it))
       }
     } as ArrayList
   }

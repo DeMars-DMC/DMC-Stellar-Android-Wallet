@@ -370,7 +370,7 @@
     <string name="bank_account_explain">You may only make a deposit or withdrawal to an account in your name. For compliance purposes no third party deposit or withdrawal are permitted.</string>
     <string name="select_account_type">Select account type</string>
     <string name="pattern_branch_number">Branch number: %s</string>
-    <string name="zar_deposit_limit_message">Limit: R5,000 per deposit and R25,000 per month</string>
+    <string name="pattern_deposit_limit">Limit: %s5,000 per deposit and %s25,000 per month</string>
     <string name="request_amount">%s amount</string>
     <string name="deposit_confirm_massage">Deposit requests not matched in 3 days are discarded</string>
     <string name="agree_request_terms">I hereby agree to the %s Terms and Conditions</string>

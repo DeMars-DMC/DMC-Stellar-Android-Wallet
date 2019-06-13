@@ -83,6 +83,13 @@ class AssetUtils {
       else -> 0
     }
 
+    fun getShortCode(assetCode: String): String = when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> "L"
+      Constants.ZAR_ASSET_TYPE -> "R"
+      Constants.NGNT_ASSET_TYPE -> "N"
+      else -> ""
+    }
+
     fun getMaxDecimals(assetCode: String): Int = when {
       assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
       assetCode.equals(Constants.RTGS_ASSET_TYPE, true) -> 2

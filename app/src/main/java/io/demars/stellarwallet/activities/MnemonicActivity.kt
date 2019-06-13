@@ -9,7 +9,7 @@ import android.widget.ImageView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.PassphraseDialogHelper
-import io.demars.stellarwallet.models.MnemonicType
+import io.demars.stellarwallet.models.stellar.MnemonicType
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder

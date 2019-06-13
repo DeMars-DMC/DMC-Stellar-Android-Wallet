@@ -75,19 +75,16 @@ class DiagnosticActivity : BaseActivity() {
         val encryptedPhrase = WalletApplication.wallet.getEncryptedPhrase()
         val masterKey = AccountUtils.getPinMasterKey(this, WalletApplication.userSession.getPin()!!)
 
-        if (encryptedPhrase != null && masterKey!= null) {
+        recoveryType = if (encryptedPhrase != null && masterKey!= null) {
             val decryptedPhrase = AccountUtils.getDecryptedString(encryptedPhrase, masterKey)
-            val wordCount = StringFormat.getWordCount(decryptedPhrase)
-
-            recoveryType = when (wordCount) {
+            when (StringFormat.getWordCount(decryptedPhrase)) {
                 1 -> getString(R.string.recovered_secret_seed)
                 12 -> getString(R.string.mnemonic_phrase_12_words)
                 24 -> getString(R.string.mnemonic_phrase_24_words)
                 else -> "Unknown"
             }
-
         } else {
-            recoveryType = "Unknown"
+            "Unknown"
         }
         return recoveryType
     }

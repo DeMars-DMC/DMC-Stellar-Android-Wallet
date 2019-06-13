@@ -19,7 +19,7 @@ import io.demars.stellarwallet.adapters.MyOffersAdapter
 import io.demars.stellarwallet.interfaces.OnDeleteRequest
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.Currency
-import io.demars.stellarwallet.models.MyOffer
+import io.demars.stellarwallet.models.ui.MyOffer
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import kotlinx.android.synthetic.main.fragment_tab_my_offers.*

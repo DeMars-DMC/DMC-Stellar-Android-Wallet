@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 data class Trade(var activeAssetCode:String, var createdAt: String,
                  var offerId: String?, var baseIsSeller: Boolean?, var price: String?,

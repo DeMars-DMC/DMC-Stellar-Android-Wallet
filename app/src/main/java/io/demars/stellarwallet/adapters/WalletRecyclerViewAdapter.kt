@@ -24,6 +24,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.demars.stellarwallet.models.stellar.*
 import io.demars.stellarwallet.utils.AssetUtils
 
 
@@ -103,7 +104,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         it[position] is TotalBalance -> TransactionViewType.TOTAL.value
         it[position] is AvailableBalance -> TransactionViewType.AVAILABLE.value
         it[position] is Pair<*, *> -> TransactionViewType.HEADER.value
-        it[position] is AccountEffect -> TransactionViewType.ACCOUNT_EFFECT.value
+        it[position] is Effect -> TransactionViewType.ACCOUNT_EFFECT.value
         it[position] is TradeEffect -> TransactionViewType.TRADE_EFFECT.value
         it[position] is Transaction -> TransactionViewType.TRANSACTION.value
         it[position] is Trade -> TransactionViewType.TRADE.value
@@ -280,7 +281,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
 
   @SuppressLint("SetTextI18n")
   private fun configureAccountEffectViewHolder(viewHolder: OperationViewHolder, position: Int) {
-    val transaction = items!![position] as AccountEffect
+    val transaction = items!![position] as Effect
 
     viewHolder.amount.text = formatNumber4Decimals(transaction.amount,
       transaction.assetCode ?: "XLM")

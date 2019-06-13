@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 enum class MnemonicType {
     WORD_12,

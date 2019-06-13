@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import io.demars.stellarwallet.utils.ViewUtils
@@ -17,17 +18,26 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun onResume() {
     super.onResume()
+
     val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
+
     if (WalletApplication.showPin && askForPin) {
       WalletApplication.showPin = false
 
-      if (GlobalGraphHelper.isExistingWallet()) {
-        Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
-        startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
-      } else {
-        Timber.d("Bad state, wiping wallet")
-        // bad state, let's clean the wallet
-        GlobalGraphHelper.wipe(applicationContext)
+      when {
+        Firebase.getCurrentUser() == null -> {
+          Timber.d("Firebase user is null, wiping wallet")
+          GlobalGraphHelper.wipeAndRestart(this)
+        }
+        GlobalGraphHelper.isExistingWallet() -> {
+          Timber.d("Existing wallet, opening WalletManagerActivity to verify the pin")
+          startActivityForResult(WalletManagerActivity.verifyPin(this), VERIFY_PIN_REQUEST)
+        }
+        else -> {
+          Timber.d("Bad state, wiping wallet")
+          // bad state, let's clean the wallet
+          GlobalGraphHelper.wipe(applicationContext)
+        }
       }
     }
   }
@@ -54,13 +64,21 @@ abstract class BaseActivity : AppCompatActivity() {
     return false
   }
 
-  fun finishWithToast(message : String) {
+  fun toast(message: String) {
     ViewUtils.showToast(this, message)
+  }
+
+  fun toast(messageRes: Int) {
+    ViewUtils.showToast(this, messageRes)
+  }
+
+  fun finishWithToast(message : String) {
+    toast(message)
     finish()
   }
 
   fun finishWithToast(messageRes: Int) {
-    ViewUtils.showToast(this, messageRes)
+    toast(messageRes)
     finish()
   }
 }

@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.models.MnemonicType
+import io.demars.stellarwallet.models.stellar.MnemonicType
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import kotlinx.android.synthetic.main.activity_launch.*
 import timber.log.Timber
@@ -78,6 +78,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     override fun onCancelled(error: DatabaseError) {
+      ViewUtils.showToast(this@LaunchActivity, error.message)
     }
   }
 

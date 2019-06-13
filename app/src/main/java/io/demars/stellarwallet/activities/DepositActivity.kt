@@ -31,10 +31,17 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.Deposit
-import io.demars.stellarwallet.models.HorizonException
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.models.Withdrawal
+import io.demars.stellarwallet.models.cowrie.DepositResponse
+import io.demars.stellarwallet.models.cowrie.WithdrawalResponse
+import io.demars.stellarwallet.remote.CowrieRetrofit
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
 
 class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   enum class Mode {
@@ -108,8 +115,17 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         R.string.deposit else R.string.withdraw)
 
       assetCode = it.getString(ARG_ASSET_CODE, "")
-      maxAmount = 5000.0 // later we can change it to constants
-      maxAmountText = "5000.00"
+      when(mode) {
+        Mode.DEPOSIT -> {
+          maxAmount = 5000.0
+          maxAmountText = "5000.00"
+        }
+        Mode.WITHDRAW -> {
+          val available = AccountUtils.getAvailableBalance(assetCode)
+          maxAmount = available.toDouble()
+          maxAmountText = StringFormat.truncateDecimalPlaces(available, MAX_DECIMALS)
+        }
+      }
     }
   }
 
@@ -227,6 +243,14 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         Mode.WITHDRAW -> confirmWithdrawal()
       }
     }
+
+    when (mode) {
+      Mode.DEPOSIT -> {
+        val shortAssetCode = AssetUtils.getShortCode(assetCode)
+        limitText.text = getString(R.string.pattern_deposit_limit, shortAssetCode, shortAssetCode)
+      }
+      Mode.WITHDRAW -> limitText.text = getString(R.string.pattern_available, maxAmountText)
+    }
   }
 
   private fun onUserFetched(user: DmcUser) {
@@ -283,13 +307,13 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun showAmountInput() {
     numberKeyboard?.visibility = View.VISIBLE
     submitButton?.visibility = View.VISIBLE
-    depositLimitText?.visibility = View.VISIBLE
+    limitText?.visibility = View.VISIBLE
     amountTextView?.visibility = View.VISIBLE
   }
 
   private fun hideAmountInput() {
     amountTextView?.visibility = View.GONE
-    depositLimitText?.visibility = View.GONE
+    limitText?.visibility = View.GONE
     submitButton?.visibility = View.GONE
     numberKeyboard?.visibility = View.GONE
   }
@@ -374,11 +398,35 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun confirmDeposit() {
     confirmButton.isEnabled = false
 
-    val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
-    val deposit = Deposit(assetCode, amount, userBankAccounts[0])
+    if (NetworkUtils(applicationContext).isNetworkAvailable()) {
+      val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
+      val deposit = Deposit(assetCode, amount, userBankAccounts[0])
 
-    MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-    finishWithToast(getString(R.string.request_sent_message, modeString))
+      when (assetCode) {
+        Constants.NGNT_ASSET_TYPE -> {
+          // Use Cowrie exchange api to request deposit NGNT
+          CowrieRetrofit.create().ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
+            override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
+//            MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
+              finishWithToast(getString(R.string.request_sent_message, modeString))
+            }
+
+            override fun onFailure(call: Call<DepositResponse>, t: Throwable) {
+              Timber.e(t)
+              ViewUtils.showToast(this@DepositActivity, t.localizedMessage)
+            }
+          })
+        }
+        Constants.ZAR_ASSET_TYPE -> {
+          // Notify user with our ZAR banking info
+          MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
+          finishWithToast(getString(R.string.request_sent_message, modeString))
+        }
+      }
+    } else {
+      confirmButton.isEnabled = true
+      NetworkUtils(applicationContext).displayNoNetwork()
+    }
   }
 
   private fun confirmWithdrawal() {
@@ -386,28 +434,72 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     val fee = StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)
     val amount = StringFormat.truncateDecimalPlaces(amount * 0.99, MAX_DECIMALS)
+    val secretSeed = AccountUtils.getSecretSeed(applicationContext)
 
     if (NetworkUtils(applicationContext).isNetworkAvailable()) {
 //      progressBar.visibility = View.VISIBLE
 
-      val secretSeed = AccountUtils.getSecretSeed(applicationContext)
-
-      Horizon.getWithdrawTask(object : SuccessErrorCallback {
-        override fun onSuccess() {
-          val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
-
-          MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
-
-          finishWithToast(getString(R.string.request_sent_message, modeString))
+      when (assetCode) {
+        Constants.NGNT_ASSET_TYPE -> {
+          withdrawNgnt(secretSeed, amount, fee)
         }
-
-        override fun onError(error: HorizonException) {
-          finishWithToast(error.localizedMessage)
+        Constants.RTGS_ASSET_TYPE -> {
+          withdrawZar(secretSeed, amount, fee)
         }
-      }, assetCode, secretSeed, amount, fee).execute()
+      }
     } else {
+      confirmButton.isEnabled = true
       NetworkUtils(applicationContext).displayNoNetwork()
     }
+  }
+
+  private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String) {
+    val bankAccount = userBankAccounts[0]
+    CowrieRetrofit.create().ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawalResponse> {
+      override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
+        if (!response.isSuccessful) {
+          toast("Error requesting $assetCode withdrawal")
+          return
+        }
+
+        response.body()?.let { info ->
+          Horizon.getWithdrawTask(object : SuccessErrorCallback {
+            override fun onSuccess() {
+              val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
+
+              MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+              finishWithToast(getString(R.string.request_sent_message, modeString))
+            }
+
+            override fun onError(error: HorizonException) {
+              finishWithToast(error.localizedMessage)
+            }
+          }, assetCode, secretSeed, info.address, info.meta, amount, fee).execute()
+        }
+      }
+
+      override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
+        Timber.e(t)
+        toast(t.localizedMessage)
+      }
+    })
+  }
+
+  private fun withdrawZar(secretSeed: CharArray, amount: String, fee: String) {
+    Horizon.getWithdrawTask(object : SuccessErrorCallback {
+      override fun onSuccess() {
+        val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
+
+        MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+        finishWithToast(getString(R.string.request_sent_message, modeString))
+      }
+
+      override fun onError(error: HorizonException) {
+        finishWithToast(error.localizedMessage)
+      }
+    }, assetCode, secretSeed, Constants.RTGS_ASSET_ISSUER, "", amount, fee).execute()
   }
 
   override fun onDestroy() {

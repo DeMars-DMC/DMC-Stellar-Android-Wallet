@@ -1,6 +1,7 @@
 package io.demars.stellarwallet.models
 
 import android.content.Context
+import io.demars.stellarwallet.models.stellar.MinimumBalance
 
 interface UserSession {
   fun getSessionAsset(): SessionAsset

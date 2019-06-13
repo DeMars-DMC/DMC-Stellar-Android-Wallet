@@ -15,7 +15,7 @@ import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.PinActivity
 import io.demars.stellarwallet.activities.WalletActivity
-import io.demars.stellarwallet.models.MnemonicType
+import io.demars.stellarwallet.models.stellar.MnemonicType
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

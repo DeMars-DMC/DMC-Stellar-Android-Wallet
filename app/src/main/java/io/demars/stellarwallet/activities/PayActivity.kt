@@ -17,8 +17,7 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.utils.AssetUtils
-import io.demars.stellarwallet.models.ExchangeApiModel
-import io.demars.stellarwallet.models.HorizonException
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.exchange.ExchangeEntity
 import io.demars.stellarwallet.mvvm.exchange.ExchangeViewModel
 import io.demars.stellarwallet.remote.Horizon

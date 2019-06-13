@@ -1,13 +1,12 @@
 package io.demars.stellarwallet.activities
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.HorizonException
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils

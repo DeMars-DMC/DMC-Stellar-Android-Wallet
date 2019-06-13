@@ -8,8 +8,8 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
-import io.demars.stellarwallet.models.HorizonException
-import io.demars.stellarwallet.models.Operation
+import io.demars.stellarwallet.models.stellar.HorizonException
+import io.demars.stellarwallet.models.stellar.Operation
 import org.stellar.sdk.*
 import org.stellar.sdk.Transaction.Builder.TIMEOUT_INFINITE
 import org.stellar.sdk.requests.*
@@ -58,9 +58,10 @@ object Horizon : HorizonTasks {
     return SendTask(listener, destAddress, secretSeed, memo, amount)
   }
 
-  override fun getWithdrawTask(listener: SuccessErrorCallback, assetCode: String, secretSeed: CharArray, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
-    return WithdrawTask(listener, assetCode, secretSeed, amount, fee)
+  override fun getWithdrawTask(listener: SuccessErrorCallback, assetCode: String, secretSeed: CharArray, destination: String, memo: String, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
+    return WithdrawTask(listener, assetCode, secretSeed, destination, memo, amount, fee)
   }
+
   override fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest: String): AsyncTask<Void, Void, HorizonException> {
     return JoinInflationDestination(listener, secretSeed, inflationDest)
   }
@@ -212,7 +213,6 @@ object Horizon : HorizonTasks {
         } ?: run {
           listener.onFailed("Failed to get the order book")
         }
-
       }
     }
   }
@@ -489,6 +489,8 @@ object Horizon : HorizonTasks {
   private class WithdrawTask(private val listener: SuccessErrorCallback,
                              private val assetCode: String,
                              private val secretSeed: CharArray,
+                             private val destination: String,
+                             private val memo: String,
                              private val amount: String,
                              private val fee: String)
     : AsyncTask<Void, Void, HorizonException>() {
@@ -497,18 +499,21 @@ object Horizon : HorizonTasks {
       try {
         val server = getServer()
         val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
-        val issuerKeyPair = KeyPair.fromAccountId(Constants.RTGS_ASSET_ISSUER)
+        val destKeyPair = KeyPair.fromAccountId(destination)
         val feeKeyPair = KeyPair.fromAccountId(Constants.FEE_ACCOUNT)
-
-        val asset = Asset.createNonNativeAsset(assetCode, issuerKeyPair)
+        val asset = getAsset(assetCode)
 
         val sourceAccount = server.accounts().account(sourceKeyPair)
 
         val transactionBuilder = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
         // Burn amount(99% of withdrawal) sending it to Issuing Account
-        transactionBuilder.addOperation(PaymentOperation.Builder(issuerKeyPair, asset, amount).build())
+        transactionBuilder.addOperation(PaymentOperation.Builder(destKeyPair, asset, amount).build())
         // Send fee(1%) to Fee Account
         transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
+
+        if (memo.isNotEmpty()) {
+          transactionBuilder.addMemo(Memo.text(memo))
+        }
 
         val transaction = transactionBuilder.build()
         transaction.sign(sourceKeyPair)
@@ -656,6 +661,22 @@ object Horizon : HorizonTasks {
     } else {
       Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
     }
+  }
+
+  private fun getAsset(assetCode: String): Asset {
+    val assetIssuer = when (assetCode) {
+      Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
+      Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_ISSUER
+      Constants.RTGS_ASSET_TYPE -> Constants.RTGS_ASSET_ISSUER
+      else -> Constants.DMC_ASSET_ISSUER
+    }
+
+    return if (assetCode == Constants.LUMENS_ASSET_TYPE) {
+      AssetTypeNative()
+    } else {
+      Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
+    }
+
   }
 
   /**

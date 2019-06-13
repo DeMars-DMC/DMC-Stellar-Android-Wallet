@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 data class Transaction(var type: String, var createdAt: String,
                        var assetCode: String?, var amount: String?,

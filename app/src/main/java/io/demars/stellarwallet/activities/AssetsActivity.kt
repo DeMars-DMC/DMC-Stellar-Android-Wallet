@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
-import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.*
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils

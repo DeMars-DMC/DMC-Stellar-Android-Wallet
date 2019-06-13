@@ -6,7 +6,7 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.StellarAccount
 import io.demars.stellarwallet.models.BasicStellarAccount
-import io.demars.stellarwallet.models.MinimumBalance
+import io.demars.stellarwallet.models.stellar.MinimumBalance
 import io.demars.stellarwallet.models.StellarAccountImpl
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils

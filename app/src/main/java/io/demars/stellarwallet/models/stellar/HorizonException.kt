@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 import android.content.Context
 import io.demars.stellarwallet.R

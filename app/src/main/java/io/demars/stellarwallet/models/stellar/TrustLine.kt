@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 import io.demars.stellarwallet.helpers.Constants
 

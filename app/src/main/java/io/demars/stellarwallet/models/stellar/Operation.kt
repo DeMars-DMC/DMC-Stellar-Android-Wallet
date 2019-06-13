@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.stellar
 
 data class Operation(var id: String, var sourceAccount: String, var type: String,
                      var createdAt: String, var transactionSuccessful: Boolean,

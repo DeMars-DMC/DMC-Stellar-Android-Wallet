@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.interfaces.OnDeleteRequest
-import io.demars.stellarwallet.models.MyOffer
+import io.demars.stellarwallet.models.ui.MyOffer
 import kotlinx.android.synthetic.main.item_my_trade.view.*
 import java.text.DecimalFormat
 import java.text.NumberFormat

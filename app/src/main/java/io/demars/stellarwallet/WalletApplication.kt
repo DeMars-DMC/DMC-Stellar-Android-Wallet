@@ -20,6 +20,7 @@ import io.demars.stellarwallet.remote.ServerType
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.demars.stellarwallet.encryption.PRNGFixes
+import io.demars.stellarwallet.models.stellar.MinimumBalance
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber

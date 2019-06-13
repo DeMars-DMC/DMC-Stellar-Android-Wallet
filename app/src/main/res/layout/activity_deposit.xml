@@ -292,7 +292,7 @@
         style="@style/BoldText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/depositLimitText"
+        android:layout_above="@+id/limitText"
         android:layout_below="@+id/selectedBankContainer"
         android:gravity="center"
         android:text="@string/default_value"
@@ -302,7 +302,7 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/depositLimitText"
+        android:id="@+id/limitText"
         style="@style/LongDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
         android:paddingTop="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_mini"
-        android:text="@string/zar_deposit_limit_message"
+        android:text="@string/pattern_deposit_limit"
         android:visibility="gone" />
 
     <Button

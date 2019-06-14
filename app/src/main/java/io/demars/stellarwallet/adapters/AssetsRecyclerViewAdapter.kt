@@ -135,7 +135,10 @@ class AssetsRecyclerViewAdapter(private var context: Context,
         viewHolder.depositButton.visibility = View.VISIBLE
         viewHolder.depositButton.setText(R.string.deposit)
 
-        viewHolder.withdrawButton.visibility = View.GONE
+        val hasZAR = AccountUtils.hasAvailableAssets(asset.code)
+
+        viewHolder.withdrawButton.visibility = if (hasZAR) View.VISIBLE else View.GONE
+        viewHolder.withdrawButton.setText(R.string.withdraw)
       }
 
       asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {

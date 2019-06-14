@@ -68,9 +68,11 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var supportedBanks = HashMap<String, String>()
   private var bankToAdd = BankAccount()
   private var amount = 0.0
+  private var minAmount = 0.0
   private var maxAmount = 0.0
   private var amountText = "0"
   private var maxAmountText = "0.0"
+
   private val userListener = object : ValueEventListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       dataSnapshot.getValue(DmcUser::class.java)?.let { user ->
@@ -124,6 +126,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           val available = AccountUtils.getAvailableBalance(assetCode)
           maxAmount = available.toDouble()
           maxAmountText = StringFormat.truncateDecimalPlaces(available, MAX_DECIMALS)
+          when (assetCode) {
+            Constants.NGNT_ASSET_TYPE -> minAmount = 500.0
+          }
         }
       }
     }
@@ -244,13 +249,25 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       }
     }
 
+
+    val shortAssetCode = AssetUtils.getShortCode(assetCode)
     when (mode) {
       Mode.DEPOSIT -> {
-        val shortAssetCode = AssetUtils.getShortCode(assetCode)
         limitText.text = getString(R.string.pattern_deposit_limit, shortAssetCode, shortAssetCode)
       }
-      Mode.WITHDRAW -> limitText.text = getString(R.string.pattern_available, maxAmountText)
+      Mode.WITHDRAW -> {
+        var minWithdrawalText = ""
+        if (minAmount != 0.0) {
+          val minAmountText = StringFormat.truncateDecimalPlaces(minAmount, MAX_DECIMALS)
+          minWithdrawalText = getString(R.string.pattern_min_withdrawal, "$shortAssetCode$minAmountText. ")
+        }
+        val limitStr = minWithdrawalText + getString(R.string.pattern_available, "$shortAssetCode$maxAmountText")
+        limitText.text = limitStr
+      }
     }
+
+    depositConfirmExplain.visibility = if (mode == Mode.DEPOSIT &&
+      assetCode == Constants.ZAR_ASSET_TYPE) View.VISIBLE else View.GONE
   }
 
   private fun onUserFetched(user: DmcUser) {
@@ -338,8 +355,22 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun showDepositAmount() {
     depositAmountContainer.visibility = View.VISIBLE
-    depositAmountText.text = String.format("%s %s", StringFormat.truncateDecimalPlaces(
+    depositAmountTextView.text = String.format("%s %s", StringFormat.truncateDecimalPlaces(
       amount, MAX_DECIMALS), assetCode)
+    feeTextView.visibility = View.VISIBLE
+
+    if (mode == Mode.WITHDRAW) {
+      // count and show fee(s) for withdrawal
+      val shortCode = AssetUtils.getShortCode(assetCode)
+      // 1% DMC withdrawal fee
+      val dmcFeeValue = "$shortCode${StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)}"
+      val assetFeeString = if (assetCode == Constants.NGNT_ASSET_TYPE)
+        "\n${getString(R.string.pattern_withdrawal_fee_asset, "${shortCode}200.00", assetCode)}" else ""
+      val feesString = "${getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue)}$assetFeeString"
+      feeTextView.text = feesString
+    } else {
+      feeTextView.visibility = View.GONE
+    }
   }
 
   private fun hideDepositAmount() {
@@ -391,7 +422,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun showAmount(amountToUse: String) {
     amountTextView?.text = amountToUse
-    submitButton.isEnabled = this.amount > 0
+    submitButton.isEnabled = this.amount > 0 && this.amount >= minAmount
   }
 
   private fun showProgressBar() {
@@ -419,13 +450,14 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
                 val anchorBank = BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
                 val deposit = Deposit(assetCode, amount, it.depositRef, anchorBank, userBankAccounts[0])
                 MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-                finishWithToast(getString(R.string.request_sent_message, modeString))
+                showDepositInfoDialog(deposit)
+                hideProgressBar()
               }
             }
 
             override fun onFailure(call: Call<DepositResponse>, t: Throwable) {
               Timber.e(t)
-              toast(t.localizedMessage)
+              toast(t.localizedMessage ?: "Unknown error while deposit $assetCode")
               hideProgressBar()
             }
           })
@@ -437,13 +469,24 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           val depositRef = "${dmcUser.email_address}*demars.io"
           val deposit = Deposit(assetCode, amount, depositRef, anchorBank, userBankAccounts[0])
           MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
-          finishWithToast(getString(R.string.request_sent_message, modeString))
+          showDepositInfoDialog(deposit)
+          hideProgressBar()
         }
       }
     } else {
       confirmButton.isEnabled = true
       NetworkUtils(applicationContext).displayNoNetwork()
     }
+  }
+
+  private fun showDepositInfoDialog(deposit: Deposit) {
+    AlertDialog.Builder(this)
+      .setTitle(deposit.toReadableTitle())
+      .setMessage(deposit.toReadableMessage())
+      .setCancelable(false)
+      .setPositiveButton(R.string.ok) { _, _ -> finish() }
+      .show()
+
   }
 
   private fun confirmWithdrawal() {
@@ -460,7 +503,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         Constants.NGNT_ASSET_TYPE -> {
           withdrawNgnt(secretSeed, amount, fee)
         }
-        Constants.RTGS_ASSET_TYPE -> {
+        Constants.ZAR_ASSET_TYPE -> {
           withdrawZar(secretSeed, amount, fee)
         }
       }
@@ -492,7 +535,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             }
 
             override fun onError(error: HorizonException) {
-              finishWithToast(error.localizedMessage)
+              finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
             }
           }, assetCode, secretSeed, info.address, info.meta, amount, fee).execute()
         }
@@ -500,7 +543,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
         Timber.e(t)
-        toast(t.localizedMessage)
+        toast(t.localizedMessage ?: "Unknown error while requesting withdraw $assetCode")
         hideProgressBar()
       }
     })
@@ -518,10 +561,10 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       }
 
       override fun onError(error: HorizonException) {
-        finishWithToast(error.localizedMessage)
+        finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
         hideProgressBar()
       }
-    }, assetCode, secretSeed, Constants.RTGS_ASSET_ISSUER, "", amount, fee).execute()
+    }, assetCode, secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
   }
 
   override fun onDestroy() {

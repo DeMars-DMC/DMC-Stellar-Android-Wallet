@@ -71,16 +71,9 @@ object MailHelper {
 
   fun notifyAboutNewDeposit(user: DmcUser, deposit: Deposit) {
     // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE, "New ${deposit.assetCode} Deposit Request", "New deposit(${deposit.assetCode}) was just requested\n\n$deposit\n\n$user")
+    sendMailAsync(EMAIL_OFFICE, deposit.toReadableTitle(), "New deposit(${deposit.assetCode}) was just requested\n\n$deposit\n\n$user")
     // Notifying User with deposit payment information
-    val anchorInfo = deposit.anchorBank
-    sendMailAsync(user.email_address, "New ${deposit.assetCode} Deposit",
-      "Please deposit ${deposit.amount} ${deposit.assetCode} at any ${anchorInfo.bankName}\n" +
-        "${anchorInfo.name}\n" +
-        (if (anchorInfo.branch.isEmpty()) "" else "Branch Code:  ${anchorInfo.branch}\n") +
-        "Account Number: ${anchorInfo.number}\n" +
-        (if (anchorInfo.type.isEmpty()) "" else "Type: ${anchorInfo.type}\n") +
-        "Narration/Description/Remarks: ${deposit.ref}")
+    sendMailAsync(user.email_address, deposit.toReadableTitle(), deposit.toReadableMessage())
   }
 
   fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {

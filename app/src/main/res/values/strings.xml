@@ -384,4 +384,7 @@
     <string name="request_sent_message">Thank you. %s request successfully sent</string>
     <string name="withdraw">Withdraw</string>
     <string name="withdrawal">Withdrawal</string>
+    <string name="pattern_min_withdrawal">Minimal withdrawal: %s</string>
+    <string name="pattern_withdrawal_fee_dmc">Following fee(s) will be applied:\n%s - 1%% DMC withdrawal fee</string>
+    <string name="pattern_withdrawal_fee_asset">%s - %s withdrawal fee</string>
 </resources>

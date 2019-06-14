@@ -140,7 +140,7 @@
             android:textColor="@color/colorApricot" />
 
         <TextView
-            android:id="@+id/depositAmountText"
+            android:id="@+id/depositAmountTextView"
             style="@style/BoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -153,11 +153,23 @@
             android:textSize="@dimen/text_size"
             tool:text="5000.00 ZAR" />
 
+        <TextView
+            android:id="@+id/feeTextView"
+            style="@style/LongDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:layout_below="@id/depositAmountTextView"
+            tool:text="Following fee(s) will be applied:\nR5.00 - 1% DMC withdrawal fee\nR10.00 - ZAR withdrawal fee"/>
+
         <CheckBox
             android:id="@+id/agreeCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/depositAmountText"
+            android:layout_below="@+id/feeTextView"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:fontFamily="@font/lato_regular"

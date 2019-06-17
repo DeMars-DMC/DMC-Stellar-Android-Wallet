@@ -12,12 +12,9 @@ import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
 class TransactionsRepository private constructor(private val remoteRepository: RemoteRepository) {
-  private val ENABLE_STREAM = false
   private var transactionsList: ArrayList<TransactionResponse> = ArrayList()
   private var transactionListLiveData = MutableLiveData<ArrayList<TransactionResponse>>()
-  private var eventSource: SSEStream<TransactionResponse>? = null
   private var isBusy = false
-  private var currentCursor: String = ""
   /**
    * Returns an observable for ALL the transactions table changes
    */
@@ -61,34 +58,9 @@ class TransactionsRepository private constructor(private val remoteRepository: R
         } else {
           notifyLiveData(transactionsList)
           isBusy = false
-
-          if (cursor != currentCursor) {
-            openStream()
-            currentCursor = cursor
-          }
         }
       }
     })
-  }
-
-  fun openStream() {
-    if (!ENABLE_STREAM) return
-    closeStream()
-    Timber.d("Opening the stream")
-    eventSource = remoteRepository.registerForTransactions("now", EventListener {
-      Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-      transactionsList.add(0, it)
-      notifyLiveData(transactionsList)
-    })
-  }
-
-  fun closeStream() {
-    if (!ENABLE_STREAM) return
-    Timber.d("trying to close the stream {$eventSource}")
-    eventSource?.let {
-      Timber.d("Closing the stream")
-      it.close()
-    }
   }
 
   companion object {

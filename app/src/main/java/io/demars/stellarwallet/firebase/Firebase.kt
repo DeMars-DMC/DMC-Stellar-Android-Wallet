@@ -50,17 +50,9 @@ object Firebase {
 //endregion
 
   //region Storage
-  private fun getStorageReference(): StorageReference {
-    return FirebaseStorage.getInstance().reference
-  }
-
-  fun getCurrentUser(): FirebaseUser? {
-    return FirebaseAuth.getInstance().currentUser
-  }
-
-  fun getCurrentUserUid(): String? {
-    return getCurrentUser()?.uid
-  }
+  private fun getStorageReference(): StorageReference = FirebaseStorage.getInstance().reference
+  fun getCurrentUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
+  fun getCurrentUserUid(): String? = getCurrentUser()?.uid
 
   fun uploadBytes(bytes: ByteArray, cameraMode: CameraMode, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
     val fileName = when (cameraMode) {

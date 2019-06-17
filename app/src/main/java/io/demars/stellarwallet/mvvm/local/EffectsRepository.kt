@@ -10,12 +10,9 @@ import org.stellar.sdk.responses.effects.EffectResponse
 import timber.log.Timber
 
 class EffectsRepository private constructor(private val remoteRepository: RemoteRepository) {
-    private val ENABLE_STREAM = false
     private var effectsList: ArrayList<EffectResponse> = ArrayList()
     private var effectListLiveData = MutableLiveData<ArrayList<EffectResponse>>()
-    private var eventSource : SSEStream<EffectResponse>? = null
     private var isBusy = false
-    private var currentCursor : String = ""
     /**
      * Returns an observable for ALL the effects table changes
      */
@@ -73,34 +70,10 @@ class EffectsRepository private constructor(private val remoteRepository: Remote
                         if (isFirstTime) notifyLiveData(effectsList)
                         Timber.d("recursive call to getEffects")
                         fetchEffectsList()
-                    } else {
-                        if (cursor != currentCursor) {
-                            if (ENABLE_STREAM) {
-                                closeStream()
-                                Timber.d("Opening the stream")
-                                eventSource = remoteRepository.registerForEffects("now", EventListener {
-                                    Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-                                    effectsList.add(0, it)
-                                    notifyLiveData(effectsList)
-                                })
-                            }
-                            currentCursor = cursor
-                        }
-                        isBusy = false
-                        notifyLiveData(effectsList)
                     }
                 }
             }
         })
-    }
-
-    fun closeStream() {
-        if(!ENABLE_STREAM) return
-        Timber.d("trying to close the stream {$eventSource}")
-        eventSource?.let {
-            Timber.d("Closing the stream")
-            it.close()
-        }
     }
 
     companion object {

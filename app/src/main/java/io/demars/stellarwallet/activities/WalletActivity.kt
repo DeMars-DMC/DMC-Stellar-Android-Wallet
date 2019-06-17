@@ -17,6 +17,7 @@ import io.demars.stellarwallet.utils.GlobalGraphHelper
 import io.demars.stellarwallet.utils.KeyboardUtils
 import timber.log.Timber
 import android.content.Intent
+import io.demars.stellarwallet.firebase.DmcUser
 
 class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener {
   private enum class WalletFragmentType {
@@ -34,6 +35,17 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
   private lateinit var dialogTradeAlert: Dialog
   private lateinit var bottomNavigation: BottomNavigationView
   private var currentItemSelected: Int = -1
+
+  private val userListener = object : ValueEventListener {
+    override fun onDataChange(data: DataSnapshot) {
+      data.getValue(DmcUser::class.java)?.let {
+        WalletApplication.wallet.setUserState(it.state)
+      }
+    }
+
+    override fun onCancelled(error: DatabaseError) {
+    }
+  }
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_wallet)
@@ -66,6 +78,8 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
     }
 
     setupUI()
+
+    Firebase.getUserFresh(userListener)
   }
 
   private fun onNonMatchingWalletRecovered() {
@@ -183,9 +197,8 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
 
   override fun onDestroy() {
     super.onDestroy()
-    if (dialogTradeAlert.isShowing) {
-      dialogTradeAlert.dismiss()
-    }
+    if (dialogTradeAlert.isShowing) dialogTradeAlert.dismiss()
+    Firebase.removeUserListener(userListener)
   }
 
   private fun enoughAssetsToTrade(): Boolean {

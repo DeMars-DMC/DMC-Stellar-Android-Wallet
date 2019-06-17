@@ -35,6 +35,7 @@ import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.models.Withdrawal
 import io.demars.stellarwallet.models.cowrie.DepositResponse
 import io.demars.stellarwallet.models.cowrie.WithdrawalResponse
+import io.demars.stellarwallet.remote.CowrieApi
 import io.demars.stellarwallet.remote.CowrieRetrofit
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.*
@@ -61,6 +62,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private lateinit var dmcUser: DmcUser
+  private lateinit var cowrieApi: CowrieApi
   private var mode = Mode.DEPOSIT
   private var modeString = ""
   private var assetCode = ""
@@ -101,6 +103,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_deposit)
+    cowrieApi = CowrieRetrofit.create()
     checkIntent()
     setupUI()
 
@@ -158,7 +161,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           bankPicker?.setTextColor(Color.BLACK)
           bankPicker?.text = bankName
 
-          bankToAdd.name = bankName
+          bankToAdd.bankName = bankName
           bankToAdd.branch = branchCode
 
           if (bankToAdd.number.isEmpty()) {
@@ -298,7 +301,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun showSelectedBankView() {
     val selectedBankAccount = userBankAccounts[0]
-    selectedBankName?.text = selectedBankAccount.name
+    selectedBankName?.text = selectedBankAccount.bankName
     selectedBankBranch?.text = getString(R.string.pattern_branch_number, selectedBankAccount.branch)
     selectedBankAccountNumber?.text = selectedBankAccount.number
     selectedBankAccountType?.text = selectedBankAccount.type.toLowerCase()
@@ -335,22 +338,52 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     numberKeyboard?.visibility = View.GONE
   }
 
-
   private fun addBank() {
     if (!bankToAdd.isValid()) return
-
+    addBankButton?.isEnabled = false
     ViewUtils.hideKeyboard(this)
 
-    userBankAccounts.add(bankToAdd)
-    updateView()
+    userBankAccounts.clear()
 
     when (assetCode) {
-      Constants.ZAR_ASSET_TYPE ->
+      Constants.ZAR_ASSET_TYPE -> {
+        userBankAccounts.add(bankToAdd)
         Firebase.getUserBanksZarRef(dmcUser.uid).setValue(userBankAccounts)
-      Constants.NGNT_ASSET_TYPE ->
-        Firebase.getUserBanksNgntRef(dmcUser.uid).setValue(userBankAccounts)
-    }
+          .addOnSuccessListener {
+            updateView()
+          }.addOnFailureListener {
+            bankInputError("Something went wrong please try to add bank Account again")
+          }
+      }
+      Constants.NGNT_ASSET_TYPE -> {
+        // Verify NGNT bank account with cowrie exchange API first
+        cowrieApi.ngntForNgn(bankToAdd.branch, bankToAdd.number).enqueue(object : Callback<WithdrawalResponse> {
+          override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
+            if (response.isSuccessful) {
+              userBankAccounts.add(bankToAdd)
+              Firebase.getUserBanksNgntRef(dmcUser.uid).setValue(userBankAccounts)
+                .addOnSuccessListener {
+                  updateView()
+                }.addOnFailureListener {
+                  bankInputError("Something went wrong please try to add bank Account again")
+                }
+            } else {
+              bankInputError("Looks like not valid Bank Account, check your input and try again")
+            }
+          }
 
+          override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
+            bankInputError(t.localizedMessage ?: "Error adding bank account, check your input and try again")
+          }
+        })
+      }
+    }
+  }
+
+  private fun bankInputError(message: String) {
+    toast(message)
+    addBankButton?.isEnabled = true
+    userBankAccounts.clear()
   }
 
   private fun showDepositAmount() {
@@ -444,7 +477,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       when (assetCode) {
         Constants.NGNT_ASSET_TYPE -> {
           // Use Cowrie exchange api to request deposit NGNT
-          CowrieRetrofit.create().ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
+          cowrieApi.ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
             override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
               response.body()?.let {
                 val anchorBank = BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
@@ -515,7 +548,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String) {
     val bankAccount = userBankAccounts[0]
-    CowrieRetrofit.create().ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawalResponse> {
+    cowrieApi.ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawalResponse> {
       override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
         if (!response.isSuccessful) {
           toast("Error requesting $assetCode withdrawal")

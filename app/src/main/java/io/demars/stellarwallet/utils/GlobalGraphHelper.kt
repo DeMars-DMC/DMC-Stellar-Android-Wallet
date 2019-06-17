@@ -54,10 +54,6 @@ class GlobalGraphHelper {
 
     fun clearSession() {
       WalletApplication.userSession.setPin(null)
-      EffectsRepository.getInstance().closeStream()
-      OperationsRepository.getInstance().closeStream()
-      TransactionsRepository.getInstance().closeStream()
-      TradesRepository.getInstance().closeStream()
     }
   }
 }

@@ -43,7 +43,6 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   private var sellingCurrencies = mutableListOf<SelectionModel>()
   private var buyingCurrencies = mutableListOf<SelectionModel>()
   private var availableAmount: Double = 0.0
-  private var counterBalance: Double = 0.0
   private var addedCurrencies: ArrayList<Currency> = ArrayList()
   private var latestBid: OrderBookResponse.Row? = null
 
@@ -137,8 +136,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun swapCurrencies() {
-    if (!(::selectedSellingCurrency.isInitialized)) return
-    if (!(::selectedBuyingCurrency.isInitialized)) return
+    if (!isCurrenciesInitialized()) return
+    if (!isUiReady()) return
 
     val sellingBefore = selectedSellingCurrency
     val buyingBefore = selectedBuyingCurrency
@@ -151,8 +150,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   fun updateAvailableBalance() {
-    if (!(::selectedSellingCurrency.isInitialized)) return
-    if (!(::selectedBuyingCurrency.isInitialized)) return
+    if (!isCurrenciesInitialized()) return
+    if (!isUiReady()) return
 
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
       val assetCode = selectedSellingCurrency.label
@@ -183,7 +182,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   private fun onSelectorChanged() {
     latestBid = null
-    if (::selectedBuyingCurrency.isInitialized && ::selectedSellingCurrency.isInitialized) {
+    if (isCurrenciesInitialized()) {
       notifyParent(selectedSellingCurrency, selectedBuyingCurrency)
     }
     refreshSubmitTradeButton()
@@ -191,6 +190,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun refreshSubmitTradeButton() {
+    if (!isCurrenciesInitialized()) return
+    if (!isUiReady()) return
+    if (placeTrade == null) return
+
     val sellingValue = sellingCustomSelector.editText.text.toString()
     val buyingValue = buyingCustomSelector.editText.text.toString()
 
@@ -442,4 +445,10 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
     updatePrices()
   }
+
+  private fun isCurrenciesInitialized(): Boolean =
+    ::selectedSellingCurrency.isInitialized &&
+      ::selectedBuyingCurrency.isInitialized
+
+  private fun isUiReady():Boolean = sellingCustomSelector != null && buyingCustomSelector != null
 }

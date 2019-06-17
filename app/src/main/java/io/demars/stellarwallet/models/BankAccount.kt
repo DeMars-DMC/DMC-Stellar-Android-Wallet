@@ -9,6 +9,6 @@ data class BankAccount(var name: String = "",
                        var bankName: String = "") {
 
   @Exclude
-  fun isValid(): Boolean = name.isNotEmpty() && branch.isNotEmpty() &&
+  fun isValid(): Boolean = bankName.isNotEmpty() && branch.isNotEmpty() &&
     type.isNotEmpty() && number.isNotEmpty()
 }

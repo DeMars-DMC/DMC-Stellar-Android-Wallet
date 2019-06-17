@@ -11,12 +11,9 @@ import org.stellar.sdk.responses.TradeResponse
 import timber.log.Timber
 
 class TradesRepository private constructor(private val remoteRepository: RemoteRepository) {
-  private val ENABLE_STREAM = false
   private var tradesList: ArrayList<TradeResponse> = ArrayList()
   private var tradeListLiveData = MutableLiveData<ArrayList<TradeResponse>>()
-  private var eventSource: SSEStream<TradeResponse>? = null
   private var isBusy = false
-  private var currentCursor: String = ""
 
   fun listLiveData(): LiveData<ArrayList<TradeResponse>> = tradeListLiveData
   private fun notifyLiveData(data: ArrayList<TradeResponse>) {
@@ -59,36 +56,10 @@ class TradesRepository private constructor(private val remoteRepository: RemoteR
           } else {
             notifyLiveData(tradesList)
             isBusy = false
-
-            if (cursor != currentCursor) {
-              openStream()
-              currentCursor = cursor
-            }
           }
         }
       }
     })
-  }
-
-  fun openStream() {
-    if (!ENABLE_STREAM) return
-
-    closeStream()
-    Timber.d("Opening the stream")
-    eventSource = remoteRepository.registerForTrades("now", EventListener {
-      Timber.d("Stream response {$it}")
-      tradesList.add(0, it)
-      notifyLiveData(tradesList)
-    })
-  }
-
-  fun closeStream() {
-    if (!ENABLE_STREAM) return
-    Timber.d("trying to close the stream {$eventSource}")
-    eventSource?.let {
-      Timber.d("Closing the stream")
-      it.close()
-    }
   }
 
   companion object {

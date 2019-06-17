@@ -244,14 +244,7 @@ class CreateUserActivity : AppCompatActivity() {
       Firebase.getDatabaseReference().child("users")
         .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
           MailHelper.notifyAboutNewUser(user)
-          AlertDialog.Builder(this)
-            .setCancelable(false)
-            .setTitle(R.string.thank_you)
-            .setMessage(R.string.new_user_message)
-            .setPositiveButton(R.string.proceed_to_wallet) { dialog, _ ->
-              dialog.dismiss()
-              setResultAndFinish()
-            }.show()
+          showSuccessDialog()
         }.addOnFailureListener {
           Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show()
         }
@@ -261,6 +254,18 @@ class CreateUserActivity : AppCompatActivity() {
     }
   }
 
+  private fun showSuccessDialog() {
+    if (isFinishing) return
+
+    AlertDialog.Builder(this)
+      .setCancelable(false)
+      .setTitle(R.string.thank_you)
+      .setMessage(R.string.new_user_message)
+      .setPositiveButton(R.string.proceed_to_wallet) { dialog, _ ->
+        dialog.dismiss()
+        setResultAndFinish()
+      }.show()
+  }
   private fun setResultAndFinish() {
     setResult(Activity.RESULT_OK)
     finish()

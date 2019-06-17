@@ -13,12 +13,9 @@ import org.stellar.sdk.responses.operations.OperationResponse
 import timber.log.Timber
 
 class OperationsRepository private constructor(private val remoteRepository: RemoteRepository) {
-  private val ENABLE_STREAM = false
   private var operationsList: ArrayList<Pair<OperationResponse, String?>> = ArrayList()
   private var operationListLiveData = MutableLiveData<ArrayList<Pair<OperationResponse, String?>>>()
-  private var eventSource: SSEStream<OperationResponse>? = null
   private var isBusy = false
-  private var currentCursor: String = ""
 
   /**
    * Returns an observable for ALL the operations table changes
@@ -64,14 +61,9 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
           if (result != null) {
             if (result.isNotEmpty()) {
               operationsList.addAll(result)
-              notifyLiveData(operationsList)
-            } else {
-              notifyLiveData(operationsList)
-              if (cursor != currentCursor) {
-                openStream()
-                currentCursor = cursor
-              }
             }
+
+            notifyLiveData(operationsList)
           }
         }
 
@@ -100,26 +92,6 @@ class OperationsRepository private constructor(private val remoteRepository: Rem
           notifyLiveData(operationsList)
         }
       })
-  }
-
-  fun openStream() {
-    if (!ENABLE_STREAM) return
-    closeStream()
-    Timber.d("Opening the stream")
-    eventSource = remoteRepository.registerForOperations("now", EventListener {
-      Timber.d("Stream response {$it}, created at: ${it.createdAt}")
-      operationsList.add(0, Pair(it, null))
-      notifyLiveData(operationsList)
-    })
-  }
-
-  fun closeStream() {
-    if (!ENABLE_STREAM) return
-    Timber.d("trying to close the stream {$eventSource}")
-    eventSource?.let {
-      Timber.d("Closing the stream")
-      it.close()
-    }
   }
 
   companion object {

@@ -24,6 +24,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.stellar.*
 import io.demars.stellarwallet.utils.AssetUtils
 
@@ -360,11 +361,12 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     viewHolder.date.text = getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
-    if (transaction.memo != null) {
-      viewHolder.info.visibility = VISIBLE
-      viewHolder.info.text = transaction.memo
-    } else {
-      viewHolder.info.visibility = GONE
+    when {
+      transaction.memo != null -> {
+        viewHolder.info.visibility = VISIBLE
+        viewHolder.info.text = transaction.memo
+      }
+      else -> viewHolder.info.visibility = GONE
     }
 
     viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
@@ -399,16 +401,18 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     val accountId = WalletApplication.wallet.getStellarAccountId()
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
     viewHolder.line.visibility = if (viewHolder.adapterPosition != itemCount - 1) VISIBLE else GONE
-    viewHolder.info.visibility = GONE
 
     viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
     viewHolder.date.text = getFormattedDateTime(operation.createdAt,
       DateFormat.is24HourFormat(context))
 
-    operation.memo?.let {
-      viewHolder.info.visibility = VISIBLE
-      viewHolder.info.text = it
+    val memoToUse = when {
+      operation.memo != null -> operation.memo
+      else -> ""
     }
+
+    viewHolder.info.text = memoToUse
+    viewHolder.info.visibility = if (memoToUse.isNullOrEmpty()) GONE else VISIBLE
 
     when (operation.type) {
       Operation.OperationType.CREATED.value -> {
@@ -424,13 +428,28 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         }
       }
       Operation.OperationType.PAYMENT.value -> {
-        if (operation.from == accountId) {
-          viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
-          viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
-          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
-        } else if (operation.to == accountId) {
-          viewHolder.transactionType.text = "Received from ${formatAddress(operation.from)}"
-          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorMantis), PorterDuff.Mode.SRC_IN)
+        val assetCode = operation.asset?.toUpperCase() ?: "XLM"
+
+        when (accountId) {
+          operation.from -> {
+            when {
+              operation.to == Constants.FEE_ACCOUNT -> {
+                viewHolder.transactionType.text = context.getString(R.string.withdrawal_fee)
+                viewHolder.info.visibility = GONE
+              }
+              operation.to == AssetUtils.getWithdrawAccount(assetCode) -> {
+                viewHolder.transactionType.text = context.getString(R.string.withdrawal)
+                viewHolder.info.visibility = GONE
+              }
+              else -> viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
+            }
+            viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
+            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
+          }
+          operation.to -> {
+            viewHolder.transactionType.text = "Received from ${formatAddress(operation.from)}"
+            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorMantis), PorterDuff.Mode.SRC_IN)
+          }
         }
       }
       Operation.OperationType.PATH_PAYMENT.value -> {

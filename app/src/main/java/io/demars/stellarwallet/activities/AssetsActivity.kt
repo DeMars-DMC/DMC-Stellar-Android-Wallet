@@ -180,17 +180,12 @@ class AssetsActivity : BaseActivity(), AssetListener {
       Constants.ZAR_ASSET_ISSUER, "100000000000",
       Constants.ZAR_ASSET_NAME, "", "", null, null, null)
 
-    val rtgs = SupportedAsset(2, Constants.RTGS_ASSET_TYPE, Constants.RTGS_IMAGE_RES,
-      Constants.RTGS_ASSET_ISSUER, "100000000000",
-      Constants.RTGS_ASSET_NAME, "", "", null, null, null)
-
-    val ngnt = SupportedAsset(3, Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
+    val ngnt = SupportedAsset(2, Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
       Constants.NGNT_ASSET_ISSUER, "100000000000",
       Constants.NGNT_ASSET_NAME, "", "", null, null, null)
 
     map[Constants.DMC_ASSET_TYPE] = dmc
     map[Constants.ZAR_ASSET_TYPE] = zar
-    map[Constants.RTGS_ASSET_TYPE] = rtgs
     map[Constants.NGNT_ASSET_TYPE] = ngnt
 
     updateAdapter()

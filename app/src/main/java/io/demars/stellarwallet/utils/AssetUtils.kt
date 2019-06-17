@@ -78,7 +78,6 @@ class AssetUtils {
       Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_IMAGE_RES
       Constants.DMC_ASSET_TYPE -> Constants.DMC_IMAGE_RES
-      Constants.RTGS_ASSET_TYPE -> Constants.RTGS_IMAGE_RES
       Constants.NGNT_ASSET_TYPE -> Constants.NGNT_IMAGE_RES
       else -> 0
     }
@@ -90,17 +89,22 @@ class AssetUtils {
       else -> ""
     }
 
+    fun getWithdrawAccount(assetCode: String?): String = when (assetCode) {
+      Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
+      Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_WITHDRAW
+      else -> ""
+    }
+
     fun getMaxDecimals(assetCode: String): Int = when {
       assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
-      assetCode.equals(Constants.RTGS_ASSET_TYPE, true) -> 2
       assetCode.equals(Constants.NGNT_ASSET_TYPE, true) -> 2
       else -> 7
     }
 
-    fun isSessionAsset(assetCode: String) : Boolean = xlmAsNative(assetCode).equals(
+    fun isSessionAsset(assetCode: String): Boolean = xlmAsNative(assetCode).equals(
       WalletApplication.userSession.getSessionAsset().assetCode, true)
 
-    private fun xlmAsNative(assetCode: String) : String =
+    private fun xlmAsNative(assetCode: String): String =
       if (assetCode == Constants.LUMENS_ASSET_CODE) Constants.LUMENS_ASSET_TYPE else assetCode
   }
 }

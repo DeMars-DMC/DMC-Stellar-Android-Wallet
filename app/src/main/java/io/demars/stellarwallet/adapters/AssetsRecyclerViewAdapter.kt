@@ -141,12 +141,6 @@ class AssetsRecyclerViewAdapter(private var context: Context,
         viewHolder.withdrawButton.setText(R.string.withdraw)
       }
 
-      asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
-        viewHolder.depositButton.visibility = View.GONE
-
-        viewHolder.withdrawButton.visibility = View.VISIBLE
-        viewHolder.withdrawButton.setText(R.string.withdraw)
-      }
       asset.code.equals(Constants.NGNT_ASSET_TYPE, true) -> {
         viewHolder.depositButton.visibility = View.VISIBLE
         viewHolder.depositButton.setText(R.string.deposit)
@@ -194,15 +188,6 @@ class AssetsRecyclerViewAdapter(private var context: Context,
           viewHolder.assetName.text = asset.name
           Picasso.get()
             .load(Constants.DMC_IMAGE_RES)
-            .resize(256, 256)
-            .onlyScaleDown()
-            .into(viewHolder.assetImage)
-        }
-        asset.code.equals(Constants.RTGS_ASSET_TYPE, true) -> {
-          viewHolder.defaultImage.visibility = View.GONE
-          viewHolder.assetName.text = asset.name
-          Picasso.get()
-            .load(Constants.RTGS_IMAGE_RES)
             .resize(256, 256)
             .onlyScaleDown()
             .into(viewHolder.assetImage)

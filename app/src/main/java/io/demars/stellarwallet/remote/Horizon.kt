@@ -667,7 +667,6 @@ object Horizon : HorizonTasks {
     val assetIssuer = when (assetCode) {
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
       Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_ISSUER
-      Constants.RTGS_ASSET_TYPE -> Constants.RTGS_ASSET_ISSUER
       else -> Constants.DMC_ASSET_ISSUER
     }
 

@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.firebase
 
+import android.net.Uri
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -51,10 +52,11 @@ object Firebase {
 
   //region Storage
   private fun getStorageReference(): StorageReference = FirebaseStorage.getInstance().reference
+
   fun getCurrentUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
   fun getCurrentUserUid(): String? = getCurrentUser()?.uid
 
-  fun uploadBytes(bytes: ByteArray, cameraMode: CameraMode, onSuccess: OnSuccessListener<UploadTask.TaskSnapshot>, onFailure: OnFailureListener) {
+  fun uploadBytes(bytes: ByteArray, cameraMode: CameraMode, onSuccess: OnSuccessListener<Uri?>, onFailure: OnFailureListener) {
     val fileName = when (cameraMode) {
       CameraMode.ID_FRONT -> "id_front.jpg"
       CameraMode.ID_BACK -> "id_back.jpg"
@@ -62,13 +64,18 @@ object Firebase {
     }
 
     getCurrentUser()?.let {
-      getStorageReference()
+      val fileRef = getStorageReference()
         .child("images/users/${it.uid}")
         .child(fileName)
-        .putBytes(bytes)
-        .addOnSuccessListener(onSuccess)
-        .addOnFailureListener(onFailure)
-    }
+
+      fileRef.putBytes(bytes)
+        .addOnSuccessListener {
+          // File uploaded, let's get download URL
+          fileRef.downloadUrl
+            .addOnSuccessListener(onSuccess)
+            .addOnFailureListener(onFailure)
+        }.addOnFailureListener(onFailure)
+    } ?: onFailure.onFailure(Exception("User not authorized"))
   }
 //endregion
 

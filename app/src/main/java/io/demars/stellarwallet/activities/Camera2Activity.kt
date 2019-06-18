@@ -896,12 +896,25 @@ class Camera2Activity : AppCompatActivity() {
       showUploadingView()
       Firebase.uploadBytes(bytes, cameraMode,
         OnSuccessListener {
-          setResult(Activity.RESULT_OK)
-          finish()
+          onFirebaseResult(it)
         }, OnFailureListener {
         onError(it.localizedMessage, false)
         hideUploadingView()
       })
+    }
+  }
+
+  private fun onFirebaseResult(uri: Uri?) {
+    if (uri != null) {
+      val intent = Intent().apply {
+        putExtra("url", uri.toString())
+      }
+
+      setResult(Activity.RESULT_OK, intent)
+      finish()
+    } else {
+      onError("Downloading URL is Null", false)
+      hideUploadingView()
     }
   }
 

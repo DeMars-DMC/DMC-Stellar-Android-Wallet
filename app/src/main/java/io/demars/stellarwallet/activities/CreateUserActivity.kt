@@ -141,17 +141,21 @@ class CreateUserActivity : AppCompatActivity() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK) {
+      val downloadUrl = data?.getStringExtra("url") ?: ""
       when (requestCode) {
         REQUEST_CODE_CAMERA_ID_FRONT -> {
-          user?.id_photo_uploaded = true
+          user?.id_photo_uploaded = downloadUrl.isNotEmpty()
+          user?.id_photo_url = downloadUrl
           idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
         REQUEST_CODE_CAMERA_ID_BACK -> {
-          user?.id_back_uploaded = true
+          user?.id_back_uploaded = downloadUrl.isNotEmpty()
+          user?.id_back_url = downloadUrl
           idBackCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
         REQUEST_CODE_CAMERA_SELFIE -> {
-          user?.id_selfie_uploaded = true
+          user?.id_selfie_uploaded = downloadUrl.isNotEmpty()
+          user?.id_selfie_url = downloadUrl
           idSelfieCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
         }
       }
@@ -242,7 +246,8 @@ class CreateUserActivity : AppCompatActivity() {
 
       // Update remote firebase
       Firebase.getDatabaseReference().child("users")
-        .child(Firebase.getCurrentUserUid()!!).setValue(user).addOnSuccessListener {
+        .child(Firebase.getCurrentUserUid()!!).setValue(user)
+        .addOnSuccessListener {
           MailHelper.notifyAboutNewUser(user)
           showSuccessDialog()
         }.addOnFailureListener {
@@ -266,6 +271,7 @@ class CreateUserActivity : AppCompatActivity() {
         setResultAndFinish()
       }.show()
   }
+
   private fun setResultAndFinish() {
     setResult(Activity.RESULT_OK)
     finish()

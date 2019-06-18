@@ -131,7 +131,7 @@ class CameraActivity : AppCompatActivity() {
   private fun autoFocus() {
     try {
       camera?.autoFocus(null)
-    } catch (ex:Exception) {
+    } catch (ex: Exception) {
       // Auto-focus failed for some reason, just ignore
     }
   }
@@ -157,12 +157,25 @@ class CameraActivity : AppCompatActivity() {
       showUploadingView()
       Firebase.uploadBytes(bytes, cameraMode,
         OnSuccessListener {
-          setResult(Activity.RESULT_OK)
-          finish()
+          onFirebaseResult(it)
         }, OnFailureListener {
         onError(it.localizedMessage, false)
         hideUploadingView()
       })
+    }
+  }
+
+  private fun onFirebaseResult(uri: Uri?) {
+    if (uri != null) {
+      val intent = Intent().apply {
+        putExtra("url", uri.toString())
+      }
+
+      setResult(Activity.RESULT_OK, intent)
+      finish()
+    } else {
+      onError("Downloading URL is Null", false)
+      hideUploadingView()
     }
   }
 

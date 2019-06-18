@@ -19,8 +19,8 @@ android {
         applicationId "io.demars.stellarwallet"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 18
-        versionName "1.1.7"
+        versionCode 19
+        versionName "1.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -107,7 +107,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    androidTestImplementation "androidx.annotation:annotation:1.0.2"
+    androidTestImplementation "androidx.annotation:annotation:1.1.0"
     androidTestImplementation "androidx.test:rules:1.2.0"
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
@@ -156,16 +156,16 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:0.8.1'
     implementation 'com.github.abdularis:CircularImageView:v1.2'
 
-    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
     implementation 'commons-lang:commons-lang:20030203.000129'
 
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.google.firebase:firebase-auth:17.0.0'
-    implementation 'com.google.firebase:firebase-database:17.0.0'
-    implementation 'com.google.firebase:firebase-storage:17.0.0'
-    implementation 'com.google.firebase:firebase-functions:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:18.0.0'
+    implementation 'com.google.firebase:firebase-functions:18.0.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    implementation 'com.google.firebase:firebase-dynamic-links:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:19.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:18.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

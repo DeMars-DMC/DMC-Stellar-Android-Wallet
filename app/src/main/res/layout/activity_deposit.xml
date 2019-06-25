@@ -172,7 +172,7 @@
             android:layout_below="@+id/feeTextView"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_horizontal"
-            android:fontFamily="@font/lato_regular"
+            android:fontFamily="@font/opensans_regular"
             android:gravity="start|center_vertical"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_micro"

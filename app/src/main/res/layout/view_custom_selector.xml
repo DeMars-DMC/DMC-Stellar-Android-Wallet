@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/selector_edittext"
             android:duplicateParentState="true"
-            android:fontFamily="@font/lato_regular"
+            android:fontFamily="@font/opensans_regular"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/button_height_big"
             android:textColor="@color/black"

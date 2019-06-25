@@ -906,11 +906,7 @@ class Camera2Activity : AppCompatActivity() {
 
   private fun onFirebaseResult(uri: Uri?) {
     if (uri != null) {
-      val intent = Intent().apply {
-        putExtra("url", uri.toString())
-      }
-
-      setResult(Activity.RESULT_OK, intent)
+      setResult(Activity.RESULT_OK, Intent().putExtra("url", uri.toString()))
       finish()
     } else {
       onError("Downloading URL is Null", false)

@@ -156,8 +156,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
       }
 
       // This cast is guaranteed to succeed
-      @Suppress("UNCHECKED_CAST")
-      list.addAll((nullableAssets.filter { it != null }) as List<SupportedAsset>)
+      list.addAll((nullableAssets.filterNotNull()))
     }
 
     return list

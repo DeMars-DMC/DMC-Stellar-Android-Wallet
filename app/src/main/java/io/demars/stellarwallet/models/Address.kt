@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.models
 
+import com.google.firebase.database.Exclude
 import java.io.Serializable
 
 class Address : Serializable {
@@ -9,6 +10,7 @@ class Address : Serializable {
   var post_code = ""
   var country = ""
 
+  @Exclude
   fun isValid(): Boolean = first_line.isNotEmpty() && town_city.isNotEmpty() &&
     post_code.isNotEmpty() && country.isNotEmpty()
 

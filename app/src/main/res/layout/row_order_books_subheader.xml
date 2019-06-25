@@ -18,7 +18,7 @@
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/divider" />
+        android:background="@color/colorLightGrey" />
 
     <TextView
         android:id="@+id/amountTo"
@@ -32,7 +32,7 @@
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/divider" />
+        android:background="@color/colorLightGrey" />
 
     <TextView
         android:id="@+id/amountFrom"

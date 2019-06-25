@@ -319,7 +319,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
     when {
       transaction.type == EffectType.RECEIVED.value -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorMantis), PorterDuff.Mode.SRC_IN)
       transaction.type == EffectType.SENT.value -> {
-        viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
+        viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorTerracotta), PorterDuff.Mode.SRC_IN)
         viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
       }
       else -> viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
@@ -424,7 +424,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
         } else {
           viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
           viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
-          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
+          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorTerracotta), PorterDuff.Mode.SRC_IN)
         }
       }
       Operation.OperationType.PAYMENT.value -> {
@@ -444,7 +444,7 @@ class WalletRecyclerViewAdapter(var context: Context) : RecyclerView.Adapter<Rec
               else -> viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
             }
             viewHolder.amount.text = String.format(context.getString(R.string.bracket_template), viewHolder.amount.text.toString())
-            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorApricot), PorterDuff.Mode.SRC_IN)
+            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorTerracotta), PorterDuff.Mode.SRC_IN)
           }
           operation.to -> {
             viewHolder.transactionType.text = "Received from ${formatAddress(operation.from)}"

@@ -2,13 +2,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/button_height_big">
-<ImageView
-    android:id="@+id/button"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:padding="@dimen/padding_horizontal"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <ImageView
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/padding_micro"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/padding_horizontal" />
 </FrameLayout>

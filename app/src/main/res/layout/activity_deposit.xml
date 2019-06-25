@@ -137,7 +137,7 @@
             android:paddingEnd="@dimen/padding_horizontal"
             android:text="@string/other_amount"
             android:textAllCaps="true"
-            android:textColor="@color/colorApricot" />
+            android:textColor="@color/colorTerracotta" />
 
         <TextView
             android:id="@+id/depositAmountTextView"

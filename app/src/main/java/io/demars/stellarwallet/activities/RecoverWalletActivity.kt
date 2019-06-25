@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
-import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.R
@@ -130,9 +129,9 @@ class RecoverWalletActivity : BaseActivity() {
             endIndex += word.length
 
             val colorText = if (!wordListBIP39.contains(word)) {
-                ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorApricot))
+                ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorTerracotta))
             } else {
-                ForegroundColorSpan(ContextCompat.getColor(this, R.color.regularTextColor))
+                ForegroundColorSpan(ContextCompat.getColor(this, R.color.black))
             }
 
             phraseEditText.text.setSpan(colorText, startIndex, endIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
@@ -144,9 +143,9 @@ class RecoverWalletActivity : BaseActivity() {
     private fun highlightSeed() {
         val seedText = secretKeyEditText.text
         val colorText = if (seedText.length != Constants.STELLAR_ADDRESS_LENGTH || seedText[0] != 'S') {
-            ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorApricot))
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorTerracotta))
         } else {
-            ForegroundColorSpan(ContextCompat.getColor(this, R.color.regularTextColor))
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.black))
         }
 
         if (secretKeyEditText.text.isNotEmpty()) {

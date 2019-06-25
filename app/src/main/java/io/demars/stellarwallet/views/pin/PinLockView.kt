@@ -131,7 +131,7 @@ class PinLockView : RecyclerView {
   /**
    * Sets the pin length dynamically
    *
-   * @param pinLength the pin length
+   * pinLength the pin length
    */
   var pinLength: Int
     get() = mPinLength
@@ -151,7 +151,7 @@ class PinLockView : RecyclerView {
   /**
    * Set the text color of the buttons dynamically
    *
-   * @param textColor the text color
+   * textColor the text color
    */
   var textColor: Int
     get() = mTextColor
@@ -169,85 +169,13 @@ class PinLockView : RecyclerView {
   /**
    * Set the size of text in pixels
    *
-   * @param textSize the text size in pixels
+   * textSize the text size in pixels
    */
   var textSize: Int
     get() = mTextSize
     set(textSize) {
       this.mTextSize = textSize
       mCustomizationOptionsBundle!!.textSize = textSize
-      mAdapter!!.notifyDataSetChanged()
-    }
-
-  /**
-   * Get the size of the pin buttons
-   *
-   * @return the size of the button in pixels
-   */
-  /**
-   * Set the size of the pin buttons dynamically
-   *
-   * @param buttonSize the button size
-   */
-  var buttonSize: Int
-    get() = mButtonSize
-    set(buttonSize) {
-      this.mButtonSize = buttonSize
-      mCustomizationOptionsBundle!!.buttonSize = buttonSize
-      mAdapter!!.notifyDataSetChanged()
-    }
-
-  /**
-   * Get the current background drawable of the buttons, can be null
-   *
-   * @return the background drawable
-   */
-  /**
-   * Set the background drawable of the buttons dynamically
-   *
-   * @param buttonBackgroundDrawable the background drawable
-   */
-  var buttonBackgroundDrawable: Drawable?
-    get() = mButtonBackgroundDrawable
-    set(buttonBackgroundDrawable) {
-      this.mButtonBackgroundDrawable = buttonBackgroundDrawable
-      mCustomizationOptionsBundle!!.buttonBackgroundDrawable = buttonBackgroundDrawable
-      mAdapter!!.notifyDataSetChanged()
-    }
-
-  /**
-   * Get the drawable of the delete button
-   *
-   * @return the delete button drawable
-   */
-  /**
-   * Set the drawable of the delete button dynamically
-   *
-   * @param deleteBackgroundDrawable the delete button drawable
-   */
-  var deleteButtonDrawable: Drawable?
-    get() = mDeleteButtonDrawable
-    set(deleteBackgroundDrawable) {
-      this.mDeleteButtonDrawable = deleteBackgroundDrawable
-      mCustomizationOptionsBundle!!.deleteButtonDrawable = deleteBackgroundDrawable
-      mAdapter!!.notifyDataSetChanged()
-    }
-
-  /**
-   * Get the drawable of the dot button
-   *
-   * @return the dot button drawable
-   */
-  /**
-   * Set the drawable of the dot button dynamically
-   *
-   * @param dotButtonDrawable the delete button drawable
-   */
-  var dotButtonDrawable: Drawable?
-    get() = mDotButtonDrawable
-    set(dotButtonDrawable) {
-      this.mDotButtonDrawable = dotButtonDrawable
-      mCustomizationOptionsBundle!!.dotButtonDrawable = dotButtonDrawable
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -259,31 +187,13 @@ class PinLockView : RecyclerView {
   /**
    * Dynamically set if the delete button should be shown
    *
-   * @param showDeleteButton true if the delete button should be shown, false otherwise
+   * showDeleteButton true if the delete button should be shown, false otherwise
    */
   var isShowDeleteButton: Boolean
     get() = mShowDeleteButton
     set(showDeleteButton) {
       this.mShowDeleteButton = showDeleteButton
       mCustomizationOptionsBundle!!.isShowDeleteButton = showDeleteButton
-      mAdapter!!.notifyDataSetChanged()
-    }
-
-  /**
-   * Is the dot button shown
-   *
-   * @return returns true if shown, false otherwise
-   */
-  /**
-   * Dynamically set if the delete button should be shown
-   *
-   * @param showDotButton true if the delete button should be shown, false otherwise
-   */
-  var isShowDotButton: Boolean
-    get() = mShowDotButton
-    set(showDotButton) {
-      this.mShowDotButton = showDotButton
-      mCustomizationOptionsBundle!!.isShowDotButton = showDotButton
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -352,12 +262,6 @@ class PinLockView : RecyclerView {
 
     addItemDecoration(ItemSpaceDecoration(mHorizontalSpacing, mVerticalSpacing, 3, false))
     overScrollMode = OVER_SCROLL_NEVER
-  }
-
-  private fun swap(array: IntArray, index: Int, change: Int) {
-    val temp = array[index]
-    array[index] = array[change]
-    array[change] = temp
   }
 
   /**

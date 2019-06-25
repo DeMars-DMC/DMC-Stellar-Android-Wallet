@@ -5,10 +5,10 @@
         <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
-        <item name="colorControlHighlight">@color/navButtonRippleColor</item>
+        <item name="colorControlHighlight">@color/transparent_white</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:fontFamily">@font/opensans_bold</item>
+        <item name="android:fontFamily">@font/opensans_regular</item>
         <item name="android:background">@color/blueDark</item>
     </style>
 

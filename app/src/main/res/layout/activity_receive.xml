@@ -42,7 +42,7 @@
         android:clipChildren="false"
         android:elevation="@dimen/elevation_mini"
         android:padding="@dimen/padding_horizontal"
-        android:background="@color/addressLayoutBackGroundColor"
+        android:background="@color/white"
         tools:ignore="UnusedAttribute">
 
         <TextView
@@ -50,7 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/your_wallet_address"
-            android:textColor="@color/addressTextColor"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
             android:paddingStart="@dimen/padding_micro"
             android:paddingEnd="@dimen/padding_micro"
             android:textSize="18sp"/>

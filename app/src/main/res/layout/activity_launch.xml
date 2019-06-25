@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_bg_dark"
+    android:background="@drawable/bg_gradient"
     android:fitsSystemWindows="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -14,6 +14,7 @@
         android:id="@+id/appLogo"
         android:layout_width="@dimen/logo_width_main"
         android:layout_height="@dimen/logo_width_main"
+        android:layout_marginTop="@dimen/padding_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_logo_dmc"
         app:layout_constraintBottom_toTopOf="@id/verificationLabel"
@@ -24,7 +25,7 @@
 
     <TextView
         android:id="@+id/verificationLabel"
-        style="@style/LandingPageDescription"
+        style="@style/WhiteDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -34,13 +35,14 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/enter_your_phone_number"
-        app:layout_constraintBottom_toTopOf="@id/verificationText"
+        app:layout_constraintTop_toBottomOf="@id/appLogo"
         android:visibility="gone"/>
 
     <TextView
+        style="@style/DigitalWhiteInput"
         android:id="@+id/verificationText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height_big"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLength="18"
         android:paddingStart="@dimen/padding_horizontal"
@@ -48,17 +50,17 @@
         android:text="@string/symbol_plus"
         android:textColor="@color/white"
         android:textColorHint="@color/colorPaleSky"
-        android:textSize="28sp"
+        android:textSize="30sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/loginMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appLogo"
+        app:layout_constraintTop_toBottomOf="@id/verificationLabel"
         tools:text="+380123456789" />
 
     <TextView
         android:id="@+id/loginMessage"
-        style="@style/LandingPageDescription"
+        style="@style/WhiteDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -77,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:text="@string/log_in"
+        android:text="@string/sign_in"
         android:textSize="@dimen/text_size_big"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/dialerView" />
@@ -99,6 +101,22 @@
         app:keypadTextSize="@dimen/keypad_size"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="UnusedAttribute" />
+
+    <TextView
+        android:id="@+id/walletLabel"
+        style="@style/WhiteDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:gravity="center"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:text="@string/recover_wallet_message"
+        app:layout_constraintTop_toBottomOf="@id/appLogo"
+        app:layout_constraintBottom_toTopOf="@id/createWalletButton"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/createWalletButton"

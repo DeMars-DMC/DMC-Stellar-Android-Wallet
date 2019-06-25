@@ -5,7 +5,9 @@
 
     <Button
         android:id="@+id/button"
+        style="@style/DigitalWhiteInput"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textColor="@color/black" />
 </FrameLayout>

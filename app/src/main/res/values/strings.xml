@@ -73,7 +73,7 @@
     <string name="view_phrase">View Phrase</string>
     <string name="view_seed">View Secret Key (Not recommended)</string>
     <string name="wallet">Wallet</string>
-    <string name="log_out">Log out</string>
+    <string name="sign_out">Sign out</string>
     <string name="security">Security</string>
     <string name="pin_send_payments">Request PIN when sending payments</string>
     <string name="troubleshooting">Troubleshooting</string>
@@ -291,7 +291,7 @@
     <string name="uploading_photo">Uploading photo…</string>
     <string name="uploading_photo_error">Something went wrong. Please try again</string>
     <string name="no_camera_message">No camera detected\nplease add from gallery</string>
-    <string name="log_in">Log in</string>
+    <string name="sign_in">Sign in</string>
     <string name="log_in_message">If this number is not attached to any DMC account, you will be able to create a new one</string>
     <string name="symbol_plus">+</string>
     <string name="enter_code_from_sms">Enter code from SMS</string>

@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
-                android:background="@color/addressBackGroundColor"
+                android:background="@color/main_bg_light"
                 android:digits="@string/stellar_address_alphabet"
                 android:hint="@string/send_address_hint"
                 android:inputType="textCapCharacters"

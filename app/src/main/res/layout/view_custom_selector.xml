@@ -24,7 +24,7 @@
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/button_height_big"
             android:textColor="@color/black"
-            android:textColorHint="@color/selectorHint"
+            android:textColorHint="@color/colorDisabled"
             android:textSize="@dimen/text_size" />
 
         <ImageView

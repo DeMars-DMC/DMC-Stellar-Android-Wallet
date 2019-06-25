@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_horizontal"
-        android:textColor="@color/regularTextColor"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/assetImageView"
         app:layout_constraintStart_toEndOf="@+id/assetImageView"
         tools:text="16.0000 XLM" />

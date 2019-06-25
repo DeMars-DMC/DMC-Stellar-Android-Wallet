@@ -42,7 +42,7 @@
             android:name=".activities.WalletActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.AssetsActivity"

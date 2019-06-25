@@ -281,7 +281,7 @@ class CreateUserActivity : AppCompatActivity() {
     val spannable = SpannableStringBuilder(if (infoCheckedOnce)
       textView.text.substring(0, textView.text.length - 2) else textView.text)
     val color = ContextCompat.getColor(this,
-      if (verified) R.color.colorGreen else R.color.colorApricot)
+      if (verified) R.color.colorGreen else R.color.colorTerracotta)
     val textToInsert = if (verified) " ✓" else " ✗"
     val spanIndex = spannable.length
 

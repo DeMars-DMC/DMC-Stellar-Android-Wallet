@@ -124,7 +124,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     loginMessage.visibility = View.VISIBLE
     loginButton.visibility = View.VISIBLE
     loginButton.isEnabled = true
-    loginButton.setText(R.string.log_in)
+    loginButton.setText(R.string.sign_in)
     loginButton.setOnClickListener {
       verifyPhoneNumber()
     }
@@ -170,14 +170,15 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun updateViewForStellar() {
     if (!GlobalGraphHelper.isExistingWallet()) {
+      verificationLabel.visibility = View.GONE
       verificationText.visibility = View.GONE
       loginButton.visibility = View.GONE
       dialerView.visibility = View.GONE
       loginMessage.visibility = View.GONE
 
       if (dmcUser?.stellar_address.isNullOrBlank()) {
-        verificationLabel.visibility = View.VISIBLE
-        verificationLabel.text = getString(R.string.attach_wallet_message)
+        walletLabel.visibility = View.VISIBLE
+        walletLabel.text = getString(R.string.attach_wallet_message)
 
         createWalletButton.visibility = View.VISIBLE
         createWalletButton.isEnabled = true
@@ -186,8 +187,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
           showCreateDialog()
         }
       } else {
-        verificationLabel.visibility = View.VISIBLE
-        verificationLabel.text = getString(R.string.recover_wallet_message)
+        walletLabel.visibility = View.VISIBLE
+        walletLabel.text = getString(R.string.recover_wallet_message)
 
         createWalletButton.visibility = View.GONE
       }

@@ -39,7 +39,7 @@
         android:visibility="gone"/>
 
     <TextView
-        style="@style/DigitalWhiteInput"
+        style="@style/WhiteDigitalInput"
         android:id="@+id/verificationText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -25,6 +25,6 @@
         android:textSize="@dimen/text_size_micro"
         android:padding="@dimen/padding_mini"
         android:background="@drawable/button_grey"
-        style="@style/RegularWhiteText"/>
+        style="@style/WhiteRegularText"/>
 
 </LinearLayout>

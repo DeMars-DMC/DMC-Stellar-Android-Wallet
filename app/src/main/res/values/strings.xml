@@ -388,4 +388,8 @@
     <string name="pattern_min_withdrawal">Minimal withdrawal: %s</string>
     <string name="pattern_withdrawal_fee_dmc">Following fee(s) will be applied:\n%s - 1%% DMC withdrawal fee</string>
     <string name="pattern_withdrawal_fee_asset">%s - %s withdrawal fee</string>
+    <string name="reporting_currency">Reporting currency</string>
+    <string name="manage_assets">Manage assets</string>
+    <string name="currencies">Currencies</string>
+    <string name="cryptos">Cryptos</string>
 </resources>

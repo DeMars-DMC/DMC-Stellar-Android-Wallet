@@ -5,7 +5,7 @@
 
     <Button
         android:id="@+id/button"
-        style="@style/DigitalWhiteInput"
+        style="@style/WhiteDigitalInput"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackgroundBorderless"

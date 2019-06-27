@@ -10,6 +10,7 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
         <item name="android:background">@color/blueDark</item>
+        <item name="android:elevation">@dimen/elevation</item>
     </style>
 
     <style name="BlackTheme" parent="AppTheme">

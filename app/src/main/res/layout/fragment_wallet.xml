@@ -19,7 +19,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_size_big"
+                android:layout_height="@dimen/asset_logo_size"
                 android:background="@color/blueDark"
                 android:paddingStart="@dimen/padding_micro"
                 android:paddingEnd="@dimen/padding_zero">

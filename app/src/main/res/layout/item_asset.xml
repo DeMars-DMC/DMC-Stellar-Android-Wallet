@@ -1,114 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:layout_marginStart="@dimen/padding_vertical"
+    android:layout_marginTop="@dimen/padding_horizontal"
+    android:layout_marginEnd="@dimen/padding_vertical"
+    android:background="@drawable/bg_card">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/assetImage"
+        android:layout_alignBottom="@+id/assetImage"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/assetImage"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/assetName"
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:gravity="center"
+            android:text="XLM"
+            android:textSize="@dimen/text_size_xbig" />
+
+        <TextView
+            android:id="@+id/assetBalance"
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:gravity="center"
+            android:text="21,035.0215719"
+            android:textSize="@dimen/text_size_big" />
+
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/assetImageView"
-        android:layout_width="@dimen/button_height"
-        android:layout_height="@dimen/button_height"
-        android:layout_margin="@dimen/padding_horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/assetImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:src="@drawable/ic_logo_stellar"
+        tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/defaultAssetView"
-        android:layout_width="@dimen/button_height"
-        android:layout_height="@dimen/button_height"
+        android:id="@+id/defaultImage"
+        style="@style/WhiteTitle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/padding_horizontal"
-        android:background="@drawable/bg_rounded_button_grey"
+        android:background="@drawable/bg_round_button_grey"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="@dimen/text_size" />
 
-    <TextView
-        android:id="@+id/assetNameTextView"
-        style="@style/BoldText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_horizontal"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toTopOf="@+id/assetAmountTextView"
-        app:layout_constraintStart_toEndOf="@+id/assetImageView"
-        app:layout_constraintTop_toTopOf="@+id/assetImageView"
-        tools:text="XLM" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingStart="@dimen/padding_mini"
+        android:paddingEnd="@dimen/padding_mini"
+        android:layout_below="@id/assetImage"
+        android:weightSum="1">
 
-    <TextView
-        android:id="@+id/assetAmountTextView"
-        style="@style/RegularText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_horizontal"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/assetImageView"
-        app:layout_constraintStart_toEndOf="@+id/assetImageView"
-        tools:text="16.0000 XLM" />
+        <Button
+            android:id="@+id/leftButton"
+            style="@style/WhiteTitle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="0.5"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/buy"
+            android:textColor="@color/colorAccent" />
 
-    <ImageView
-        android:id="@+id/assetIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:padding="@dimen/padding_micro"
-        android:src="@drawable/dot_filled"
-        android:tint="@color/colorGreen"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/assetNameTextView"
-        app:layout_constraintStart_toEndOf="@+id/assetNameTextView"
-        app:layout_constraintTop_toTopOf="@+id/assetNameTextView" />
+        <Button
+            android:id="@+id/rightButton"
+            style="@style/WhiteTitle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="0.5"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/set_inflation"
+            android:textColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/withdrawButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:padding="@dimen/padding_horizontal"
-        android:text="@string/withdraw"
-        android:textColor="@color/colorAccent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/depositButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/depositButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:padding="@dimen/padding_horizontal"
-        android:text="@string/deposit"
-        android:textColor="@color/colorAccent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/assetButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/assetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:paddingTop="@dimen/padding_horizontal"
-        android:paddingBottom="@dimen/padding_horizontal"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_medium"
-        android:src="@drawable/ic_add"
-        android:text="@string/add_asset"
-        android:textSize="@dimen/text_size_micro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        style="@style/HorizontalDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</RelativeLayout>

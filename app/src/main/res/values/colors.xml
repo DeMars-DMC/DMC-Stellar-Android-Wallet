@@ -25,6 +25,12 @@
 
     <color name="colorPaleSky">#6f7785</color>
 
+    <color name="bgWhiteTransparent">#1Affffff</color>
+    <color name="bgBlackTransparent">#1A000000</color>
+
+    <color name="transparent_white">#80FFFFFF</color>
+    <color name="transparent_black">#80000000</color>
+
     <!--MERGE COLORS-->
     <!--Colors-->
     <color name="black">#000000</color>
@@ -47,11 +53,6 @@
     <color name="blueRegular">#1E2C88</color>
     <color name="blueLight">#801C4DE0</color>
     <color name="main_bg_light">#F8F8F8</color>
-
-    <!--Random Colors for contact list-->
-    <color name="lightBlue">#2ED6FF</color>
-    <color name="transparent_white">#80FFFFFF</color>
-    <color name="transparent_black">#80000000</color>
 
     <!--Global-->
     <color name="fragmentBg">@color/main_bg_light</color>

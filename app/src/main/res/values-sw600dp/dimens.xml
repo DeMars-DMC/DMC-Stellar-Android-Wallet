@@ -31,6 +31,6 @@
     <dimen name="elevation_mini">2dp</dimen>
     <dimen name="elevation">4dp</dimen>
 
-    <dimen name="toolbar_size_big">120dp</dimen>
+    <dimen name="asset_logo_size">120dp</dimen>
 
 </resources>

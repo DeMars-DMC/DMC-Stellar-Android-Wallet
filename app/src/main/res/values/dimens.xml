@@ -17,6 +17,8 @@
     <dimen name="button_height_big">48dp</dimen>
     <dimen name="button_height_send">@dimen/button_height</dimen>
 
+    <dimen name="logo_width_dash">48dp</dimen>
+
     <dimen name="text_size">14sp</dimen>
     <dimen name="text_size_big">18sp</dimen>
     <dimen name="text_size_xbig">24sp</dimen>
@@ -32,7 +34,7 @@
     <dimen name="elevation_mini">1dp</dimen>
     <dimen name="elevation">2dp</dimen>
 
-    <dimen name="toolbar_size_big">60dp</dimen>
+    <dimen name="asset_logo_size">60dp</dimen>
 
     <!--ALL BELOW SHOULD BE CLEANED UP-->
     <dimen name="activity_vertical_margin">16dp</dimen>

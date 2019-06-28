@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/padding_horizontal"
+    android:orientation="vertical">
 
     <TextView
+        style="@style/WhiteTitle"
         android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dmc_asset"
-        android:textColor="@color/colorDisabled"
-        android:textSize="@dimen/text_size_small" />
+        android:gravity="center"
+        android:text="@string/dmc_asset" />
 
-</LinearLayout>
+</FrameLayout>

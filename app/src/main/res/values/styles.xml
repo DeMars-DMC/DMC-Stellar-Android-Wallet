@@ -78,6 +78,21 @@
     </style>
 
 
+    <style name="WhiteLabel" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_micro</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="WhiteTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+
     <style name="LongDescription" parent="TextAppearance.AppCompat">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/colorDisabled</item>
@@ -122,7 +137,7 @@
     </style>
 
     <style name="TabTitle" parent="@android:style/TextAppearance.Widget.TabWidget">
-        <item name="android:fontFamily">@font/opensans_bold</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -166,7 +181,7 @@
     <style name="HorizontalDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:background">@color/transparent_white</item>
     </style>
 
     <style name="VerticalDivider">

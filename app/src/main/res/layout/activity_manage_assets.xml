@@ -21,12 +21,10 @@
 
     <TextView
         android:id="@+id/totalBalanceLabel"
+        style="@style/WhiteTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total_balance"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_micro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walletLogo" />
@@ -37,11 +35,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_light"
+        android:text="38,808.2342234"
         android:textSize="@dimen/text_size_xbig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalBalanceLabel"
-        tool:text="38,808.2342234" />
+        app:layout_constraintTop_toBottomOf="@+id/totalBalanceLabel" />
 
     <TextView
         android:id="@+id/reportingCurrency"
@@ -49,29 +47,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/roboto_light"
-        android:textSize="@dimen/text_size_xbig"
-        android:background="@drawable/bg_rounded_button_white"
-        android:paddingStart="@dimen/padding_mini"
-        android:paddingEnd="@dimen/padding_micro"
-        android:paddingTop="@dimen/padding_micro"
-        android:paddingBottom="@dimen/padding_micro"
         android:layout_marginTop="@dimen/padding_micro"
+        android:background="@drawable/bg_card"
         android:drawableEnd="@drawable/ic_arrow_drop_down"
+        android:fontFamily="@font/roboto_light"
+        android:paddingStart="@dimen/padding_mini"
+        android:paddingTop="@dimen/padding_micro"
+        android:paddingEnd="@dimen/padding_micro"
+        android:paddingBottom="@dimen/padding_micro"
+        android:text="XLM"
+        android:textSize="@dimen/text_size_xbig"
+        app:layout_constraintBottom_toBottomOf="@+id/tradeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalBalance"
-        tool:text="XLM" />
+        app:layout_constraintTop_toTopOf="@+id/tradeButton" />
 
     <ImageButton
         android:id="@+id/exchangeButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/badge_height"
         android:layout_marginStart="@dimen/padding_horizontal"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_trading"
-        android:tint="@color/white"
         android:layout_marginEnd="@dimen/padding_horizontal"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/receive"
+        android:src="@drawable/ic_receive"
+        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/walletLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/walletLogo" />
@@ -80,91 +80,92 @@
         android:id="@+id/accountButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/badge_height"
+        android:layout_margin="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_settings"
         android:tint="@color/white"
-        android:layout_margin="@dimen/padding_horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/walletLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/walletLogo" />
 
     <ImageButton
+        android:id="@+id/tradeButton"
         android:layout_width="@dimen/button_height_big"
         android:layout_height="@dimen/button_height_big"
         android:background="@drawable/bg_round_button_white"
-        android:src="@drawable/ic_receive"
+        android:src="@drawable/ic_trading"
         android:tint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/totalBalance"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/reportingCurrency"
-        app:layout_constraintTop_toBottomOf="@+id/reportingCurrency" />
+        app:layout_constraintTop_toBottomOf="@+id/totalBalance" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+    <TextView
+        android:id="@+id/tradeLabel"
+        style="@style/WhiteLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_micro"
+        android:text="@string/trade"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_micro"
+        app:layout_constraintEnd_toEndOf="@+id/tradeButton"
+        app:layout_constraintStart_toStartOf="@+id/tradeButton"
+        app:layout_constraintTop_toBottomOf="@+id/tradeButton" />
 
     <ImageButton
+        android:id="@+id/detailsButton"
         android:layout_width="@dimen/button_height_big"
         android:layout_height="@dimen/button_height_big"
         android:background="@drawable/bg_round_button_white"
         android:src="@drawable/ic_more"
         android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/reportingCurrency"
-        app:layout_constraintTop_toBottomOf="@+id/reportingCurrency" />
+        app:layout_constraintStart_toEndOf="@+id/totalBalance"
+        app:layout_constraintTop_toBottomOf="@+id/totalBalance" />
 
+    <TextView
+        android:id="@+id/detailsLabel"
+        style="@style/WhiteLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_micro"
+        android:text="@string/details"
+        app:layout_constraintEnd_toEndOf="@+id/detailsButton"
+        app:layout_constraintStart_toStartOf="@+id/detailsButton"
+        app:layout_constraintTop_toBottomOf="@+id/detailsButton" />
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_marginStart="@dimen/padding_horizontal"-->
-    <!--android:layout_marginEnd="@dimen/padding_horizontal"-->
-    <!--android:background="@drawable/bg_card"-->
-    <!--android:elevation="@dimen/elevation_mini">-->
+    <TextView
+        android:id="@+id/reportingCurrencyLabel"
+        style="@style/WhiteLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reporting_currency"
+        app:layout_constraintBottom_toBottomOf="@+id/tradeLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tradeLabel" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/currenciesLabel"-->
-    <!--style="@style/DmcLabel"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingStart="@dimen/padding_horizontal"-->
-    <!--android:paddingTop="@dimen/padding_mini"-->
-    <!--android:paddingEnd="@dimen/padding_horizontal"-->
-    <!--android:text="@string/currencies" />-->
+    <View
+        android:id="@+id/walletDivider"
+        style="@style/HorizontalDivider"
+        android:layout_marginStart="@dimen/padding_vertical"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reportingCurrencyLabel" />
 
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/currenciesRecyclerView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"/>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/assetsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/walletDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fadeScrollbars="false"
+        android:overScrollMode="never"/>
 
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_margin="@dimen/padding_horizontal"-->
-    <!--android:background="@drawable/bg_card"-->
-    <!--android:elevation="@dimen/elevation_mini">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/cryptosLabel"-->
-    <!--style="@style/DmcLabel"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingStart="@dimen/padding_horizontal"-->
-    <!--android:paddingTop="@dimen/padding_mini"-->
-    <!--android:paddingEnd="@dimen/padding_horizontal"-->
-    <!--android:text="@string/cryptos" />-->
-
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/cryptosRecyclerView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"/>-->
-
-    <!--</LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

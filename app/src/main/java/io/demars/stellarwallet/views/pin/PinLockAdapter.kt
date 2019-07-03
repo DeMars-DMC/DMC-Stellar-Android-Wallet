@@ -11,7 +11,7 @@ import io.demars.stellarwallet.R
 class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   override fun getItemCount(): Int = 12
 
-  var customizationOptions: CustomizationOptionsBundle? = null
+  var customizationOptions: CustomizationOptions? = null
   var onItemClickListener: OnNumberClickListener? = null
   var onDeleteClickListener: OnDeleteClickListener? = null
   var onDotClickListener: OnDotClickListener? = null

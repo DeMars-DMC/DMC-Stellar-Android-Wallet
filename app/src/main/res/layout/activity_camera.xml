@@ -94,7 +94,7 @@
             android:focusable="true"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:src="@drawable/ic_camera_black"
-            android:background="@drawable/background_button_round"
+            android:background="@drawable/background_button_round_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -73,7 +73,7 @@ class AccountUtils {
 
     fun getPostedForTrade(assetCode: String): String {
       WalletApplication.wallet.getBalances().forEach {
-        if (it.assetCode == assetCode ||
+        if (it.assetCode.equals(assetCode, true) ||
           it.assetCode.isNullOrEmpty() && assetCode.equals("XLM", true)) {
           return it.sellingLiabilities
         }

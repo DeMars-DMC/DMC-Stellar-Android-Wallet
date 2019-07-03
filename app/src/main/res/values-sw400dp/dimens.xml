@@ -18,7 +18,8 @@
 
     <dimen name="text_size">16sp</dimen>
     <dimen name="text_size_big">20sp</dimen>
-    <dimen name="text_size_xbig">28sp</dimen>
+    <dimen name="text_size_xbig">24sp</dimen>
+    <dimen name="text_size_xxbig">28sp</dimen>
 
     <dimen name="pin_spacing_vertical">16dp</dimen>
     <dimen name="pin_spacing_horizontal">48dp</dimen>

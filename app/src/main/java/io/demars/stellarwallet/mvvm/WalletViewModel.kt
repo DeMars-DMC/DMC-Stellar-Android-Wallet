@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants.Companion.DEFAULT_ACCOUNT_BALANCE
-import io.demars.stellarwallet.interfaces.StellarAccount
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository

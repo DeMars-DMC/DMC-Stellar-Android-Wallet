@@ -75,10 +75,11 @@ class AssetUtils {
     }
 
     fun getLogo(assetCode: String): Int = when (assetCode) {
-      Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_IMAGE_RES
       Constants.DMC_ASSET_TYPE -> Constants.DMC_IMAGE_RES
       Constants.NGNT_ASSET_TYPE -> Constants.NGNT_IMAGE_RES
+      Constants.LUMENS_ASSET_TYPE -> Constants.LUMENS_IMAGE_RES
+      Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
       else -> 0
     }
 
@@ -88,6 +89,14 @@ class AssetUtils {
       Constants.NGNT_ASSET_TYPE -> "N"
       else -> ""
     }
+
+    fun getBalance(assetCode: String): String =
+      WalletApplication.wallet.getBalances().firstOrNull {
+        it.assetCode == assetCode || (it.assetCode == null && assetCode == "XLM")
+      }?.balance?.let {
+        StringFormat.truncateDecimalPlaces(it, getMaxDecimals(assetCode))
+      }?: ""
+
 
     fun getWithdrawAccount(assetCode: String?): String = when (assetCode) {
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER

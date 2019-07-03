@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.helpers.Constants
@@ -87,7 +88,7 @@ class AssetsRecyclerViewAdapter(private var context: Context,
   class AssetViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val assetImage: ImageView = v.findViewById(R.id.assetImage)
     val defaultImage: TextView = v.findViewById(R.id.defaultImage)
-    val assetName: TextView = v.findViewById(R.id.assetName)
+    val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
     val leftButton: Button = v.findViewById(R.id.leftButton)
     val rightButton: Button = v.findViewById(R.id.rightButton)
@@ -96,7 +97,7 @@ class AssetsRecyclerViewAdapter(private var context: Context,
   class SupportedAssetViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val assetImage: ImageView = v.findViewById(R.id.assetImage)
     val defaultImage: TextView = v.findViewById(R.id.defaultImage)
-    val assetName: TextView = v.findViewById(R.id.assetName)
+    val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
     val leftButton: Button = v.findViewById(R.id.leftButton)
     val rightButton: Button = v.findViewById(R.id.rightButton)
@@ -110,118 +111,124 @@ class AssetsRecyclerViewAdapter(private var context: Context,
     viewHolder.title.text = titleText
   }
 
-  private fun displayAsset(viewHolder: AssetViewHolder, position: Int) {
+  private fun displayAsset(holder: AssetViewHolder, position: Int) {
     val asset = items[position] as SupportedAsset
+    val assetCode = asset.code.toUpperCase()
 
-    viewHolder.assetName.text = asset.name
-    viewHolder.assetBalance.text = StringFormat.truncateDecimalPlaces(asset.amount,
-      AssetUtils.getMaxDecimals(asset.code))
+    holder.assetCode.text = asset.name
+    holder.assetBalance.text = StringFormat.truncateDecimalPlaces(asset.amount,
+      AssetUtils.getMaxDecimals(assetCode))
 
     // Buttons
     when {
       asset.amount!!.toDouble() == 0.0 &&
-        asset.code != Constants.LUMENS_ASSET_CODE &&
-        asset.code != Constants.DMC_ASSET_TYPE -> {
-        viewHolder.rightButton.visibility = View.VISIBLE
-        viewHolder.rightButton.setText(R.string.remove_asset)
-        viewHolder.rightButton.setTextColor(
+        assetCode != Constants.LUMENS_ASSET_CODE &&
+        assetCode != Constants.DMC_ASSET_TYPE -> {
+        holder.rightButton.visibility = View.VISIBLE
+        holder.rightButton.setText(R.string.remove_asset)
+        holder.rightButton.setTextColor(
           ContextCompat.getColor(context, R.color.colorTerracotta))
-        viewHolder.rightButton.setOnClickListener {
+        holder.rightButton.setOnClickListener {
           listener.changeTrustline(asset.asset!!, true)
         }
       }
       else -> {
-        viewHolder.rightButton.setTextColor(
+        holder.rightButton.setTextColor(
           ContextCompat.getColor(context, R.color.colorAccent))
-        viewHolder.rightButton.visibility = View.GONE
+        holder.rightButton.visibility = View.GONE
       }
     }
 
-    when {
-      asset.code == Constants.LUMENS_ASSET_CODE -> {
-        viewHolder.leftButton.visibility = View.VISIBLE
-        viewHolder.leftButton.setText(R.string.buy)
+    when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> {
+        holder.leftButton.visibility = View.VISIBLE
+        holder.leftButton.setText(R.string.buy)
 
-        viewHolder.rightButton.visibility = View.VISIBLE
-        viewHolder.rightButton.setText(R.string.set_inflation)
+        holder.rightButton.visibility = View.VISIBLE
+        holder.rightButton.setText(R.string.set_inflation)
       }
-      asset.code.equals(Constants.DMC_ASSET_TYPE, true) -> {
-        viewHolder.leftButton.visibility = View.VISIBLE
-        viewHolder.leftButton.setText(R.string.learn)
+      Constants.DMC_ASSET_TYPE -> {
+        holder.leftButton.visibility = View.VISIBLE
+        holder.leftButton.setText(R.string.learn)
 
-        viewHolder.rightButton.visibility = View.VISIBLE
-        viewHolder.rightButton.setText(R.string.trade)
+        holder.rightButton.visibility = View.VISIBLE
+        holder.rightButton.setText(R.string.trade)
       }
-
-      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) -> {
-        viewHolder.leftButton.visibility = View.VISIBLE
-        viewHolder.leftButton.setText(R.string.deposit)
+      Constants.ZAR_ASSET_TYPE -> {
+        holder.leftButton.visibility = View.VISIBLE
+        holder.leftButton.setText(R.string.deposit)
 
         val hasAvailableZAR = AccountUtils.hasAvailableAssets(asset.code)
 
-        viewHolder.rightButton.visibility = if (hasAvailableZAR) View.VISIBLE else View.GONE
-        viewHolder.rightButton.setText(R.string.withdraw)
+        holder.rightButton.visibility = if (hasAvailableZAR) View.VISIBLE else View.GONE
+        holder.rightButton.setText(R.string.withdraw)
       }
-
-      asset.code.equals(Constants.NGNT_ASSET_TYPE, true) -> {
-        viewHolder.leftButton.visibility = View.VISIBLE
-        viewHolder.leftButton.setText(R.string.deposit)
+      Constants.NGNT_ASSET_TYPE -> {
+        holder.leftButton.visibility = View.VISIBLE
+        holder.leftButton.setText(R.string.deposit)
 
         val hasNGNT = AccountUtils.hasAvailableAssets(asset.code)
 
-        viewHolder.rightButton.visibility = if (hasNGNT) View.VISIBLE else View.GONE
-        viewHolder.rightButton.setText(R.string.withdraw)
+        holder.rightButton.visibility = if (hasNGNT) View.VISIBLE else View.GONE
+        holder.rightButton.setText(R.string.withdraw)
       }
       else -> {
-        viewHolder.leftButton.visibility = View.GONE
-        viewHolder.rightButton.visibility = View.GONE
+        holder.leftButton.visibility = View.GONE
+        holder.rightButton.visibility = View.GONE
       }
     }
 
-    viewHolder.leftButton.setOnClickListener {
-      listener.deposit(asset.code.toUpperCase())
+    holder.leftButton.setOnClickListener {
+      listener.deposit(assetCode)
     }
 
-    viewHolder.rightButton.setOnClickListener {
-      listener.withdraw(asset.code.toUpperCase())
+    holder.rightButton.setOnClickListener {
+      listener.withdraw(assetCode)
     }
 
 
-    viewHolder.defaultImage.visibility = View.GONE
-    viewHolder.assetName.text = asset.name
+    holder.defaultImage.visibility = View.GONE
+    holder.assetCode.text = asset.name
 
     // Image
     when {
-      asset.code.equals(Constants.ZAR_ASSET_TYPE, true) ->
-        loadAssetImage(Constants.ZAR_IMAGE_RES, viewHolder.assetImage)
-      asset.code.equals(Constants.DMC_ASSET_TYPE, true) ->
-        loadAssetImage(Constants.DMC_IMAGE_RES, viewHolder.assetImage)
-      asset.code.equals(Constants.NGNT_ASSET_TYPE, true) ->
-        loadAssetImage(Constants.NGNT_IMAGE_RES, viewHolder.assetImage)
+      assetCode == Constants.ZAR_ASSET_TYPE ->
+        loadAssetImage(Constants.ZAR_IMAGE_RES, holder.assetImage)
+      assetCode == Constants.DMC_ASSET_TYPE ->
+        loadAssetImage(Constants.DMC_IMAGE_RES, holder.assetImage)
+      assetCode == Constants.NGNT_ASSET_TYPE ->
+        loadAssetImage(Constants.NGNT_IMAGE_RES, holder.assetImage)
       asset.image != 0 -> {
-        loadAssetImage(asset.image, viewHolder.assetImage)
+        loadAssetImage(asset.image, holder.assetImage)
       }
       else -> {
-        viewHolder.defaultImage.text = asset.code.toUpperCase()
-        viewHolder.defaultImage.visibility = View.VISIBLE
-        viewHolder.assetImage.setImageDrawable(null)
+        holder.defaultImage.text = assetCode
+        holder.defaultImage.visibility = View.VISIBLE
+        holder.assetImage.setImageDrawable(null)
       }
     }
 
-    viewHolder.itemView.setOnClickListener {
-      listener.assetSelected(if (asset.code == Constants.LUMENS_ASSET_CODE) DefaultAsset()
-      else SessionAssetImpl(asset.code.toUpperCase(), asset.name, asset.issuer))
+    // Transition names
+    ViewCompat.setTransitionName(holder.assetImage, "${assetCode}IMAGE")
+    ViewCompat.setTransitionName(holder.assetCode, "${assetCode}CODE")
+    ViewCompat.setTransitionName(holder.assetBalance, "${assetCode}BALANCE")
+
+    holder.itemView.setOnClickListener {
+      listener.assetSelected(if (assetCode == Constants.LUMENS_ASSET_CODE) DefaultAsset()
+      else SessionAssetImpl(assetCode, asset.name, asset.issuer),
+        holder.assetImage, holder.assetCode, holder.assetBalance)
     }
   }
 
   private fun displaySupportedAsset(viewHolder: SupportedAssetViewHolder, position: Int) {
     val asset = items[position] as SupportedAsset
-    val trustLineAsset = Asset.createNonNativeAsset(asset.code.toUpperCase(), KeyPair.fromAccountId(asset.issuer))
+    val assetCode = asset.code.toUpperCase()
+    val trustLineAsset = Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(asset.issuer))
 
     viewHolder.defaultImage.visibility = View.GONE
     viewHolder.leftButton.visibility = View.GONE
 
-    viewHolder.assetName.text = asset.code.toUpperCase()
+    viewHolder.assetCode.text = assetCode
     viewHolder.assetBalance.text = asset.name
     viewHolder.assetBalance.visibility = View.VISIBLE
 

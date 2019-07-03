@@ -2,7 +2,8 @@ package io.demars.stellarwallet.views.pin
 
 import android.graphics.drawable.Drawable
 
-class CustomizationOptionsBundle {
+// TODO: Remove
+class CustomizationOptions {
   var textColor: Int = 0
   var textSize: Int = 0
   var buttonSize: Int = 0

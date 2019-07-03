@@ -29,7 +29,7 @@ class PinLockView : RecyclerView {
   private var mIndicatorDots: IndicatorDots? = null
   private var mAdapter: PinLockAdapter? = null
   private var mPinLockListener: PinLockListener? = null
-  private var mCustomizationOptionsBundle: CustomizationOptionsBundle? = null
+  private var mCustomizationOptions: CustomizationOptions? = null
 
   var mDialerListener: DialerListener? = null
 
@@ -157,7 +157,7 @@ class PinLockView : RecyclerView {
     get() = mTextColor
     set(textColor) {
       this.mTextColor = textColor
-      mCustomizationOptionsBundle!!.textColor = textColor
+      mCustomizationOptions!!.textColor = textColor
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -175,7 +175,7 @@ class PinLockView : RecyclerView {
     get() = mTextSize
     set(textSize) {
       this.mTextSize = textSize
-      mCustomizationOptionsBundle!!.textSize = textSize
+      mCustomizationOptions!!.textSize = textSize
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -193,7 +193,7 @@ class PinLockView : RecyclerView {
     get() = mShowDeleteButton
     set(showDeleteButton) {
       this.mShowDeleteButton = showDeleteButton
-      mCustomizationOptionsBundle!!.isShowDeleteButton = showDeleteButton
+      mCustomizationOptions!!.isShowDeleteButton = showDeleteButton
       mAdapter!!.notifyDataSetChanged()
     }
 
@@ -237,15 +237,15 @@ class PinLockView : RecyclerView {
       typedArray.recycle()
     }
 
-    mCustomizationOptionsBundle = CustomizationOptionsBundle()
-    mCustomizationOptionsBundle!!.textColor = mTextColor
-    mCustomizationOptionsBundle!!.textSize = mTextSize
-    mCustomizationOptionsBundle!!.buttonSize = mButtonSize
-    mCustomizationOptionsBundle!!.buttonBackgroundDrawable = mButtonBackgroundDrawable
-    mCustomizationOptionsBundle!!.deleteButtonDrawable = mDeleteButtonDrawable
-    mCustomizationOptionsBundle!!.isShowDeleteButton = mShowDeleteButton
-    mCustomizationOptionsBundle!!.dotButtonDrawable = mDotButtonDrawable
-    mCustomizationOptionsBundle!!.isShowDotButton = mShowDotButton
+    mCustomizationOptions = CustomizationOptions()
+    mCustomizationOptions!!.textColor = mTextColor
+    mCustomizationOptions!!.textSize = mTextSize
+    mCustomizationOptions!!.buttonSize = mButtonSize
+    mCustomizationOptions!!.buttonBackgroundDrawable = mButtonBackgroundDrawable
+    mCustomizationOptions!!.deleteButtonDrawable = mDeleteButtonDrawable
+    mCustomizationOptions!!.isShowDeleteButton = mShowDeleteButton
+    mCustomizationOptions!!.dotButtonDrawable = mDotButtonDrawable
+    mCustomizationOptions!!.isShowDotButton = mShowDotButton
 
     initView()
   }
@@ -257,7 +257,7 @@ class PinLockView : RecyclerView {
     mAdapter!!.onItemClickListener = mOnNumberClickListener
     mAdapter!!.onDeleteClickListener = mOnDeleteClickListener
     mAdapter!!.onDotClickListener = mOnDotClickListener
-    mAdapter!!.customizationOptions = mCustomizationOptionsBundle
+    mAdapter!!.customizationOptions = mCustomizationOptions
     adapter = mAdapter
 
     addItemDecoration(ItemSpaceDecoration(mHorizontalSpacing, mVerticalSpacing, 3, false))

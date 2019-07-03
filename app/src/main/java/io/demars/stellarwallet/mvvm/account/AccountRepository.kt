@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.OnLoadAccount
-import io.demars.stellarwallet.interfaces.StellarAccount
-import io.demars.stellarwallet.models.BasicStellarAccount
+import io.demars.stellarwallet.models.StellarAccount
 import io.demars.stellarwallet.models.stellar.MinimumBalance
-import io.demars.stellarwallet.models.StellarAccountImpl
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import org.stellar.sdk.requests.ErrorResponse
@@ -48,7 +46,7 @@ object AccountRepository {
             WalletApplication.wallet.setAvailableBalances(
               AccountUtils.calculateAvailableBalances(result))
 
-            liveData.postValue(AccountEvent(200, StellarAccountImpl(result)))
+            liveData.postValue(AccountEvent(200, StellarAccount(result)))
           }
           isBusy = false
         }
@@ -57,7 +55,7 @@ object AccountRepository {
           val stellarAccountId = WalletApplication.wallet.getStellarAccountId()
 
           Timber.e("(${error.code}) Error Loading account")
-          liveData.postValue(AccountEvent(error.code, BasicStellarAccount(stellarAccountId, null, 0L, null)))
+          liveData.postValue(AccountEvent(error.code, StellarAccount(stellarAccountId, null, 0L, null)))
           isBusy = false
         }
 

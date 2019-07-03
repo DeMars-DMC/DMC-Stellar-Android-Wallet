@@ -1,7 +1,9 @@
 package io.demars.stellarwallet.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
@@ -10,9 +12,14 @@ import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.models.SessionAsset
 import io.demars.stellarwallet.models.SupportedAsset
 import io.demars.stellarwallet.models.SupportedAssetType
-import kotlinx.android.synthetic.main.activity_assets.*
+import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.AccountResponse
+import androidx.core.app.ActivityOptionsCompat
+import android.content.Intent
+import androidx.core.view.ViewCompat
+import androidx.core.util.Pair
+
 
 class ManageAssetsActivity : BaseActivity(), AssetListener {
 
@@ -26,7 +33,34 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_manage_assets)
+    setupAppBar()
     setupAssetsRecyclerView()
+  }
+
+  private fun setupAppBar() {
+    appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
+      val positiveOffset = -offset
+      val toolbarHeight = toolbar.height
+      val scrollRange = appBar.totalScrollRange
+      if (positiveOffset in 0..toolbarHeight) {
+        walletLogo.alpha = 1f - (positiveOffset * 1.2f) / toolbarHeight
+        val balanceScale = 1f - 0.3f * (positiveOffset.toFloat() / toolbarHeight)
+        totalBalanceContainer.scaleX = balanceScale
+        totalBalanceContainer.scaleY = balanceScale
+        totalBalanceContainer.translationY = 0f
+      } else {
+        walletLogo.alpha = 0f
+        totalBalanceContainer.translationY = positiveOffset.toFloat() - toolbarHeight
+      }
+
+      val bottomAlpha = 1f - (positiveOffset * 2f) / scrollRange
+      arrayOf(tradeButton, tradeLabel, reportingCurrency,
+        reportingCurrencyLabel, detailsButton, detailsLabel).forEach {
+        it.alpha = bottomAlpha
+      }
+
+      walletDivider.scaleX = 1f + 0.2f * (positiveOffset.toFloat() / scrollRange)
+    })
   }
 
   private fun setupAssetsRecyclerView() {
@@ -124,7 +158,16 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
 
   }
 
-  override fun assetSelected(sessionAsset: SessionAsset) {
+  override fun assetSelected(sessionAsset: SessionAsset, image: View, code: View, balance: View) {
+    val intent = Intent(this, AssetActivity::class.java)
+    val assetCode = if (sessionAsset.assetCode == "native") "XLM" else sessionAsset.assetCode
+    intent.putExtra("ARG_ASSET_CODE", assetCode)
+    val pair1 = Pair.create(image, ViewCompat.getTransitionName(image))
+    val pair2 = Pair(code, ViewCompat.getTransitionName(code))
+    val pair3 = Pair(balance, ViewCompat.getTransitionName(balance))
+    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pair1, pair2, pair3).toBundle()
+
+    startActivity(intent, options)
   }
 
   override fun deposit(assetCode: String) {

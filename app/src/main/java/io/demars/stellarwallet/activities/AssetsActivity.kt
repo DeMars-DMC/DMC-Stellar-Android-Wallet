@@ -191,7 +191,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   //region Call backs
-  override fun assetSelected(sessionAsset: SessionAsset) {
+  override fun assetSelected(sessionAsset: SessionAsset, image: View, code: View, balance: View) {
     WalletApplication.userSession.setSessionAsset(sessionAsset)
     finish()
   }

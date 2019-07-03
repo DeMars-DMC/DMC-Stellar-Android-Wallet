@@ -28,6 +28,7 @@
     <color name="bgWhiteTransparent">#1Affffff</color>
     <color name="bgBlackTransparent">#1A000000</color>
 
+    <color name="transparent">#00000000</color>
     <color name="transparent_white">#80FFFFFF</color>
     <color name="transparent_black">#80000000</color>
 

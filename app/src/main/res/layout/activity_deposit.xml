@@ -37,7 +37,7 @@
         android:paddingTop="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/text_size_small"
         tool:text="Ivan Ivanov" />
 
     <TextView
@@ -52,7 +52,7 @@
         android:paddingTop="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/text_size_small"
         android:visibility="gone"
         tool:text="+1234567890" />
 
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_horizontal"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_small"
             tool:text="Absa Bank" />
 
         <TextView
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_small"
             tool:text="32423423423" />
 
         <TextView
@@ -150,7 +150,7 @@
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_small"
             tool:text="5000.00 ZAR" />
 
         <TextView
@@ -249,7 +249,7 @@
             android:paddingBottom="@dimen/padding_mini"
             android:text="@string/select_bank"
             android:textColor="@color/colorPaleSky"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size_small" />
 
         <EditText
             android:id="@+id/accountNumberInput"
@@ -265,7 +265,7 @@
             android:paddingEnd="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_mini"
             android:textColorHint="@color/colorPaleSky"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size_small" />
 
         <TextView
             android:id="@+id/accountTypePicker"
@@ -282,7 +282,7 @@
             android:paddingBottom="@dimen/padding_mini"
             android:text="@string/account_type"
             android:textColor="@color/colorPaleSky"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size_small" />
 
         <Button
             android:id="@+id/addBankButton"

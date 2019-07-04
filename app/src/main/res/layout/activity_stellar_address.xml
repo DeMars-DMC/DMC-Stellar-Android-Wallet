@@ -75,7 +75,7 @@
             android:inputType="textCapSentences"
             android:padding="@dimen/padding_horizontal"
             android:scrollHorizontally="true"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_small"
             tool:ignore="ContentDescription,UnusedAttribute" />
 
         <TextView
@@ -112,7 +112,7 @@
                 android:padding="@dimen/padding_horizontal"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size"
+                android:textSize="@dimen/text_size_small"
                 tool:ignore="UnusedAttribute"
                 tool:text="ALAJSLDJFALSKDFJ2L3K4JLSDKFJL34KJ5LKSZJGFLKSJL4" />
 

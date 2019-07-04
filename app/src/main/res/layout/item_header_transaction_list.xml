@@ -22,7 +22,7 @@
         android:textColor="@color/colorDisabled"
         android:layout_alignParentEnd="true"/>
 
-    <View style="@style/HorizontalDivider"
+    <View style="@style/HorizontalDividerWhite"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/activityHeaderTextView"
         android:layout_centerInParent="true"/>

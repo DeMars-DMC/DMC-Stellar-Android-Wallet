@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +16,10 @@ import io.demars.stellarwallet.models.SupportedAssetType
 import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.AccountResponse
-import androidx.core.app.ActivityOptionsCompat
 import android.content.Intent
-import androidx.core.view.ViewCompat
-import androidx.core.util.Pair
-
+import android.net.Uri
+import io.demars.stellarwallet.utils.AccountUtils
+import io.demars.stellarwallet.utils.ViewUtils
 
 class ManageAssetsActivity : BaseActivity(), AssetListener {
 
@@ -33,11 +33,12 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_manage_assets)
-    setupAppBar()
-    setupAssetsRecyclerView()
+    initAppBar()
+    initUI()
+    initAssets()
   }
 
-  private fun setupAppBar() {
+  private fun initAppBar() {
     appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
       val positiveOffset = -offset
       val toolbarHeight = toolbar.height
@@ -63,7 +64,14 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     })
   }
 
-  private fun setupAssetsRecyclerView() {
+  private fun initUI() {
+    accountButton.setOnClickListener {
+      startActivity(SettingsActivity.newInstance(this))
+      overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+    }
+  }
+
+  private fun initAssets() {
     adapter = AssetsRecyclerViewAdapter(this, this, assetsList)
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
     assetsRecyclerView.adapter = adapter
@@ -159,21 +167,61 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   }
 
   override fun assetSelected(sessionAsset: SessionAsset, image: View, code: View, balance: View) {
-    val intent = Intent(this, AssetActivity::class.java)
     val assetCode = if (sessionAsset.assetCode == "native") "XLM" else sessionAsset.assetCode
-    intent.putExtra("ARG_ASSET_CODE", assetCode)
-    val pair1 = Pair.create(image, ViewCompat.getTransitionName(image))
-    val pair2 = Pair(code, ViewCompat.getTransitionName(code))
-    val pair3 = Pair(balance, ViewCompat.getTransitionName(balance))
-    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pair1, pair2, pair3).toBundle()
-
-    startActivity(intent, options)
+    startActivity(AssetActivity.newInstance(this, assetCode))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
   override fun deposit(assetCode: String) {
+    when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
+      }
+      Constants.DMC_ASSET_TYPE -> {
+        // TODO: TRADE DMC
+      }
+      else -> {
+        if (WalletApplication.wallet.isVerified()) {
+          startActivity(DepositActivity.newInstance(
+            this, DepositActivity.Mode.DEPOSIT, assetCode))
+        } else {
+          ViewUtils.showToast(this, R.string.deposit_not_verified)
+        }
+      }
+    }
+
   }
 
   override fun withdraw(assetCode: String) {
+    when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> {
+        if (WalletApplication.wallet.getBalances().isNotEmpty() &&
+          AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
+          startActivity(Intent(this, InflationActivity::class.java))
+        } else {
+          showBalanceErrorDialog()
+        }
+      }
+      Constants.DMC_ASSET_TYPE -> {
+        // TODO: LEARN DMC
+      }
+      else -> {
+        if (WalletApplication.wallet.isVerified()) {
+          startActivity(DepositActivity.newInstance(
+            this, DepositActivity.Mode.WITHDRAW, assetCode))
+        } else {
+          ViewUtils.showToast(this, R.string.withdraw_not_verified)
+        }
+
+      }
+    }
   }
   //endregion
+
+  private fun showBalanceErrorDialog() {
+    AlertDialog.Builder(this)
+      .setTitle(getString(R.string.no_balance_dialog_title))
+      .setMessage(getString(R.string.no_balance_text_message))
+      .setPositiveButton(getString(R.string.ok)) { _, _ -> }.show()
+  }
 }

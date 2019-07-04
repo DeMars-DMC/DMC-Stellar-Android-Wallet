@@ -2,6 +2,11 @@ package io.demars.stellarwallet.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.transition.Fade
+import android.transition.Slide
+import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.WalletApplication

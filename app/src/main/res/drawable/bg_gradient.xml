@@ -6,7 +6,6 @@
         android:endColor="@color/blueDark"
         android:centerColor="@color/blueRegular"
         android:startColor="@color/blueLight"
-        android:centerY="30%"
         android:type="linear" />
 
     <corners

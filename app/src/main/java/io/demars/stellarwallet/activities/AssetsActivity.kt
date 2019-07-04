@@ -65,13 +65,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
     }
 
     setInflationButton.setOnClickListener {
-      if (WalletApplication.wallet.getBalances().isNotEmpty() &&
-        AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
-        startActivity(Intent(this, InflationActivity::class.java))
-      } else {
-        showBalanceErrorDialog()
       }
-    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -88,12 +82,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
       .above(if (isRegistered) R.id.manuallyAddAssetButton else R.id.openAccountButton)
   }
 
-  private fun showBalanceErrorDialog() {
-    AlertDialog.Builder(this)
-      .setTitle(getString(R.string.no_balance_dialog_title))
-      .setMessage(getString(R.string.no_balance_text_message))
-      .setPositiveButton(getString(R.string.ok)) { _, _ -> }.show()
-  }
+
 
   //region User Interface
 
@@ -197,24 +186,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   override fun deposit(assetCode: String) {
-    when (assetCode) {
-      Constants.LUMENS_ASSET_CODE -> {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
-      }
-      Constants.DMC_ASSET_TYPE -> {
-        setResult(RESULT_OK)
-        finish()
-      }
-      else -> {
-        if (WalletApplication.wallet.isVerified()) {
-          startActivity(DepositActivity.newInstance(
-            this, DepositActivity.Mode.DEPOSIT, assetCode))
-        } else {
-          ViewUtils.showToast(this, R.string.deposit_not_verified)
-        }
-      }
-    }
-  }
+   }
 
   override fun withdraw(assetCode: String) {
     if (WalletApplication.wallet.isVerified()) {

@@ -153,9 +153,9 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
             ?: ContactsFragment(), WalletFragmentType.CONTACTS)
         }
         R.id.nav_settings -> {
-          val settingsFragment = getReusedFragment(WalletFragmentType.SETTING.name)
-            ?: SettingsFragment.newInstance()
-          replaceFragment(settingsFragment, WalletFragmentType.SETTING)
+//          val settingsFragment = getReusedFragment(WalletFragmentType.SETTING.name)
+//            ?: SettingsActivity.newInstance()
+//          replaceFragment(settingsFragment, WalletFragmentType.SETTING)
         }
         else -> throw IllegalAccessException("Navigation item not supported $item.title(${item.itemId})")
       }

@@ -18,8 +18,6 @@ import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.stellar.HorizonException
-import io.demars.stellarwallet.mvvm.exchange.ExchangeEntity
-import io.demars.stellarwallet.mvvm.exchange.ExchangeViewModel
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
@@ -83,11 +81,6 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
         amountTextView.startAnimation(shakeAnimation)
       }
     }
-
-    val viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
-    viewModel.exchangeMatching(address).observe(this, Observer {
-      updateExchangeProviderText(it)
-    })
   }
 
   override fun onResume() {
@@ -209,25 +202,4 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     Toast.makeText(applicationContext, getString(HorizonException.HorizonExceptionType.SEND.value), Toast.LENGTH_LONG).show()
   }
 //endregion
-
-  @Suppress("DEPRECATION")
-  private fun fromHtml(html: String): Spanned {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-      Html.fromHtml(html)
-    }
-  }
-
-  private fun updateExchangeProviderText(provider: ExchangeEntity?) {
-    if (provider != null) {
-      identifiedAddressTextView.text = fromHtml(getString(R.string.send_address_identified, provider.name))
-      identifiedAddressTextView.visibility = View.VISIBLE
-      memoTitleTextView.text = provider.memo
-      memoTextView.hint = null
-    } else {
-      identifiedAddressTextView.visibility = View.GONE
-    }
-  }
-
 }

@@ -9,7 +9,6 @@ import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.mvvm.account.AccountRepository
-import io.demars.stellarwallet.mvvm.local.EffectsRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
 import io.demars.stellarwallet.mvvm.local.TransactionsRepository
@@ -36,7 +35,6 @@ class GlobalGraphHelper {
       clearSession()
       Firebase.signOut()
       AccountRepository.clear()
-      EffectsRepository.getInstance().clear()
       OperationsRepository.getInstance().clear()
       TransactionsRepository.getInstance().clear()
       TradesRepository.getInstance().clear()

@@ -65,10 +65,10 @@ object AccountRepository {
     }
   }
 
-  data class AccountEvent(val httpCode: Int, val stellarAccount: StellarAccount)
-
   fun clear() {
     accountResponse = null
     liveData = MutableLiveData()
   }
+
+  data class AccountEvent(val httpCode: Int, val stellarAccount: StellarAccount)
 }

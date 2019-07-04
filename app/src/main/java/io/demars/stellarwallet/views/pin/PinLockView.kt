@@ -226,7 +226,7 @@ class PinLockView : RecyclerView {
       mHorizontalSpacing = typedArray.getDimension(R.styleable.PinLockView_keypadHorizontalSpacing, 0f).toInt()
       mVerticalSpacing = typedArray.getDimension(R.styleable.PinLockView_keypadVerticalSpacing, 0f).toInt()
       mTextColor = typedArray.getColor(R.styleable.PinLockView_keypadTextColor, ContextCompat.getColor(context, R.color.white))
-      mTextSize = typedArray.getDimension(R.styleable.PinLockView_keypadTextSize, context.resources.getDimension(R.dimen.text_size)).toInt()
+      mTextSize = typedArray.getDimension(R.styleable.PinLockView_keypadTextSize, context.resources.getDimension(R.dimen.text_size_small)).toInt()
       mButtonSize = typedArray.getDimension(R.styleable.PinLockView_keypadButtonSize, context.resources.getDimension(R.dimen.button_height_big)).toInt()
       mButtonBackgroundDrawable = typedArray.getDrawable(R.styleable.PinLockView_keypadButtonBackgroundDrawable)
       mDeleteButtonDrawable = typedArray.getDrawable(R.styleable.PinLockView_keypadDeleteButtonDrawable)

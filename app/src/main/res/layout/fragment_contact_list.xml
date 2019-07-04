@@ -16,7 +16,7 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
             app:popupTheme="@style/ToolbarTheme"
-            app:title="@string/nav_contacts" />
+            app:title="@string/contacts" />
 
         <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/searchBar"

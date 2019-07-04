@@ -57,7 +57,7 @@
                 android:padding="@dimen/padding_horizontal"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size" />
+                android:textSize="@dimen/text_size_small" />
 
             <ImageButton
                 android:id="@+id/cameraImageButton"

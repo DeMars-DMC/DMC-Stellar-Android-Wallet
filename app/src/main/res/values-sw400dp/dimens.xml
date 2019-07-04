@@ -11,12 +11,14 @@
 
     <dimen name="logo_width_main">140dp</dimen>
     <dimen name="logo_width_pin">100dp</dimen>
+    <dimen name="logo_width_asset">80dp</dimen>
 
     <dimen name="button_height">40dp</dimen>
     <dimen name="button_height_big">56dp</dimen>
     <dimen name="button_height_send">@dimen/button_height_big</dimen>
 
-    <dimen name="text_size">16sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_xbig">24sp</dimen>
     <dimen name="text_size_xxbig">28sp</dimen>

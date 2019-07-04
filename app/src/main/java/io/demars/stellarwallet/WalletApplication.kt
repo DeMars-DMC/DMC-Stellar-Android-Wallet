@@ -14,7 +14,6 @@ import io.demars.stellarwallet.helpers.WalletLifecycleListener
 import io.demars.stellarwallet.interfaces.WalletStore
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
-import io.demars.stellarwallet.mvvm.exchange.ExchangeRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.remote.ServerType
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -127,9 +126,6 @@ class WalletApplication : MultiDexApplication() {
         Timber.d("Leak canary is disabled")
       }
     }
-
-    // exchange providers addresses are not very likely to change but let's refresh them during application startup.
-    ExchangeRepository(this).getAllExchangeProviders(true)
   }
 
   private fun createNotificationChannels() {

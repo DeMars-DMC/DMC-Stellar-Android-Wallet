@@ -149,10 +149,10 @@ class AssetsRecyclerViewAdapter(private var context: Context,
       }
       Constants.DMC_ASSET_TYPE -> {
         holder.leftButton.visibility = View.VISIBLE
-        holder.leftButton.setText(R.string.learn)
+        holder.leftButton.setText(R.string.trade)
 
         holder.rightButton.visibility = View.VISIBLE
-        holder.rightButton.setText(R.string.trade)
+        holder.rightButton.setText(R.string.learn)
       }
       Constants.ZAR_ASSET_TYPE -> {
         holder.leftButton.visibility = View.VISIBLE

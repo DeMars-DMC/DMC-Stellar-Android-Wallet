@@ -182,7 +182,7 @@
 
                 <View
                     android:id="@+id/walletDivider"
-                    style="@style/HorizontalDivider"
+                    style="@style/HorizontalDividerWhite"
                     android:layout_marginStart="@dimen/padding_vertical"
                     android:layout_marginTop="@dimen/padding_horizontal"
                     android:layout_marginEnd="@dimen/padding_vertical"

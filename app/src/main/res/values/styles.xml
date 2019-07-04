@@ -1,4 +1,5 @@
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,9 +10,9 @@
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:windowTranslucentStatus">true</item>
-</style>
+    </style>
 
-    <style name="BlackTheme" parent="AppTheme"/>
+    <style name="BlackTheme" parent="AppTheme" />
 
     <style name="TransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
@@ -59,19 +60,19 @@
 
     <style name="WhiteDescription" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
     <style name="BlackDescription" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
     <style name="DmcLabel" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
@@ -85,7 +86,7 @@
 
     <style name="WhiteTitle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textAllCaps">true</item>
     </style>
@@ -138,7 +139,7 @@
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -153,47 +154,60 @@
     </style>
 
     <style name="ButtonStyleAccent" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_accent</item>
     </style>
 
     <style name="ButtonStyleAccentFlat" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_accent_flat</item>
     </style>
 
     <style name="ButtonStyleYellow" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_yellow</item>
     </style>
 
     <style name="ButtonStyleBlue" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_blue</item>
     </style>
 
-    <style name="HorizontalDivider">
+    <style name="HorizontalDividerWhite">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/transparent_white</item>
     </style>
 
-    <style name="VerticalDivider">
+    <style name="VerticalDividerWhite">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:background">@color/transparent_white</item>
+    </style>
+
+    <style name="HorizontalDividerBlack">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorPaleSky</item>
+    </style>
+
+    <style name="VerticalDividerBlack">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/colorPaleSky</item>
     </style>
 
     <style name="SettingsTitle" parent="RegularText">
         <item name="android:textColor">@color/blueDark</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
     <style name="SettingsButton" parent="RegularText">
-        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>

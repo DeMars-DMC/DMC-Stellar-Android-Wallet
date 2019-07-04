@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.fragments
+package io.demars.stellarwallet.activities
 
 import android.app.Activity
 import android.content.ClipData
@@ -6,48 +6,35 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.activities.*
-import io.demars.stellarwallet.firebase.DmcUser
-import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.utils.DiagnosticUtils
 import io.demars.stellarwallet.utils.GlobalGraphHelper
-import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import timber.log.Timber
 
-class SettingsFragment : BaseFragment() {
-  private lateinit var appContext: Context
+class SettingsActivity : BaseActivity() {
 
   enum class SettingsAction {
     SHOW_MNEMONIC, SHOW_SECRET_SEED, SHOW_ACCOUNT, LOG_OUT, TOGGLE_PIN_ON_SENDING, TOGGLE_ENABLE_WEAR_APP
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-    inflater.inflate(R.layout.fragment_settings, container, false)
-
   companion object {
     const val RC_CREATE_DMC_ACCOUNT = 111
-    fun newInstance(): SettingsFragment = SettingsFragment()
+    fun newInstance(context: Context): Intent {
+      return Intent(context, SettingsActivity::class.java)
+    }
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    appContext = view.context.applicationContext
+  //region Init UI
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_settings)
     setupUI()
   }
-
-  //region User Interface
 
   override fun onResume() {
     super.onResume()
@@ -57,6 +44,11 @@ class SettingsFragment : BaseFragment() {
 
   private fun setupUI() {
     updatePersonalInfo()
+
+    backButton.setOnClickListener {
+      onBackPressed()
+    }
+
     viewPhraseButton.setOnClickListener {
       startActivityForResult(WalletManagerActivity.showMnemonic(it.context), SettingsAction.SHOW_MNEMONIC.ordinal)
     }
@@ -123,35 +115,34 @@ class SettingsFragment : BaseFragment() {
     if (resultCode == Activity.RESULT_OK) {
       when (requestCode) {
         SettingsAction.SHOW_MNEMONIC.ordinal -> {
-          context?.let {
-            val mnemonic = WalletManagerActivity.getResultDataString(data)
-            if (mnemonic != null) {
-              val phrase = WalletManagerActivity.getResultExtraDataString(data)
-              startActivity(MnemonicActivity.newDisplayMnemonicIntent(it, mnemonic, phrase))
-            } else {
-              Timber.e("fatal error: mnemonic is null")
-            }
-          }
 
+          val mnemonic = WalletManagerActivity.getResultDataString(data)
+          if (mnemonic != null) {
+            val phrase = WalletManagerActivity.getResultExtraDataString(data)
+            startActivity(MnemonicActivity.newDisplayMnemonicIntent(this, mnemonic, phrase))
+          } else {
+            Timber.e("fatal error: mnemonic is null")
+          }
         }
+
 
         SettingsAction.SHOW_SECRET_SEED.ordinal -> {
-          context?.let {
-            val decryptedPhrase = WalletManagerActivity.getResultDataString(data)
-            if (decryptedPhrase != null) {
-              startActivity(ViewSecretSeedActivity.newInstance(it, decryptedPhrase))
-            } else {
-              Timber.e("fatal error: decrypted phrase is null")
-            }
+
+          val decryptedPhrase = WalletManagerActivity.getResultDataString(data)
+          if (decryptedPhrase != null) {
+            startActivity(ViewSecretSeedActivity.newInstance(this, decryptedPhrase))
+          } else {
+            Timber.e("fatal error: decrypted phrase is null")
           }
         }
 
+
         SettingsAction.SHOW_ACCOUNT.ordinal -> {
-          startActivityForResult(CreateUserActivity.newInstance(context!!), RC_CREATE_DMC_ACCOUNT)
+          startActivityForResult(CreateUserActivity.newInstance(this), RC_CREATE_DMC_ACCOUNT)
         }
 
         SettingsAction.LOG_OUT.ordinal -> {
-          GlobalGraphHelper.wipeAndRestart(activity as FragmentActivity)
+          GlobalGraphHelper.wipeAndRestart(this)
         }
 
         SettingsAction.TOGGLE_PIN_ON_SENDING.ordinal -> {
@@ -169,12 +160,14 @@ class SettingsFragment : BaseFragment() {
   }
 
   private fun copyToClipBoard(data: String, label: String, toastMessage: String) {
-    activity?.let {
-      val clipboard = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip = ClipData.newPlainText(label, data)
-      clipboard.primaryClip = clip
+    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, data)
+    clipboard.primaryClip = clip
+    toast(toastMessage)
+  }
 
-      Toast.makeText(it, toastMessage, Toast.LENGTH_LONG).show()
-    }
+  override fun onBackPressed() {
+    super.onBackPressed()
+    overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
   }
 }

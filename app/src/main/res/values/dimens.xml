@@ -12,6 +12,7 @@
 
     <dimen name="logo_width_main">100dp</dimen>
     <dimen name="logo_width_pin">80dp</dimen>
+    <dimen name="logo_width_asset">60dp</dimen>
 
     <dimen name="button_height">40dp</dimen>
     <dimen name="button_height_big">48dp</dimen>
@@ -19,7 +20,9 @@
 
     <dimen name="logo_width_dash">48dp</dimen>
 
-    <dimen name="text_size">14sp</dimen>
+    <dimen name="text_size_micro">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_big">18sp</dimen>
     <dimen name="text_size_xbig">20sp</dimen>
     <dimen name="text_size_xxbig">24sp</dimen>
@@ -124,8 +127,6 @@
     <dimen name="notification_icon_size">22dp</dimen>
 
     <!-- Font sizes -->
-    <dimen name="text_size_micro">12sp</dimen>
-    <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_xlarge">34sp</dimen>
     <dimen name="text_size_xxlarge">45sp</dimen>

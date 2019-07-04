@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/contact_letter"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/text_size_small"
         android:textColor="@color/white"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignParentStart="true"
@@ -55,6 +55,6 @@
         android:layout_alignBaseline="@+id/rounded_iv_profile"
         android:gravity="center_vertical"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/text_size_small"
         tools:text="Name Surname" />
 </RelativeLayout>

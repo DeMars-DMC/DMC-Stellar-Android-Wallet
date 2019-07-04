@@ -9,7 +9,7 @@
         android:id="@+id/itemLabel"
         android:textColor="@color/white"
         android:fontFamily="@font/opensans_regular"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/text_size_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

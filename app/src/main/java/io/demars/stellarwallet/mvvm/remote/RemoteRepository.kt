@@ -28,7 +28,6 @@ class RemoteRepository {
     Horizon.getLoadTradesTask(cursor, limit, listener).execute()
   }
 
-
   fun registerForEffects(cursor: String, listener: EventListener<EffectResponse>): SSEStream<EffectResponse>? {
     return Horizon.registerForEffects(cursor, listener)
   }

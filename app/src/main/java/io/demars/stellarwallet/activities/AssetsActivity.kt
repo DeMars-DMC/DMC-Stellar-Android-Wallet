@@ -1,9 +1,7 @@
 package io.demars.stellarwallet.activities
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.RelativeLayout
@@ -11,7 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
+import io.demars.stellarwallet.adapters.AssetsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.interfaces.OnLoadAccount
@@ -32,7 +30,7 @@ import org.stellar.sdk.responses.AccountResponse
 class AssetsActivity : BaseActivity(), AssetListener {
   private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
-  private lateinit var adapter: AssetsRecyclerViewAdapter
+  private lateinit var adapter: AssetsAdapter
 
   companion object {
     const val RC_OPEN_ACCOUNT = 111
@@ -87,7 +85,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
   //region User Interface
 
   private fun bindAdapter() {
-    adapter = AssetsRecyclerViewAdapter(this, this, assetsList)
+    adapter = AssetsAdapter(this, this, assetsList)
     assetsRecyclerView.adapter = adapter
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
   }

@@ -32,10 +32,9 @@
                 android:contentDescription="@string/receive"
                 android:paddingTop="@dimen/padding_horizontal"
                 android:paddingBottom="@dimen/padding_horizontal"
-                android:src="@drawable/ic_chevron_left"
-                app:layout_constraintBottom_toBottomOf="@+id/walletLogo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/walletLogo" />
+                android:paddingStart="@dimen/padding_zero"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:src="@drawable/ic_chevron_left"/>
 
         </androidx.appcompat.widget.Toolbar>
 

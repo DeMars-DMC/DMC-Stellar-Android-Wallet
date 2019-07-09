@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_big"
             android:layout_marginBottom="@dimen/padding_vertical"
-            android:background="@drawable/text_widget"
+            android:background="@drawable/bg_card_white"
             android:elevation="@dimen/elevation_mini"
             android:hint="@string/enter_the_contact_name"
             android:importantForAutofill="no"
@@ -94,7 +94,7 @@
             android:id="@+id/addressLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_big"
-            android:background="@drawable/text_widget"
+            android:background="@drawable/bg_card_white"
             android:elevation="2dp"
             android:orientation="horizontal"
             tool:ignore="UnusedAttribute">

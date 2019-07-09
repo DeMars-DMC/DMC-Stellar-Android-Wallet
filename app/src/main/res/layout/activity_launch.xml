@@ -17,6 +17,7 @@
         android:layout_marginTop="@dimen/padding_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_logo_dmc"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/verificationLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,12 +36,12 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/enter_your_phone_number"
-        app:layout_constraintTop_toBottomOf="@id/appLogo"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/appLogo" />
 
     <TextView
-        style="@style/WhiteDigitalInput"
         android:id="@+id/verificationText"
+        style="@style/WhiteDigitalInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -94,8 +95,8 @@
         android:visibility="gone"
         app:keypadButtonSize="@dimen/button_height_big"
         app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
-        app:keypadShowDeleteButton="true"
         app:keypadDotButtonDrawable="@null"
+        app:keypadShowDeleteButton="true"
         app:keypadShowDotButton="false"
         app:keypadTextColor="@color/black"
         app:keypadTextSize="@dimen/keypad_size"
@@ -114,9 +115,9 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/recover_wallet_message"
-        app:layout_constraintTop_toBottomOf="@id/appLogo"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/createWalletButton"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/appLogo" />
 
     <Button
         android:id="@+id/createWalletButton"
@@ -124,13 +125,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_above="@id/recoverWalletButton"
-        android:text="@string/create_new_wallet"
-        android:textSize="@dimen/text_size_big"
-        android:visibility="gone"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:layout_marginBottom="@dimen/padding_mini"
-        app:layout_constraintBottom_toTopOf="@id/recoverWalletButton"/>
+        android:text="@string/create_new_wallet"
+        android:textSize="@dimen/text_size_big"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/recoverWalletButton" />
 
     <Button
         android:id="@+id/recoverWalletButton"
@@ -138,12 +139,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:text="@string/recover_wallet"
-        android:textSize="@dimen/text_size_big"
-        android:visibility="gone"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:layout_marginBottom="@dimen/padding_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:text="@string/recover_wallet"
+        android:textSize="@dimen/text_size_big"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

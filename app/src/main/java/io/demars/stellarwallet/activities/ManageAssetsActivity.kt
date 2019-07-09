@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.WalletApplication
-import io.demars.stellarwallet.adapters.AssetsRecyclerViewAdapter
+import io.demars.stellarwallet.adapters.AssetsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
 import io.demars.stellarwallet.models.SessionAsset
@@ -18,6 +18,8 @@ import org.stellar.sdk.Asset
 import org.stellar.sdk.responses.AccountResponse
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.Observer
+import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.ViewUtils
 
@@ -26,7 +28,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   //region Properties
   private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
-  private lateinit var adapter: AssetsRecyclerViewAdapter
+  private var appBarOffset = 0
+  private lateinit var adapter: AssetsAdapter
   //endregion
 
   //region Init
@@ -36,35 +39,46 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     initAppBar()
     initUI()
     initAssets()
+    fetchAssets()
   }
 
   private fun initAppBar() {
     appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
-      val positiveOffset = -offset
+      appBarOffset = -offset
       val toolbarHeight = toolbar.height
       val scrollRange = appBar.totalScrollRange
-      if (positiveOffset in 0..toolbarHeight) {
-        walletLogo.alpha = 1f - (positiveOffset * 1.2f) / toolbarHeight
-        val balanceScale = 1f - 0.3f * (positiveOffset.toFloat() / toolbarHeight)
+      if (appBarOffset in 0..toolbarHeight) {
+        walletLogo.alpha = 1f - (appBarOffset * 1.2f) / toolbarHeight
+        val balanceScale = 1f - 0.3f * (appBarOffset.toFloat() / toolbarHeight)
         totalBalanceContainer.scaleX = balanceScale
         totalBalanceContainer.scaleY = balanceScale
         totalBalanceContainer.translationY = 0f
       } else {
         walletLogo.alpha = 0f
-        totalBalanceContainer.translationY = positiveOffset.toFloat() - toolbarHeight
+        totalBalanceContainer.translationY = appBarOffset.toFloat() - toolbarHeight
       }
 
-      val bottomAlpha = 1f - (positiveOffset * 2f) / scrollRange
+      val bottomAlpha = 1f - (appBarOffset * 2f) / scrollRange
       arrayOf(tradeButton, tradeLabel, reportingCurrency,
         reportingCurrencyLabel, detailsButton, detailsLabel).forEach {
         it.alpha = bottomAlpha
       }
 
-      walletDivider.scaleX = 1f + 0.2f * (positiveOffset.toFloat() / scrollRange)
+      walletDivider.scaleX = 1f + 0.2f * (appBarOffset.toFloat() / scrollRange)
     })
   }
 
   private fun initUI() {
+    swipeRefresh.setColorSchemeResources(R.color.colorAccent)
+    swipeRefresh.setOnRefreshListener {
+      fetchAssets()
+    }
+
+    receiveButton.setOnClickListener {
+      startActivity(ReceiveActivity.newInstance(this))
+      overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
+    }
+
     accountButton.setOnClickListener {
       startActivity(SettingsActivity.newInstance(this))
       overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
@@ -72,10 +86,17 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   }
 
   private fun initAssets() {
-    adapter = AssetsRecyclerViewAdapter(this, this, assetsList)
+    adapter = AssetsAdapter(this, this, assetsList)
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
     assetsRecyclerView.adapter = adapter
-    loadSupportedAssets()
+  }
+
+
+  private fun fetchAssets() {
+    swipeRefresh.isRefreshing = true
+    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
+      loadSupportedAssets()
+    })
   }
 
   private fun updateAdapter() {
@@ -88,6 +109,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     }
 
     adapter.notifyDataSetChanged()
+    swipeRefresh?.isRefreshing = false
   }
   //endregion
 
@@ -179,6 +201,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
       }
       Constants.DMC_ASSET_TYPE -> {
         // TODO: TRADE DMC
+
       }
       else -> {
         if (WalletApplication.wallet.isVerified()) {

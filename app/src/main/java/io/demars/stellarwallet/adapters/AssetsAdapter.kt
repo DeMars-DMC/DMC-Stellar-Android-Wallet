@@ -21,9 +21,9 @@ import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 
-class AssetsRecyclerViewAdapter(private var context: Context,
-                                private var listener: AssetListener,
-                                private var items: ArrayList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AssetsAdapter(private var context: Context,
+                    private var listener: AssetListener,
+                    private var items: ArrayList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   companion object {
     const val TYPE_ASSET = 0
     const val TYPE_HEADER = 1

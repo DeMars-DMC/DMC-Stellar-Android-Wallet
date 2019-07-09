@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.adapters.WalletRecyclerViewAdapter
+import io.demars.stellarwallet.adapters.TransactionsAdapter
 import io.demars.stellarwallet.mvvm.WalletViewState
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -62,8 +62,8 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     ContactsRepositoryImpl(activity!!).getContactsListLiveData(true)
       .observe(viewLifecycleOwner, Observer {
         stellarContacts = ArrayList(it.stellarContacts)
-        if (walletRecyclerView.adapter is WalletRecyclerViewAdapter) {
-          (walletRecyclerView.adapter as WalletRecyclerViewAdapter).setContacts(stellarContacts)
+        if (walletRecyclerView.adapter is TransactionsAdapter) {
+          (walletRecyclerView.adapter as TransactionsAdapter).setContacts(stellarContacts)
           walletRecyclerView.adapter?.notifyDataSetChanged()
         }
       })
@@ -91,7 +91,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     payButton.setOnClickListener {
       payButton.isEnabled = false
       activity?.let { activityContext ->
-        startActivity(StellarAddressActivity.toSend(it.context))
+        startActivity(StellarAddressActivity.toPay(it.context))
         activityContext.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
       }
     }
@@ -154,7 +154,6 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     list.array.add(TotalBalance(WalletState.UPDATING, "Refreshing Wallet", "", "Updating..."))
     list.array.add(AvailableBalance("XLM", null, "-1"))
     list.array.add(Pair("Activity", "Amount"))
-    list.hideAvailableBalance()
     val delta = System.currentTimeMillis() - time
     Timber.d("createListWrapper(), it took: $delta ms")
     return list
@@ -216,18 +215,10 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
         WalletState.UPDATING -> {
           //we had to hide the list of effects :(
-          listWrapper.updateTotalBalance(TotalBalance(newState, "Refreshing Wallet", "", "Updating..."))
-          listWrapper.hidePair()
-          listWrapper.hideAvailableBalance()
         }
         WalletState.ERROR -> {
-          listWrapper.updateTotalBalance(TotalBalance(newState, "Error fetching from Horizon", "", "Error"))
-          listWrapper.hidePair()
         }
         WalletState.NOT_FUNDED -> {
-          listWrapper.updateTotalBalance(TotalBalance(newState, "Account Funding Required", "", "0.00"))
-          listWrapper.hideAvailableBalance()
-          listWrapper.hidePair()
         }
         else -> {
           //nothing
@@ -243,7 +234,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
               qrRendered = true
             }
 
-            (walletRecyclerView.adapter as WalletRecyclerViewAdapter)
+            (walletRecyclerView.adapter as TransactionsAdapter)
               .updateData(listWrapper.array)
             updatePlaceHolders(newState)
           }
@@ -318,28 +309,9 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   /**
    * It will reset the array list.
    */
-  private fun createAdapter(): WalletRecyclerViewAdapter {
-    val adapter = WalletRecyclerViewAdapter(activity!!)
+  private fun createAdapter(): TransactionsAdapter {
+    val adapter = TransactionsAdapter(activity!!)
     adapter.setContacts(stellarContacts)
-    adapter.setOnAssetDropdownListener(object : WalletRecyclerViewAdapter.OnAssetDropdownListener {
-      override fun onAssetDropdownClicked(view: View, position: Int) {
-        activity?.let {
-          (it as WalletActivity).openAssetsActivity()
-        }
-      }
-    })
-    adapter.setOnLearnMoreButtonListener(object : WalletRecyclerViewAdapter.OnLearnMoreButtonListener {
-      override fun onLearnMoreButtonClicked(view: View, assetCode: String, issuer: String?, position: Int) {
-        activity?.let {
-          if (assetCode == "native" || issuer.isNullOrBlank()) {
-            startActivity(BalanceSummaryActivity.newNativeAssetIntent(it))
-          } else {
-            startActivity(BalanceSummaryActivity.newIntent(it, assetCode, issuer))
-          }
-          it.overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
-        }
-      }
-    })
     return adapter
   }
 
@@ -348,9 +320,6 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                                  totalAssetBalance: TotalBalance): WalletHeterogeneousWrapper {
     val time = System.currentTimeMillis()
     val list = createListWrapper()
-    list.showAvailableBalance(availableBalance)
-    list.updateTotalBalance(totalAssetBalance)
-    list.updateAvailableBalance(availableBalance)
     list.updateOperationsList(activeAsset, operations)
     list.updateTradesList(activeAsset, trades)
     val delta = System.currentTimeMillis() - time

@@ -29,7 +29,7 @@
                 app:layout_collapseMode="pin">
 
                 <ImageButton
-                    android:id="@+id/exchangeButton"
+                    android:id="@+id/receiveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/padding_horizontal"
@@ -183,9 +183,9 @@
                 <View
                     android:id="@+id/walletDivider"
                     style="@style/HorizontalDividerWhite"
-                    android:layout_marginStart="@dimen/padding_vertical"
+                    android:layout_marginStart="@dimen/padding_horizontal"
                     android:layout_marginTop="@dimen/padding_horizontal"
-                    android:layout_marginEnd="@dimen/padding_vertical"
+                    android:layout_marginEnd="@dimen/padding_horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/reportingCurrencyLabel" />
@@ -193,13 +193,18 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assetsRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fadeScrollbars="false"
-        android:overScrollMode="never"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assetsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:overScrollMode="never" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

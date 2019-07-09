@@ -3,6 +3,7 @@ package io.demars.stellarwallet.helpers
 /**
  * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">BIP-0039 Standard</a>
  */
+// TODO: REMOVE OR MOVE SOMEWHERE ELSE
 enum class Bip0039(val numberOfWords: Int) {
     TWELVE_WORDS(12),
     FIFTEEN_WORDS(15),

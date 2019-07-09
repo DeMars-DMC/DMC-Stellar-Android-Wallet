@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/padding_vertical"
+    android:layout_marginStart="@dimen/padding_horizontal"
     android:layout_marginTop="@dimen/padding_horizontal"
-    android:layout_marginEnd="@dimen/padding_vertical"
+    android:layout_marginEnd="@dimen/padding_horizontal"
     android:paddingTop="@dimen/padding_mini"
     android:background="@drawable/background_card_transparent">
 
@@ -42,7 +42,6 @@
         android:layout_width="@dimen/logo_width_asset"
         android:layout_height="@dimen/logo_width_asset"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:paddingTop="@dimen/padding_mini"
         android:paddingBottom="@dimen/padding_mini"
@@ -55,7 +54,7 @@
         android:layout_width="@dimen/logo_width_asset"
         android:layout_height="@dimen/logo_width_asset"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         android:background="@drawable/bg_round_button_grey"
         android:gravity="center"
         android:textColor="@color/white"
@@ -79,7 +78,6 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="0.5"
             android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/roboto_light"
             android:text="@string/buy"
             android:textColor="@color/colorAccent" />
 
@@ -90,7 +88,6 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="0.5"
             android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/roboto_light"
             android:text="@string/set_inflation"
             android:textColor="@color/colorAccent" />
 

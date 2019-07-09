@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import io.demars.stellarwallet.R
 import kotlinx.android.synthetic.main.activity_view_secret_seed.*
@@ -29,7 +28,7 @@ class ViewSecretSeedActivity : BaseActivity() {
             val secretSeed = it.getString(ARG_SECRET_SEED)
             secretSeed?.let {
                 secretSeedTextView.text = secretSeed
-                copyImageButton.setOnClickListener { copyAddressToClipBoard(secretSeed)  }
+                copyAddressButton.setOnClickListener { copyAddressToClipBoard(secretSeed)  }
             }
         }
         setSupportActionBar(toolbar)

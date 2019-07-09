@@ -20,7 +20,7 @@
     <string name="no_network">There was a problem connecting to the network. Attempting to reconnect.</string>
     <string name="balance_template">%1$s %2$s</string>
     <string name="asset_template">%1$s (%2$s)</string>
-    <string name="bracket_template">(%1$s)</string>
+    <string name="negative_template">-%1$s</string>
     <string name="exchange_item_template">Exchange %1$s for %2$s</string>
 
     <!--Wallet Fragment-->
@@ -117,7 +117,7 @@
     <!--PIN Screen-->
     <string name="please_enter_your_pin">Please enter your PIN code</string>
     <string name="please_reenter_your_pin">Please re-enter your PIN code</string>
-    <string name="please_create_a_pin">Please create a PIN code. Do not reuse your phone PIN</string>
+    <string name="please_create_a_pin">Please create a PIN code.\nDo not reuse your phone PIN</string>
     <string name="pin_correct">PIN Correct!</string>
     <string name="pin_incorrect">PIN Incorrect!</string>
     <string name="pin_canceled">PIN Verification Canceled</string>
@@ -270,6 +270,7 @@
     <string name="add_asset">Add asset</string>
     <string name="pay_to_contact">Pay to contact</string>
     <string name="pattern_price">Price: %s</string>
+    <string name="pattern_memo">Memo: %s</string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="verify_phone_number">Verify phone number</string>
     <string name="continue_as_guest">Continue as guest</string>
@@ -390,4 +391,5 @@
     <string name="assets">Assets</string>
     <string name="remove_asset">Remove asset</string>
     <string name="learn">Learn</string>
+    <string name="receive_payments">Receive payments</string>
 </resources>

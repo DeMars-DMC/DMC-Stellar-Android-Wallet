@@ -38,7 +38,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private enum class Mode {
-    INITIAL, CODE, VERIFYING, WALLET, NO_INTERNET
+    INITIAL, CODE, WALLET, NO_INTERNET
   }
 
   private var mode = Mode.INITIAL
@@ -103,7 +103,6 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     when (mode) {
       Mode.INITIAL -> updateViewForInitial()
       Mode.CODE -> updateViewForCode()
-      Mode.VERIFYING -> updateViewForVerifying()
       Mode.WALLET -> updateViewForStellar()
       Mode.NO_INTERNET -> updateViewForNoInternet()
     }
@@ -114,6 +113,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
     createWalletButton.visibility = View.GONE
     recoverWalletButton.visibility = View.GONE
+
+    appLogo.visibility = View.VISIBLE
 
     verificationLabel.visibility = View.VISIBLE
     verificationLabel.text = getString(R.string.enter_your_phone_number)
@@ -139,6 +140,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     createWalletButton.visibility = View.GONE
     recoverWalletButton.visibility = View.GONE
 
+    appLogo.visibility = View.VISIBLE
+
     verificationText.visibility = View.VISIBLE
     verificationText.text = formatSmsCode()
 
@@ -156,18 +159,6 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     smsTimer.start()
   }
 
-  private fun updateViewForVerifying() {
-    verificationText.visibility = View.GONE
-    loginButton.visibility = View.GONE
-    dialerView.visibility = View.GONE
-    loginMessage.visibility = View.GONE
-    createWalletButton.visibility = View.GONE
-    recoverWalletButton.visibility = View.GONE
-
-    verificationLabel.visibility = View.VISIBLE
-    verificationLabel.text = getString(R.string.account_verifying_message)
-  }
-
   private fun updateViewForStellar() {
     if (!GlobalGraphHelper.isExistingWallet()) {
       verificationLabel.visibility = View.GONE
@@ -175,6 +166,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       loginButton.visibility = View.GONE
       dialerView.visibility = View.GONE
       loginMessage.visibility = View.GONE
+
+      appLogo.visibility = View.VISIBLE
 
       if (dmcUser?.stellar_address.isNullOrBlank()) {
         walletLabel.visibility = View.VISIBLE
@@ -373,6 +366,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
 
   private fun hideUI() {
+    appLogo.visibility = View.GONE
     verificationText.visibility = View.GONE
     verificationLabel.visibility = View.GONE
     loginMessage.visibility = View.GONE

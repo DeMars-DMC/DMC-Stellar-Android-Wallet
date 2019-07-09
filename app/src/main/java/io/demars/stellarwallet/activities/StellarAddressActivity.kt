@@ -43,7 +43,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
     private const val ARG_MODE = "ARG_MODE"
     private const val ARG_CONTACT = "ARG_CONTACT"
 
-    fun toSend(context: Context): Intent {
+    fun toPay(context: Context): Intent {
       val intent = Intent(context, StellarAddressActivity::class.java)
       intent.putExtra(ARG_MODE, Mode.PAY_TO)
       return intent
@@ -250,6 +250,10 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
     return super.onOptionsItemSelected(item)
   }
 
+  override fun onBackPressed() {
+    super.onBackPressed()
+    overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
+  }
 
   //endregion
 }

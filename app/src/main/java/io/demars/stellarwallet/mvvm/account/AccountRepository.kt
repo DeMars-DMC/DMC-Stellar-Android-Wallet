@@ -21,6 +21,7 @@ object AccountRepository {
 
   private var accountResponse: AccountResponse? = null
   private var isBusy = false
+
   /**
    * Returns an observable for ALL the effects table changes
    */

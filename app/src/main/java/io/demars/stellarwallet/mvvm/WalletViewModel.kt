@@ -35,8 +35,6 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
   private var walletViewState: MutableLiveData<WalletViewState> = MutableLiveData()
   private var state: WalletState = WalletState.UPDATING
 
-  private var handler = Handler()
-  private var runnableCode: Runnable? = null
   private var canRefresh = false
 
   init {

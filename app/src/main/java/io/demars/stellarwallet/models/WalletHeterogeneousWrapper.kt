@@ -1,90 +1,33 @@
 package io.demars.stellarwallet.models
 
-import io.demars.stellarwallet.WalletApplication
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.models.stellar.Effect
 import io.demars.stellarwallet.models.stellar.EffectType
 import io.demars.stellarwallet.models.stellar.Operation
 import io.demars.stellarwallet.models.stellar.Trade
-import io.demars.stellarwallet.models.stellar.TradeEffect
-import io.demars.stellarwallet.models.stellar.Transaction
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.Response
 import org.stellar.sdk.responses.TradeResponse
-import org.stellar.sdk.responses.TransactionResponse
 import org.stellar.sdk.responses.effects.*
 import org.stellar.sdk.responses.operations.*
 import org.threeten.bp.Instant
 
 class WalletHeterogeneousWrapper {
 
-  companion object {
-    const val TOTAL_INDEX = 0
-    const val AVAILABLE_INDEX = 1
-    const val PAIR_INDEX = 2
-    const val EFFECTS_LIST_INDEX = 3
-  }
-
   var array: ArrayList<Any> = ArrayList()
-  private var availableBalanceOffset = 0
 
   //region Update methods
 
-  fun updateTotalBalance(balance: TotalBalance) {
-    array.removeAt(TOTAL_INDEX)
-    array.add(TOTAL_INDEX, balance)
-  }
 
-  fun updateAvailableBalance(balance: AvailableBalance) {
-    if (WalletApplication.userSession.getSessionAsset().assetCode == Constants.LUMENS_ASSET_TYPE) {
-      array.removeAt(AVAILABLE_INDEX)
-      array.add(AVAILABLE_INDEX, balance)
-    }
-  }
-
-  fun updatePair(p: Pair<*, *>) {
-    array.removeAt(PAIR_INDEX - availableBalanceOffset)
-    array.add(PAIR_INDEX - availableBalanceOffset, p)
-  }
-
-  fun hidePair() {
-    if (array.size > PAIR_INDEX - availableBalanceOffset) {
-      array.removeAt(PAIR_INDEX - availableBalanceOffset)
-    }
-  }
 
   fun updateOperationsList(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>?) {
-    array.subList(EFFECTS_LIST_INDEX - availableBalanceOffset, array.size).clear()
+    array.clear()
     addFilteredOperations(activeAsset, list)
-  }
-
-  fun updateEffectsList(activeAsset: String, list: ArrayList<EffectResponse>?) {
-    array.subList(EFFECTS_LIST_INDEX - availableBalanceOffset, array.size).clear()
-    addFilteredEffects(activeAsset, list)
-  }
-
-  fun updateTransactionsList(activeAsset: String, list: ArrayList<TransactionResponse>?) {
-    addFilteredTransactions(activeAsset, list)
   }
 
   fun updateTradesList(activeAsset: String, list: ArrayList<TradeResponse>?) {
     addFilteredTrades(activeAsset, list)
   }
   //endregion
-
-  fun hideAvailableBalance() {
-    if (availableBalanceOffset == 0) {
-      array.removeAt(AVAILABLE_INDEX)
-      availableBalanceOffset = 1
-    }
-  }
-
-  fun showAvailableBalance(balance: AvailableBalance) {
-    if (availableBalanceOffset != 0) {
-      availableBalanceOffset = 0
-      array.add(AVAILABLE_INDEX, balance)
-    }
-  }
 
   private fun addFilteredOperations(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>?) {
     val filteredOperations = getFilteredOperations(list, activeAsset)
@@ -93,25 +36,11 @@ class WalletHeterogeneousWrapper {
     }
   }
 
-  private fun addFilteredEffects(activeAsset: String, list: ArrayList<EffectResponse>?) {
-    val filteredEffects = getFilteredEffects(list, activeAsset)
-    if (filteredEffects != null) {
-      array.addAll(convertEffectsToAccountEffects(activeAsset, filteredEffects))
-    }
-  }
-
-  private fun addFilteredTransactions(activeAsset: String, list: ArrayList<TransactionResponse>?) {
-    val filteredTransactions = getFilteredTransactions(list, activeAsset)
-    if (filteredTransactions != null) {
-      array.addAll(convertResponseToTransaction(filteredTransactions))
-    }
-  }
-
   private fun addFilteredTrades(activeAsset: String, list: ArrayList<TradeResponse>?) {
     val filteredTrades = getFilteredTrades(list, activeAsset)
     if (filteredTrades != null) {
       array.addAll(convertResponseToTrade(activeAsset, filteredTrades))
-      array.subList(EFFECTS_LIST_INDEX - availableBalanceOffset, array.size).sortByDescending {
+      array.sortByDescending {
         when (it) {
           is Trade -> Instant.parse(it.createdAt).toEpochMilli()
           else -> Instant.parse((it as Operation).createdAt).toEpochMilli()
@@ -140,32 +69,32 @@ class WalletHeterogeneousWrapper {
     } as ArrayList)
   }
 
-  private fun getFilteredOperations(list: ArrayList<Pair<OperationResponse, String?>>?, assetType: String): ArrayList<Pair<OperationResponse, String?>>? {
+  private fun getFilteredOperations(list: ArrayList<Pair<OperationResponse, String?>>?, assetCode: String): ArrayList<Pair<OperationResponse, String?>>? {
     if (list == null) return null
 
-    val newList = ArrayList<Pair<OperationResponse, String?>>(list)
+    val newList = ArrayList(list)
     val returnList = ArrayList<Pair<OperationResponse, String?>>()
     for (it in newList) {
       when (it.first) {
         is CreateAccountOperationResponse -> {
-          if (assetType == Constants.LUMENS_ASSET_TYPE) {
+          if (assetCode == Constants.LUMENS_ASSET_CODE) {
             returnList.add(it)
           }
         }
         is PaymentOperationResponse -> {
-          if (assetType == getAssetCode(it.first)) {
+          if (assetCode == getAssetCode(it.first)) {
             returnList.add(it)
           }
         }
         is PathPaymentOperationResponse -> {
         }
         is ChangeTrustOperationResponse -> {
-          if (assetType == getAssetCode(it.first)) {
+          if (assetCode == getAssetCode(it.first)) {
             returnList.add(it)
           }
         }
         is AllowTrustOperationResponse -> {
-          if (assetType == getAssetCode(it.first)) {
+          if (assetCode == getAssetCode(it.first)) {
             returnList.add(it)
           }
         }
@@ -181,31 +110,12 @@ class WalletHeterogeneousWrapper {
     return returnList
   }
 
-  private fun getFilteredTransactions(list: ArrayList<TransactionResponse>?, assetType: String): ArrayList<TransactionResponse>? {
-    if (list == null) return null
-
-    return (list.filter {
-      it.isSuccessful
-    } as ArrayList)
-  }
-
   private fun getFilteredTrades(list: ArrayList<TradeResponse>?, assetType: String): ArrayList<TradeResponse>? {
     if (list == null) return null
 
     return (list.filter {
       convertAsset(it.baseAsset) == assetType || convertAsset(it.counterAsset) == assetType
     } as ArrayList)
-  }
-
-  private fun convertEffectsToAccountEffects(activeAsset: String, list: ArrayList<EffectResponse>): ArrayList<Any> {
-    return list.map {
-      if (it is TradeEffectResponse) {
-        return@map TradeEffect(activeAsset, it.type, it.createdAt, convertAsset(it.boughtAsset), convertAsset(it.soldAsset),
-          it.boughtAmount, it.soldAmount)
-      } else {
-        return@map Effect(it.type, it.createdAt, getAssetCode(it), getAmount(it))
-      }
-    } as ArrayList
   }
 
   private fun convertResponseToOperation(list: ArrayList<Pair<OperationResponse, String?>>): ArrayList<Operation> {
@@ -217,13 +127,6 @@ class WalletHeterogeneousWrapper {
         operation.transactionHash, operation.links.transaction.href,
         getAmount(operation), getFrom(operation), getTo(operation),
         getAssetCode(operation), getCounterAssetCode(operation), getPrice(operation), memo)
-    } as ArrayList
-  }
-
-  private fun convertResponseToTransaction(list: ArrayList<TransactionResponse>): ArrayList<Transaction> {
-    return list.map {
-      return@map Transaction("Transaction", it.createdAt, "XLM", "amount",
-        convertMemo(it.memo), it.sourceAccount.accountId, it.feePaid.toString(), it.operationCount, it.isSuccessful)
     } as ArrayList
   }
 
@@ -247,9 +150,9 @@ class WalletHeterogeneousWrapper {
       is ManageBuyOfferOperationResponse -> convertAsset(response.sellingAsset)
       is ChangeTrustOperationResponse -> convertAsset(response.asset)
       is AllowTrustOperationResponse -> convertAsset(response.asset)
-      is TrustlineCreatedEffectResponse -> (response.asset as AssetTypeCreditAlphaNum).code
-      is TrustlineRemovedEffectResponse -> (response.asset as AssetTypeCreditAlphaNum).code
-      is TrustlineUpdatedEffectResponse -> (response.asset as AssetTypeCreditAlphaNum).code
+      is TrustlineCreatedEffectResponse -> convertAsset(response.asset)
+      is TrustlineRemovedEffectResponse -> convertAsset(response.asset)
+      is TrustlineUpdatedEffectResponse -> convertAsset(response.asset)
       else -> null
     }
   }
@@ -270,14 +173,10 @@ class WalletHeterogeneousWrapper {
 
   private fun convertAsset(asset: Asset): String {
     return if (asset is AssetTypeCreditAlphaNum) {
-      asset.code
+      asset.code.toUpperCase()
     } else {
-      (asset as AssetTypeNative).type
+      "XLM"
     }
-  }
-
-  private fun convertMemo(memo: Memo): String? {
-    return if (memo is MemoText) memo.text else null
   }
 
   private fun getFrom(response: OperationResponse): String? {

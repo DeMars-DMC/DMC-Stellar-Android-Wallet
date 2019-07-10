@@ -107,13 +107,19 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val ngnt = DmcAsset(Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
       Constants.NGNT_ASSET_ISSUER, Constants.NGNT_ASSET_NAME, "", false, null)
 
+    val currencies = ArrayList<DmcAsset>()
+    val customs = ArrayList<DmcAsset>()
+
+    val cryptos = ArrayList<DmcAsset>().apply {
+      add(dmc)
+      add(xlm)
+    }
+
+    // We will remove assets from here if already added to the wallet
     val supported = ArrayList<DmcAsset>().apply {
       add(zar)
       add(ngnt)
     }
-
-    val currencies = ArrayList<DmcAsset>()
-    val customs = ArrayList<DmcAsset>()
 
     balances.forEach {
       when {
@@ -149,61 +155,81 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
     items = items.apply {
       var index = 0
-      if (currencies.isNotEmpty()) {
-        if (isCustomizing) {
-          add("Currencies")
-          notifyItemInserted(index)
-          index += 1
-        } else if (contains("Currencies")) {
-          remove("Currencies")
-          notifyItemRemoved(index)
-        }
-
-        if (initial) {
-          addAll(currencies)
-          notifyItemRangeInserted(index, index + currencies.size)
-          index += currencies.size
-        } else {
-
-        }
-      }
-
-      if (customs.isNotEmpty()) {
-//        add("Custom assets")
-        if (initial) {
-          addAll(customs)
-          notifyItemRangeInserted(index, index + currencies.size)
-          index += currencies.size
-        }
-      }
-
-      if (isCustomizing) {
-        add("Cryptos")
-        notifyItemInserted(index)
-        index += 1
-      } else {
-        remove("Cryptos")
-        notifyItemRemoved(index)
-      }
-
       if (initial) {
-        add(dmc)
-        add(xlm)
-        add("Footer")
-        notifyItemRangeInserted(index, index + 3)
-        index += 3
-      } else {
-        notifyItemChanged(index + 1)
-      }
+        if (currencies.isNotEmpty()) {
+          addAll(currencies)
+          notifyItemRangeInserted(index, currencies.size)
+          index += currencies.size
+        }
 
-//      if (supported.isNotEmpty()) {
-//        add("DMC assets")
-//        addAll(supported)
-//      }
-//      add("addAssetButton")
+        if (customs.isNotEmpty()) {
+          addAll(customs)
+          notifyItemRangeInserted(index, customs.size)
+          index += customs.size
+        }
+
+        addAll(cryptos)
+        add("Footer")
+        notifyItemRangeInserted(index,cryptos.size + 1)
+      } else {
+        if (currencies.isNotEmpty()) {
+          index += if (isCustomizing) {
+            add(index, "Currencies")
+            notifyItemInserted(index)
+            currencies.size + 1
+          } else {
+            remove("Currencies")
+            notifyItemRemoved(index)
+            currencies.size
+          }
+        }
+
+        if (customs.isNotEmpty()) {
+          index += if (isCustomizing) {
+            add(index, "Custom assets")
+            notifyItemInserted(index)
+            customs.size + 1
+          } else {
+            remove("Custom assets")
+            notifyItemRemoved(index)
+            customs.size
+          }
+        }
+
+        index += if (isCustomizing) {
+          add(index, "Cryptos")
+          notifyItemInserted(index)
+          cryptos.size + 1
+        } else {
+          remove("Cryptos")
+          notifyItemRemoved(index)
+          cryptos.size
+        }
+
+        if (supported.isNotEmpty()) {
+          index += if (isCustomizing) {
+            add(index, "Add assets")
+            notifyItemInserted(index)
+            1
+          } else {
+            remove("Add assets")
+            notifyItemRemoved(index)
+            0
+          }
+
+          if (isCustomizing) {
+            addAll(index, supported)
+            notifyItemRangeInserted(index, supported.size)
+          } else {
+            removeAll(supported)
+            notifyItemRangeRemoved(index, supported.size)
+          }
+        }
+
+        notifyItemChanged(size - 1)
+      }
     }
   }
-
   //region View Holders
 
   class AssetHeaderViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -250,7 +276,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.icon.setImageResource(R.drawable.ic_add_green)
       viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_green)
       viewHolder.button.setOnClickListener {
-        listener.addCustomAsset()
+        isCustomizing = false
+        updateAdapter()
+//        listener.addCustomAsset()
       }
     } else {
       viewHolder.title.setText(R.string.customize_wallet)

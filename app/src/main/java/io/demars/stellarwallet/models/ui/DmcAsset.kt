@@ -14,5 +14,23 @@ import org.stellar.sdk.Asset
 
 data class DmcAsset(var code: String, var image: Int, var issuer: String,
                     var name: String, var amount: String?,
-                    var isAdded: Boolean = false, var asset: Asset?)
+                    var isAdded: Boolean = false, var asset: Asset?) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as DmcAsset
+
+    if (code != other.code) return false
+    if (issuer != other.issuer) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = code.hashCode()
+    result = 31 * result + issuer.hashCode()
+    return result
+  }
+}
 

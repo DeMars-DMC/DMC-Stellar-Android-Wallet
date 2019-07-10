@@ -5,7 +5,7 @@
         android:angle="90"
         android:endColor="@color/blueDark"
         android:centerColor="@color/blueRegular"
-        android:startColor="@color/blueLight"
+        android:startColor="@color/blueRegular"
         android:type="linear" />
 
     <corners

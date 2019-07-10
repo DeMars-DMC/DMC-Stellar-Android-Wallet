@@ -1,0 +1,31 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footerButton"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/button_height_big"
+    android:layout_marginStart="@dimen/padding_horizontal"
+    android:layout_marginTop="@dimen/padding_mini"
+    android:layout_marginEnd="@dimen/padding_horizontal"
+    android:layout_marginBottom="@dimen/padding_mini"
+    android:paddingStart="@dimen/padding_horizontal"
+    android:paddingEnd="@dimen/padding_horizontal"
+    android:background="@drawable/background_card_transparent_green"
+    android:orientation="horizontal">
+
+    <TextView
+        style="@style/WhiteTitle"
+        android:id="@+id/footerTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/colorGreen"
+        android:singleLine="true"
+        android:text="@string/add_custom_asset"
+        android:textSize="@dimen/text_size_medium" />
+
+    <ImageView
+        android:id="@+id/footerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_add_green"
+        android:layout_gravity="end|center_vertical"/>
+</FrameLayout>

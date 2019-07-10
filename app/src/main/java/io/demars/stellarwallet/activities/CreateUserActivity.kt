@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
@@ -63,7 +63,7 @@ class CreateUserActivity : AppCompatActivity() {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
       user = dataSnapshot.getValue(DmcUser::class.java)
       user?.let {
-        WalletApplication.wallet.setUserState(it.state)
+        DmcApp.wallet.setUserState(it.state)
         isCreating = !it.isRegistrationCompleted()
         initUI()
       } ?: finish()
@@ -242,7 +242,7 @@ class CreateUserActivity : AppCompatActivity() {
       user.created_at = System.currentTimeMillis()
 
       // Update locally
-      WalletApplication.wallet.setUserState(user.state)
+      DmcApp.wallet.setUserState(user.state)
 
       // Update remote firebase
       Firebase.getDatabaseReference().child("users")

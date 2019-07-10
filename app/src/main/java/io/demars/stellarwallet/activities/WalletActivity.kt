@@ -10,7 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.fragments.*
 import io.demars.stellarwallet.utils.GlobalGraphHelper
@@ -39,7 +39,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
   private val userListener = object : ValueEventListener {
     override fun onDataChange(data: DataSnapshot) {
       data.getValue(DmcUser::class.java)?.let {
-        WalletApplication.wallet.setUserState(it.state)
+        DmcApp.wallet.setUserState(it.state)
       }
     }
 
@@ -52,7 +52,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
 
     dialogTradeAlert = createTradingErrorDialog()
 
-    WalletApplication.wallet.getStellarAccountId().let { address ->
+    DmcApp.wallet.getStellarAccountId().let { address ->
       Firebase.getCurrentUserUid()?.let { uid ->
         Firebase.getUserStellarAddress(object : ValueEventListener {
           override fun onDataChange(data: DataSnapshot) {
@@ -202,7 +202,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
   }
 
   private fun enoughAssetsToTrade(): Boolean {
-    val balances = WalletApplication.wallet.getBalances()
+    val balances = DmcApp.wallet.getBalances()
     //minimum 2 assets to trade
     return balances.size > 1
   }

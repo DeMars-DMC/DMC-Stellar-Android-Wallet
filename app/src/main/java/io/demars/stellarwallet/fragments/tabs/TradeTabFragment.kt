@@ -10,7 +10,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.Currency
@@ -352,7 +352,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     sellingCustomSelector.editText.isEnabled = false
     buyingCustomSelector.editText.isEnabled = false
 
-    WalletApplication.userSession.getAvailableBalance()
+    DmcApp.userSession.getAvailableBalance()
 
     val sellingAmountFormatted: String
     val priceFormatted: String
@@ -407,7 +407,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun refreshAddedCurrencies() {
-    val accounts = WalletApplication.wallet.getBalances()
+    val accounts = DmcApp.wallet.getBalances()
     addedCurrencies.clear()
     var i = 0
     var native: Currency? = null

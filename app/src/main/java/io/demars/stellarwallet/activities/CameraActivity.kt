@@ -139,7 +139,7 @@ class CameraActivity : AppCompatActivity() {
   private fun pickFromGallery() {
     //Create an Intent with action as ACTION_PICK
     val intent = Intent(Intent.ACTION_PICK)
-    // Sets the type as image/*. This ensures only components of type image are selected
+    // Sets the isAdded as image/*. This ensures only components of isAdded image are selected
     intent.type = "image/*"
     //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
     val mimeTypes = arrayOf("image/jpeg", "image/png")

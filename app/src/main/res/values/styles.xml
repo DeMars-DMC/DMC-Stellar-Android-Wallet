@@ -27,10 +27,10 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="actionMenuTextColor">@color/white</item>
+        <item name="colorControlHighlight">@color/whiteMain</item>
+        <item name="colorControlNormal">@color/whiteMain</item>
+        <item name="android:textColorPrimary">@color/whiteMain</item>
+        <item name="actionMenuTextColor">@color/whiteMain</item>
         <item name="android:background">@color/blueDark</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
@@ -60,7 +60,7 @@
     </style>
 
     <style name="WhiteDescription" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
@@ -79,14 +79,14 @@
 
 
     <style name="WhiteLabel" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_micro</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="WhiteTitle" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textAllCaps">true</item>
@@ -113,13 +113,13 @@
     </style>
 
     <style name="WhiteRegularText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
     <style name="WhiteDigitalInput" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_xxbig</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
@@ -156,25 +156,25 @@
 
     <style name="ButtonStyleAccent" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_accent</item>
     </style>
 
     <style name="ButtonStyleAccentFlat" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_accent_flat</item>
     </style>
 
     <style name="ButtonStyleYellow" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_yellow</item>
     </style>
 
     <style name="ButtonStyleBlue" parent="ButtonStyle">
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_blue</item>
     </style>
 

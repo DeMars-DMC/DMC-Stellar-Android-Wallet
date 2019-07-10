@@ -84,7 +84,7 @@
                 app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
                 app:keypadHorizontalSpacing="@dimen/pin_spacing_horizontal"
                 app:keypadShowDeleteButton="true"
-                app:keypadTextColor="@color/white"
+                app:keypadTextColor="@color/whiteMain"
                 app:keypadTextSize="@dimen/keypad_size"
                 app:keypadVerticalSpacing="@dimen/pin_spacing_vertical"
                 app:pinLength="4" />

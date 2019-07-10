@@ -4,17 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.text.Spanned
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.stellar.HorizonException
@@ -71,7 +66,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
     send_button.setOnClickListener {
       if (amount <= amountAvailable && amount != 0.0) {
-        if (WalletApplication.wallet.getShowPinOnSend()) {
+        if (DmcApp.wallet.getShowPinOnSend()) {
           startActivityForResult(WalletManagerActivity.verifyPin(it.context), REQUEST_PIN)
         } else {
           sendPayment()
@@ -91,7 +86,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   @SuppressLint("SetTextI18n")
   private fun updateAvailableBalance() {
-    assetCode = WalletApplication.userSession.getSessionAsset().assetCode
+    assetCode = DmcApp.userSession.getSessionAsset().assetCode
     assetCode = if (assetCode == "native") "XLM" else assetCode
     val available = AccountUtils.getAvailableBalance(assetCode)
     val maxDecimals = AssetUtils.getMaxDecimals(assetCode)

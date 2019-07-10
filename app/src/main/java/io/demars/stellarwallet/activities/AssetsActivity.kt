@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.adapters.AssetsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
@@ -16,6 +16,7 @@ import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.models.stellar.HorizonException
+import io.demars.stellarwallet.models.ui.DmcAsset
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
@@ -28,7 +29,7 @@ import org.stellar.sdk.responses.AccountResponse
 
 
 class AssetsActivity : BaseActivity(), AssetListener {
-  private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
+  private var map: LinkedHashMap<String, DmcAsset> = LinkedHashMap()
   private var assetsList: ArrayList<Any> = ArrayList()
   private lateinit var adapter: AssetsAdapter
 
@@ -63,7 +64,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
     }
 
     setInflationButton.setOnClickListener {
-      }
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,25 +75,24 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   private fun updateOpenAccountButton() {
-    val isRegistered = WalletApplication.wallet.isRegistered()
+    val isRegistered = DmcApp.wallet.isRegistered()
     openAccountButton.visibility = if (isRegistered) View.GONE else View.VISIBLE
     (assetsRecyclerView.layoutParams as RelativeLayout.LayoutParams)
       .above(if (isRegistered) R.id.manuallyAddAssetButton else R.id.openAccountButton)
   }
 
 
-
   //region User Interface
 
   private fun bindAdapter() {
-    adapter = AssetsAdapter(this, this, assetsList)
+    adapter = AssetsAdapter(this)
     assetsRecyclerView.adapter = adapter
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
   }
 
   private fun updateAdapter() {
     assetsList.clear()
-    assetsList.addAll(convertBalanceToSupportedAsset(WalletApplication.wallet.getBalances(), map))
+    assetsList.addAll(convertBalanceToSupportedAsset(DmcApp.wallet.getBalances(), map))
     val filteredList = getFilteredSupportedAssets(map)
     if (filteredList.isNotEmpty()) {
       assetsList.add(getString(R.string.supported_assets_header))
@@ -110,13 +110,12 @@ class AssetsActivity : BaseActivity(), AssetListener {
   //endregion
 
   private fun convertBalanceToSupportedAsset(balances: Array<AccountResponse.Balance>,
-                                             supportedAssetsMap: Map<String, SupportedAsset>): List<SupportedAsset> {
+                                             dmcAssetsMap: Map<String, DmcAsset>): List<DmcAsset> {
 
-    val lumenSupportedAsset = SupportedAsset(0, Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
-      "", "", Constants.LUMENS_ASSET_CODE, "", "",
-      "0", SupportedAssetType.ADDED, null)
+    val lumenSupportedAsset = DmcAsset(Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
+      "", "", Constants.LUMENS_ASSET_CODE, true, null)
 
-    val list = ArrayList<SupportedAsset>()
+    val list = ArrayList<DmcAsset>()
     list.add(lumenSupportedAsset)
 
     if (balances.isNotEmpty()) {
@@ -126,18 +125,17 @@ class AssetsActivity : BaseActivity(), AssetListener {
             list[0].amount = it.balance
             return@map null
           }
-          supportedAssetsMap.containsKey(it.assetCode.toLowerCase()) -> {
-            supportedAssetsMap[it.assetCode.toLowerCase()]?.let { asset ->
+          dmcAssetsMap.containsKey(it.assetCode.toLowerCase()) -> {
+            dmcAssetsMap[it.assetCode.toLowerCase()]?.let { asset ->
               asset.amount = it.balance
-              asset.type = SupportedAssetType.ADDED
+              asset.isAdded = true
               asset.asset = it.asset
               return@map asset
             }
           }
           else -> {
-            return@map SupportedAsset(0, it.assetCode.toLowerCase(), 0,
-              it.assetIssuer.accountId, it.limit, it.assetCode, "",
-              "", it.balance, SupportedAssetType.ADDED, it.asset)
+            return@map DmcAsset(it.assetCode.toLowerCase(), 0,
+              it.assetIssuer.accountId, it.assetCode, it.balance, true, it.asset)
           }
         }
       }
@@ -149,26 +147,25 @@ class AssetsActivity : BaseActivity(), AssetListener {
     return list
   }
 
-  private fun getFilteredSupportedAssets(map: Map<String, SupportedAsset>): List<SupportedAsset> {
+  private fun getFilteredSupportedAssets(map: Map<String, DmcAsset>): List<DmcAsset> {
     return map.values.filter { asset ->
-      asset.code.toUpperCase() !in WalletApplication.wallet.getBalances().map { it.assetCode }
+      asset.code.toUpperCase() !in DmcApp.wallet.getBalances().map { it.assetCode }
     }
   }
 
   private fun loadSupportedAssets() {
     map.clear()
 
-    val dmc = SupportedAsset(0, Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
-      Constants.DMC_ASSET_ISSUER, "100000000000",
-      Constants.DMC_ASSET_NAME, "", "", null, null, null)
+    val dmc = DmcAsset(Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
+      Constants.DMC_ASSET_ISSUER, Constants.DMC_ASSET_NAME, "", false, null)
 
-    val zar = SupportedAsset(1, Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
-      Constants.ZAR_ASSET_ISSUER, "100000000000",
-      Constants.ZAR_ASSET_NAME, "", "", null, null, null)
+    val zar = DmcAsset(Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
+      Constants.ZAR_ASSET_ISSUER,
+      Constants.ZAR_ASSET_NAME, "", false, null)
 
-    val ngnt = SupportedAsset(2, Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
-      Constants.NGNT_ASSET_ISSUER, "100000000000",
-      Constants.NGNT_ASSET_NAME, "", "", null, null, null)
+    val ngnt = DmcAsset(Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
+      Constants.NGNT_ASSET_ISSUER,
+      Constants.NGNT_ASSET_NAME, "", false, null)
 
     map[Constants.DMC_ASSET_TYPE] = dmc
     map[Constants.ZAR_ASSET_TYPE] = zar
@@ -178,21 +175,24 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   //region Call backs
-  override fun assetSelected(sessionAsset: SessionAsset, image: View, code: View, balance: View) {
-    WalletApplication.userSession.setSessionAsset(sessionAsset)
+  override fun assetSelected(assetCode: String) {
+//    DmcApp.userSession.setSessionAsset(sessionAsset)
     finish()
   }
 
   override fun deposit(assetCode: String) {
-   }
+  }
 
   override fun withdraw(assetCode: String) {
-    if (WalletApplication.wallet.isVerified()) {
+    if (DmcApp.wallet.isVerified()) {
       startActivity(DepositActivity.newInstance(
         this, DepositActivity.Mode.WITHDRAW, assetCode))
     } else {
       ViewUtils.showToast(this, R.string.withdraw_not_verified)
     }
+  }
+
+  override fun addCustomAsset() {
   }
 
   override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {
@@ -209,11 +209,11 @@ class AssetsActivity : BaseActivity(), AssetListener {
           if (isRemove) {
             Toast.makeText(this@AssetsActivity, getString(R.string.asset_removed), Toast.LENGTH_SHORT).show()
           } else {
-            Toast.makeText(this@AssetsActivity, getString(R.string.success_trustline_changed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AssetsActivity, getString(R.string.asset_added), Toast.LENGTH_SHORT).show()
           }
           progressBar.visibility = View.GONE
           if (isRemove) {
-            WalletApplication.userSession.setSessionAsset(DefaultAsset())
+            DmcApp.userSession.setSessionAsset(DefaultAsset())
           }
         }
 
@@ -234,7 +234,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
 
         override fun onLoadAccount(result: AccountResponse?) {
           if (result != null) {
-            WalletApplication.wallet.setBalances(result.balances)
+            DmcApp.wallet.setBalances(result.balances)
             updateAdapter()
           }
         }

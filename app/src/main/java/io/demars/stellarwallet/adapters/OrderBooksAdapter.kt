@@ -70,7 +70,7 @@ class OrderBooksAdapter(private val context: Context) : RecyclerView.Adapter<Rec
             OrderBookAdapterTypes.EMPTY.value ->
                 EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.row_order_books_empty, parent, false))
             else -> {
-                throw IllegalStateException("unknown view type {$viewType}")
+                throw IllegalStateException("unknown view isAdded {$viewType}")
             }
         }
     }

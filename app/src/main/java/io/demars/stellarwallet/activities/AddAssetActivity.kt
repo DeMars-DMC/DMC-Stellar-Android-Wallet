@@ -1,5 +1,8 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -14,6 +17,10 @@ import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
 
 class AddAssetActivity : BaseActivity() {
+
+    companion object {
+        fun newInstance(context: Context) : Intent = Intent(context, AddAssetActivity::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +61,7 @@ class AddAssetActivity : BaseActivity() {
                 override fun onSuccess() {
                     Toast.makeText(this@AddAssetActivity, getString(R.string.asset_added), Toast.LENGTH_SHORT).show()
                     progressBar.visibility = View.GONE
+                    setResult(Activity.RESULT_OK)
                     finish()
                 }
 

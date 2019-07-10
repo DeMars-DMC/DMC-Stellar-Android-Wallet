@@ -4,10 +4,9 @@ import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.models.Diagnostic
 import io.demars.stellarwallet.models.Values
 import io.demars.stellarwallet.utils.AccountUtils
@@ -31,14 +30,14 @@ class DiagnosticActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val isPassphrase = WalletApplication.wallet.getEncryptedPhrase() != null
+        val isPassphrase = DmcApp.wallet.getEncryptedPhrase() != null
         recoveryType = getRecoveryType()
 
         deviceModelTextView.text = DiagnosticUtils.getDeviceName()
         androidVersionTextView.text = DiagnosticUtils.getAndroidVersion()
         localeTextView.text = DiagnosticUtils.getLocale()
         appVersionText.text = DiagnosticUtils.getAppVersion()
-        publicAddressTextView.text = WalletApplication.wallet.getStellarAccountId()
+        publicAddressTextView.text = DmcApp.wallet.getStellarAccountId()
         passphraseUsedTextView.text = isPassphrase.toString()
         recoveryTypeTextView.text = recoveryType
 
@@ -72,8 +71,8 @@ class DiagnosticActivity : BaseActivity() {
 
     private fun getRecoveryType(): String {
         val recoveryType : String
-        val encryptedPhrase = WalletApplication.wallet.getEncryptedPhrase()
-        val masterKey = AccountUtils.getPinMasterKey(this, WalletApplication.userSession.getPin()!!)
+        val encryptedPhrase = DmcApp.wallet.getEncryptedPhrase()
+        val masterKey = AccountUtils.getPinMasterKey(this, DmcApp.userSession.getPin()!!)
 
         recoveryType = if (encryptedPhrase != null && masterKey!= null) {
             val decryptedPhrase = AccountUtils.getDecryptedString(encryptedPhrase, masterKey)

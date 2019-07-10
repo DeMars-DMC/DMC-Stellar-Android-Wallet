@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants.Companion.STELLAR_ADDRESS_LENGTH
 import io.demars.stellarwallet.interfaces.ContactsRepository.ContactOperationStatus
 import io.demars.stellarwallet.models.Contact
@@ -155,7 +155,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
   @SuppressLint("SetTextI18n")
   private fun updateAvailableBalance() {
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
-      var assetCode = WalletApplication.userSession.getSessionAsset().assetCode
+      var assetCode = DmcApp.userSession.getSessionAsset().assetCode
       assetCode = if (assetCode == "native") "XLM" else assetCode
       val available = AccountUtils.getAvailableBalance(assetCode)
       val decimalPlaces = AssetUtils.getMaxDecimals(assetCode)
@@ -188,7 +188,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
       R.id.bottomButton -> {
         when (mode) {
           Mode.PAY_TO -> {
-            if (address.length == STELLAR_ADDRESS_LENGTH && address != WalletApplication.wallet.getStellarAccountId()) {
+            if (address.length == STELLAR_ADDRESS_LENGTH && address != DmcApp.wallet.getStellarAccountId()) {
               startActivityForResult(PayActivity.newIntent(this, address), RC_PAY)
               overridePendingTransition(R.anim.slide_in_up, R.anim.stay)
             } else {

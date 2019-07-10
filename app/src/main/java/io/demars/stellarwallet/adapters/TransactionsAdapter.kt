@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.StringFormat.Companion.getFormattedDateTime
@@ -146,7 +146,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
     viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
       StringFormat.formatAssetCode(trade.baseAsset), StringFormat.formatAssetCode(trade.counterAsset))
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
-    if (WalletApplication.userSession.getSessionAsset().assetCode == trade.baseAsset) {
+    if (DmcApp.userSession.getSessionAsset().assetCode == trade.baseAsset) {
       viewHolder.amount.text = String.format(context.getString(R.string.negative_template),
         truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)))
     } else {
@@ -164,7 +164,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
   @SuppressLint("SetTextI18n")
   private fun configureOperationViewHolder(viewHolder: OperationViewHolder, position: Int) {
     val operation = items!![position] as Operation
-    val accountId = WalletApplication.wallet.getStellarAccountId()
+    val accountId = DmcApp.wallet.getStellarAccountId()
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
 
     viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
@@ -226,7 +226,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
         val amountDouble = operation.amount?.toDouble()
         val priceDouble = operation.price?.toDouble()
         val totalAmount = (amountDouble!! * priceDouble!!).toString()
-        val sessionAsset = WalletApplication.userSession.getSessionAsset().assetCode
+        val sessionAsset = DmcApp.userSession.getSessionAsset().assetCode
         val decimalPlaces = AssetUtils.getMaxDecimals(sessionAsset)
         if (sessionAsset == operation.asset) {
           viewHolder.amount.text = String.format(context.getString(R.string.negative_template),

@@ -5,7 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import io.demars.stellarwallet.BuildConfig
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 
@@ -13,7 +13,7 @@ class WalletLifecycleListener(val context: Context) : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
-        WalletApplication.showPin = true
+        DmcApp.showPin = true
 
     }
 
@@ -22,7 +22,7 @@ class WalletLifecycleListener(val context: Context) : LifecycleObserver {
         if (BuildConfig.DEBUG && DebugPreferencesHelper(context).isPinDisabled) {
             // in debug builds it is possible to disable pin in the session
         } else {
-            WalletApplication.showPin = false
+            DmcApp.showPin = false
             GlobalGraphHelper.clearSession()
         }
     }

@@ -129,7 +129,7 @@ object ContactsRepositoryImpl : ContactsRepository {
 
   override fun getContactsListLiveData(forceRefresh: Boolean): MutableLiveData<ContactsResult> {
     Timber.d("start getContactsListLiveData")
-    if (!forceRefresh && !contactsList.isEmpty()) {
+    if (!forceRefresh && contactsList.isNotEmpty()) {
       notifyLiveData()
     } else {
       refreshContacts()

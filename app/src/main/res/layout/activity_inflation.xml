@@ -67,7 +67,7 @@
                 android:layout_weight="0.2"
                 android:background="@drawable/background_rounded_right_button_accent"
                 android:contentDescription="@string/copy_address_content_descriptor"
-                android:tint="@color/white"
+                android:tint="@color/whiteMain"
                 android:src="@drawable/ic_qr_scanner" />
 
         </LinearLayout>
@@ -81,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/padding_horizontal"
         android:text="@string/save_button"
-        android:textColor="@color/white"
+        android:textColor="@color/whiteMain"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar

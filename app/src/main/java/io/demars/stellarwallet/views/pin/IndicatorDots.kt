@@ -89,7 +89,7 @@ class IndicatorDots @JvmOverloads constructor(context: Context, attrs: Attribute
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    // If the indicator type is not fixed
+    // If the indicator isAdded is not fixed
     if (mIndicatorType != 0) {
       val params = this.layoutParams
       params.height = mDotDiameter

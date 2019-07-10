@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.View
 import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.utils.DiagnosticUtils
 import io.demars.stellarwallet.utils.GlobalGraphHelper
@@ -100,7 +100,7 @@ class SettingsActivity : BaseActivity() {
   }
 
   private fun updatePersonalInfo() {
-    val isRegistered = WalletApplication.wallet.isRegistered()
+    val isRegistered = DmcApp.wallet.isRegistered()
     editInfoButton.setText(if (isRegistered) R.string.personal_information else R.string.open_account)
     editInfoButton.setOnClickListener {
       if (isRegistered) {
@@ -146,7 +146,7 @@ class SettingsActivity : BaseActivity() {
         }
 
         SettingsAction.TOGGLE_PIN_ON_SENDING.ordinal -> {
-          WalletApplication.wallet.setShowPinOnSend(!WalletApplication.wallet.getShowPinOnSend())
+          DmcApp.wallet.setShowPinOnSend(!DmcApp.wallet.getShowPinOnSend())
         }
 
         SettingsAction.TOGGLE_ENABLE_WEAR_APP.ordinal -> {
@@ -156,7 +156,7 @@ class SettingsActivity : BaseActivity() {
   }
 
   private fun setSavedSettings() {
-    pinOnSendPaymentsButton.isChecked = WalletApplication.wallet.getShowPinOnSend()
+    pinOnSendPaymentsButton.isChecked = DmcApp.wallet.getShowPinOnSend()
   }
 
   private fun copyToClipBoard(data: String, label: String, toastMessage: String) {

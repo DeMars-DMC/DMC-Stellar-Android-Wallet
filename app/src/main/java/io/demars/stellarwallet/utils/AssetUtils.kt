@@ -1,6 +1,6 @@
 package io.demars.stellarwallet.utils
 
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
@@ -91,7 +91,7 @@ class AssetUtils {
     }
 
     fun getBalance(assetCode: String): String =
-      WalletApplication.wallet.getBalances().firstOrNull {
+      DmcApp.wallet.getBalances().firstOrNull {
         it.assetCode == assetCode || (it.assetCode == null && assetCode == "XLM")
       }?.balance?.let {
         StringFormat.truncateDecimalPlaces(it, getMaxDecimals(assetCode))
@@ -111,7 +111,7 @@ class AssetUtils {
     }
 
     fun isSessionAsset(assetCode: String): Boolean = xlmAsNative(assetCode).equals(
-      WalletApplication.userSession.getSessionAsset().assetCode, true)
+      DmcApp.userSession.getSessionAsset().assetCode, true)
 
     private fun xlmAsNative(assetCode: String): String =
       if (assetCode == Constants.LUMENS_ASSET_CODE) Constants.LUMENS_ASSET_TYPE else assetCode

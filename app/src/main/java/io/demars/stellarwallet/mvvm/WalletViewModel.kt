@@ -3,10 +3,9 @@ package io.demars.stellarwallet.mvvm
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.os.Handler
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants.Companion.DEFAULT_ACCOUNT_BALANCE
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.account.AccountRepository
@@ -38,7 +37,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
   private var canRefresh = false
 
   init {
-    WalletApplication.assetSession.observeForever {
+    DmcApp.assetSession.observeForever {
       if (it != null) {
         sessionAsset = it
         notifyViewState()
@@ -113,7 +112,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
   private fun notifyViewState() {
     Timber.d("Notifying state {$state}")
 
-    val accountId = WalletApplication.wallet.getStellarAccountId()!!
+    val accountId = DmcApp.wallet.getStellarAccountId()!!
     when (state) {
       WalletState.ACTIVE -> {
         if (stellarAccount == null) return

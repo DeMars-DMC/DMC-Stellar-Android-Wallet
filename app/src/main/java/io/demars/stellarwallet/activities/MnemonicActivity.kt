@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.PassphraseDialogHelper
 import io.demars.stellarwallet.models.stellar.MnemonicType
 import io.demars.stellarwallet.utils.GlobalGraphHelper
@@ -84,7 +84,7 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
             passphraseButton.visibility = View.GONE
             generateQRCode(mnemonicString, qrImageView, 500)
 
-            if (!WalletApplication.wallet.getIsRecoveryPhrase()) {
+            if (!DmcApp.wallet.getIsRecoveryPhrase()) {
                 warningPhraseTextView.text = getString(R.string.no_mnemonic_set)
                 mnemonicView.visibility = View.GONE
             }

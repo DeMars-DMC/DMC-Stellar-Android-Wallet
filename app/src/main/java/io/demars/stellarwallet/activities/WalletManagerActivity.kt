@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
 import io.demars.stellarwallet.utils.AccountUtils
 import java.lang.IllegalStateException
@@ -111,7 +111,7 @@ class WalletManagerActivity : AppCompatActivity() {
             ActionType.VERIFY_PIN -> {
                 startActivityForResult(PinActivity.newInstance(this, getPinFromKeyStore(), getString(R.string.please_enter_your_pin)), ActionType.VERIFY_PIN.ordinal)
             } else -> {
-                throw IllegalStateException("invalid action type $actionType")
+                throw IllegalStateException("invalid action isAdded $actionType")
             }
         }
     }
@@ -149,7 +149,7 @@ class WalletManagerActivity : AppCompatActivity() {
             ActionType.VERIFY_PIN.ordinal-> {
                 val pin = PinActivity.getPinFromIntent(data)
                 if (resultCode == Activity.RESULT_OK && data != null && pin != null) {
-                    WalletApplication.userSession.setPin(pin)
+                    DmcApp.userSession.setPin(pin)
                     setResult(Activity.RESULT_OK)
                     finish()
                     return
@@ -161,9 +161,9 @@ class WalletManagerActivity : AppCompatActivity() {
                     if (pin != null) {
                         val masterKey = AccountUtils.getPinMasterKey(applicationContext, pin)
                         if (masterKey != null) {
-                            val encryptedPhrase = WalletApplication.wallet.getEncryptedPhrase()!!
-                            WalletApplication.wallet.getEncryptedPassphrase()
-                            val encryptedPassphrase = WalletApplication.wallet.getEncryptedPassphrase()
+                            val encryptedPhrase = DmcApp.wallet.getEncryptedPhrase()!!
+                            DmcApp.wallet.getEncryptedPassphrase()
+                            val encryptedPassphrase = DmcApp.wallet.getEncryptedPassphrase()
                             var passphrase: String?= null
                             if (encryptedPassphrase != null) {
                                 passphrase = AccountUtils.getDecryptedString(encryptedPassphrase, masterKey)
@@ -181,10 +181,10 @@ class WalletManagerActivity : AppCompatActivity() {
                     if (pin != null) {
                         val masterKey = AccountUtils.getPinMasterKey(applicationContext, pin)
                         if (masterKey != null) {
-                            val encryptedPhrase = WalletApplication.wallet.getEncryptedPhrase()!!
+                            val encryptedPhrase = DmcApp.wallet.getEncryptedPhrase()!!
                             val phrase = AccountUtils.getDecryptedString(encryptedPhrase, masterKey)
 
-                            val encryptedPassphrase = WalletApplication.wallet.getEncryptedPassphrase()
+                            val encryptedPassphrase = DmcApp.wallet.getEncryptedPassphrase()
                             var passphrase: String?= null
                             if (encryptedPassphrase != null) {
                                 passphrase = AccountUtils.getDecryptedString(encryptedPassphrase, masterKey)

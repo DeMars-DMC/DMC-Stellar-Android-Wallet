@@ -15,7 +15,7 @@
         android:background="@color/colorPrimaryDark"
         android:minHeight="?attr/actionBarSize"
         app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="@color/white"
+        app:tabTextColor="@color/whiteMain"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabTextAppearance="@style/TabTitle" />
 

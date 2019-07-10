@@ -24,7 +24,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.NetworkUtils
@@ -70,7 +70,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       if (dataSnapshot.exists()) {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { user ->
-          WalletApplication.wallet.setUserState(user.state)
+          DmcApp.wallet.setUserState(user.state)
           Firebase.initFcm(user.uid, "create")
           updateForMode(Mode.WALLET)
         } ?: createNewUser()

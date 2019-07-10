@@ -2,7 +2,7 @@ package io.demars.stellarwallet.mvvm.account
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.models.StellarAccount
 import io.demars.stellarwallet.models.stellar.MinimumBalance
@@ -42,9 +42,9 @@ object AccountRepository {
             Timber.d("refreshData successfully")
             accountResponse = result
 
-            WalletApplication.wallet.setBalances(result.balances)
-            WalletApplication.userSession.setMinimumBalance(MinimumBalance(result))
-            WalletApplication.wallet.setAvailableBalances(
+            DmcApp.wallet.setBalances(result.balances)
+            DmcApp.userSession.setMinimumBalance(MinimumBalance(result))
+            DmcApp.wallet.setAvailableBalances(
               AccountUtils.calculateAvailableBalances(result))
 
             liveData.postValue(AccountEvent(200, StellarAccount(result)))
@@ -53,7 +53,7 @@ object AccountRepository {
         }
 
         override fun onError(error: ErrorResponse) {
-          val stellarAccountId = WalletApplication.wallet.getStellarAccountId()
+          val stellarAccountId = DmcApp.wallet.getStellarAccountId()
 
           Timber.e("(${error.code}) Error Loading account")
           liveData.postValue(AccountEvent(error.code, StellarAccount(stellarAccountId, null, 0L, null)))

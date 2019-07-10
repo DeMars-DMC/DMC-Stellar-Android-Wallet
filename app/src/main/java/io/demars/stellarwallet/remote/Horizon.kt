@@ -3,7 +3,7 @@ package io.demars.stellarwallet.remote
 import android.os.AsyncTask
 import android.os.Handler
 import android.os.Looper
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.utils.AssetUtils
@@ -106,7 +106,7 @@ object Horizon : HorizonTasks {
 
   override fun registerForEffects(cursor: String, listener: EventListener<EffectResponse>): SSEStream<EffectResponse>? {
     val server = getServer()
-    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
     try {
       //ATTENTION STREAM must work with order.ASC!
       return server.effects()
@@ -121,7 +121,7 @@ object Horizon : HorizonTasks {
 
   override fun registerForOperations(cursor: String, listener: EventListener<OperationResponse>): SSEStream<OperationResponse>? {
     val server = getServer()
-    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
     try {
       //ATTENTION STREAM must work with order.ASC!
       return server.operations()
@@ -136,7 +136,7 @@ object Horizon : HorizonTasks {
 
   override fun registerForTransactions(cursor: String, listener: EventListener<TransactionResponse>): SSEStream<TransactionResponse>? {
     val server = getServer()
-    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
     try {
       //ATTENTION STREAM must work with order.ASC!
       return server.transactions()
@@ -151,7 +151,7 @@ object Horizon : HorizonTasks {
 
   override fun registerForTrades(cursor: String, listener: EventListener<TradeResponse>): SSEStream<TradeResponse>? {
     val server = getServer()
-    val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+    val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
     try {
       //ATTENTION STREAM must work with order.ASC!
       return (server.trades().order(RequestBuilder.Order.ASC) as TradesRequestBuilder)
@@ -227,7 +227,7 @@ object Horizon : HorizonTasks {
       var list: ArrayList<OfferResponse>? = null
       val server = getServer()
       try {
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         val response = server.offers().forAccount(sourceKeyPair).execute()
         if (response != null) {
           list = response.records
@@ -259,7 +259,7 @@ object Horizon : HorizonTasks {
       var account: AccountResponse? = null
       try {
         val server = getServer()
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         account = server.accounts().account(sourceKeyPair)
 
       } catch (ex: Exception) {
@@ -288,7 +288,7 @@ object Horizon : HorizonTasks {
       val server = getServer()
       var effectResults: Page<EffectResponse>? = null
       try {
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         effectResults = server.effects().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -316,7 +316,7 @@ object Horizon : HorizonTasks {
       val server = getServer()
       var operationsResult: ArrayList<Pair<OperationResponse, String?>>? = null
       try {
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         operationsResult = server.operations().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -359,7 +359,7 @@ object Horizon : HorizonTasks {
       val server = getServer()
       var transactionResults: ArrayList<TransactionResponse> = ArrayList()
       try {
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         transactionResults = server.transactions().order(RequestBuilder.Order.DESC)
           .cursor(cursor)
           .limit(limit)
@@ -394,7 +394,7 @@ object Horizon : HorizonTasks {
       val server = getServer()
       var tradeResults: ArrayList<TradeResponse>? = ArrayList()
       try {
-        val sourceKeyPair = KeyPair.fromAccountId(WalletApplication.wallet.getStellarAccountId()!!)
+        val sourceKeyPair = KeyPair.fromAccountId(DmcApp.wallet.getStellarAccountId()!!)
         tradeResults = (server.trades().order(RequestBuilder.Order.DESC) as TradesRequestBuilder)
           .cursor(cursor)
           .limit(limit)
@@ -653,8 +653,8 @@ object Horizon : HorizonTasks {
   }
 
   private fun getCurrentAsset(): Asset {
-    val assetCode = WalletApplication.userSession.getSessionAsset().assetCode
-    val assetIssuer = WalletApplication.userSession.getSessionAsset().assetIssuer
+    val assetCode = DmcApp.userSession.getSessionAsset().assetCode
+    val assetIssuer = DmcApp.userSession.getSessionAsset().assetIssuer
 
     return if (assetCode == Constants.LUMENS_ASSET_TYPE) {
       AssetTypeNative()

@@ -6,12 +6,12 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 
 class MessagingService : FirebaseMessagingService()  {
   override fun onMessageReceived(remoteMessage: RemoteMessage?) {
     super.onMessageReceived(remoteMessage)
-    val notification = NotificationCompat.Builder(this, WalletApplication.CHANNEL_ID_ACC)
+    val notification = NotificationCompat.Builder(this, DmcApp.CHANNEL_ID_ACC)
       .setContentTitle(remoteMessage?.notification?.title?: "")
       .setContentText(remoteMessage?.notification?.body?:"")
       .setSmallIcon(R.drawable.ic_stat_ic_main_logo)

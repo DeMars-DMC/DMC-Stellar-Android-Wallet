@@ -25,7 +25,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.activities.*
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.WalletViewModel
@@ -296,7 +296,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   }
 
   private fun updateOpenAccountButton() {
-    if (WalletApplication.wallet.isRegistered()) {
+    if (DmcApp.wallet.isRegistered()) {
       openAccountButton?.visibility = View.GONE
     } else {
       openAccountButton?.visibility = View.VISIBLE

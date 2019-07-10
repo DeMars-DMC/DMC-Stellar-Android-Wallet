@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.AccountUtils
@@ -65,7 +65,7 @@ class BalanceSummaryActivity : BasePopupActivity() {
   }
 
   private fun renderNativeAsset() {
-    val minimumBalance = WalletApplication.userSession.getMinimumBalance()
+    val minimumBalance = DmcApp.userSession.getMinimumBalance()
 
     if (minimumBalance != null) {
       baseReserveAmountTextView.text = "1"

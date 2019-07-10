@@ -4,7 +4,7 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/whiteMain"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical">
@@ -20,7 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
+        android:background="@color/whiteMain"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingStart="@dimen/activity_vertical_margin"
@@ -43,7 +43,7 @@
             android:layout_gravity="start"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:layout_marginBottom="@dimen/padding_horizontal"
-            android:background="@color/white"
+            android:background="@color/whiteMain"
             android:gravity="center"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
@@ -125,7 +125,7 @@
                 android:contentDescription="@string/open_camera_to_scan_qr"
                 android:elevation="@dimen/elevation_mini"
                 android:src="@drawable/ic_qr_scanner"
-                android:tint="@color/white" />
+                android:tint="@color/whiteMain" />
 
         </LinearLayout>
 

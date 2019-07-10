@@ -28,7 +28,7 @@ import java.security.Security
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class WalletApplication : MultiDexApplication() {
+class DmcApp : MultiDexApplication() {
   companion object {
     const val CHANNEL_ID_ACC = "CHANNEL_ID_ACC"
 

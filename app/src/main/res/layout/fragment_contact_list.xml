@@ -27,9 +27,9 @@
             app:mt_hint="@string/hint_search_bar"
             app:mt_hintColor="@color/transparent_white"
             app:mt_maxSuggestionsCount="5"
-            app:mt_backIconTint="@color/white"
+            app:mt_backIconTint="@color/whiteMain"
             app:mt_speechMode="false"
-            app:mt_textColor="@color/white" />
+            app:mt_textColor="@color/whiteMain" />
 
     </ViewFlipper>
 

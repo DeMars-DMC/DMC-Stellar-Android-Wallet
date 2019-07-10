@@ -2,14 +2,9 @@ package io.demars.stellarwallet.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.transition.Fade
-import android.transition.Slide
-import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
@@ -26,8 +21,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
 
-    if (WalletApplication.showPin && askForPin) {
-      WalletApplication.showPin = false
+    if (DmcApp.showPin && askForPin) {
+      DmcApp.showPin = false
 
       when {
         GlobalGraphHelper.isExistingWallet() -> {

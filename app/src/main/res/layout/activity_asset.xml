@@ -53,10 +53,7 @@
                     android:layout_marginEnd="@dimen/padding_horizontal"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_receive"
-                    android:tint="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@+id/walletLogo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/walletLogo" />
+                    android:tint="@color/whiteMain" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -129,7 +126,7 @@
                             android:layout_height="@dimen/button_height_big"
                             android:background="@drawable/background_button_round_transparent"
                             android:src="@drawable/ic_trading"
-                            android:tint="@color/white"
+                            android:tint="@color/whiteMain"
                             app:layout_constraintEnd_toStartOf="@+id/totalBalanceContainer"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/totalBalanceContainer" />
@@ -142,7 +139,7 @@
                             android:layout_marginTop="@dimen/padding_micro"
                             android:text="@string/deposit"
                             android:textAllCaps="true"
-                            android:textColor="@color/white"
+                            android:textColor="@color/whiteMain"
                             android:textSize="@dimen/text_size_micro"
                             app:layout_constraintEnd_toEndOf="@+id/tradeButton"
                             app:layout_constraintStart_toStartOf="@+id/tradeButton"
@@ -162,7 +159,7 @@
                             android:layout_height="@dimen/button_height_big"
                             android:background="@drawable/background_button_round_transparent"
                             android:src="@drawable/ic_trading"
-                            android:tint="@color/white"
+                            android:tint="@color/whiteMain"
                             app:layout_constraintEnd_toStartOf="@+id/totalBalanceContainer"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/totalBalanceContainer" />
@@ -175,7 +172,7 @@
                             android:layout_marginTop="@dimen/padding_micro"
                             android:text="@string/withdraw"
                             android:textAllCaps="true"
-                            android:textColor="@color/white"
+                            android:textColor="@color/whiteMain"
                             android:textSize="@dimen/text_size_micro"
                             app:layout_constraintEnd_toEndOf="@+id/tradeButton"
                             app:layout_constraintStart_toStartOf="@+id/tradeButton"

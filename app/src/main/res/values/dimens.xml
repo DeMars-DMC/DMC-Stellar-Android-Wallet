@@ -12,7 +12,7 @@
 
     <dimen name="logo_width_main">100dp</dimen>
     <dimen name="logo_width_pin">80dp</dimen>
-    <dimen name="logo_width_asset">60dp</dimen>
+    <dimen name="logo_width_asset">50dp</dimen>
 
     <dimen name="button_height">40dp</dimen>
     <dimen name="button_height_big">48dp</dimen>
@@ -26,6 +26,7 @@
     <dimen name="text_size_big">18sp</dimen>
     <dimen name="text_size_xbig">20sp</dimen>
     <dimen name="text_size_xxbig">24sp</dimen>
+    <dimen name="text_size_xxxbig">30sp</dimen>
 
     <dimen name="pin_spacing_vertical">8dp</dimen>
     <dimen name="pin_spacing_horizontal">24dp</dimen>

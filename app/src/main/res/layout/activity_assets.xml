@@ -20,7 +20,7 @@
         android:background="?attr/selectableItemBackground"
         android:padding="@dimen/padding_horizontal"
         android:text="@string/set_inflation"
-        android:textColor="@color/white" />
+        android:textColor="@color/whiteMain" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assetsRecyclerView"

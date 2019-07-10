@@ -5,13 +5,13 @@
     <color name="colorPrimaryDark">@color/blueDark</color>
     <color name="colorPrimaryHighlight">@color/blueLight</color>
 
-    <color name="colorAccent">#EA8D0C</color>
+    <color name="colorAccent">#F79E02</color>
     <color name="colorAccentHighlight">#B16B09</color>
 
     <color name="colorYellow">#deaf2a</color>
     <color name="colorYellowHighlight">#AC8722</color>
 
-    <color name="colorGreen">#09AF00</color>
+    <color name="colorGreen">#88D453</color>
     <color name="colorGreenHighlight">#077A00</color>
 
     <color name="colorDisabled">#797979</color>
@@ -30,11 +30,14 @@
     <color name="transparent">#00000000</color>
     <color name="transparent_white">#80FFFFFF</color>
     <color name="transparent_black">#80000000</color>
+    <color name="transparent_accent">#80F79E02</color>
+    <color name="transparent_green">#8088D453</color>
+
+    <color name="black">#000000</color>
+    <color name="whiteMain">#ebebeb</color>
 
     <!--MERGE COLORS-->
     <!--Colors-->
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
     <color name="cornflowerBlue">#4791F6</color>
     <color name="royalBlue">#3E7FEF</color>
     <color name="puce">#C7808E</color>
@@ -57,6 +60,6 @@
     <!--Global-->
     <color name="fragmentBg">@color/main_bg_light</color>
     <color name="toggleSelected">@color/royalBlue</color>
-    <color name="toggleUnselected">@color/white</color>
+    <color name="toggleUnselected">@color/whiteMain</color>
 
 </resources>

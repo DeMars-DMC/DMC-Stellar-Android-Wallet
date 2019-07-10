@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/itemLabel"
-        android:textColor="@color/white"
+        android:textColor="@color/whiteMain"
         android:fontFamily="@font/opensans_regular"
         android:textSize="@dimen/text_size_small"
         android:layout_width="match_parent"

@@ -2,12 +2,12 @@
     android:color="@color/colorDisabledHighlight">
     <item android:id="@android:id/mask">
         <shape android:shape="oval">
-            <solid android:color="@color/white" />
+            <solid android:color="@color/whiteMain" />
         </shape>
     </item>
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/white" />
+            <solid android:color="@color/whiteMain" />
         </shape>
     </item>
 </ripple>

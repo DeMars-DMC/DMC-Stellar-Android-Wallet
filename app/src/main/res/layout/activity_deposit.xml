@@ -344,7 +344,7 @@
         android:elevation="0dp"
         android:enabled="false"
         android:text="@string/submit"
-        android:textColor="@color/white"
+        android:textColor="@color/whiteMain"
         android:visibility="gone"
         tool:ignore="UnusedAttribute" />
 

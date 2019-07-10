@@ -2,32 +2,35 @@ package io.demars.stellarwallet.activities
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.adapters.AssetsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
-import io.demars.stellarwallet.models.SessionAsset
-import io.demars.stellarwallet.models.SupportedAsset
-import io.demars.stellarwallet.models.SupportedAssetType
 import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
-import org.stellar.sdk.responses.AccountResponse
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.Observer
+import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.models.DefaultAsset
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
+import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
+import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.ViewUtils
+import kotlinx.android.synthetic.main.activity_manage_assets.assetsRecyclerView
 
 class ManageAssetsActivity : BaseActivity(), AssetListener {
 
   //region Properties
-  private var map: LinkedHashMap<String, SupportedAsset> = LinkedHashMap()
-  private var assetsList: ArrayList<Any> = ArrayList()
+  companion object {
+    const val RC_ADD_CUSTOM = 111
+  }
+
   private var appBarOffset = 0
   private lateinit var adapter: AssetsAdapter
   //endregion
@@ -45,26 +48,11 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   private fun initAppBar() {
     appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
       appBarOffset = -offset
-      val toolbarHeight = toolbar.height
       val scrollRange = appBar.totalScrollRange
-      if (appBarOffset in 0..toolbarHeight) {
-        walletLogo.alpha = 1f - (appBarOffset * 1.2f) / toolbarHeight
-        val balanceScale = 1f - 0.3f * (appBarOffset.toFloat() / toolbarHeight)
-        totalBalanceContainer.scaleX = balanceScale
-        totalBalanceContainer.scaleY = balanceScale
-        totalBalanceContainer.translationY = 0f
-      } else {
-        walletLogo.alpha = 0f
-        totalBalanceContainer.translationY = appBarOffset.toFloat() - toolbarHeight
-      }
-
       val bottomAlpha = 1f - (appBarOffset * 2f) / scrollRange
-      arrayOf(tradeButton, tradeLabel, reportingCurrency,
-        reportingCurrencyLabel, detailsButton, detailsLabel).forEach {
-        it.alpha = bottomAlpha
-      }
 
       walletDivider.scaleX = 1f + 0.2f * (appBarOffset.toFloat() / scrollRange)
+      totalBalanceContainer.translationY = appBarOffset.toFloat()
     })
   }
 
@@ -74,11 +62,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
       fetchAssets()
     }
 
-    receiveButton.setOnClickListener {
-      startActivity(ReceiveActivity.newInstance(this))
-      overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
-    }
-
     accountButton.setOnClickListener {
       startActivity(SettingsActivity.newInstance(this))
       overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
@@ -86,7 +69,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   }
 
   private fun initAssets() {
-    adapter = AssetsAdapter(this, this, assetsList)
+    adapter = AssetsAdapter(this)
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
     assetsRecyclerView.adapter = adapter
   }
@@ -95,101 +78,51 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   private fun fetchAssets() {
     swipeRefresh.isRefreshing = true
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
-      loadSupportedAssets()
+      updateAdapter()
     })
   }
 
   private fun updateAdapter() {
-    assetsList.clear()
-    assetsList.addAll(convertBalanceToSupportedAsset(WalletApplication.wallet.getBalances(), map))
-    val filteredList = getFilteredSupportedAssets(map)
-    if (filteredList.isNotEmpty()) {
-      assetsList.add(getString(R.string.supported_assets_header))
-      assetsList.addAll(filteredList)
-    }
-
-    adapter.notifyDataSetChanged()
+    adapter.updateAdapter()
     swipeRefresh?.isRefreshing = false
   }
   //endregion
 
   //region Supported Assets
-  private fun convertBalanceToSupportedAsset(balances: Array<AccountResponse.Balance>,
-                                             supportedAssetsMap: Map<String, SupportedAsset>): List<SupportedAsset> {
 
-    val lumenSupportedAsset = SupportedAsset(0, Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
-      "", "", Constants.LUMENS_ASSET_CODE, "", "",
-      "0", SupportedAssetType.ADDED, null)
-
-    val list = ArrayList<SupportedAsset>()
-    list.add(lumenSupportedAsset)
-
-    if (balances.isNotEmpty()) {
-      val nullableAssets = balances.map {
-        when {
-          it.assetType == Constants.LUMENS_ASSET_TYPE -> {
-            list[0].amount = it.balance
-            return@map null
-          }
-          supportedAssetsMap.containsKey(it.assetCode.toLowerCase()) -> {
-            supportedAssetsMap[it.assetCode.toLowerCase()]?.let { asset ->
-              asset.amount = it.balance
-              asset.type = SupportedAssetType.ADDED
-              asset.asset = it.asset
-              return@map asset
-            }
-          }
-          else -> {
-            return@map SupportedAsset(0, it.assetCode.toLowerCase(), 0,
-              it.assetIssuer.accountId, it.limit, it.assetCode, "",
-              "", it.balance, SupportedAssetType.ADDED, it.asset)
-          }
-        }
-      }
-
-      // This cast is guaranteed to succeed
-      list.addAll((nullableAssets.filterNotNull()))
-    }
-
-    return list
-  }
-
-  private fun getFilteredSupportedAssets(map: Map<String, SupportedAsset>): List<SupportedAsset> {
-    return map.values.filter { asset ->
-      asset.code.toUpperCase() !in WalletApplication.wallet.getBalances().map { it.assetCode }
-    }
-  }
-
-  private fun loadSupportedAssets() {
-    map.clear()
-
-    val dmc = SupportedAsset(0, Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
-      Constants.DMC_ASSET_ISSUER, "100000000000",
-      Constants.DMC_ASSET_NAME, "", "", null, null, null)
-
-    val zar = SupportedAsset(1, Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
-      Constants.ZAR_ASSET_ISSUER, "100000000000",
-      Constants.ZAR_ASSET_NAME, "", "", null, null, null)
-
-    val ngnt = SupportedAsset(2, Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
-      Constants.NGNT_ASSET_ISSUER, "100000000000",
-      Constants.NGNT_ASSET_NAME, "", "", null, null, null)
-
-    map[Constants.DMC_ASSET_TYPE] = dmc
-    map[Constants.ZAR_ASSET_TYPE] = zar
-    map[Constants.NGNT_ASSET_TYPE] = ngnt
-
-    updateAdapter()
-  }
   //endregion
 
   //region Assets Callbacks
-  override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {
+  override fun changeTrustline(asset: Asset, isRemove: Boolean) {
+    swipeRefresh?.isRefreshing = true
+    val secretSeed = AccountUtils.getSecretSeed(this)
+    if (NetworkUtils(this).isNetworkAvailable()) {
+      Horizon.getChangeTrust(object : SuccessErrorCallback {
+        override fun onSuccess() {
+          fetchAssets()
+          if (isRemove) {
+            toast(R.string.asset_removed)
+          } else {
+            toast(R.string.asset_added)
+          }
+          swipeRefresh?.isRefreshing = false
+          if (isRemove) {
+            DmcApp.userSession.setSessionAsset(DefaultAsset())
+          }
+        }
 
+        override fun onError(error: HorizonException) {
+          toast(error.message(this@ManageAssetsActivity))
+          swipeRefresh?.isRefreshing = false
+        }
+      }, asset, isRemove, secretSeed).execute()
+    } else {
+      NetworkUtils(this).displayNoNetwork()
+      swipeRefresh?.isRefreshing = false
+    }
   }
 
-  override fun assetSelected(sessionAsset: SessionAsset, image: View, code: View, balance: View) {
-    val assetCode = if (sessionAsset.assetCode == "native") "XLM" else sessionAsset.assetCode
+  override fun assetSelected(assetCode: String) {
     startActivity(AssetActivity.newInstance(this, assetCode))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
@@ -204,7 +137,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
 
       }
       else -> {
-        if (WalletApplication.wallet.isVerified()) {
+        if (DmcApp.wallet.isVerified()) {
           startActivity(DepositActivity.newInstance(
             this, DepositActivity.Mode.DEPOSIT, assetCode))
         } else {
@@ -218,7 +151,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   override fun withdraw(assetCode: String) {
     when (assetCode) {
       Constants.LUMENS_ASSET_CODE -> {
-        if (WalletApplication.wallet.getBalances().isNotEmpty() &&
+        if (DmcApp.wallet.getBalances().isNotEmpty() &&
           AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
           startActivity(Intent(this, InflationActivity::class.java))
         } else {
@@ -229,7 +162,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
         // TODO: LEARN DMC
       }
       else -> {
-        if (WalletApplication.wallet.isVerified()) {
+        if (DmcApp.wallet.isVerified()) {
           startActivity(DepositActivity.newInstance(
             this, DepositActivity.Mode.WITHDRAW, assetCode))
         } else {
@@ -237,6 +170,18 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
         }
 
       }
+    }
+  }
+
+  override fun addCustomAsset() {
+    startActivityForResult(AddAssetActivity.newInstance(this), RC_ADD_CUSTOM)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == RC_ADD_CUSTOM && resultCode == RESULT_OK) {
+      fetchAssets()
+    } else {
+      super.onActivityResult(requestCode, resultCode, data)
     }
   }
   //endregion

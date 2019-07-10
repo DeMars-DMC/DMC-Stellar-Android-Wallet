@@ -9,14 +9,17 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.adapters.TransactionsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.ViewUtils
+import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_asset.*
+import kotlinx.android.synthetic.main.activity_asset.payButton
+import kotlinx.android.synthetic.main.activity_asset.swipeRefresh
 import kotlinx.android.synthetic.main.activity_asset.toolbar
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
@@ -130,7 +133,7 @@ class AssetActivity : BaseActivity() {
   }
 
   private fun openDepositScreen(mode: DepositActivity.Mode) {
-    if (WalletApplication.wallet.isVerified()) {
+    if (DmcApp.wallet.isVerified()) {
       startActivity(DepositActivity.newInstance(this, mode, assetCode))
     } else {
       ViewUtils.showToast(this, R.string.withdraw_not_verified)
@@ -144,6 +147,12 @@ class AssetActivity : BaseActivity() {
 
     transactionsAdapter = TransactionsAdapter(this)
     transactionsRecyclerView.adapter = transactionsAdapter
+
+    ContactsRepositoryImpl(this).getContactsListLiveData(true)
+      .observe(this, Observer {
+          transactionsAdapter?.setContacts(ArrayList(it.stellarContacts))
+          transactionsAdapter?.notifyDataSetChanged()
+      })
 
     viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
     viewModel.walletViewState(false).observe(this, Observer {

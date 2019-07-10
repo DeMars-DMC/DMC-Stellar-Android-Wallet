@@ -9,7 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import com.soneso.stellarmnemonics.mnemonic.WordList
 import io.demars.stellarwallet.helpers.*
@@ -65,7 +65,7 @@ class RecoverWalletActivity : BaseActivity() {
         bottomButton.setOnClickListener {
             try {
                 recoveryString = StellarRecoveryString(getMnemonicString(), isRecoveryPhrase, passphrase).getString()
-                WalletApplication.wallet.setIsRecoveryPhrase(isRecoveryPhrase)
+                DmcApp.wallet.setIsRecoveryPhrase(isRecoveryPhrase)
                 startActivityForResult(WalletManagerActivity.restore(it.context, recoveryString, passphrase), RESTORE_REQUEST)
             } catch (e: Exception) {
                 showErrorMessage(e.message)

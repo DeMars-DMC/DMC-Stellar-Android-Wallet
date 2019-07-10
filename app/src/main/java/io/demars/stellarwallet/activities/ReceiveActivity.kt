@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.WalletApplication
+import io.demars.stellarwallet.DmcApp
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.android.synthetic.main.activity_receive.*
@@ -23,7 +23,7 @@ class ReceiveActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receive)
 
-        val pubAddress = WalletApplication.wallet.getStellarAccountId()
+        val pubAddress = DmcApp.wallet.getStellarAccountId()
 
         addressEditText.text = pubAddress
         generateQRCode(pubAddress!!, qrImageView, 500)

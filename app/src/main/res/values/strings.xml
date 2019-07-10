@@ -151,7 +151,6 @@
     <string name="remove_asset_message">Remove asset</string>
     <string name="no_balance_dialog_title">Minimum balance error</string>
     <string name="no_balance_text_message">You must have more than 1 Lumen (XLM) to perform this action.</string>
-    <string name="success_trustline_changed">Trust line changed!</string>
     <string name="asset_removed">Asset removed successfully</string>
     <string name="asset_added">Asset added successfully</string>
     <string name="error_trustline_changed">There was an error changing trust lines.</string>
@@ -392,4 +391,6 @@
     <string name="remove_asset">Remove asset</string>
     <string name="learn">Learn</string>
     <string name="receive_payments">Receive payments</string>
+    <string name="add_custom_asset">Add Custom Asset</string>
+    <string name="customize_wallet">Customize wallet</string>
 </resources>

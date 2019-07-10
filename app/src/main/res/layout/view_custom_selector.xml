@@ -51,7 +51,7 @@
             style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_big"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/whiteMain"
             android:spinnerMode="dialog"
             tools:ignore="UnusedAttribute" />
     </FrameLayout>

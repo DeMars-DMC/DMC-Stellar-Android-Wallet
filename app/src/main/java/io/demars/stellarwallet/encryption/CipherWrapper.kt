@@ -95,7 +95,7 @@ class CipherWrapper(val transformation: String) {
     }
 
     /**
-     * Unwraps(decrypts) a key with another key. Requires wrapped key algorithm and type.
+     * Unwraps(decrypts) a key with another key. Requires wrapped key algorithm and isAdded.
      */
     fun unWrapKey(wrappedKeyData: String, algorithm: String, wrappedKeyType: Int, keyToUnWrapWith: Key?): Key {
         val encryptedKeyData = Base64.decode(wrappedKeyData, Base64.DEFAULT)

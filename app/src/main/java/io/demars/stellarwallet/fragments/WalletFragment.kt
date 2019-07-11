@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.activities.*
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
@@ -37,7 +38,7 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var viewModel: WalletViewModel
   private var state = WalletState.UNKNOWN
   private var lastOperationsListSize = 0
-  private var activeAsset: String = DefaultAsset().LUMENS_ASSET_NAME
+  private var activeAsset: String = Constants.LUMENS_ASSET_NAME
   private var qrRendered = false
 
   private var stellarContacts: ArrayList<Contact> = ArrayList()

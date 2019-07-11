@@ -42,7 +42,7 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
 
     private var mBoundContact: Contact? = null // Can be null
     private val colors: IntArray = intArrayOf(R.color.blueLight, R.color.puce, R.color.colorMantis, R.color.brown,
-      R.color.purple, R.color.pink, R.color.colorPaleSky, R.color.colorTerracotta, R.color.cornflowerBlue)
+      R.color.purple, R.color.pink, R.color.colorPaleSky, R.color.colorError, R.color.cornflowerBlue)
 
     fun bind(contact: Contact) {
       mBoundContact = contact

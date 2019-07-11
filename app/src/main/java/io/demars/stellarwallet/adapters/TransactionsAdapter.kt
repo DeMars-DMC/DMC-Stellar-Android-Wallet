@@ -187,7 +187,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
         } else {
           viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
           viewHolder.amount.text = String.format(context.getString(R.string.negative_template), viewHolder.amount.text.toString())
-          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorTerracotta), PorterDuff.Mode.SRC_IN)
+          viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorError), PorterDuff.Mode.SRC_IN)
         }
       }
       Operation.OperationType.PAYMENT.value -> {
@@ -207,7 +207,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
               else -> viewHolder.transactionType.text = "Sent to ${formatAddress(operation.to)}"
             }
             viewHolder.amount.text = String.format(context.getString(R.string.negative_template), viewHolder.amount.text.toString())
-            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorTerracotta), PorterDuff.Mode.SRC_IN)
+            viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorError), PorterDuff.Mode.SRC_IN)
           }
           operation.to -> {
             viewHolder.transactionType.text = "Received from ${formatAddress(operation.from)}"

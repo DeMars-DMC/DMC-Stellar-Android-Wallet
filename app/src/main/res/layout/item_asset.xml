@@ -58,13 +58,13 @@
 
 
     <ImageView
-        android:id="@+id/clickIcon"
+        android:id="@+id/rightIcon"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:src="@drawable/ic_chevron_right_transparent"
-        android:layout_marginTop="@dimen/padding_horizontal"
-        android:tint="@color/transparent_white"
+        android:background="?attr/selectableItemBackgroundBorderless"
         tools:ignore="ContentDescription" />
 
 </RelativeLayout>

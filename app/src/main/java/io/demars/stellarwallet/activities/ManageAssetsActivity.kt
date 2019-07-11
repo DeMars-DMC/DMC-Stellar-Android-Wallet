@@ -1,27 +1,22 @@
 package io.demars.stellarwallet.activities
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.adapters.AssetsAdapter
-import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.AssetListener
 import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import android.content.Intent
-import android.net.Uri
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.DefaultAsset
 import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
-import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_manage_assets.assetsRecyclerView
 
 class ManageAssetsActivity : BaseActivity(), AssetListener {
@@ -31,41 +26,33 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     const val RC_ADD_CUSTOM = 111
   }
 
-  private var appBarOffset = 0
   private lateinit var adapter: AssetsAdapter
+  private var isCustomizing = false
+  private var totalBalanceStr = "36,544.85"
+  private var reportingAsset = "XLM"
   //endregion
 
   //region Init
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_manage_assets)
-    initAppBar()
     initUI()
     initAssets()
-    fetchAssets()
-  }
-
-  private fun initAppBar() {
-    appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
-      appBarOffset = -offset
-      val scrollRange = appBar.totalScrollRange
-      val bottomAlpha = 1f - (appBarOffset * 2f) / scrollRange
-
-      walletDivider.scaleX = 1f + 0.2f * (appBarOffset.toFloat() / scrollRange)
-      totalBalanceContainer.translationY = appBarOffset.toFloat()
-    })
+    refreshAssets()
   }
 
   private fun initUI() {
     swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     swipeRefresh.setOnRefreshListener {
-      fetchAssets()
+      refreshAssets()
     }
 
     accountButton.setOnClickListener {
-      startActivity(SettingsActivity.newInstance(this))
-      overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+      openSettings()
     }
+
+    totalBalanceLabel.setText(R.string.total_balance)
+    totalBalanceView.text = String.format("%s%s", totalBalanceStr, reportingAsset)
   }
 
   private fun initAssets() {
@@ -74,17 +61,17 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     assetsRecyclerView.adapter = adapter
   }
 
-
-  private fun fetchAssets() {
-    swipeRefresh.isRefreshing = true
-    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
-      updateAdapter()
-    })
+  private fun openSettings() {
+    startActivity(SettingsActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
-  private fun updateAdapter() {
-    adapter.updateAdapter()
-    swipeRefresh?.isRefreshing = false
+  private fun refreshAssets() {
+    swipeRefresh.isRefreshing = true
+    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
+      adapter.refreshAdapter()
+      swipeRefresh?.isRefreshing = false
+    })
   }
   //endregion
 
@@ -99,15 +86,11 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     if (NetworkUtils(this).isNetworkAvailable()) {
       Horizon.getChangeTrust(object : SuccessErrorCallback {
         override fun onSuccess() {
-          fetchAssets()
+          refreshAssets()
           if (isRemove) {
             toast(R.string.asset_removed)
           } else {
             toast(R.string.asset_added)
-          }
-          swipeRefresh?.isRefreshing = false
-          if (isRemove) {
-            DmcApp.userSession.setSessionAsset(DefaultAsset())
           }
         }
 
@@ -127,50 +110,37 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
-  override fun deposit(assetCode: String) {
-    when (assetCode) {
-      Constants.LUMENS_ASSET_CODE -> {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
-      }
-      Constants.DMC_ASSET_TYPE -> {
-        // TODO: TRADE DMC
-
-      }
-      else -> {
-        if (DmcApp.wallet.isVerified()) {
-          startActivity(DepositActivity.newInstance(
-            this, DepositActivity.Mode.DEPOSIT, assetCode))
-        } else {
-          ViewUtils.showToast(this, R.string.deposit_not_verified)
-        }
-      }
-    }
-
+  override fun customizeWallet() {
+    enableCustomization()
   }
 
-  override fun withdraw(assetCode: String) {
-    when (assetCode) {
-      Constants.LUMENS_ASSET_CODE -> {
-        if (DmcApp.wallet.getBalances().isNotEmpty() &&
-          AccountUtils.getTotalBalance(Constants.LUMENS_ASSET_CODE).toDouble() > 1.0) {
-          startActivity(Intent(this, InflationActivity::class.java))
-        } else {
-          showBalanceErrorDialog()
-        }
-      }
-      Constants.DMC_ASSET_TYPE -> {
-        // TODO: LEARN DMC
-      }
-      else -> {
-        if (DmcApp.wallet.isVerified()) {
-          startActivity(DepositActivity.newInstance(
-            this, DepositActivity.Mode.WITHDRAW, assetCode))
-        } else {
-          ViewUtils.showToast(this, R.string.withdraw_not_verified)
-        }
-
-      }
+  private fun enableCustomization() {
+    isCustomizing = true
+    adapter.enableCustomization(true)
+    assetsRecyclerView.smoothScrollBy(0,0)
+    totalBalanceLabel.setText(R.string.reporting_currency)
+    totalBalanceView.text = ""
+    reportingCurrency.visibility = View.VISIBLE
+    reportingCurrency.text = reportingAsset
+    accountButton.setImageResource(R.drawable.ic_check_white)
+    swipeRefresh.isEnabled = false
+    accountButton.setOnClickListener {
+      disableCustomization()
     }
+  }
+
+  private fun disableCustomization() {
+    isCustomizing = false
+    adapter.enableCustomization(false)
+    totalBalanceLabel.setText(R.string.total_balance)
+    totalBalanceView.text = String.format("%s%s", totalBalanceStr, reportingAsset)
+    reportingCurrency.visibility = View.GONE
+    accountButton.setImageResource(R.drawable.ic_settings)
+    accountButton.setColorFilter(ContextCompat.getColor(this, R.color.whiteMain))
+    accountButton.setOnClickListener {
+      openSettings()
+    }
+    swipeRefresh.isEnabled = true
   }
 
   override fun addCustomAsset() {
@@ -179,17 +149,19 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == RC_ADD_CUSTOM && resultCode == RESULT_OK) {
-      fetchAssets()
+      refreshAssets()
     } else {
       super.onActivityResult(requestCode, resultCode, data)
     }
   }
-  //endregion
 
-  private fun showBalanceErrorDialog() {
-    AlertDialog.Builder(this)
-      .setTitle(getString(R.string.no_balance_dialog_title))
-      .setMessage(getString(R.string.no_balance_text_message))
-      .setPositiveButton(getString(R.string.ok)) { _, _ -> }.show()
+  override fun onBackPressed() {
+    if (isCustomizing) {
+      disableCustomization()
+    } else {
+      super.onBackPressed()
+    }
   }
+
+  //endregion
 }

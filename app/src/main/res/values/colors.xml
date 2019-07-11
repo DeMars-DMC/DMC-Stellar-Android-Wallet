@@ -17,8 +17,7 @@
     <color name="colorDisabled">#797979</color>
     <color name="colorDisabledHighlight">#424242</color>
 
-    <color name="colorTerracotta">#E66E64</color>
-    <color name="colorTerracottaHighlight">#B6574F</color>
+    <color name="colorError">#c93434</color>
 
     <color name="colorLightGrey">@color/alto</color>
 

@@ -180,25 +180,14 @@ class AssetsActivity : BaseActivity(), AssetListener {
     finish()
   }
 
-  override fun deposit(assetCode: String) {
-  }
+  override fun customizeWallet() {}
 
-  override fun withdraw(assetCode: String) {
-    if (DmcApp.wallet.isVerified()) {
-      startActivity(DepositActivity.newInstance(
-        this, DepositActivity.Mode.WITHDRAW, assetCode))
-    } else {
-      ViewUtils.showToast(this, R.string.withdraw_not_verified)
-    }
-  }
+  override fun addCustomAsset() {}
 
-  override fun addCustomAsset() {
-  }
-
-  override fun changeTrustline(asset: Asset, isRemoveAsset: Boolean) {
+  override fun changeTrustline(asset: Asset, isRemove: Boolean) {
     progressBar.visibility = View.VISIBLE
     val secretSeed = AccountUtils.getSecretSeed(this)
-    changeTrustLine(secretSeed, asset, isRemoveAsset)
+    changeTrustLine(secretSeed, asset, isRemove)
   }
 
   private fun changeTrustLine(secretSeed: CharArray, assetToChange: Asset, isRemove: Boolean) {

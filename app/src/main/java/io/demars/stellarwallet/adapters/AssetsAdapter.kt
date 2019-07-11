@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.helpers.Constants
@@ -88,12 +89,21 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     }
   }
 
-  fun updateAdapter() {
+
+  fun refreshAdapter() {
+    items.clear()
+    notifyDataSetChanged()
+
+    updateAssets()
+  }
+
+  fun enableCustomization(enable: Boolean) {
+    isCustomizing = enable
     updateAssets()
   }
 
   private fun updateAssets() {
-    val initial = items.isEmpty()
+    val isRefreshing = items.isEmpty()
     val balances = DmcApp.wallet.getBalances()
     val xlm = DmcAsset(Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
       "", Constants.LUMENS_ASSET_CODE, "", true, null)
@@ -155,43 +165,81 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
     items = items.apply {
       var index = 0
-      if (initial) {
-        if (currencies.isNotEmpty()) {
-          addAll(currencies)
-          notifyItemRangeInserted(index, currencies.size)
-          index += currencies.size
-        }
-
-        if (customs.isNotEmpty()) {
-          addAll(customs)
-          notifyItemRangeInserted(index, customs.size)
-          index += customs.size
-        }
-
-        addAll(cryptos)
-        add("Footer")
-        notifyItemRangeInserted(index,cryptos.size + 1)
-      } else {
+      if (isRefreshing) {
         if (currencies.isNotEmpty()) {
           index += if (isCustomizing) {
-            add(index, "Currencies")
-            notifyItemInserted(index)
+            add("Currencies")
+            addAll(currencies)
+            notifyItemRangeInserted(index, currencies.size + 1)
             currencies.size + 1
           } else {
-            remove("Currencies")
-            notifyItemRemoved(index)
+            addAll(currencies)
+            notifyItemRangeInserted(index, currencies.size)
             currencies.size
           }
         }
 
         if (customs.isNotEmpty()) {
           index += if (isCustomizing) {
+            add("Custom assets")
+            addAll(customs)
+            notifyItemRangeInserted(index, customs.size + 1)
+            customs.size
+          } else {
+            addAll(customs)
+            notifyItemRangeInserted(index, customs.size)
+            customs.size
+          }
+        }
+
+        if (isCustomizing) {
+          add("Cryptos")
+          addAll(cryptos)
+          notifyItemRangeInserted(index, cryptos.size + 1)
+          index += cryptos.size + 1
+
+          if (supported.isNotEmpty()) {
+            add("DMC assets")
+            addAll(supported)
+            notifyItemRangeInserted(index, supported.size + 1)
+            index += supported.size + 1
+          }
+
+          add("Footer")
+          notifyItemInserted(index)
+        } else {
+          addAll(cryptos)
+          add("Footer")
+          notifyItemRangeInserted(index, cryptos.size + 1)
+          index += cryptos.size + 1
+        }
+      } else {
+        if (currencies.isNotEmpty()) {
+          index += if (isCustomizing) {
+            add(index, "Currencies")
+            notifyItemInserted(index)
+            notifyItemRangeChanged(index + 1, currencies.size)
+            currencies.size + 1
+          } else {
+            remove("Currencies")
+            notifyItemRemoved(index)
+            notifyItemRangeChanged(index, currencies.size)
+            currencies.size
+          }
+
+
+        }
+
+        if (customs.isNotEmpty()) {
+          index += if (isCustomizing) {
             add(index, "Custom assets")
             notifyItemInserted(index)
+            notifyItemRangeChanged(index + 1, customs.size)
             customs.size + 1
           } else {
             remove("Custom assets")
             notifyItemRemoved(index)
+            notifyItemRangeChanged(index, customs.size)
             customs.size
           }
         }
@@ -199,20 +247,22 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         index += if (isCustomizing) {
           add(index, "Cryptos")
           notifyItemInserted(index)
+          notifyItemRangeChanged(index + 1, cryptos.size)
           cryptos.size + 1
         } else {
           remove("Cryptos")
           notifyItemRemoved(index)
+          notifyItemRangeChanged(index, cryptos.size)
           cryptos.size
         }
 
         if (supported.isNotEmpty()) {
           index += if (isCustomizing) {
-            add(index, "Add assets")
+            add(index, "DMC assets")
             notifyItemInserted(index)
             1
           } else {
-            remove("Add assets")
+            remove("DMC assets")
             notifyItemRemoved(index)
             0
           }
@@ -247,8 +297,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val defaultImage: TextView = v.findViewById(R.id.defaultImage)
     val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
-//    val leftButton: TextView = v.findViewById(R.id.leftButton)
-//    val rightButton: TextView = v.findViewById(R.id.rightButton)
+    val rightIcon: ImageView = v.findViewById(R.id.rightIcon)
   }
 
   class SupportedAssetViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -256,8 +305,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val defaultImage: TextView = v.findViewById(R.id.defaultImage)
     val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
-//    val leftButton: TextView = v.findViewById(R.id.leftButton)
-//    val rightButton: TextView = v.findViewById(R.id.rightButton)
+    val rightIcon: ImageView = v.findViewById(R.id.rightIcon)
   }
 
   //endregion
@@ -276,9 +324,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.icon.setImageResource(R.drawable.ic_add_green)
       viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_green)
       viewHolder.button.setOnClickListener {
-        isCustomizing = false
-        updateAdapter()
-//        listener.addCustomAsset()
+        listener.addCustomAsset()
       }
     } else {
       viewHolder.title.setText(R.string.customize_wallet)
@@ -287,8 +333,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.icon.setImageResource(R.drawable.ic_edit_accent)
       viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_accent)
       viewHolder.button.setOnClickListener {
-        isCustomizing = true
-        updateAdapter()
+        listener.customizeWallet()
       }
     }
   }
@@ -301,71 +346,26 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     holder.assetBalance.text = StringFormat.truncateDecimalPlaces(asset.amount,
       AssetUtils.getMaxDecimals(assetCode))
 
-    // Buttons
-//    when (assetCode) {
-//      Constants.LUMENS_ASSET_CODE -> {
-//        holder.leftButton.visibility = View.VISIBLE
-//        holder.leftButton.setText(R.string.buy)
-//
-//        holder.rightButton.visibility = View.VISIBLE
-//        holder.rightButton.setText(R.string.set_inflation)
-//      }
-//      Constants.DMC_ASSET_TYPE -> {
-//        holder.leftButton.visibility = View.VISIBLE
-//        holder.leftButton.setText(R.string.trade)
-//
-//        holder.rightButton.visibility = View.VISIBLE
-//        holder.rightButton.setText(R.string.learn)
-//      }
-//      Constants.ZAR_ASSET_TYPE -> {
-//        holder.leftButton.visibility = View.VISIBLE
-//        holder.leftButton.setText(R.string.deposit)
-//
-//        val hasAvailableZAR = AccountUtils.hasAvailableAssets(asset.code)
-//
-//        holder.rightButton.visibility = if (hasAvailableZAR) View.VISIBLE else View.GONE
-//        holder.rightButton.setText(R.string.withdraw)
-//      }
-//      Constants.NGNT_ASSET_TYPE -> {
-//        holder.leftButton.visibility = View.VISIBLE
-//        holder.leftButton.setText(R.string.deposit)
-//
-//        val hasNGNT = AccountUtils.hasAvailableAssets(asset.code)
-//
-//        holder.rightButton.visibility = if (hasNGNT) View.VISIBLE else View.GONE
-//        holder.rightButton.setText(R.string.withdraw)
-//      }
-//      else -> {
-//        holder.leftButton.visibility = View.GONE
-//        holder.rightButton.visibility = View.GONE
-//      }
-//    }
-//
-//    holder.leftButton.setOnClickListener {
-//      listener.deposit(assetCode)
-//    }
-//
-//    holder.rightButton.setOnClickListener {
-//      listener.withdraw(assetCode)
-//    }
-//
-//    when {
-//      asset.amount!!.toDouble() == 0.0 &&
-//        assetCode != Constants.LUMENS_ASSET_CODE &&
-//        assetCode != Constants.DMC_ASSET_TYPE -> {
-//        holder.rightButton.visibility = View.VISIBLE
-//        holder.rightButton.setText(R.string.remove_asset)
-//        holder.rightButton.setTextColor(
-//          ContextCompat.getColor(context, R.color.colorTerracotta))
-//        holder.rightButton.setOnClickListener {
-//          listener.changeTrustline(asset.asset!!, true)
-//        }
-//      }
-//      else -> {
-//        holder.rightButton.setTextColor(
-//          ContextCompat.getColor(context, R.color.colorAccent))
-//      }
-//    }
+    if (isCustomizing) {
+      if (asset.amount!!.toDouble() == 0.0 &&
+        assetCode != Constants.LUMENS_ASSET_CODE &&
+        assetCode != Constants.DMC_ASSET_TYPE) {
+        holder.rightIcon.visibility = View.VISIBLE
+        holder.rightIcon.setImageResource(R.drawable.ic_clear)
+        holder.rightIcon.setPadding(holder.rightIcon.context.resources?.
+          getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+        holder.rightIcon.setOnClickListener {
+          listener.changeTrustline(asset.asset!!, true)
+        }
+      } else {
+        holder.rightIcon.visibility = View.GONE
+      }
+    } else {
+      holder.rightIcon.visibility = View.VISIBLE
+      holder.rightIcon.setImageResource(R.drawable.ic_chevron_right_transparent)
+      holder.rightIcon.setPadding(0)
+      holder.rightIcon.setOnClickListener(null)
+    }
 
     holder.defaultImage.visibility = View.GONE
 
@@ -392,32 +392,35 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     ViewCompat.setTransitionName(holder.assetCode, "${assetCode}CODE")
     ViewCompat.setTransitionName(holder.assetBalance, "${assetCode}BALANCE")
 
-    holder.itemView.setOnClickListener {
-      listener.assetSelected(assetCode)
+    if (isCustomizing) {
+      holder.itemView.setOnClickListener(null)
+    } else {
+      holder.itemView.setOnClickListener {
+        listener.assetSelected(assetCode)
+      }
     }
   }
 
-  private fun displaySupportedAsset(viewHolder: SupportedAssetViewHolder, position: Int) {
+  private fun displaySupportedAsset(holder: SupportedAssetViewHolder, position: Int) {
     val asset = items[position] as DmcAsset
     val assetCode = asset.code.toUpperCase()
     val trustLineAsset = Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(asset.issuer))
 
-    viewHolder.defaultImage.visibility = View.GONE
-//    viewHolder.leftButton.visibility = View.GONE
+    holder.defaultImage.visibility = View.GONE
 
-    viewHolder.assetCode.text = assetCode
-    viewHolder.assetBalance.text = asset.name
-    viewHolder.assetBalance.visibility = View.VISIBLE
+    holder.assetCode.text = assetCode
+    holder.assetBalance.text = asset.name
+    holder.assetBalance.visibility = View.VISIBLE
 
-    loadAssetImage(asset.image, viewHolder.assetImage)
+    loadAssetImage(asset.image, holder.assetImage)
 
-//    viewHolder.rightButton.visibility = View.VISIBLE
-//    viewHolder.rightButton.setText(R.string.add_asset)
-//    viewHolder.rightButton.setTextColor(
-//      ContextCompat.getColor(context, R.color.colorGreen))
-//    viewHolder.rightButton.setOnClickListener {
-//      listener.changeTrustline(trustLineAsset, false)
-//    }
+    holder.rightIcon.visibility = View.VISIBLE
+    holder.rightIcon.setImageResource(R.drawable.ic_add_green)
+    holder.rightIcon.setPadding(holder.rightIcon.context.resources?.
+      getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+    holder.rightIcon.setOnClickListener {
+      listener.changeTrustline(trustLineAsset, false)
+    }
   }
 
   private fun loadAssetImage(image: Int, view: ImageView) {

@@ -62,7 +62,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
       address = intent.getStringExtra(ARG_ADDRESS_DATA)
     }
 
-    addressEditText.text = address
+    addressTextView.text = address
 
     send_button.setOnClickListener {
       if (amount <= amountAvailable && amount != 0.0) {

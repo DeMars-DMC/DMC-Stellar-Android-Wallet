@@ -125,9 +125,9 @@ class WalletFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
   }
 
-  private fun initAddressCopyButton(secretSeed: String) {
-    publicSeedTextView.text = secretSeed
-    publicSeedCopyButton.setOnClickListener { copyAddressToClipBoard(secretSeed) }
+  private fun initAddressCopyButton(publicSeed: String) {
+    publicSeedTextView.text = publicSeed
+    publicSeedCopyButton.setOnClickListener { copyAddressToClipBoard(publicSeed) }
   }
 
   private fun copyAddressToClipBoard(data: String) {

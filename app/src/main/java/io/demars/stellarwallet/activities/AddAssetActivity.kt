@@ -34,12 +34,12 @@ class AddAssetActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         addAssetButton.setOnClickListener {
-            if (assetCodeEditText.text.isNotEmpty() && addressEditText.text.isNotEmpty()) {
+            if (assetCodeEditText.text.isNotEmpty() && addressTextView.text.isNotEmpty()) {
                 val secretSeed = AccountUtils.getSecretSeed(this)
                 val asset : Asset
                 try {
                     asset = Asset.createNonNativeAsset(assetCodeEditText.text.toString().toUpperCase(),
-                            KeyPair.fromAccountId(addressEditText.text.toString().toUpperCase()))
+                            KeyPair.fromAccountId(addressTextView.text.toString().toUpperCase()))
 
                 } catch (e: Exception) {
                     Toast.makeText(applicationContext, "Invalid input for code or issuer", Toast.LENGTH_SHORT).show()

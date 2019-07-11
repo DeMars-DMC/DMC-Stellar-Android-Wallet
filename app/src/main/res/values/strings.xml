@@ -258,7 +258,7 @@
     <string name="exchange_alert_message">You must have at least one Stellar asset in addition to Lumens(XLM) in order to exchange.</string>
     <string name="exchange_alert_positive_button">Add asset</string>
     <string name="exchange_alert_negative_button">Not now</string>
-    <string name="fund_account_string">Deposit 1 XLM to activate your wallet or Create a DMC Account and get 5 XLM for FREE</string>
+    <string name="fund_account_string">Deposit 1 XLM to activate your wallet or create a DMC Account and get 5 XLM for FREE</string>
     <string name="fetching_account_state">Fetching account transactions, please wait</string>
     <string name="nav_start">Start</string>
     <string name="learn_about_stellar">Learn about Stellar &amp; DMC</string>
@@ -393,4 +393,6 @@
     <string name="receive_payments">Receive payments</string>
     <string name="add_custom_asset">Add Custom Asset</string>
     <string name="customize_wallet">Customize wallet</string>
+    <string name="refreshing">Refreshing…</string>
+    <string name="not_funded">NOT FUNDED</string>
 </resources>

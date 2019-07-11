@@ -23,12 +23,12 @@ class ReceiveActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receive)
 
-        val pubAddress = DmcApp.wallet.getStellarAccountId()
-
-        addressEditText.text = pubAddress
-        generateQRCode(pubAddress!!, qrImageView, 500)
         backButton.setOnClickListener { onBackPressed() }
-        copyAddressButton.setOnClickListener { copyAddressToClipBoard(pubAddress)  }
+
+        val publicId = DmcApp.wallet.getStellarAccountId()
+        addressTextView.text = publicId
+        generateQRCode(publicId!!, qrImageView, 500)
+        addressCopyButton.setOnClickListener { copyAddressToClipBoard(publicId)  }
     }
 
     private fun generateQRCode(data: String, imageView: ImageView, size: Int) {

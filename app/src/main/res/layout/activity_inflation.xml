@@ -46,7 +46,7 @@
             tools:ignore="UnusedAttribute">
 
             <EditText
-                android:id="@+id/addressEditText"
+                android:id="@+id/addressTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"

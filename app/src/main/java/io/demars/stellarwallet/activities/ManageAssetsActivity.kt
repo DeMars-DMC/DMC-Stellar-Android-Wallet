@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.activities
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
@@ -9,26 +10,31 @@ import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import android.content.Intent
 import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
-import kotlinx.android.synthetic.main.activity_manage_assets.assetsRecyclerView
+import io.demars.stellarwallet.utils.ViewUtils
 
 class ManageAssetsActivity : BaseActivity(), AssetListener {
 
   //region Properties
   companion object {
     const val RC_ADD_CUSTOM = 111
+    const val RC_CREATE_ACC = 222
   }
 
   private lateinit var adapter: AssetsAdapter
   private var isCustomizing = false
-  private var totalBalanceStr = "36,544.85"
+  private var totalBalance = "36,544.85"
   private var reportingAsset = "XLM"
   //endregion
 
@@ -52,7 +58,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     }
 
     totalBalanceLabel.setText(R.string.total_balance)
-    totalBalanceView.text = String.format("%s%s", totalBalanceStr, reportingAsset)
+    totalBalanceView.text = String.format("%s%s", totalBalance, reportingAsset)
   }
 
   private fun initAssets() {
@@ -68,16 +74,69 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
 
   private fun refreshAssets() {
     swipeRefresh.isRefreshing = true
-    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> {
-      adapter.refreshAdapter()
+    totalBalanceView.setText(R.string.refreshing)
+    AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> { response ->
       swipeRefresh?.isRefreshing = false
+      when (response.httpCode) {
+        200 -> {
+          //Funded account
+          updateViewForActive()
+        }
+        404 -> {
+          // Not Funded
+          updateViewForFunding()
+        }
+        else -> {
+          // Error
+          updateViewForError()
+        }
+      }
     })
+  }
+
+  private fun updateViewForActive() {
+    totalBalance = DmcApp.wallet.getBalances()
+      .find { it.assetType == "native" }?.balance ?: "0.00" + "XLM"
+    totalBalanceView.text = totalBalance
+
+    fundingState.visibility = View.GONE
+    assetsRecyclerView.visibility = View.VISIBLE
+
+    adapter.refreshAdapter()
+  }
+
+  private fun updateViewForFunding() {
+    totalBalance = "0.00XLM"
+    totalBalanceView.text = totalBalance
+
+    assetsRecyclerView.visibility = View.GONE
+    fundingState.visibility = View.VISIBLE
+
+    val publicId = DmcApp.wallet.getStellarAccountId() ?: ""
+    addressTextView.text = publicId
+    addressCopyButton.setOnClickListener {
+      ViewUtils.copyToClipBoard(this, publicId, "Account Id",
+        R.string.address_copied_message)
+    }
+
+    generateQRCode(publicId, qrCode, 500)
+
+    if (DmcApp.wallet.isRegistered()) {
+      openAccountButton?.visibility = View.GONE
+    } else {
+      openAccountButton?.visibility = View.VISIBLE
+      openAccountButton?.setOnClickListener {
+        startActivityForResult(CreateUserActivity.newInstance(this), RC_CREATE_ACC)
+      }
+    }
+  }
+
+  private fun updateViewForError() {
+    totalBalance = "ERROR"
+    totalBalanceView.text = totalBalance
   }
   //endregion
 
-  //region Supported Assets
-
-  //endregion
 
   //region Assets Callbacks
   override fun changeTrustline(asset: Asset, isRemove: Boolean) {
@@ -117,7 +176,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   private fun enableCustomization() {
     isCustomizing = true
     adapter.enableCustomization(true)
-    assetsRecyclerView.smoothScrollBy(0,0)
+    assetsRecyclerView.smoothScrollBy(0, 0)
     totalBalanceLabel.setText(R.string.reporting_currency)
     totalBalanceView.text = ""
     reportingCurrency.visibility = View.VISIBLE
@@ -133,7 +192,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     isCustomizing = false
     adapter.enableCustomization(false)
     totalBalanceLabel.setText(R.string.total_balance)
-    totalBalanceView.text = String.format("%s%s", totalBalanceStr, reportingAsset)
+    totalBalanceView.text = String.format("%s%s", totalBalance, reportingAsset)
     reportingCurrency.visibility = View.GONE
     accountButton.setImageResource(R.drawable.ic_settings)
     accountButton.setColorFilter(ContextCompat.getColor(this, R.color.whiteMain))
@@ -143,12 +202,20 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
     swipeRefresh.isEnabled = true
   }
 
+  private fun generateQRCode(data: String, imageView: ImageView, size: Int) {
+    val barcodeEncoder = BarcodeEncoder()
+    val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
+    imageView.setImageBitmap(bitmap)
+  }
+
   override fun addCustomAsset() {
     startActivityForResult(AddAssetActivity.newInstance(this), RC_ADD_CUSTOM)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == RC_ADD_CUSTOM && resultCode == RESULT_OK) {
+      refreshAssets()
+    } else if (requestCode == RC_CREATE_ACC && resultCode == Activity.RESULT_OK) {
       refreshAssets()
     } else {
       super.onActivityResult(requestCode, resultCode, data)

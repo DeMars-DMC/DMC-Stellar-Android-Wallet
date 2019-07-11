@@ -2,6 +2,8 @@ package io.demars.stellarwallet.utils
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Resources
@@ -103,6 +105,24 @@ object ViewUtils {
     }
 
     builder.show()
+  }
+  //endregion
+
+  //region Clipboard
+  @JvmStatic
+  fun copyToClipBoard(context: Context, data: String, label: String, toastMessage: String) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, data)
+    clipboard.primaryClip = clip
+    showToast(context, toastMessage)
+  }
+
+  @JvmStatic
+  fun copyToClipBoard(context: Context, data: String, label: String, toastMessage: Int) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, data)
+    clipboard.primaryClip = clip
+    showToast(context, toastMessage)
   }
   //endregion
 }

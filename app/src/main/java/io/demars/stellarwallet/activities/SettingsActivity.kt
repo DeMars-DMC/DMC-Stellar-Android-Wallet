@@ -13,6 +13,7 @@ import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.utils.DiagnosticUtils
 import io.demars.stellarwallet.utils.GlobalGraphHelper
+import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_settings.*
 import timber.log.Timber
 
@@ -70,13 +71,13 @@ class SettingsActivity : BaseActivity() {
     }
 
     supportEmailButton.setOnClickListener {
-      copyToClipBoard("support@demars.io", "DMC Email",
-        getString(R.string.email_copied_message))
+      ViewUtils.copyToClipBoard(this, "support@demars.io", "DMC Email",
+        R.string.email_copied_message)
     }
 
     supportWhatsAppButton.setOnClickListener {
-      copyToClipBoard("+230 5 775 8837", "DMC WhatsApp",
-        getString(R.string.number_copied_message))
+      ViewUtils.copyToClipBoard(this, "+230 5 775 8837", "DMC WhatsApp",
+        R.string.number_copied_message)
     }
 
     quickStartButton.setOnClickListener {
@@ -157,13 +158,6 @@ class SettingsActivity : BaseActivity() {
 
   private fun setSavedSettings() {
     pinOnSendPaymentsButton.isChecked = DmcApp.wallet.getShowPinOnSend()
-  }
-
-  private fun copyToClipBoard(data: String, label: String, toastMessage: String) {
-    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText(label, data)
-    clipboard.primaryClip = clip
-    toast(toastMessage)
   }
 
   override fun onBackPressed() {

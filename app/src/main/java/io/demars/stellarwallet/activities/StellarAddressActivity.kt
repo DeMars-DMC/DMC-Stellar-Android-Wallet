@@ -97,7 +97,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
       if (result.contents == null) {
         Toast.makeText(this, "Scan cancelled", Toast.LENGTH_LONG).show()
       } else {
-        addressEditText.setText(result.contents)
+        addressTextView.setText(result.contents)
         bottomButton.isEnabled = true
       }
     } else {
@@ -137,7 +137,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
         contactNameText.visibility = View.GONE
         contactNameEditText.visibility = View.GONE
         addressTitleText.text = getString(R.string.stellar_address_title)
-        addressEditText.setText(contact.stellarAddress)
+        addressTextView.setText(contact.stellarAddress)
       }
       Mode.CREATE_CONTACT -> {
         titleBalance.visibility = View.GONE
@@ -177,7 +177,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
   }
 
   override fun onClick(v: View) {
-    val address = addressEditText.text.toString()
+    val address = addressTextView.text.toString()
     when (v.id) {
       R.id.cameraImageButton -> {
         initiateScan()
@@ -194,7 +194,7 @@ class StellarAddressActivity : BaseActivity(), View.OnClickListener {
             } else {
               // Shake animation on the text
               val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake)
-              addressEditText.startAnimation(shakeAnimation)
+              addressTextView.startAnimation(shakeAnimation)
             }
           }
           Mode.UPDATE_CONTACT -> {

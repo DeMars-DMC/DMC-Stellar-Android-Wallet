@@ -25,7 +25,7 @@ class InflationActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        addressEditText.setText(Constants.INFLATION_DESTINATION)
+        addressTextView.setText(Constants.INFLATION_DESTINATION)
 
         saveButton.setOnClickListener {
 
@@ -43,7 +43,7 @@ class InflationActivity : BaseActivity() {
                         progressBar.visibility = View.GONE
                         Toast.makeText(this@InflationActivity, error.message(this@InflationActivity), Toast.LENGTH_SHORT).show()
                     }
-                }, secretSeed, addressEditText.text.toString()).execute()
+                }, secretSeed, addressTextView.text.toString()).execute()
             } else {
                 progressBar.visibility = View.GONE
                 NetworkUtils(this).displayNoNetwork()

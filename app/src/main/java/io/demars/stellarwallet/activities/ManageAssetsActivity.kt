@@ -28,6 +28,8 @@ import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.ViewUtils
+import kotlinx.android.synthetic.main.activity_manage_assets.addressTextView
+import org.stellar.sdk.KeyPair
 
 class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
 
@@ -84,11 +86,13 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
     swipeRefresh.isRefreshing = true
     totalBalanceView.setText(R.string.refreshing)
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> { response ->
-      swipeRefresh?.isRefreshing = false
       when (response.httpCode) {
         200 -> {
           //Funded account
           updateViewForActive()
+          if (checkDmcAsset()) {
+            adapter.refreshAdapter()
+          }
         }
         404 -> {
           // Not Funded
@@ -102,18 +106,35 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
     })
   }
 
+  private fun checkDmcAsset(): Boolean {
+    val dmc = DmcApp.wallet.getBalances().find {
+      it.assetCode.equals(Constants.DMC_ASSET_TYPE, true) &&
+        it.assetIssuer.accountId == Constants.DMC_ASSET_ISSUER
+    }
+
+    return if (dmc == null) {
+      changeTrustline(Asset.createNonNativeAsset(Constants.DMC_ASSET_TYPE,
+        KeyPair.fromAccountId(Constants.DMC_ASSET_ISSUER)), false)
+      false
+    } else {
+      true
+    }
+  }
+
   private fun updateViewForActive() {
-    totalBalance = DmcApp.wallet.getBalances()
-      .find { it.assetType == "native" }?.balance ?: "0.00" + "XLM"
+    swipeRefresh?.isRefreshing = false
+
+    totalBalance = (DmcApp.wallet.getBalances()
+      .find { it.assetType == "native" }?.balance ?: "0.00") + "XLM"
     totalBalanceView.text = totalBalance
 
     fundingState.visibility = View.GONE
     assetsRecyclerView.visibility = View.VISIBLE
-
-    adapter.refreshAdapter()
   }
 
   private fun updateViewForFunding() {
+    swipeRefresh?.isRefreshing = false
+
     totalBalance = "0.00XLM"
     totalBalanceView.text = totalBalance
 
@@ -140,6 +161,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
   }
 
   private fun updateViewForError() {
+    swipeRefresh?.isRefreshing = false
     totalBalance = "ERROR"
     totalBalanceView.text = totalBalance
   }
@@ -154,11 +176,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
       Horizon.getChangeTrust(object : SuccessErrorCallback {
         override fun onSuccess() {
           refreshAssets()
-          if (isRemove) {
-            toast(R.string.asset_removed)
-          } else {
-            toast(R.string.asset_added)
-          }
         }
 
         override fun onError(error: HorizonException) {

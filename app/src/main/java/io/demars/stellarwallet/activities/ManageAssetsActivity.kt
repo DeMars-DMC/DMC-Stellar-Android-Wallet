@@ -13,9 +13,14 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.demars.stellarwallet.DmcApp
+import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
@@ -24,7 +29,7 @@ import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.ViewUtils
 
-class ManageAssetsActivity : BaseActivity(), AssetListener {
+class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
 
   //region Properties
   companion object {
@@ -42,9 +47,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_manage_assets)
+
+    Firebase.getUserStellarAddress(this)
     initUI()
-    initAssets()
-    refreshAssets()
   }
 
   private fun initUI() {
@@ -59,9 +64,12 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
 
     totalBalanceLabel.setText(R.string.total_balance)
     totalBalanceView.text = String.format("%s%s", totalBalance, reportingAsset)
+
+    initAssetsView()
+    refreshAssets()
   }
 
-  private fun initAssets() {
+  private fun initAssetsView() {
     adapter = AssetsAdapter(this)
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
     assetsRecyclerView.adapter = adapter
@@ -229,6 +237,24 @@ class ManageAssetsActivity : BaseActivity(), AssetListener {
       super.onBackPressed()
     }
   }
+  //endregion
 
+  //region Stellar address listener
+  override fun onCancelled(error: DatabaseError) = Unit
+
+  override fun onDataChange(data: DataSnapshot) {
+    // TODO: MOVE EARLIER TO LOGIN
+    Firebase.removeStellarAddressListener(this)
+    val address = DmcApp.wallet.getStellarAccountId()
+    if (address.isNullOrEmpty()) {
+      finishWithToast("Stellar address is NULL")
+    } else if (!data.exists() || data.getValue(String::class.java).isNullOrBlank()) {
+      // User doesn't have stellar address attached yet so we add it to Firebase
+      Firebase.updateStellarAddress(address)
+    } else if (address != data.getValue(String::class.java)) {
+      // Address not matching show error and restart
+      ViewUtils.showWrongWalletDialog(this)
+    }
+  }
   //endregion
 }

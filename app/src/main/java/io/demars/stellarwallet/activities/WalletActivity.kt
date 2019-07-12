@@ -58,7 +58,7 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
           override fun onDataChange(data: DataSnapshot) {
             if (!data.exists() || data.getValue(String::class.java).isNullOrBlank()) {
               // User doesn't have stellar address attached yet so we add it to Firebase
-              Firebase.getStellarAddressRef(uid).setValue(address)
+//              Firebase.setStellarAddress(address)
             } else {
               val stellarAddressRemote = data.getValue(String::class.java)
               if (address != stellarAddressRemote) {

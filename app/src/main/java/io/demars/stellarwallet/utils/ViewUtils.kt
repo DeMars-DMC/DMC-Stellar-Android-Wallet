@@ -2,25 +2,17 @@ package io.demars.stellarwallet.utils
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.DialogInterface
-import android.content.res.Resources
+import android.content.*
 import android.graphics.Color
 import android.os.Build
-import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import io.demars.stellarwallet.activities.CreateUserActivity
+import io.demars.stellarwallet.R
+import io.demars.stellarwallet.firebase.Firebase
 
 object ViewUtils {
 
@@ -78,6 +70,28 @@ object ViewUtils {
   //endregion
 
   //region Dialogs
+  fun showWrongWalletDialog(activity: FragmentActivity) {
+    val builder = AlertDialog.Builder(activity)
+    builder.setTitle(R.string.non_matching_wallet_title)
+      .setMessage(R.string.non_matching_wallet_message)
+      .setPositiveButton(R.string.try_again) { _, _ ->
+        GlobalGraphHelper.wipeAndRestart(activity)
+      }
+      .setNeutralButton(R.string.contact_us) { _, _ ->
+        val uid = Firebase.getCurrentUserUid()
+        GlobalGraphHelper.wipeAndRestart(activity)
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/html"
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@demars.io"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Cannot access to Stellar Wallet: UID - $uid")
+        activity.startActivity(Intent.createChooser(intent, "Send email to DMC support"))
+      }
+    val dialog = builder.create()
+    dialog.setCancelable(false)
+    dialog.setCanceledOnTouchOutside(false)
+    dialog.show()
+  }
+
   @JvmStatic
   fun showDialog(context: Context?, title: Int, message: Int,
                  negativeText: Int, positiveText: Int,

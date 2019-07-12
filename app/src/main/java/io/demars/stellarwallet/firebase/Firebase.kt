@@ -90,6 +90,13 @@ object Firebase {
         .addValueEventListener(listener)
     }
 
+  fun updateStellarAddress(stellarAddress: String) {
+    getCurrentUserUid()?.let { uid ->
+      getStellarAddressRef(uid)
+        .setValue(stellarAddress)
+    }
+  }
+
   fun getStellarAddressRef(uid: String): DatabaseReference = getDatabaseReference().child("users")
     .child(uid).child("stellar_address")
 
@@ -120,6 +127,12 @@ object Firebase {
   fun removeUserListener(listener: ValueEventListener) {
     getCurrentUserUid()?.let { uid ->
       getUserRef(uid).removeEventListener(listener)
+    }
+  }
+
+  fun removeStellarAddressListener(listener: ValueEventListener) {
+    getCurrentUserUid()?.let { uid ->
+      getStellarAddressRef(uid).removeEventListener(listener)
     }
   }
 

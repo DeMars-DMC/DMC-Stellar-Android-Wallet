@@ -341,7 +341,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     val width = resources.getDimensionPixelOffset(R.dimen.progress_snackbar_width)
 
     val params = FrameLayout.LayoutParams(height, width)
-    params.gravity = Gravity.END or Gravity.RIGHT or Gravity.CENTER_VERTICAL
+    params.gravity = Gravity.END or Gravity.CENTER_VERTICAL
     val margin = resources.getDimensionPixelOffset(R.dimen.progress_snackbar_margin)
     progress.setPadding(margin, margin, margin, margin)
     snackView.addView(progress, params)

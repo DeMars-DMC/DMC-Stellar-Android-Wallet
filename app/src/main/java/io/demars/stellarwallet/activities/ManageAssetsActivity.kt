@@ -22,16 +22,18 @@ import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.interfaces.OnAssetSelected
+import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.remote.Horizon
-import io.demars.stellarwallet.utils.AccountUtils
-import io.demars.stellarwallet.utils.NetworkUtils
-import io.demars.stellarwallet.utils.ViewUtils
+import io.demars.stellarwallet.utils.*
 import kotlinx.android.synthetic.main.activity_manage_assets.addressTextView
 import org.stellar.sdk.KeyPair
+import org.stellar.sdk.responses.OrderBookResponse
+import timber.log.Timber
 
-class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
+class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, ValueEventListener {
 
   //region Properties
   companion object {
@@ -40,9 +42,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
   }
 
   private lateinit var adapter: AssetsAdapter
+  private lateinit var reportingAsset: DataAsset
   private var isCustomizing = false
-  private var totalBalance = "36,544.85"
-  private var reportingAsset = "XLM"
+  private var totalBalance = 0.0
   //endregion
 
   //region Init
@@ -51,6 +53,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
     setContentView(R.layout.activity_manage_assets)
 
     Firebase.getUserStellarAddress(this)
+
+    reportingAsset = AssetUtils.getDataAssetFromPrefs(this)
+
     initUI()
   }
 
@@ -64,32 +69,20 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
       openSettings()
     }
 
-    totalBalanceLabel.setText(R.string.total_balance)
-    totalBalanceView.text = String.format("%s%s", totalBalance, reportingAsset)
-
     initAssetsView()
-    refreshAssets()
   }
 
   private fun initAssetsView() {
     adapter = AssetsAdapter(this)
     assetsRecyclerView.layoutManager = LinearLayoutManager(this)
     assetsRecyclerView.adapter = adapter
-  }
 
-  private fun openSettings() {
-    startActivity(SettingsActivity.newInstance(this))
-    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
-  }
-
-  private fun refreshAssets() {
-    swipeRefresh.isRefreshing = true
-    totalBalanceView.setText(R.string.refreshing)
     AccountRepository.refreshData().observe(this, Observer<AccountRepository.AccountEvent> { response ->
       when (response.httpCode) {
         200 -> {
           //Funded account
           updateViewForActive()
+          calculateTotalBalance()
           if (checkDmcAsset()) {
             adapter.refreshAdapter()
           }
@@ -104,6 +97,17 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
         }
       }
     })
+  }
+
+  private fun openSettings() {
+    startActivity(SettingsActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+  }
+
+  private fun refreshAssets() {
+    swipeRefresh.isRefreshing = true
+
+    AccountRepository.refresh()
   }
 
   private fun checkDmcAsset(): Boolean {
@@ -124,10 +128,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
   private fun updateViewForActive() {
     swipeRefresh?.isRefreshing = false
 
-    totalBalance = (DmcApp.wallet.getBalances()
-      .find { it.assetType == "native" }?.balance ?: "0.00") + "XLM"
-    totalBalanceView.text = totalBalance
-
     fundingState.visibility = View.GONE
     assetsRecyclerView.visibility = View.VISIBLE
   }
@@ -135,8 +135,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
   private fun updateViewForFunding() {
     swipeRefresh?.isRefreshing = false
 
-    totalBalance = "0.00XLM"
-    totalBalanceView.text = totalBalance
+    totalBalance = 0.0
+    updateTotalBalanceView()
 
     assetsRecyclerView.visibility = View.GONE
     fundingState.visibility = View.VISIBLE
@@ -162,8 +162,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
 
   private fun updateViewForError() {
     swipeRefresh?.isRefreshing = false
-    totalBalance = "ERROR"
-    totalBalanceView.text = totalBalance
+    totalBalanceView?.setText(R.string.error)
   }
   //endregion
 
@@ -203,9 +202,13 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
     adapter.enableCustomization(true)
     assetsRecyclerView.smoothScrollBy(0, 0)
     totalBalanceLabel.setText(R.string.reporting_currency)
-    totalBalanceView.text = ""
+    totalBalanceView.visibility = View.GONE
     reportingCurrency.visibility = View.VISIBLE
-    reportingCurrency.text = reportingAsset
+    reportingCurrency.text = reportingAsset.code
+    reportingCurrency.setOnClickListener {
+      ViewUtils.showReportingCurrencyDialog(this, this)
+    }
+
     accountButton.setImageResource(R.drawable.ic_check_white)
     swipeRefresh.isEnabled = false
     accountButton.setOnClickListener {
@@ -215,16 +218,16 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
 
   private fun disableCustomization() {
     isCustomizing = false
+    swipeRefresh.isEnabled = true
     adapter.enableCustomization(false)
     totalBalanceLabel.setText(R.string.total_balance)
-    totalBalanceView.text = String.format("%s%s", totalBalance, reportingAsset)
+    totalBalanceView.visibility = View.VISIBLE
     reportingCurrency.visibility = View.GONE
     accountButton.setImageResource(R.drawable.ic_settings)
     accountButton.setColorFilter(ContextCompat.getColor(this, R.color.whiteMain))
     accountButton.setOnClickListener {
       openSettings()
     }
-    swipeRefresh.isEnabled = true
   }
 
   private fun generateQRCode(data: String, imageView: ImageView, size: Int) {
@@ -253,6 +256,118 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, ValueEventListener {
     } else {
       super.onBackPressed()
     }
+  }
+  //endregion
+
+  override fun onAssetSelected(asset: DataAsset) {
+    reportingCurrency?.text = asset.code
+    reportingCurrencyLogo?.setImageResource(AssetUtils.getLogo(asset.code))
+
+    AssetUtils.saveDateAssetToPrefs(this, asset)
+
+    reportingAsset = asset
+
+    calculateTotalBalance()
+  }
+
+  private fun calculateTotalBalance() {
+    // Reporting currency balance
+    totalBalance = DmcApp.wallet.getBalances().find {
+      AssetUtils.isReporting(this, it)
+    }?.balance?.toDouble() ?: 0.0
+    updateTotalBalanceView()
+
+    // other balances
+
+    if (reportingAsset.type == "native") {
+      // If reporting currency is Lumen XLM, we need to convert all the other balances
+      // directly with the latest bid price
+      DmcApp.wallet.getBalances().filterNot {
+        AssetUtils.isReporting(this, it)
+      }.forEach {
+        val dataAsset = AssetUtils.toDataAssetFrom(it.asset)
+        Timber.d("Loading order book %s %s", it.assetCode, reportingAsset)
+
+        Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
+          override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+            if (bids.isNotEmpty()) {
+              Timber.d("${bids.size} bids in the order book")
+              val reportingBalance = (it.balance?.toDouble() ?: 0.0) * bids[0].price.toDouble()
+              totalBalance += reportingBalance
+              updateTotalBalanceView()
+            } else {
+              Timber.d("No bids in the order book")
+            }
+          }
+
+          override fun onFailed(errorMessage: String) {
+            Timber.d("failed to load the order book %s", errorMessage)
+          }
+
+        }, reportingAsset, dataAsset!!)
+      }
+    } else {
+      // If reporting currency is not XLM, we need to know price of the asset in XLM
+      // so then we can convert all other assets into XLM and then into reporting currency
+      DmcApp.wallet.getBalances().find { it.assetType == "native" }?.let { xlmBalance ->
+        val xlmDataAsset = AssetUtils.toDataAssetFrom(xlmBalance.asset)
+        Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
+          var priceInXlm = 0.0
+          override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+            if (bids.isNotEmpty()) {
+              Timber.d("${bids.size} bids in the order book")
+              priceInXlm = bids[0].price.toDouble()
+              val reportingBalance = (xlmBalance.balance?.toDouble() ?: 0.0) * priceInXlm
+              totalBalance += reportingBalance
+              updateTotalBalanceView()
+
+              // Okay now we have a price in XLM for reporting currency
+              // and converted XLM balance already and we can go through all the other
+              // assets and convert them to XLM and then to reporting currency
+              DmcApp.wallet.getBalances().filter { filter ->
+                !AssetUtils.isReporting(this@ManageAssetsActivity, filter) &&
+                  filter.assetType != "native"
+              }.forEach { balance ->
+                val dataAsset = AssetUtils.toDataAssetFrom(balance.asset)
+
+                Timber.d("Loading order book %s %s", xlmBalance, dataAsset)
+
+                Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
+                  override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+                    if (bids.isNotEmpty()) {
+                      Timber.d("${bids.size} bids in the order book")
+                      // Now we have balance of currency converted to XLM
+                      val balanceVal = (balance.balance?.toDouble() ?: 0.0) * bids[0].price.toDouble()
+                      // And now we convert it to reporting currency with price in XLM
+                      totalBalance += (balanceVal * priceInXlm)
+                      updateTotalBalanceView()
+                    } else {
+                      Timber.d("No bids in the order book")
+                    }
+                  }
+
+                  override fun onFailed(errorMessage: String) {
+                    Timber.d("failed to load the order book %s", errorMessage)
+                  }
+                }, xlmDataAsset!!, dataAsset!!)
+              }
+            } else {
+              Timber.d("No bids in the order book")
+            }
+          }
+
+          override fun onFailed(errorMessage: String) {
+            Timber.d("failed to load the order book %s", errorMessage)
+          }
+        }, reportingAsset, xlmDataAsset!!)
+      }
+    }
+  }
+
+  private fun updateTotalBalanceView() {
+    val newBalanceAmount = StringFormat
+      .truncateDecimalPlaces(totalBalance, 2) + reportingAsset.code
+    totalBalanceView?.text = newBalanceAmount
   }
   //endregion
 

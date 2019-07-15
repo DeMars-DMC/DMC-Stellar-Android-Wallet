@@ -135,9 +135,9 @@ class WalletActivity : BaseActivity(), KeyboardUtils.SoftKeyboardToggleListener 
       currentItemSelected = item.itemId
       when (item.itemId) {
         R.id.nav_wallet -> {
-          val walletFragment = getReusedFragment(WalletFragmentType.WALLET.name)
-            ?: WalletFragment.newInstance()
-          replaceFragment(walletFragment, WalletFragmentType.WALLET)
+//          val walletFragment = getReusedFragment(WalletFragmentType.WALLET.name)
+//            ?: WalletFragment.newInstance()
+//          replaceFragment(walletFragment, WalletFragmentType.WALLET)
         }
         R.id.nav_exchange -> {
           // minimum two trades

@@ -11,8 +11,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.interfaces.OnAssetSelected
 
 object ViewUtils {
 
@@ -70,6 +72,7 @@ object ViewUtils {
   //endregion
 
   //region Dialogs
+  @JvmStatic
   fun showWrongWalletDialog(activity: FragmentActivity) {
     val builder = AlertDialog.Builder(activity)
     builder.setTitle(R.string.non_matching_wallet_title)
@@ -90,6 +93,22 @@ object ViewUtils {
     dialog.setCancelable(false)
     dialog.setCanceledOnTouchOutside(false)
     dialog.show()
+  }
+
+  @JvmStatic
+  fun showReportingCurrencyDialog(activity: FragmentActivity, onAssetSelected: OnAssetSelected) {
+    val balances = DmcApp.wallet.getBalances()
+      .filter { !AssetUtils.isReporting(activity, it) }
+
+    val codes = balances
+      .map { it.assetCode ?: "XLM" }.toTypedArray()
+    AlertDialog.Builder(activity)
+      .setTitle(R.string.select_reporting_currency)
+      .setItems(codes) { _, which ->
+        AssetUtils.toDataAssetFrom(balances[which].asset)?.let {
+          onAssetSelected.onAssetSelected(it)
+        }
+      }.show()
   }
 
   @JvmStatic

@@ -395,4 +395,7 @@
     <string name="customize_wallet">Customize wallet</string>
     <string name="refreshing">Refreshing…</string>
     <string name="not_funded">NOT FUNDED</string>
+    <string name="select_reporting_currency">Select reporting currency</string>
+    <string name="calculating">Calculating</string>
+    <string name="error">Error</string>
 </resources>

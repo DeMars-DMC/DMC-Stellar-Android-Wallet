@@ -14,6 +14,7 @@ import io.demars.stellarwallet.adapters.TransactionsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
 import io.demars.stellarwallet.mvvm.WalletViewModel
+import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
@@ -90,7 +91,7 @@ class AssetActivity : BaseActivity() {
     }
 
     assetLogo.setImageResource(AssetUtils.getLogo(assetCode))
-    assetBalance.text = AssetUtils.getBalance(assetCode)
+    assetBalance.text = AccountUtils.getTotalBalance(assetCode)
     assetName.text = assetCode
 
     swipeRefresh.setColorSchemeResources(R.color.colorAccent)
@@ -169,7 +170,7 @@ class AssetActivity : BaseActivity() {
             list.updateOperationsList(assetCode, operations)
             list.updateTradesList(assetCode, trades)
             runOnUiThread {
-              assetBalance?.text = AssetUtils.getBalance(assetCode)
+              assetBalance?.text = AccountUtils.getTotalBalance(assetCode)
               transactionsAdapter?.updateData(list.array)
               swipeRefresh?.isRefreshing = false
             }

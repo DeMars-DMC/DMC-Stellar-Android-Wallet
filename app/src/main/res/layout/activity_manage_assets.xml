@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/totalBalanceLogo"
+                android:id="@+id/reportingCurrencyLogo"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginStart="@dimen/padding_horizontal"
@@ -39,7 +39,7 @@
                 android:layout_marginStart="@dimen/padding_horizontal"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/totalBalanceLogo"
+                app:layout_constraintStart_toEndOf="@id/reportingCurrencyLogo"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView

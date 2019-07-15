@@ -1,6 +1,7 @@
 package io.demars.stellarwallet.utils
 
-import io.demars.stellarwallet.DmcApp
+import android.content.Context
+import io.demars.stellarwallet.Preferences
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
@@ -8,19 +9,19 @@ import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeCreditAlphaNum12
 import org.stellar.sdk.AssetTypeCreditAlphaNum4
 import org.stellar.sdk.AssetTypeNative
+import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.xdr.AssetType
 
 class AssetUtils {
   companion object {
-    val NATIVE_ASSET_CODE = "XLM"
+    const val NATIVE_ASSET_CODE = "XLM"
 
     fun toAssetFrom(dataAsset: DataAsset): Asset {
-      val buying: Asset = if (dataAsset.type == "native") {
+      return if (dataAsset.type == "native") {
         AssetTypeNative()
       } else {
         Asset.create(dataAsset.type, dataAsset.code, dataAsset.issuer)
       }
-      return buying
     }
 
     fun toDataAssetFrom(selection: SelectionModel): DataAsset? {
@@ -31,7 +32,7 @@ class AssetUtils {
       return null
     }
 
-    private fun toDataAssetFrom(asset: Asset): DataAsset? {
+    fun toDataAssetFrom(asset: Asset): DataAsset? {
       var dataAsset: DataAsset? = null
       val assetType = asset.toXdr().discriminant
       if (assetType != null) {
@@ -51,6 +52,31 @@ class AssetUtils {
         }
       }
       return dataAsset
+    }
+
+    fun isReporting(context: Context, balance: AccountResponse.Balance): Boolean {
+      val reportingAsset = getDataAssetFromPrefs(context)
+      return (balance.assetCode == reportingAsset.code &&
+        balance.assetIssuer.accountId == reportingAsset.issuer)
+        || (balance.assetType == "native" && reportingAsset.type == "native")
+    }
+
+    fun saveDateAssetToPrefs(context: Context, dataAsset: DataAsset) {
+      Preferences.setReportingAssetType(context, dataAsset.type)
+      Preferences.setReportingAssetCode(context, dataAsset.code)
+      Preferences.setReportingAssetIssuer(context, dataAsset.issuer)
+    }
+
+    fun getDataAssetFromPrefs(context: Context) : DataAsset{
+      val type = Preferences.getReportingAssetType(context)
+      val code = Preferences.getReportingAssetCode(context)
+      val issuer = Preferences.getReportingAssetIssuer(context)
+
+      return if (type == "native") {
+        DataAsset(type, NATIVE_ASSET_CODE, "null")
+      } else {
+        DataAsset(type, code, issuer)
+      }
     }
 
     fun getCode(asset: Asset): String? {
@@ -90,14 +116,6 @@ class AssetUtils {
       else -> ""
     }
 
-    fun getBalance(assetCode: String): String =
-      DmcApp.wallet.getBalances().firstOrNull {
-        it.assetCode == assetCode || (it.assetCode == null && assetCode == "XLM")
-      }?.balance?.let {
-        StringFormat.truncateDecimalPlaces(it, getMaxDecimals(assetCode))
-      }?: ""
-
-
     fun getWithdrawAccount(assetCode: String?): String = when (assetCode) {
       Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
       Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_WITHDRAW
@@ -109,11 +127,5 @@ class AssetUtils {
       assetCode.equals(Constants.NGNT_ASSET_TYPE, true) -> 2
       else -> 7
     }
-
-    fun isSessionAsset(assetCode: String): Boolean = xlmAsNative(assetCode).equals(
-      DmcApp.userSession.getSessionAsset().assetCode, true)
-
-    private fun xlmAsNative(assetCode: String): String =
-      if (assetCode == Constants.LUMENS_ASSET_CODE) Constants.LUMENS_ASSET_TYPE else assetCode
   }
 }

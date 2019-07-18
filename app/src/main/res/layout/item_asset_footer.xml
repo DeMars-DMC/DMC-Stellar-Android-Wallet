@@ -12,15 +12,14 @@
     android:orientation="horizontal">
 
     <TextView
-        style="@style/WhiteTitle"
+        style="@style/ButtonTitle"
         android:id="@+id/footerTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@color/colorGreen"
         android:singleLine="true"
-        android:text="@string/add_custom_asset"
-        android:textSize="@dimen/text_size_medium" />
+        android:text="@string/add_custom_asset" />
 
     <ImageView
         android:id="@+id/footerIcon"

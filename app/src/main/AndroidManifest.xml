@@ -33,13 +33,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--TODO: RENAME TO Wallet Activity -->
+        <activity
+            android:name=".activities.ManageAssetsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity android:name=".activities.AssetActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activities.ManageAssetsActivity"
+        <activity android:name=".activities.ExchangeActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
@@ -60,10 +65,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.StellarAddressActivity"
+            android:name=".activities.PayToActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activities.ContactsActivity"
             android:screenOrientation="portrait"

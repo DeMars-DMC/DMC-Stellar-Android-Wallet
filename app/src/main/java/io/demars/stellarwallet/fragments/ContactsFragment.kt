@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import io.demars.stellarwallet.activities.StellarAddressActivity
+import io.demars.stellarwallet.activities.PayToActivity
 import io.demars.stellarwallet.adapters.ContactsAdapter
 import io.demars.stellarwallet.helpers.OnTextChanged
 import io.demars.stellarwallet.interfaces.OnSearchStateListener
@@ -141,7 +141,7 @@ class ContactsFragment : Fragment() {
           if (checkNeedPermissions()) {
             Toast.makeText(activity!!, "Please grant needed permissions to add new Contact", Toast.LENGTH_LONG).show()
           } else {
-            startActivity(StellarAddressActivity.createContact(it))
+//            startActivity(PayToActivity.createContact(it))
           }
         }
         return true

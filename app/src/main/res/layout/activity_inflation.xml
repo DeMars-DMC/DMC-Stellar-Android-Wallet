@@ -6,13 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".activities.InflationActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <FrameLayout
         android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/inflation_destination_title" />
+        android:background="@color/transparent">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_macro"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:layout_marginBottom="@dimen/padding_macro"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/receive"
+            android:paddingStart="@dimen/padding_zero"
+            android:paddingTop="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_horizontal"
+            android:src="@drawable/ic_chevron_left" />
+
+        <TextView
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/inflation_destination"
+            android:textSize="@dimen/text_size_medium" />
+    </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,34 +52,36 @@
 
         <TextView
             android:id="@+id/inflationInfoTextView"
-            style="@style/RegularText"
+            style="@style/WhiteDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_vertical"
             android:text="@string/inflation_info_message"
-            android:paddingStart="@dimen/padding_horizontal_double"
-            android:paddingEnd="@dimen/padding_horizontal_double"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
             android:gravity="center" />
 
 
         <LinearLayout
-            android:id="@+id/addressLayout"
+            android:id="@+id/addressContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_big"
             android:layout_margin="@dimen/padding_vertical"
-            android:background="@drawable/bg_rounded_left_button_white"
+            android:background="@drawable/bg_card_transparent"
             android:elevation="@dimen/elevation_mini"
             android:orientation="horizontal"
             tools:ignore="UnusedAttribute">
 
             <EditText
-                android:id="@+id/addressTextView"
+                style="@style/WhiteTitle"
+                android:id="@+id/addressEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
-                android:background="@color/main_bg_light"
+                android:background="@null"
                 android:digits="@string/stellar_address_alphabet"
                 android:hint="@string/send_address_hint"
+                android:textColorHint="@color/transparent_white"
                 android:inputType="textCapCharacters"
                 android:padding="@dimen/padding_horizontal"
                 android:scrollHorizontally="true"
@@ -61,11 +90,12 @@
 
             <ImageButton
                 android:id="@+id/cameraImageButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:elevation="@dimen/elevation_mini"
-                android:layout_weight="0.2"
-                android:background="@drawable/background_rounded_right_button_accent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/copy_address_content_descriptor"
                 android:tint="@color/whiteMain"
                 android:src="@drawable/ic_qr_scanner" />
@@ -75,11 +105,10 @@
 
     <Button
         android:id="@+id/saveButton"
-        style="@style/ButtonStyleAccent"
+        style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/padding_horizontal"
         android:text="@string/save_button"
         android:textColor="@color/whiteMain"
         app:layout_constraintBottom_toBottomOf="parent" />

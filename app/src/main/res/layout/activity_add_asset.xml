@@ -62,7 +62,7 @@
             android:textColor="@color/black"/>
 
         <EditText
-            android:id="@+id/addressTextView"
+            android:id="@+id/addressEditText"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_big"
             android:paddingStart="@dimen/padding_mini"

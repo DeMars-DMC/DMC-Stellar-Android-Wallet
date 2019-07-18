@@ -1,560 +1,555 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_light">
+    android:background="@color/main_bg_light"
+    android:orientation="vertical">
 
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="@dimen/padding_vertical"
+        android:background="@color/colorPrimaryDark" />
 
-        <View
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ToolbarTheme"
+        app:title="@string/open_account" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/padding_vertical"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolbarTheme"
-            app:title="@string/open_account" />
-
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/firstNameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/first_name"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/firstNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="@null"
+                android:hint="@string/first_name"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <TextView
+                android:id="@+id/firstNameText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/surnameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/surname"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/surnameInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="@null"
+                android:hint="@string/surname"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <TextView
+                android:id="@+id/surnameText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/birthDateLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/date_of_birth"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dateOfBirthPicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_date_palesky_24dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/date_of_birth"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nationalityLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/nationality"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/nationalityPicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/select_nationality"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/addressLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/residential_address"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/addressFirstLineInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:background="@null"
+                android:hint="@string/first_line"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <TextView
+                android:id="@+id/addressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/button_height_big"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addressSecondLineInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@null"
+                android:hint="@string/second_line"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <EditText
+                android:id="@+id/townCityInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@null"
+                android:hint="@string/town_city"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <EditText
+                android:id="@+id/postcodeInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@null"
+                android:hint="@string/postcode"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <TextView
+                android:id="@+id/countryPicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/select_country"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/email_address"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@null"
+                android:hint="@string/email_address"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky" />
+
+            <TextView
+                android:id="@+id/emailText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/communicationLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/communication_preference"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/communicationPicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/select_preferred_communication"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/documentTypeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/id_document_type"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/documentTypePicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/select_document_type"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/documentNumberLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/document_number"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/documentNumberInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="@null"
+                android:hint="@string/document_number"
+                android:imeOptions="actionDone"
+                android:inputType="textCapCharacters"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/colorPaleSky"
+                tools:ignore="TextFields" />
+
+            <TextView
+                android:id="@+id/documentNumberText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/expiryDateLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/expiry_date"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/expiryDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_date_palesky_24dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/expiry_date"
+                android:textColor="@color/colorPaleSky"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/personalIdLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_mini"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/personal_id"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/idPhotoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/idPhotoImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_id"
+                    android:tint="@color/colorPaleSky" />
 
                 <TextView
-                    android:id="@+id/firstNameLabel"
-                    android:layout_width="match_parent"
+                    android:id="@+id/idPhotoText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/first_name"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/idPhotoCheck"
+                    android:layout_toEndOf="@id/idPhotoImage"
+                    android:text="@string/upload_id_photo_tip"
+                    android:textColor="@color/colorPaleSky" />
 
-                <EditText
-                    android:id="@+id/firstNameInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="@null"
-                    android:hint="@string/first_name"
-                    android:imeOptions="actionNext"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
+                <ImageView
+                    android:id="@+id/idPhotoCheck"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:src="@drawable/ic_circle_outline_palesky_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/idBackContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/idBackImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_id"
+                    android:tint="@color/colorPaleSky" />
 
                 <TextView
-                    android:id="@+id/firstNameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/surnameLabel"
-                    android:layout_width="match_parent"
+                    android:id="@+id/idBackText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/surname"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/idBackCheck"
+                    android:layout_toEndOf="@id/idBackImage"
+                    android:text="@string/upload_id_back_tip"
+                    android:textColor="@color/colorPaleSky" />
 
-                <EditText
-                    android:id="@+id/surnameInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="@null"
-                    android:hint="@string/surname"
-                    android:imeOptions="actionDone"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
+                <ImageView
+                    android:id="@+id/idBackCheck"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:src="@drawable/ic_circle_outline_palesky_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/idSelfieContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/idSelfieImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_id"
+                    android:tint="@color/colorPaleSky" />
 
                 <TextView
-                    android:id="@+id/surnameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/birthDateLabel"
-                    android:layout_width="match_parent"
+                    android:id="@+id/idSelfieText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/date_of_birth"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/idSelfieCheck"
+                    android:layout_toEndOf="@id/idSelfieImage"
+                    android:text="@string/upload_selfie_tip"
+                    android:textColor="@color/colorPaleSky" />
 
-                <TextView
-                    android:id="@+id/dateOfBirthPicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_date_palesky_24dp"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/date_of_birth"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/idSelfieCheck"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:src="@drawable/ic_circle_outline_palesky_24dp" />
 
-                <TextView
-                    android:id="@+id/nationalityLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/nationality"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+            </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/nationalityPicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/select_nationality"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
+            <TextView
+                android:id="@+id/termsConditions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_horizontal"
+                android:text="@string/terms_and_conditions_agree"
+                android:textColor="@color/colorPaleSky" />
 
-                <TextView
-                    android:id="@+id/addressLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/residential_address"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/addressFirstLineInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:background="@null"
-                    android:hint="@string/first_line"
-                    android:imeOptions="actionNext"
-                    android:inputType="textCapSentences"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
-
-                <TextView
-                    android:id="@+id/addressText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/button_height_big"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/addressSecondLineInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:background="@null"
-                    android:hint="@string/second_line"
-                    android:imeOptions="actionNext"
-                    android:inputType="textCapSentences"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
-
-                  <EditText
-                    android:id="@+id/townCityInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:background="@null"
-                    android:hint="@string/town_city"
-                    android:imeOptions="actionNext"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
-
-                <EditText
-                    android:id="@+id/postcodeInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:background="@null"
-                    android:hint="@string/postcode"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
-
-                <TextView
-                    android:id="@+id/countryPicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/select_country"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/emailLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/email_address"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/emailInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
-                    android:background="@null"
-                    android:hint="@string/email_address"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky" />
-
-                <TextView
-                    android:id="@+id/emailText"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/communicationLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/communication_preference"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/communicationPicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/select_preferred_communication"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
-
-
-                <TextView
-                    android:id="@+id/documentTypeLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/id_document_type"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/documentTypePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/select_document_type"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/documentNumberLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/document_number"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/documentNumberInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="@null"
-                    android:hint="@string/document_number"
-                    android:imeOptions="actionDone"
-                    android:inputType="textCapCharacters"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColorHint="@color/colorPaleSky"
-                    tools:ignore="TextFields" />
-
-                <TextView
-                    android:id="@+id/documentNumberText"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/expiryDateLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/expiry_date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/expiryDatePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_date_palesky_24dp"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/expiry_date"
-                    android:textColor="@color/colorPaleSky"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/personalIdLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/personal_id"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <RelativeLayout
-                    android:id="@+id/idPhotoContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/idPhotoImage"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_id"
-                        android:tint="@color/colorPaleSky" />
-
-                    <TextView
-                        android:id="@+id/idPhotoText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/idPhotoCheck"
-                        android:layout_toEndOf="@id/idPhotoImage"
-                        android:text="@string/upload_id_photo_tip"
-                        android:textColor="@color/colorPaleSky" />
-
-                    <ImageView
-                        android:id="@+id/idPhotoCheck"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:layout_marginEnd="4dp"
-                        android:src="@drawable/ic_circle_outline_palesky_24dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/idBackContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/idBackImage"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_id"
-                        android:tint="@color/colorPaleSky" />
-
-                    <TextView
-                        android:id="@+id/idBackText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/idBackCheck"
-                        android:layout_toEndOf="@id/idBackImage"
-                        android:text="@string/upload_id_back_tip"
-                        android:textColor="@color/colorPaleSky" />
-
-                    <ImageView
-                        android:id="@+id/idBackCheck"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:layout_marginEnd="4dp"
-                        android:src="@drawable/ic_circle_outline_palesky_24dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/idSelfieContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/idSelfieImage"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_id"
-                        android:tint="@color/colorPaleSky" />
-
-                    <TextView
-                        android:id="@+id/idSelfieText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/idSelfieCheck"
-                        android:layout_toEndOf="@id/idSelfieImage"
-                        android:text="@string/upload_selfie_tip"
-                        android:textColor="@color/colorPaleSky" />
-
-                    <ImageView
-                        android:id="@+id/idSelfieCheck"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:layout_marginEnd="4dp"
-                        android:src="@drawable/ic_circle_outline_palesky_24dp" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/termsConditions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPaleSky"
-                    android:text="@string/terms_and_conditions_agree"
-                    android:paddingStart="@dimen/padding_horizontal"
-                    android:paddingEnd="@dimen/padding_horizontal"
-                    android:paddingBottom="@dimen/padding_horizontal" />
-
-                <Button
-                    android:id="@+id/submitButton"
-                    style="@style/ButtonStyleAccent"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height_big"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="@dimen/padding_vertical"
-                    android:text="@string/submit" />
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-</FrameLayout>
+            <Button
+                android:id="@+id/submitButton"
+                style="@style/ButtonStyleAccent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="@dimen/padding_vertical"
+                android:text="@string/submit" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

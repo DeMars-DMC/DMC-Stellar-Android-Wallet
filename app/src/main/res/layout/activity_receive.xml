@@ -15,7 +15,6 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_macro"
             android:layout_marginEnd="@dimen/padding_horizontal"
@@ -26,7 +25,6 @@
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_horizontal"
-            android:rotation="180"
             android:src="@drawable/ic_chevron_left" />
 
         <TextView
@@ -76,7 +74,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/addressTextView"
+            android:id="@+id/addressEditText"
             style="@style/WhiteTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

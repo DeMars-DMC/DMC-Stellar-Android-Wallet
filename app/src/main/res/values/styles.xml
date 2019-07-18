@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:windowBackground">@drawable/bg_gradient</item>
+        <item name="colorControlHighlight">@color/whiteMain</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
@@ -65,6 +66,9 @@
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
+    <style name="ButtonTitle" parent="WhiteDescription">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
     <style name="BlackDescription" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_small</item>
@@ -155,25 +159,25 @@
     </style>
 
     <style name="ButtonStyleAccent" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_accent</item>
     </style>
 
     <style name="ButtonStyleAccentFlat" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_accent_flat</item>
     </style>
 
     <style name="ButtonStyleYellow" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_yellow</item>
     </style>
 
     <style name="ButtonStyleBlue" parent="ButtonStyle">
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/whiteMain</item>
         <item name="android:background">@drawable/button_blue</item>
     </style>
@@ -211,6 +215,10 @@
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:padding">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="ClickableItem">
+        <item name="colorControlHighlight">@color/transparent_white</item>
     </style>
 
 </resources>

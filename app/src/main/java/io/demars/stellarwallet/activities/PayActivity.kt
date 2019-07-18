@@ -11,12 +11,9 @@ import android.widget.Toast
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.remote.Horizon
-import io.demars.stellarwallet.utils.AccountUtils
-import io.demars.stellarwallet.utils.NetworkUtils
-import io.demars.stellarwallet.utils.StringFormat
+import io.demars.stellarwallet.utils.*
 import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint
 import io.demars.stellarwallet.views.pin.PinLockView
@@ -26,10 +23,12 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   companion object {
     private const val ARG_ADDRESS_DATA = "ARG_ADDRESS_DATA"
+    private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     private const val REQUEST_PIN = 0x0
 
-    fun newIntent(context: Context, address: String): Intent {
+    fun newIntent(context: Context, assetCode: String, address: String): Intent {
       val intent = Intent(context, PayActivity::class.java)
+      intent.putExtra(ARG_ASSET_CODE, assetCode)
       intent.putExtra(ARG_ADDRESS_DATA, address)
       return intent
     }
@@ -52,8 +51,9 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   //region User Interface
 
   private fun setupUI() {
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    backButton.setOnClickListener {
+      onBackPressed()
+    }
 
     amountTextView.text = "0"
     numberKeyboard.mDialerListener = this
@@ -62,7 +62,11 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
       address = intent.getStringExtra(ARG_ADDRESS_DATA)
     }
 
-    addressTextView.text = address
+    if (intent.hasExtra(ARG_ASSET_CODE)) {
+      assetCode = intent.getStringExtra(ARG_ASSET_CODE)
+    }
+
+    addressEditText.text = address
 
     send_button.setOnClickListener {
       if (amount <= amountAvailable && amount != 0.0) {
@@ -86,8 +90,6 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   @SuppressLint("SetTextI18n")
   private fun updateAvailableBalance() {
-    assetCode = DmcApp.userSession.getSessionAsset().assetCode
-    assetCode = if (assetCode == "native") "XLM" else assetCode
     val available = AccountUtils.getAvailableBalance(assetCode)
     val maxDecimals = AssetUtils.getMaxDecimals(assetCode)
     val availableFormatted = StringFormat.truncateDecimalPlaces(available, maxDecimals)
@@ -195,6 +197,12 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     // specially when the other account was not created and the funds sent are lower than 1 XML.
     // Let's add a generic message for now for any error sending funds.
     Toast.makeText(applicationContext, getString(HorizonException.HorizonExceptionType.SEND.value), Toast.LENGTH_LONG).show()
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    ViewUtils.hideKeyboard(this)
+    overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
   }
 //endregion
 }

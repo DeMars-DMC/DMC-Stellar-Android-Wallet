@@ -31,6 +31,7 @@
     <color name="transparent_black">#80000000</color>
     <color name="transparent_accent">#80F79E02</color>
     <color name="transparent_green">#8088D453</color>
+    <color name="transparent_yellow">#80deaf2a</color>
 
     <color name="black">#000000</color>
     <color name="whiteMain">#ebebeb</color>

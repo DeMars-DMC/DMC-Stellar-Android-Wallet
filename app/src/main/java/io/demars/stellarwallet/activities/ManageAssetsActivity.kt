@@ -1,6 +1,5 @@
 package io.demars.stellarwallet.activities
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
@@ -28,7 +27,7 @@ import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.*
-import kotlinx.android.synthetic.main.activity_manage_assets.addressTextView
+import kotlinx.android.synthetic.main.activity_manage_assets.addressEditText
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
@@ -60,6 +59,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun initUI() {
+    reportingCurrency?.text = reportingAsset.code
+    reportingCurrencyLogo?.setImageResource(AssetUtils.getLogo(reportingAsset.code))
+
     swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     swipeRefresh.setOnRefreshListener {
       refreshAssets()
@@ -112,12 +114,12 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
   private fun checkDmcAsset(): Boolean {
     val dmc = DmcApp.wallet.getBalances().find {
-      it.assetCode.equals(Constants.DMC_ASSET_TYPE, true) &&
+      it.assetCode.equals(Constants.DMC_ASSET_CODE, true) &&
         it.assetIssuer.accountId == Constants.DMC_ASSET_ISSUER
     }
 
     return if (dmc == null) {
-      changeTrustline(Asset.createNonNativeAsset(Constants.DMC_ASSET_TYPE,
+      changeTrustline(Asset.createNonNativeAsset(Constants.DMC_ASSET_CODE,
         KeyPair.fromAccountId(Constants.DMC_ASSET_ISSUER)), false)
       false
     } else {
@@ -142,7 +144,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     fundingState.visibility = View.VISIBLE
 
     val publicId = DmcApp.wallet.getStellarAccountId() ?: ""
-    addressTextView.text = publicId
+    addressEditText.text = publicId
     addressCopyButton.setOnClickListener {
       ViewUtils.copyToClipBoard(this, publicId, "Account Id",
         R.string.address_copied_message)
@@ -243,7 +245,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == RC_ADD_CUSTOM && resultCode == RESULT_OK) {
       refreshAssets()
-    } else if (requestCode == RC_CREATE_ACC && resultCode == Activity.RESULT_OK) {
+    } else if (requestCode == RC_CREATE_ACC && resultCode == RESULT_OK) {
       refreshAssets()
     } else {
       super.onActivityResult(requestCode, resultCode, data)
@@ -276,8 +278,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
       AssetUtils.isReporting(this, it)
     }?.balance?.toDouble() ?: 0.0
     updateTotalBalanceView()
-
-    // other balances
 
     if (reportingAsset.type == "native") {
       // If reporting currency is Lumen XLM, we need to convert all the other balances
@@ -365,8 +365,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun updateTotalBalanceView() {
-    val newBalanceAmount = StringFormat
-      .truncateDecimalPlaces(totalBalance, 2) + reportingAsset.code
+    val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
     totalBalanceView?.text = newBalanceAmount
   }
   //endregion

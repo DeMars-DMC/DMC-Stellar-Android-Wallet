@@ -905,7 +905,7 @@ class Camera2Activity : AppCompatActivity() {
   }
 
   private fun onFirebaseResult(uri: Uri?) {
-    if (uri != null) {
+    if (uri != null && uri.toString().isNotEmpty()) {
       setResult(Activity.RESULT_OK, Intent().putExtra("url", uri.toString()))
       finish()
     } else {

@@ -59,4 +59,5 @@ class ContactsActivity : BaseActivity() {
       else -> super.onActivityResult(requestCode, resultCode, data)
     }
   }
+
 }

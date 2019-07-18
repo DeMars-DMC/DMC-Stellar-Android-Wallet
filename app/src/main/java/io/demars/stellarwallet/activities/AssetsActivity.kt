@@ -156,20 +156,20 @@ class AssetsActivity : BaseActivity(), AssetListener {
   private fun loadSupportedAssets() {
     map.clear()
 
-    val dmc = DmcAsset(Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
+    val dmc = DmcAsset(Constants.DMC_ASSET_CODE, Constants.DMC_IMAGE_RES,
       Constants.DMC_ASSET_ISSUER, Constants.DMC_ASSET_NAME, "", false, null)
 
-    val zar = DmcAsset(Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
+    val zar = DmcAsset(Constants.ZAR_ASSET_CODE, Constants.ZAR_IMAGE_RES,
       Constants.ZAR_ASSET_ISSUER,
       Constants.ZAR_ASSET_NAME, "", false, null)
 
-    val ngnt = DmcAsset(Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
+    val ngnt = DmcAsset(Constants.NGNT_ASSET_CODE, Constants.NGNT_IMAGE_RES,
       Constants.NGNT_ASSET_ISSUER,
       Constants.NGNT_ASSET_NAME, "", false, null)
 
-    map[Constants.DMC_ASSET_TYPE] = dmc
-    map[Constants.ZAR_ASSET_TYPE] = zar
-    map[Constants.NGNT_ASSET_TYPE] = ngnt
+    map[Constants.DMC_ASSET_CODE] = dmc
+    map[Constants.ZAR_ASSET_CODE] = zar
+    map[Constants.NGNT_ASSET_CODE] = ngnt
 
     updateAdapter()
   }

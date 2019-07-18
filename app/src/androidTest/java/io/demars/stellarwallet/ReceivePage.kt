@@ -8,13 +8,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 
 object ReceivePage : BasePage() {
     override fun onPageLoaded(): ReceivePage {
-        onView(ViewMatchers.withId(R.id.addressTextView))
+        onView(ViewMatchers.withId(R.id.addressEditText))
         return this
     }
 
     fun assertAccount(accountId : String): ReceivePage {
         // compare with account id on page
-        onView(ViewMatchers.withId(R.id.addressTextView)).check(matches(withText(accountId)))
+        onView(ViewMatchers.withId(R.id.addressEditText)).check(matches(withText(accountId)))
         return this
     }
 

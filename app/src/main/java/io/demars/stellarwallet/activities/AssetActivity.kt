@@ -2,26 +2,22 @@ package io.demars.stellarwallet.activities
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.appbar.AppBarLayout
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.adapters.TransactionsAdapter
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.AssetUtils
-import io.demars.stellarwallet.utils.ViewUtils
+import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_asset.*
-import kotlinx.android.synthetic.main.activity_asset.payButton
-import kotlinx.android.synthetic.main.activity_asset.swipeRefresh
-import kotlinx.android.synthetic.main.activity_asset.toolbar
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
 
@@ -43,14 +39,13 @@ class AssetActivity : BaseActivity() {
   private var transactionsAdapter: TransactionsAdapter? = null
 
   private var lastOperationsListSize = 0
-  private var appBarOffset = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_asset)
     checkIntent()
-    initAppBar()
     initUI()
+    initButtons()
     initTransactions()
   }
 
@@ -60,85 +55,74 @@ class AssetActivity : BaseActivity() {
     } ?: finishWithToast("Asset code cannot be NULL")
   }
 
-  private fun initAppBar() {
-    appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, offset ->
-      appBarOffset = -offset
-      val toolbarHeight = toolbar.height
-      val scrollRange = appBar.totalScrollRange
-      if (appBarOffset in 0..toolbarHeight) {
-        assetLogo.alpha = 1f - (appBarOffset * 1.2f) / toolbarHeight
-        val balanceScale = 1f - 0.3f * (appBarOffset.toFloat() / toolbarHeight)
-        assetBalanceContainer.scaleX = balanceScale
-        assetBalanceContainer.scaleY = balanceScale
-        assetBalanceContainer.translationY = 0f
-      } else {
-        assetLogo.alpha = 0f
-        assetBalanceContainer.translationY = appBarOffset.toFloat() - toolbarHeight
-      }
-
-      val bottomAlpha = 1f - (appBarOffset * 2f) / scrollRange
-      buttonsContainer.alpha = bottomAlpha
-
-      walletDivider.scaleX = 1f + 0.2f * (appBarOffset.toFloat() / scrollRange)
-    })
-  }
-
   private fun initUI() {
     backButton.setOnClickListener { onBackPressed() }
-    payButton.setOnClickListener {
-      startActivityForResult(StellarAddressActivity.toPay(this), RC_PAY)
-      overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
-    }
 
-    assetLogo.setImageResource(AssetUtils.getLogo(assetCode))
-    assetBalance.text = AccountUtils.getTotalBalance(assetCode)
+    val logo = AssetUtils.getLogo(assetCode)
+    assetLogo.setImageResource(logo)
+    assetLogo.visibility = if (logo == 0) View.GONE else View.VISIBLE
+
     assetName.text = assetCode
+
+    assetBalance.text = getFormattedBalance()
+    availableBalanceView.text = getFormattedAvailableBalance()
 
     swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     swipeRefresh.setOnRefreshListener {
       viewModel.forceRefresh()
     }
+  }
 
-    buttonsContainer.visibility = View.VISIBLE
+  private fun initButtons() {
     when (assetCode) {
       Constants.LUMENS_ASSET_CODE -> {
-        leftLabel.setText(R.string.buy)
-        rightLabel.setText(R.string.set_inflation)
+        container1.visibility = View.VISIBLE
+        container2.visibility = View.VISIBLE
+        container3.visibility = View.VISIBLE
+        container4.visibility = View.VISIBLE
+
+        label1.setText(R.string.buy)
+        label2.setText(R.string.set_inflation)
+
+        button1.setOnClickListener { buyXLM() }
+        button2.setOnClickListener { openSetInflationActivity() }
       }
-      Constants.DMC_ASSET_TYPE -> {
-        leftLabel.setText(R.string.trade)
-        rightLabel.setText(R.string.learn)
+      Constants.DMC_ASSET_CODE -> {
+        container1.visibility = View.GONE
+        container2.visibility = View.VISIBLE
+        container3.visibility = View.VISIBLE
+        container4.visibility = View.VISIBLE
+
+        label2.setText(R.string.learn)
+
+        button2.setOnClickListener { learnDMC() }
       }
-      Constants.ZAR_ASSET_TYPE -> {
-        initButtonsForCurrencies()
-      }
-      Constants.NGNT_ASSET_TYPE -> {
-        initButtonsForCurrencies()
+      Constants.ZAR_ASSET_CODE,
+      Constants.NGNT_ASSET_CODE -> {
+        container1.visibility = View.VISIBLE
+        container2.visibility = View.VISIBLE
+        container3.visibility = View.VISIBLE
+        container4.visibility = View.VISIBLE
+
+        label1.setText(R.string.deposit)
+        label2.setText(R.string.withdraw)
+
+        button1.setOnClickListener { openDepositActivity() }
+        button2.setOnClickListener { openWithdrawActivity() }
       }
       else -> {
-        buttonsContainer.visibility = View.GONE
+        container1.visibility = View.GONE
+        container2.visibility = View.GONE
+        container3.visibility = View.VISIBLE
+        container4.visibility = View.VISIBLE
       }
     }
-  }
 
-  private fun initButtonsForCurrencies() {
-    leftLabel.setText(R.string.deposit)
-    leftButton.setOnClickListener {
-      openDepositScreen(DepositActivity.Mode.DEPOSIT)
-    }
+    label3.setText(R.string.exchange)
+    label4.setText(R.string.pay)
 
-    rightLabel.setText(R.string.withdraw)
-    rightButton.setOnClickListener {
-      openDepositScreen(DepositActivity.Mode.WITHDRAW)
-    }
-  }
-
-  private fun openDepositScreen(mode: DepositActivity.Mode) {
-    if (DmcApp.wallet.isVerified()) {
-      startActivity(DepositActivity.newInstance(this, mode, assetCode))
-    } else {
-      ViewUtils.showToast(this, R.string.withdraw_not_verified)
-    }
+    button3.setOnClickListener { openExchangeActivity() }
+    button4.setOnClickListener { openPayToActivity() }
   }
 
   private fun initTransactions() {
@@ -151,8 +135,8 @@ class AssetActivity : BaseActivity() {
 
     ContactsRepositoryImpl(this).getContactsListLiveData(true)
       .observe(this, Observer {
-          transactionsAdapter?.setContacts(ArrayList(it.stellarContacts))
-          transactionsAdapter?.notifyDataSetChanged()
+        transactionsAdapter?.setContacts(ArrayList(it.stellarContacts))
+        transactionsAdapter?.notifyDataSetChanged()
       })
 
     viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
@@ -170,7 +154,7 @@ class AssetActivity : BaseActivity() {
             list.updateOperationsList(assetCode, operations)
             list.updateTradesList(assetCode, trades)
             runOnUiThread {
-              assetBalance?.text = AccountUtils.getTotalBalance(assetCode)
+              assetBalance?.text = getFormattedBalance()
               transactionsAdapter?.updateData(list.array)
               swipeRefresh?.isRefreshing = false
             }
@@ -178,6 +162,52 @@ class AssetActivity : BaseActivity() {
         }
       }
     })
+  }
+
+  private fun getFormattedBalance(): String =
+    StringFormat.truncateDecimalPlaces(
+      AccountUtils.getTotalBalance(assetCode), AssetUtils.getMaxDecimals(assetCode))
+
+  private fun getFormattedAvailableBalance(): String =
+    getString(R.string.pattern_available, StringFormat.truncateDecimalPlaces(
+      AccountUtils.getAvailableBalance(assetCode), AssetUtils.getMaxDecimals(assetCode)))
+
+  private fun openExchangeActivity() {
+    startActivity(ExchangeActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+  }
+
+  private fun openPayToActivity() {
+    startActivityForResult(PayToActivity.toPay(this, assetCode), RC_PAY)
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+  }
+
+  private fun openReceiveActivity() {
+    startActivity(ReceiveActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+  }
+
+  private fun openDepositActivity() {
+    startActivity(
+      DepositActivity.newInstance(this, DepositActivity.Mode.DEPOSIT, assetCode))
+  }
+
+  private fun openWithdrawActivity() {
+    startActivity(
+    DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode))
+  }
+
+  private fun learnDMC() {
+    toast("To implement")
+  }
+
+  private fun buyXLM() {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
+  }
+
+  private fun openSetInflationActivity() {
+    startActivity(InflationActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
   override fun onResume() {

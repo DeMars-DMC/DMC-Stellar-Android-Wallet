@@ -1,9 +1,8 @@
-package io.demars.stellarwallet.fragments
+package io.demars.stellarwallet.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import io.demars.stellarwallet.R
@@ -17,11 +16,11 @@ import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
 import io.demars.stellarwallet.remote.Horizon
-import kotlinx.android.synthetic.main.fragment_exchange.*
+import kotlinx.android.synthetic.main.activity_exchange.*
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 
-class ExchangeFragment : Fragment(), ViewPager.OnPageChangeListener, OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
+class ExchangeActivity : BaseActivity(), ViewPager.OnPageChangeListener, OnTradeCurrenciesChanged, OnRefreshOrderBookListener {
   private lateinit var fragmentAdapter: ExchangePagerAdapter
 
   private var orderBookListener: OnUpdateOrderBook? = null
@@ -31,15 +30,15 @@ class ExchangeFragment : Fragment(), ViewPager.OnPageChangeListener, OnTradeCurr
   private var currentBuy: DataAsset? = null
 
   companion object {
-    fun newInstance(): ExchangeFragment = ExchangeFragment()
+    fun newInstance(context: Context): Intent = Intent(context, ExchangeActivity::class.java)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-    inflater.inflate(R.layout.fragment_exchange, container, false)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_exchange)
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    fragmentAdapter = ExchangePagerAdapter(childFragmentManager)
+    // TODO: CHECK This out
+    fragmentAdapter = ExchangePagerAdapter(supportFragmentManager)
     viewPager.adapter = fragmentAdapter
     viewPager.offscreenPageLimit = fragmentAdapter.count
     viewPager.addOnPageChangeListener(this)
@@ -98,4 +97,8 @@ class ExchangeFragment : Fragment(), ViewPager.OnPageChangeListener, OnTradeCurr
     }
   }
 
+  override fun onBackPressed() {
+    super.onBackPressed()
+    overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
+  }
 }

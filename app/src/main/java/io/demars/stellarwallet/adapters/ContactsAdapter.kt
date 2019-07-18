@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.activities.ContactsActivity
 import io.demars.stellarwallet.activities.PayActivity
-import io.demars.stellarwallet.activities.StellarAddressActivity
+import io.demars.stellarwallet.activities.PayToActivity
 import io.demars.stellarwallet.models.Contact
 
 class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -82,19 +82,19 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
       }
 
       button.setOnClickListener {
-        val context = it.context
-        stellarAddress?.let { that ->
-          (context as Activity).startActivityForResult(
-            PayActivity.newIntent(context, that), ContactsActivity.RC_PAY_TO_CONTACT)
-        } ?: run {
-          context.startActivity(StellarAddressActivity.updateContact(context, contact))
-        }
+//        val context = it.context
+//        stellarAddress?.let { that ->
+//          (context as Activity).startActivityForResult(
+//            PayActivity.newIntent(context, that), ContactsActivity.RC_PAY_TO_CONTACT)
+//        } ?: run {
+//          context.startActivity(PayToActivity.updateContact(context, contact))
+//        }
       }
 
       itemView.setOnClickListener {
         val context = it.context
         if (mBoundContact != null) {
-          context.startActivity(StellarAddressActivity.updateContact(context, contact))
+//          context.startActivity(PayToActivity.updateContact(context, contact))
         }
       }
     }

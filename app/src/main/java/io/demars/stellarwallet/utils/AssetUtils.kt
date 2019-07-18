@@ -67,7 +67,7 @@ class AssetUtils {
       Preferences.setReportingAssetIssuer(context, dataAsset.issuer)
     }
 
-    fun getDataAssetFromPrefs(context: Context) : DataAsset{
+    fun getDataAssetFromPrefs(context: Context): DataAsset {
       val type = Preferences.getReportingAssetType(context)
       val code = Preferences.getReportingAssetCode(context)
       val issuer = Preferences.getReportingAssetIssuer(context)
@@ -101,30 +101,33 @@ class AssetUtils {
     }
 
     fun getLogo(assetCode: String): Int = when (assetCode) {
-      Constants.ZAR_ASSET_TYPE -> Constants.ZAR_IMAGE_RES
-      Constants.DMC_ASSET_TYPE -> Constants.DMC_IMAGE_RES
-      Constants.NGNT_ASSET_TYPE -> Constants.NGNT_IMAGE_RES
-      Constants.LUMENS_ASSET_TYPE -> Constants.LUMENS_IMAGE_RES
-      Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
+      Constants.LUMENS_ASSET_TYPE, Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
+      Constants.DMC_ASSET_CODE -> Constants.DMC_IMAGE_RES
+      Constants.ETH_ASSET_CODE -> Constants.ETH_IMAGE_RES
+      Constants.BTC_ASSET_CODE -> Constants.BTC_IMAGE_RES
+      Constants.ZAR_ASSET_CODE -> Constants.ZAR_IMAGE_RES
+      Constants.NGNT_ASSET_CODE -> Constants.NGNT_IMAGE_RES
       else -> 0
     }
 
     fun getShortCode(assetCode: String): String = when (assetCode) {
       Constants.LUMENS_ASSET_CODE -> "L"
-      Constants.ZAR_ASSET_TYPE -> "R"
-      Constants.NGNT_ASSET_TYPE -> "N"
+      Constants.BTC_ASSET_CODE -> "B"
+      Constants.ETH_ASSET_CODE -> "L"
+      Constants.ZAR_ASSET_CODE -> "R"
+      Constants.NGNT_ASSET_CODE -> "N"
       else -> ""
     }
 
     fun getWithdrawAccount(assetCode: String?): String = when (assetCode) {
-      Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
-      Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_WITHDRAW
+      Constants.ZAR_ASSET_CODE -> Constants.ZAR_ASSET_ISSUER
+      Constants.NGNT_ASSET_CODE -> Constants.NGNT_ASSET_WITHDRAW
       else -> ""
     }
 
     fun getMaxDecimals(assetCode: String): Int = when {
-      assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> 2
-      assetCode.equals(Constants.NGNT_ASSET_TYPE, true) -> 2
+      assetCode.equals(Constants.ZAR_ASSET_CODE, true) -> 2
+      assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> 2
       else -> 7
     }
   }

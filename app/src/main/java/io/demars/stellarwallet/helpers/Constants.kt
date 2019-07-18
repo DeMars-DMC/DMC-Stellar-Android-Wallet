@@ -21,21 +21,31 @@ class Constants {
     const val LUMENS_ASSET_NAME = "Stellar Lumens"
     const val LUMENS_IMAGE_RES = R.drawable.ic_logo_stellar_white
 
-    const val ZAR_ASSET_TYPE = "ZAR"
+    const val ZAR_ASSET_CODE = "ZAR"
     const val ZAR_ASSET_NAME = "South African Rand"
     const val ZAR_ASSET_ISSUER = "GBW4A2PFL6Y2PMFDR2V6F4X4VSJYBZHPL53AI7YXF65VLCUNQ73WTJ6Q"
     const val ZAR_IMAGE_RES = R.drawable.ic_logo_zar
 
-    const val DMC_ASSET_TYPE = "DMC"
+    const val DMC_ASSET_CODE = "DMC"
     const val DMC_ASSET_NAME = "DéMars Coins"
     const val DMC_ASSET_ISSUER = "GALRZBMCK47XLHQQXQSPCNJ375NGB6LP6RCBIGPXQAWIE2A4UCDTGQ52"
     const val DMC_IMAGE_RES = R.drawable.ic_logo_dmc
 
-    const val NGNT_ASSET_TYPE = "NGNT"
+    const val NGNT_ASSET_CODE = "NGNT"
     const val NGNT_ASSET_NAME = "Nigerian Naira"
     const val NGNT_ASSET_ISSUER = "GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD"
     const val NGNT_ASSET_WITHDRAW = "GBQZOJE2GWJU5VBT6NBLD2F3IOVOYUBDAXYUU32XMHDF4RMDOURWV3GT"
     const val NGNT_IMAGE_RES = R.drawable.ic_logo_ngnt
+
+    const val ETH_ASSET_CODE = "ETH"
+    const val ETH_ASSET_NAME = "Ethereum"
+    const val ETH_ASSET_ISSUER = "GBETHKBL5TCUTQ3JPDIYOZ5RDARTMHMEKIO2QZQ7IOZ4YC5XV3C2IKYU"
+    const val ETH_IMAGE_RES = R.drawable.ic_logo_eth_white
+
+    const val BTC_ASSET_CODE = "BTC"
+    const val BTC_ASSET_NAME = "Bitcoin"
+    const val BTC_ASSET_ISSUER = "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
+    const val BTC_IMAGE_RES = R.drawable.ic_logo_btc_white
 
     const val FEE_ACCOUNT = "GDENR3NFTMCIHX5GGQCAVG5AYHXH4FENWNRDDLMB7YHUBHKPO4PE2MC5"
 

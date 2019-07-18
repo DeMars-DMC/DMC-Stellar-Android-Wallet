@@ -26,7 +26,7 @@ class ReceiveActivity : BaseActivity() {
         backButton.setOnClickListener { onBackPressed() }
 
         val publicId = DmcApp.wallet.getStellarAccountId()
-        addressTextView.text = publicId
+        addressEditText.text = publicId
         generateQRCode(publicId!!, qrImageView, 500)
         addressCopyButton.setOnClickListener { copyAddressToClipBoard(publicId)  }
     }
@@ -47,6 +47,6 @@ class ReceiveActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
     }
 }

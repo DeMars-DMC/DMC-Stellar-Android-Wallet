@@ -26,6 +26,7 @@ import android.text.method.LinkMovementMethod
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.DmcAsset
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
@@ -103,6 +104,12 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_deposit)
+
+    if (!DmcApp.wallet.isVerified()) {
+      finishWithToast(R.string.deposit_not_verified)
+      return
+    }
+
     cowrieApi = CowrieRetrofit.create()
     checkIntent()
     setupUI()
@@ -130,7 +137,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           maxAmount = available.toDouble()
           maxAmountText = StringFormat.truncateDecimalPlaces(available, MAX_DECIMALS)
           when (assetCode) {
-            Constants.NGNT_ASSET_TYPE -> minAmount = 500.0
+            Constants.NGNT_ASSET_CODE -> minAmount = 500.0
           }
         }
       }
@@ -270,15 +277,15 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     depositConfirmExplain.visibility = if (mode == Mode.DEPOSIT &&
-      assetCode == Constants.ZAR_ASSET_TYPE) View.VISIBLE else View.GONE
+      assetCode == Constants.ZAR_ASSET_CODE) View.VISIBLE else View.GONE
   }
 
   private fun onUserFetched(user: DmcUser) {
     dmcUser = user
 
     when (assetCode) {
-      Constants.ZAR_ASSET_TYPE -> userBankAccounts = user.banksZAR
-      Constants.NGNT_ASSET_TYPE -> userBankAccounts = user.banksNGNT
+      Constants.ZAR_ASSET_CODE -> userBankAccounts = user.banksZAR
+      Constants.NGNT_ASSET_CODE -> userBankAccounts = user.banksNGNT
     }
 
     val fullNameString = "${user.first_name} ${user.last_name}"
@@ -346,7 +353,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     userBankAccounts.clear()
 
     when (assetCode) {
-      Constants.ZAR_ASSET_TYPE -> {
+      Constants.ZAR_ASSET_CODE -> {
         userBankAccounts.add(bankToAdd)
         Firebase.getUserBanksZarRef(dmcUser.uid).setValue(userBankAccounts)
           .addOnSuccessListener {
@@ -355,7 +362,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             bankInputError("Something went wrong please try to add bank Account again")
           }
       }
-      Constants.NGNT_ASSET_TYPE -> {
+      Constants.NGNT_ASSET_CODE -> {
         // Verify NGNT bank account with cowrie exchange API first
         cowrieApi.ngntForNgn(bankToAdd.branch, bankToAdd.number).enqueue(object : Callback<WithdrawalResponse> {
           override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
@@ -397,7 +404,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       val shortCode = AssetUtils.getShortCode(assetCode)
       // 1% DMC withdrawal fee
       val dmcFeeValue = "$shortCode${StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)}"
-      val assetFeeString = if (assetCode == Constants.NGNT_ASSET_TYPE)
+      val assetFeeString = if (assetCode == Constants.NGNT_ASSET_CODE)
         "\n${getString(R.string.pattern_withdrawal_fee_asset, "${shortCode}200.00", assetCode)}" else ""
       val feesString = "${getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue)}$assetFeeString"
       feeTextView.text = feesString
@@ -475,7 +482,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
       when (assetCode) {
-        Constants.NGNT_ASSET_TYPE -> {
+        Constants.NGNT_ASSET_CODE -> {
           // Use Cowrie exchange api to request deposit NGNT
           cowrieApi.ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
             override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
@@ -495,7 +502,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             }
           })
         }
-        Constants.ZAR_ASSET_TYPE -> {
+        Constants.ZAR_ASSET_CODE -> {
           // Notify user with our ZAR banking info
           val anchorBank = BankAccount("DMC Rand (Pty) Ltd", "250655",
             "Current/Cheque Account", "62756496496", "FNB")
@@ -533,10 +540,10 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       showProgressBar()
 
       when (assetCode) {
-        Constants.NGNT_ASSET_TYPE -> {
+        Constants.NGNT_ASSET_CODE -> {
           withdrawNgnt(secretSeed, amount, fee)
         }
-        Constants.ZAR_ASSET_TYPE -> {
+        Constants.ZAR_ASSET_CODE -> {
           withdrawZar(secretSeed, amount, fee)
         }
       }

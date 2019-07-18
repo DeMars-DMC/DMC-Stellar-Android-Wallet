@@ -665,8 +665,8 @@ object Horizon : HorizonTasks {
 
   private fun getAsset(assetCode: String): Asset {
     val assetIssuer = when (assetCode) {
-      Constants.ZAR_ASSET_TYPE -> Constants.ZAR_ASSET_ISSUER
-      Constants.NGNT_ASSET_TYPE -> Constants.NGNT_ASSET_ISSUER
+      Constants.ZAR_ASSET_CODE -> Constants.ZAR_ASSET_ISSUER
+      Constants.NGNT_ASSET_CODE -> Constants.NGNT_ASSET_ISSUER
       else -> Constants.DMC_ASSET_ISSUER
     }
 

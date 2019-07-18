@@ -108,13 +108,19 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val xlm = DmcAsset(Constants.LUMENS_ASSET_CODE, Constants.LUMENS_IMAGE_RES,
       "", Constants.LUMENS_ASSET_CODE, "", true, null)
 
-    val dmc = DmcAsset(Constants.DMC_ASSET_TYPE, Constants.DMC_IMAGE_RES,
+    val dmc = DmcAsset(Constants.DMC_ASSET_CODE, Constants.DMC_IMAGE_RES,
       Constants.DMC_ASSET_ISSUER, Constants.DMC_ASSET_NAME, "", false, null)
 
-    val zar = DmcAsset(Constants.ZAR_ASSET_TYPE, Constants.ZAR_IMAGE_RES,
+    val eth = DmcAsset(Constants.ETH_ASSET_CODE, Constants.ETH_IMAGE_RES,
+      Constants.ETH_ASSET_ISSUER, Constants.ETH_ASSET_NAME, "", false, null)
+
+    val btc = DmcAsset(Constants.BTC_ASSET_CODE, Constants.BTC_IMAGE_RES,
+      Constants.BTC_ASSET_ISSUER, Constants.BTC_ASSET_NAME, "", false, null)
+
+    val zar = DmcAsset(Constants.ZAR_ASSET_CODE, Constants.ZAR_IMAGE_RES,
       Constants.ZAR_ASSET_ISSUER, Constants.ZAR_ASSET_NAME, "", false, null)
 
-    val ngnt = DmcAsset(Constants.NGNT_ASSET_TYPE, Constants.NGNT_IMAGE_RES,
+    val ngnt = DmcAsset(Constants.NGNT_ASSET_CODE, Constants.NGNT_IMAGE_RES,
       Constants.NGNT_ASSET_ISSUER, Constants.NGNT_ASSET_NAME, "", false, null)
 
     val currencies = ArrayList<DmcAsset>()
@@ -129,6 +135,8 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val supported = ArrayList<DmcAsset>().apply {
       add(zar)
       add(ngnt)
+      add(eth)
+      add(btc)
     }
 
     balances.forEach {
@@ -136,24 +144,38 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         it.assetType == Constants.LUMENS_ASSET_TYPE -> {
           xlm.amount = it.balance
         }
-        it.assetCode.equals(Constants.DMC_ASSET_TYPE, true) -> {
+        it.assetCode.equals(Constants.DMC_ASSET_CODE, true) -> {
           dmc.amount = it.balance
           dmc.asset = it.asset
           dmc.isAdded = true
         }
-        it.assetCode.equals(Constants.ZAR_ASSET_TYPE, true) -> {
+        it.assetCode.equals(Constants.ZAR_ASSET_CODE, true) -> {
           zar.amount = it.balance
           zar.asset = it.asset
           zar.isAdded = true
           currencies.add(zar)
           supported.remove(zar)
         }
-        it.assetCode.equals(Constants.NGNT_ASSET_TYPE, true) -> {
+        it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> {
           ngnt.amount = it.balance
           ngnt.asset = it.asset
           ngnt.isAdded = true
           currencies.add(ngnt)
           supported.remove(ngnt)
+        }
+        it.assetCode.equals(Constants.ETH_ASSET_CODE, true) -> {
+          eth.amount = it.balance
+          eth.asset = it.asset
+          eth.isAdded = true
+          cryptos.add(eth)
+          supported.remove(eth)
+        }
+        it.assetCode.equals(Constants.BTC_ASSET_CODE, true) -> {
+          btc.amount = it.balance
+          btc.asset = it.asset
+          btc.isAdded = true
+          cryptos.add(0, btc)
+          supported.remove(btc)
         }
         else -> {
           val custom = DmcAsset(it.assetCode.toLowerCase(), 0,
@@ -349,7 +371,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     if (isCustomizing) {
       if (asset.amount!!.toDouble() == 0.0 &&
         assetCode != Constants.LUMENS_ASSET_CODE &&
-        assetCode != Constants.DMC_ASSET_TYPE) {
+        assetCode != Constants.DMC_ASSET_CODE) {
         holder.rightIcon.visibility = View.VISIBLE
         holder.rightIcon.setImageResource(R.drawable.ic_clear)
         holder.rightIcon.setPadding(holder.rightIcon.context.resources?.
@@ -371,11 +393,11 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
     // Image
     when {
-      assetCode == Constants.ZAR_ASSET_TYPE ->
+      assetCode == Constants.ZAR_ASSET_CODE ->
         loadAssetImage(Constants.ZAR_IMAGE_RES, holder.assetImage)
-      assetCode == Constants.DMC_ASSET_TYPE ->
+      assetCode == Constants.DMC_ASSET_CODE ->
         loadAssetImage(Constants.DMC_IMAGE_RES, holder.assetImage)
-      assetCode == Constants.NGNT_ASSET_TYPE ->
+      assetCode == Constants.NGNT_ASSET_CODE ->
         loadAssetImage(Constants.NGNT_IMAGE_RES, holder.assetImage)
       asset.image != 0 -> {
         loadAssetImage(asset.image, holder.assetImage)

@@ -393,7 +393,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     try {
-      parentListener = parentFragment as OnTradeCurrenciesChanged
+      parentListener = activity as OnTradeCurrenciesChanged
     } catch (e: ClassCastException) {
       Timber.e("the parent must implement: %s", OnTradeCurrenciesChanged::class.java.simpleName)
     }

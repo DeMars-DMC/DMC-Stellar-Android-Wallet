@@ -98,6 +98,7 @@ class CreateUserActivity : AppCompatActivity() {
           val expiryDate = "$year-${month + 1}-$dayOfMonth"
           expiryDatePicker.setTextColor(Color.BLACK)
           expiryDatePicker.text = expiryDate
+          expiryDateCheckbox.isChecked = true
           user?.id_expiry_date = expiryDate
         }, today[Calendar.YEAR], today[Calendar.MONTH], today[Calendar.DAY_OF_MONTH])
       expiryDateDialog?.datePicker?.minDate = today.timeInMillis
@@ -146,17 +147,17 @@ class CreateUserActivity : AppCompatActivity() {
         REQUEST_CODE_CAMERA_ID_FRONT -> {
           user?.id_photo_uploaded = downloadUrl.isNotEmpty()
           user?.id_photo_url = downloadUrl
-          idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+          idPhotoCheck.setImageResource(R.drawable.ic_check_circle_accent)
         }
         REQUEST_CODE_CAMERA_ID_BACK -> {
           user?.id_back_uploaded = downloadUrl.isNotEmpty()
           user?.id_back_url = downloadUrl
-          idBackCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+          idBackCheck.setImageResource(R.drawable.ic_check_circle_accent)
         }
         REQUEST_CODE_CAMERA_SELFIE -> {
           user?.id_selfie_uploaded = downloadUrl.isNotEmpty()
           user?.id_selfie_url = downloadUrl
-          idSelfieCheck.setImageResource(R.drawable.ic_check_circle_accent_24dp)
+          idSelfieCheck.setImageResource(R.drawable.ic_check_circle_accent)
         }
       }
     }
@@ -310,6 +311,8 @@ class CreateUserActivity : AppCompatActivity() {
     emailInput.visibility = VISIBLE
     documentNumberInput.visibility = VISIBLE
     submitButton.visibility = VISIBLE
+    expiryDateCheckbox.visibility = VISIBLE
+
 
     val user = this.user as DmcUser
 
@@ -430,6 +433,15 @@ class CreateUserActivity : AppCompatActivity() {
       showExpiryDateDialog()
     }
 
+    expiryDateCheckbox.setOnCheckedChangeListener { _, isChecked ->
+      if (!isChecked) {
+        val expiryDate = "2999-01-01"
+        expiryDatePicker.setTextColor(Color.BLACK)
+        expiryDatePicker.text = expiryDate
+        user.id_expiry_date = expiryDate
+      }
+    }
+
     idPhotoContainer.setOnClickListener {
       openCameraActivity(REQUEST_CODE_CAMERA_ID_FRONT)
     }
@@ -473,6 +485,7 @@ class CreateUserActivity : AppCompatActivity() {
     documentNumberInput.visibility = GONE
     submitButton.visibility = GONE
     termsConditions.visibility = GONE
+    expiryDateCheckbox.visibility = GONE
 
     dateOfBirthPicker.setOnClickListener(null)
     nationalityPicker.setOnClickListener(null)
@@ -509,11 +522,11 @@ class CreateUserActivity : AppCompatActivity() {
     expiryDatePicker.textColor = Color.BLACK
 
     idPhotoCheck.setImageResource(if (user.id_photo_uploaded)
-      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+      R.drawable.ic_check_circle_accent else R.drawable.ic_circle_outline_palesky_24dp)
     idBackCheck.setImageResource(if (user.id_back_uploaded)
-      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+      R.drawable.ic_check_circle_accent else R.drawable.ic_circle_outline_palesky_24dp)
     idSelfieCheck.setImageResource(if (user.id_selfie_uploaded)
-      R.drawable.ic_check_circle_accent_24dp else R.drawable.ic_circle_outline_palesky_24dp)
+      R.drawable.ic_check_circle_accent else R.drawable.ic_circle_outline_palesky_24dp)
   }
 
   override fun onDestroy() {

@@ -34,9 +34,9 @@
                 android:id="@+id/firstNameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:layout_marginTop="@dimen/padding_horizontal"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/first_name"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -50,8 +50,8 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <TextView
@@ -60,17 +60,17 @@
                 android:layout_height="@dimen/button_height_big"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/surnameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/surname"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -84,8 +84,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="textCapWords"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <TextView
@@ -94,17 +94,17 @@
                 android:layout_height="@dimen/button_height_big"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/birthDateLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/date_of_birth"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -118,18 +118,18 @@
                 android:drawableEnd="@drawable/ic_date_palesky_24dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/date_of_birth"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/nationalityLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/nationality"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -143,18 +143,18 @@
                 android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/select_nationality"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/addressLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/residential_address"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -169,9 +169,9 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColorHint="@color/colorPaleSky" />
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:textColorHint="@color/colorPaleSky"/>
 
             <TextView
                 android:id="@+id/addressText"
@@ -179,10 +179,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/button_height_big"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <EditText
                 android:id="@+id/addressSecondLineInput"
@@ -193,8 +193,8 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <EditText
@@ -206,8 +206,8 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <EditText
@@ -219,8 +219,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="number"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <TextView
@@ -232,19 +232,19 @@
                 android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/select_country"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/emailLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/email_address"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -258,8 +258,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky" />
 
             <TextView
@@ -268,18 +268,18 @@
                 android:layout_height="@dimen/button_height_big"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/communicationLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/communication_preference"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -293,11 +293,11 @@
                 android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/select_preferred_communication"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
 
             <TextView
@@ -305,8 +305,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/id_document_type"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -320,19 +320,19 @@
                 android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/select_document_type"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/documentNumberLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/document_number"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -346,8 +346,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="textCapCharacters"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColorHint="@color/colorPaleSky"
                 tools:ignore="TextFields" />
 
@@ -357,21 +357,35 @@
                 android:layout_height="@dimen/button_height_big"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
-            <TextView
-                android:id="@+id/expiryDateLabel"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/expiry_date"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal">
+
+                <TextView
+                    android:id="@+id/expiryDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/expiry_date"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/expiryDateCheckbox"
+                    android:theme="@style/CheckBoxTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/expiryDatePicker"
@@ -382,19 +396,19 @@
                 android:drawableEnd="@drawable/ic_date_palesky_24dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/expiry_date"
                 android:textColor="@color/colorPaleSky"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:id="@+id/personalIdLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
                 android:text="@string/personal_id"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -413,8 +427,8 @@
                     android:layout_height="80dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="@dimen/padding_horizontal"
+                    android:paddingEnd="@dimen/padding_horizontal"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_id"
                     android:tint="@color/colorPaleSky" />
@@ -457,8 +471,8 @@
                     android:layout_height="80dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="@dimen/padding_horizontal"
+                    android:paddingEnd="@dimen/padding_horizontal"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_id"
                     android:tint="@color/colorPaleSky" />
@@ -501,8 +515,8 @@
                     android:layout_height="80dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="@dimen/padding_horizontal"
+                    android:paddingEnd="@dimen/padding_horizontal"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_id"
                     android:tint="@color/colorPaleSky" />
@@ -543,12 +557,9 @@
 
             <Button
                 android:id="@+id/submitButton"
-                style="@style/ButtonStyleAccent"
+                style="@style/ButtonStyleAccentFlat"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height_big"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="@dimen/padding_vertical"
                 android:text="@string/submit" />
         </LinearLayout>
     </ScrollView>

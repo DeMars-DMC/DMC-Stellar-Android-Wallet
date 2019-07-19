@@ -175,7 +175,7 @@ class AssetsActivity : BaseActivity(), AssetListener {
   }
 
   //region Call backs
-  override fun assetSelected(assetCode: String) {
+  override fun assetSelected(assetCode: String, assetIssuer: String) {
 //    DmcApp.userSession.setSessionAsset(sessionAsset)
     finish()
   }

@@ -54,12 +54,12 @@ object Horizon : HorizonTasks {
     return LoadTradesTask(cursor, limit, listener)
   }
 
-  override fun getSendTask(listener: SuccessErrorCallback, destAddress: String, secretSeed: CharArray, memo: String, amount: String): AsyncTask<Void, Void, HorizonException> {
-    return SendTask(listener, destAddress, secretSeed, memo, amount)
+  override fun getSendTask(listener: SuccessErrorCallback, asset: Asset, destAddress: String, secretSeed: CharArray, memo: String, amount: String): AsyncTask<Void, Void, HorizonException> {
+    return SendTask(listener, asset, destAddress, secretSeed, memo, amount)
   }
 
-  override fun getWithdrawTask(listener: SuccessErrorCallback, assetCode: String, secretSeed: CharArray, destination: String, memo: String, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
-    return WithdrawTask(listener, assetCode, secretSeed, destination, memo, amount, fee)
+  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
+    return WithdrawTask(listener, asset, secretSeed, destination, memo, amount, fee)
   }
 
   override fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest: String): AsyncTask<Void, Void, HorizonException> {
@@ -422,8 +422,11 @@ object Horizon : HorizonTasks {
     }
   }
 
-  private class SendTask(private val listener: SuccessErrorCallback, private val destAddress: String,
-                         private val secretSeed: CharArray, private val memo: String,
+  private class SendTask(private val listener: SuccessErrorCallback,
+                         private val asset: Asset,
+                         private val destAddress: String,
+                         private val secretSeed: CharArray,
+                         private val memo: String,
                          private val amount: String) : AsyncTask<Void, Void, HorizonException>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
@@ -452,7 +455,7 @@ object Horizon : HorizonTasks {
         if (isCreateAccount) {
           transactionBuilder.addOperation(CreateAccountOperation.Builder(destKeyPair, amount).build())
         } else {
-          transactionBuilder.addOperation(PaymentOperation.Builder(destKeyPair, getCurrentAsset(), amount).build())
+          transactionBuilder.addOperation(PaymentOperation.Builder(destKeyPair, asset, amount).build())
         }
 
         if (memo.isNotEmpty()) {
@@ -487,7 +490,7 @@ object Horizon : HorizonTasks {
   }
 
   private class WithdrawTask(private val listener: SuccessErrorCallback,
-                             private val assetCode: String,
+                             private val asset: Asset,
                              private val secretSeed: CharArray,
                              private val destination: String,
                              private val memo: String,
@@ -501,7 +504,6 @@ object Horizon : HorizonTasks {
         val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
         val destKeyPair = KeyPair.fromAccountId(destination)
         val feeKeyPair = KeyPair.fromAccountId(Constants.FEE_ACCOUNT)
-        val asset = getAsset(assetCode)
 
         val sourceAccount = server.accounts().account(sourceKeyPair)
 
@@ -650,32 +652,6 @@ object Horizon : HorizonTasks {
   interface OnOffersListener {
     fun onOffers(offers: ArrayList<OfferResponse>)
     fun onFailed(errorMessage: String)
-  }
-
-  private fun getCurrentAsset(): Asset {
-    val assetCode = DmcApp.userSession.getSessionAsset().assetCode
-    val assetIssuer = DmcApp.userSession.getSessionAsset().assetIssuer
-
-    return if (assetCode == Constants.LUMENS_ASSET_TYPE) {
-      AssetTypeNative()
-    } else {
-      Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
-    }
-  }
-
-  private fun getAsset(assetCode: String): Asset {
-    val assetIssuer = when (assetCode) {
-      Constants.ZAR_ASSET_CODE -> Constants.ZAR_ASSET_ISSUER
-      Constants.NGNT_ASSET_CODE -> Constants.NGNT_ASSET_ISSUER
-      else -> Constants.DMC_ASSET_ISSUER
-    }
-
-    return if (assetCode == Constants.LUMENS_ASSET_TYPE) {
-      AssetTypeNative()
-    } else {
-      Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
-    }
-
   }
 
   /**

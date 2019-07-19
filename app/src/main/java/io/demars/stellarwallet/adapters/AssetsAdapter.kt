@@ -418,7 +418,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       holder.itemView.setOnClickListener(null)
     } else {
       holder.itemView.setOnClickListener {
-        listener.assetSelected(assetCode)
+        listener.assetSelected(assetCode, asset.issuer)
       }
     }
   }

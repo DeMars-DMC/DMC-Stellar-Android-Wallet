@@ -53,13 +53,14 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   companion object {
     private const val ARG_MODE = "ARG_MODE"
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
+    private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
     private const val MAX_DECIMALS = 2
-    fun newInstance(context: Context, mode: Mode, assetCode: String): Intent {
-      val intent = Intent(context, DepositActivity::class.java)
-      intent.putExtra(ARG_MODE, mode)
-      intent.putExtra(ARG_ASSET_CODE, assetCode)
-      return intent
-    }
+    fun newInstance(context: Context, mode: Mode, assetCode: String, assetIssuer: String): Intent =
+      Intent(context, DepositActivity::class.java).apply {
+        putExtra(ARG_MODE, mode)
+        putExtra(ARG_ASSET_CODE, assetCode)
+        putExtra(ARG_ASSET_ISSUER, assetIssuer)
+      }
   }
 
   private lateinit var dmcUser: DmcUser
@@ -67,6 +68,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var mode = Mode.DEPOSIT
   private var modeString = ""
   private var assetCode = ""
+  private var assetIssuer = ""
   private var userBankAccounts = ArrayList<BankAccount>()
   private var supportedBanks = HashMap<String, String>()
   private var bankToAdd = BankAccount()
@@ -127,6 +129,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         R.string.deposit else R.string.withdraw)
 
       assetCode = it.getString(ARG_ASSET_CODE, "")
+      assetIssuer = it.getString(ARG_ASSET_ISSUER, "")
       when (mode) {
         Mode.DEPOSIT -> {
           maxAmount = 5000.0
@@ -380,7 +383,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           }
 
           override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
-            bankInputError(t.localizedMessage ?: "Error adding bank account, check your input and try again")
+            bankInputError(t.localizedMessage
+              ?: "Error adding bank account, check your input and try again")
           }
         })
       }
@@ -577,7 +581,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             override fun onError(error: HorizonException) {
               finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
             }
-          }, assetCode, secretSeed, info.address, info.meta, amount, fee).execute()
+          }, getAsset(), secretSeed, info.address, info.meta, amount, fee).execute()
         }
       }
 
@@ -604,7 +608,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
         hideProgressBar()
       }
-    }, assetCode, secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
+    }, getAsset(), secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
   }
 
   override fun onDestroy() {
@@ -612,4 +616,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     Firebase.removeUserListener(userListener)
     Firebase.removeAssetListener(assetCode, assetListener)
   }
+
+  private fun getAsset() = AssetUtils.getAsset(assetCode, assetIssuer)
 }

@@ -190,8 +190,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     }
   }
 
-  override fun assetSelected(assetCode: String) {
-    startActivity(AssetActivity.newInstance(this, assetCode))
+  override fun assetSelected(assetCode: String, assetIssuer: String) {
+    startActivity(AssetActivity.newInstance(this, assetCode, assetIssuer))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
@@ -337,7 +337,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
                     if (bids.isNotEmpty()) {
                       Timber.d("${bids.size} bids in the order book")
                       // Now we have balance of currency converted to XLM
-                      val balanceVal = (balance.balance?.toDouble() ?: 0.0) * bids[0].price.toDouble()
+                      val balanceVal = (balance.balance?.toDouble()
+                        ?: 0.0) * bids[0].price.toDouble()
                       // And now we convert it to reporting currency with price in XLM
                       totalBalance += (balanceVal * priceInXlm)
                       updateTotalBalanceView()

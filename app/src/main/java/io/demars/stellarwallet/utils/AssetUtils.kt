@@ -5,16 +5,20 @@ import io.demars.stellarwallet.Preferences
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
-import org.stellar.sdk.Asset
-import org.stellar.sdk.AssetTypeCreditAlphaNum12
-import org.stellar.sdk.AssetTypeCreditAlphaNum4
-import org.stellar.sdk.AssetTypeNative
+import org.stellar.sdk.*
 import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.xdr.AssetType
 
 class AssetUtils {
   companion object {
-    const val NATIVE_ASSET_CODE = "XLM"
+
+    fun getAsset(assetCode: String, assetIssuer: String): Asset {
+      return if (assetCode == Constants.LUMENS_ASSET_CODE) {
+        AssetTypeNative()
+      } else {
+        Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
+      }
+    }
 
     fun toAssetFrom(dataAsset: DataAsset): Asset {
       return if (dataAsset.type == "native") {
@@ -47,7 +51,7 @@ class AssetUtils {
           }
           AssetType.ASSET_TYPE_NATIVE -> {
             val concreteAsset = asset as AssetTypeNative
-            DataAsset(concreteAsset.type, NATIVE_ASSET_CODE, "null")
+            DataAsset(concreteAsset.type, Constants.LUMENS_ASSET_CODE, "null")
           }
         }
       }
@@ -73,7 +77,7 @@ class AssetUtils {
       val issuer = Preferences.getReportingAssetIssuer(context)
 
       return if (type == "native") {
-        DataAsset(type, NATIVE_ASSET_CODE, "null")
+        DataAsset(type, Constants.LUMENS_ASSET_CODE, "null")
       } else {
         DataAsset(type, code, issuer)
       }
@@ -93,7 +97,7 @@ class AssetUtils {
             concreteAsset.code
           }
           AssetType.ASSET_TYPE_NATIVE -> {
-            NATIVE_ASSET_CODE
+            Constants.LUMENS_ASSET_CODE
           }
         }
       }

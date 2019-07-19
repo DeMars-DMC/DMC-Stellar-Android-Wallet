@@ -26,18 +26,19 @@ class AssetActivity : BaseActivity() {
   companion object {
     const val RC_PAY = 111
     const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
-    fun newInstance(context: Context, assetCode: String): Intent {
-      val intent = Intent(context, AssetActivity::class.java)
-      intent.putExtra(ARG_ASSET_CODE, assetCode)
-      return intent
+    const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
+    fun newInstance(context: Context, assetCode: String, assetIssuer: String): Intent =
+       Intent(context, AssetActivity::class.java).apply {
+         putExtra(ARG_ASSET_CODE, assetCode)
+         putExtra(ARG_ASSET_ISSUER, assetIssuer)
     }
   }
 
+  private var assetCode = ""
+  private var assetIssuer = ""
+
   private lateinit var viewModel: WalletViewModel
-  private lateinit var assetCode: String
-
   private var transactionsAdapter: TransactionsAdapter? = null
-
   private var lastOperationsListSize = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +51,17 @@ class AssetActivity : BaseActivity() {
   }
 
   private fun checkIntent() {
-    intent.extras?.getString(ARG_ASSET_CODE)?.let {
-      assetCode = it
-    } ?: finishWithToast("Asset code cannot be NULL")
+    intent.extras?.let {
+      if (it.containsKey(ARG_ASSET_CODE)) {
+        assetCode = it.getString(ARG_ASSET_CODE, "")
+      } else {
+        finishWithToast("Asset code cannot be NULL")
+      }
+
+      if (it.containsKey(ARG_ASSET_ISSUER)) {
+        assetIssuer = it.getString(ARG_ASSET_ISSUER, "")
+      }
+    }
   }
 
   private fun initUI() {
@@ -155,6 +164,7 @@ class AssetActivity : BaseActivity() {
             list.updateTradesList(assetCode, trades)
             runOnUiThread {
               assetBalance?.text = getFormattedBalance()
+              availableBalanceView?.text = getFormattedAvailableBalance()
               transactionsAdapter?.updateData(list.array)
               swipeRefresh?.isRefreshing = false
             }
@@ -178,7 +188,7 @@ class AssetActivity : BaseActivity() {
   }
 
   private fun openPayToActivity() {
-    startActivityForResult(PayToActivity.toPay(this, assetCode), RC_PAY)
+    startActivityForResult(PayToActivity.newInstance(this, assetCode, assetIssuer), RC_PAY)
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
@@ -189,12 +199,12 @@ class AssetActivity : BaseActivity() {
 
   private fun openDepositActivity() {
     startActivity(
-      DepositActivity.newInstance(this, DepositActivity.Mode.DEPOSIT, assetCode))
+      DepositActivity.newInstance(this, DepositActivity.Mode.DEPOSIT, assetCode, assetIssuer))
   }
 
   private fun openWithdrawActivity() {
     startActivity(
-    DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode))
+    DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode, assetIssuer))
   }
 
   private fun learnDMC() {

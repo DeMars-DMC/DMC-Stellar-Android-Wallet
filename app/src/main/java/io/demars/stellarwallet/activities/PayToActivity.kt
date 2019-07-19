@@ -22,36 +22,25 @@ import kotlinx.android.synthetic.main.activity_pay_to.*
 
 class PayToActivity : BaseActivity(), View.OnClickListener {
 
-  private lateinit var assetCode: String
+  private var assetCode = ""
+  private var assetIssuer = ""
 
   companion object {
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
+    private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
     private const val RC_PAY = 222
 
-    fun toPay(context: Context, assetCode: String): Intent =
+    fun newInstance(context: Context, assetCode: String, assetIssuer: String): Intent =
       Intent(context, PayToActivity::class.java).apply {
         putExtra(ARG_ASSET_CODE, assetCode)
+        putExtra(ARG_ASSET_ISSUER, assetIssuer)
       }
-
-//    fun updateContact(context: Context, contactId: Contact): Intent {
-//      val intent = Intent(context, PayToActivity::class.java)
-//      intent.putExtra(ARG_MODE, Mode.UPDATE_CONTACT)
-//      intent.putExtra(ARG_CONTACT, contactId)
-//      return intent
-//    }
-//
-//    fun createContact(context: Context): Intent {
-//      val intent = Intent(context, PayToActivity::class.java)
-//      intent.putExtra(ARG_MODE, Mode.CREATE_CONTACT)
-//      return intent
-//    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pay_to)
-
-    assetCode = intent.getStringExtra(ARG_ASSET_CODE)
+    checkIntent()
 
     setupUI()
     loadAvailableBalance()
@@ -86,6 +75,11 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
     }
   }
 
+  private fun checkIntent() {
+    assetCode = intent.getStringExtra(ARG_ASSET_CODE)
+    assetIssuer = intent.getStringExtra(ARG_ASSET_ISSUER)
+  }
+
   //region User Interface
   private fun setupUI() {
     backButton.setOnClickListener {
@@ -104,7 +98,7 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
   private fun validateAndProceed() {
     val address = addressEditText.text.toString()
     if (address.length == STELLAR_ADDRESS_LENGTH && address != DmcApp.wallet.getStellarAccountId()) {
-      startActivityForResult(PayActivity.newIntent(this, assetCode, address), RC_PAY)
+      startActivityForResult(PayActivity.newIntent(this, assetCode, assetIssuer, address), RC_PAY)
       overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
     } else {
       // Shake animation on the text

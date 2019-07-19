@@ -27,6 +27,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.lifecycle.Observer
+import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.ViewUtils
@@ -415,7 +416,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       val currency = if (it.assetType != "native") {
         Currency(i, it.assetCode, it.assetCode, it.balance.toDouble(), it.asset)
       } else {
-        native = Currency(i, AssetUtils.NATIVE_ASSET_CODE, "LUMEN", it.balance.toDouble(), it.asset)
+        native = Currency(i, Constants.LUMENS_ASSET_CODE, "LUMEN", it.balance.toDouble(), it.asset)
         native as Currency
       }
       addedCurrencies.add(currency)

@@ -24,20 +24,23 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
   companion object {
     private const val ARG_ADDRESS_DATA = "ARG_ADDRESS_DATA"
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
+    private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
     private const val REQUEST_PIN = 0x0
 
-    fun newIntent(context: Context, assetCode: String, address: String): Intent {
-      val intent = Intent(context, PayActivity::class.java)
-      intent.putExtra(ARG_ASSET_CODE, assetCode)
-      intent.putExtra(ARG_ADDRESS_DATA, address)
-      return intent
-    }
+    fun newIntent(context: Context, assetCode: String,
+                  assetIssuer: String, address: String): Intent =
+      Intent(context, PayActivity::class.java).apply {
+        putExtra(ARG_ADDRESS_DATA, address)
+        putExtra(ARG_ASSET_CODE, assetCode)
+        putExtra(ARG_ASSET_ISSUER, assetIssuer)
+      }
   }
 
   private var amount = 0.0
   private var amountAvailable = 0.0
 
   private var assetCode = "XLM"
+  private var assetIssuer = ""
   private var address: String = ""
   private var amountText: String = ""
   private var amountAvailableText = "0.0"
@@ -64,6 +67,10 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
     if (intent.hasExtra(ARG_ASSET_CODE)) {
       assetCode = intent.getStringExtra(ARG_ASSET_CODE)
+    }
+
+    if (intent.hasExtra(ARG_ASSET_ISSUER)) {
+      assetIssuer = intent.getStringExtra(ARG_ASSET_ISSUER)
     }
 
     addressEditText.text = address
@@ -171,8 +178,8 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
       progressBar.visibility = View.VISIBLE
 
       val secretSeed = AccountUtils.getSecretSeed(applicationContext)
-
-      Horizon.getSendTask(this, address, secretSeed,
+      val asset = AssetUtils.getAsset(assetCode, assetIssuer)
+      Horizon.getSendTask(this, asset, address, secretSeed,
         memoTextView.text.toString(), amountText).execute()
     } else {
       NetworkUtils(applicationContext).displayNoNetwork()

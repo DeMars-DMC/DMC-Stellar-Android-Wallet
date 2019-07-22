@@ -254,7 +254,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       val price = latestBid?.price?.toFloatOrNull()
       val ssBuilder = SpannableStringBuilder("")
       if (price != null) {
-        val priceString = "Rate: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
+        val priceString = "Price: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
           "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n"
         val invertedString = "1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
 
@@ -266,7 +266,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
           0, indexBold,
           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val transparentString = "Rate: "
+        val transparentString = "Price: "
         val indexTransparent = indexBold + transparentString.length
 
         ssBuilder.append(transparentString)

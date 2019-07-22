@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.TransactionsAdapter
-import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.utils.AccountUtils
@@ -28,10 +27,10 @@ class AssetActivity : BaseActivity() {
     const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
     fun newInstance(context: Context, assetCode: String, assetIssuer: String): Intent =
-       Intent(context, AssetActivity::class.java).apply {
-         putExtra(ARG_ASSET_CODE, assetCode)
-         putExtra(ARG_ASSET_ISSUER, assetIssuer)
-    }
+      Intent(context, AssetActivity::class.java).apply {
+        putExtra(ARG_ASSET_CODE, assetCode)
+        putExtra(ARG_ASSET_ISSUER, assetIssuer)
+      }
   }
 
   private var assetCode = ""
@@ -83,55 +82,10 @@ class AssetActivity : BaseActivity() {
   }
 
   private fun initButtons() {
-    when (assetCode) {
-      Constants.LUMENS_ASSET_CODE -> {
-        container1.visibility = View.VISIBLE
-        container2.visibility = View.VISIBLE
-        container3.visibility = View.VISIBLE
-        container4.visibility = View.VISIBLE
-
-        label1.setText(R.string.buy)
-        label2.setText(R.string.set_inflation)
-
-        button1.setOnClickListener { buyXLM() }
-        button2.setOnClickListener { openSetInflationActivity() }
-      }
-      Constants.DMC_ASSET_CODE -> {
-        container1.visibility = View.GONE
-        container2.visibility = View.VISIBLE
-        container3.visibility = View.VISIBLE
-        container4.visibility = View.VISIBLE
-
-        label2.setText(R.string.learn)
-
-        button2.setOnClickListener { learnDMC() }
-      }
-      Constants.ZAR_ASSET_CODE,
-      Constants.NGNT_ASSET_CODE -> {
-        container1.visibility = View.VISIBLE
-        container2.visibility = View.VISIBLE
-        container3.visibility = View.VISIBLE
-        container4.visibility = View.VISIBLE
-
-        label1.setText(R.string.deposit)
-        label2.setText(R.string.withdraw)
-
-        button1.setOnClickListener { openDepositActivity() }
-        button2.setOnClickListener { openWithdrawActivity() }
-      }
-      else -> {
-        container1.visibility = View.GONE
-        container2.visibility = View.GONE
-        container3.visibility = View.VISIBLE
-        container4.visibility = View.VISIBLE
-      }
-    }
-
-    label3.setText(R.string.exchange)
-    label4.setText(R.string.pay)
-
-    button3.setOnClickListener { openExchangeActivity() }
-    button4.setOnClickListener { openPayToActivity() }
+    button1.setOnClickListener { deposit() }
+    button2.setOnClickListener { withdraw() }
+    button3.setOnClickListener { exchange() }
+    button4.setOnClickListener { pay() }
   }
 
   private fun initTransactions() {
@@ -174,50 +128,31 @@ class AssetActivity : BaseActivity() {
     })
   }
 
-  private fun getFormattedBalance(): String =
-    StringFormat.truncateDecimalPlaces(
-      AccountUtils.getTotalBalance(assetCode), AssetUtils.getMaxDecimals(assetCode))
+  private fun getFormattedBalance(): String = StringFormat.truncateDecimalPlaces(
+    AccountUtils.getTotalBalance(assetCode), AssetUtils.getMaxDecimals(assetCode))
 
   private fun getFormattedAvailableBalance(): String =
     getString(R.string.pattern_available, StringFormat.truncateDecimalPlaces(
       AccountUtils.getAvailableBalance(assetCode), AssetUtils.getMaxDecimals(assetCode)))
 
-  private fun openExchangeActivity() {
+  private fun exchange() {
     startActivity(ExchangeActivity.newInstance(this))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
-  private fun openPayToActivity() {
+  private fun pay() {
     startActivityForResult(PayToActivity.newInstance(this, assetCode, assetIssuer), RC_PAY)
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
-  private fun openReceiveActivity() {
+  private fun deposit() {
     startActivity(ReceiveActivity.newInstance(this))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
-  private fun openDepositActivity() {
+  private fun withdraw() {
     startActivity(
-      DepositActivity.newInstance(this, DepositActivity.Mode.DEPOSIT, assetCode, assetIssuer))
-  }
-
-  private fun openWithdrawActivity() {
-    startActivity(
-    DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode, assetIssuer))
-  }
-
-  private fun learnDMC() {
-    toast("To implement")
-  }
-
-  private fun buyXLM() {
-    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/XLMCEX")))
-  }
-
-  private fun openSetInflationActivity() {
-    startActivity(InflationActivity.newInstance(this))
-    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+      DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode, assetIssuer))
   }
 
   override fun onResume() {

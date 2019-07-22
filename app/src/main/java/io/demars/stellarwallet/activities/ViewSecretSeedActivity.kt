@@ -28,11 +28,13 @@ class ViewSecretSeedActivity : BaseActivity() {
             val secretSeed = it.getString(ARG_SECRET_SEED)
             secretSeed?.let {
                 secretSeedTextView.text = secretSeed
-                copyAddressButton.setOnClickListener { copyAddressToClipBoard(secretSeed)  }
+                addressCopyButton.setOnClickListener { copyAddressToClipBoard(secretSeed)  }
             }
         }
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun copyAddressToClipBoard(data: String) {

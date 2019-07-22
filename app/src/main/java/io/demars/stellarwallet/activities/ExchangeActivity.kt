@@ -37,7 +37,10 @@ class ExchangeActivity : BaseActivity(), ViewPager.OnPageChangeListener, OnTrade
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_exchange)
 
-    // TODO: CHECK This out
+    backButton.setOnClickListener {
+      onBackPressed()
+    }
+
     fragmentAdapter = ExchangePagerAdapter(supportFragmentManager)
     viewPager.adapter = fragmentAdapter
     viewPager.offscreenPageLimit = fragmentAdapter.count

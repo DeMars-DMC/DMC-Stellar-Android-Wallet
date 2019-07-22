@@ -146,7 +146,7 @@ class AssetActivity : BaseActivity() {
   }
 
   private fun deposit() {
-    startActivity(ReceiveActivity.newInstance(this))
+    startActivity(ReceiveActivity.newInstance(this, assetCode, assetIssuer))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 

@@ -11,7 +11,6 @@ import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository
-import io.demars.stellarwallet.mvvm.local.TransactionsRepository
 
 class GlobalGraphHelper {
   companion object {
@@ -36,7 +35,6 @@ class GlobalGraphHelper {
       Firebase.signOut()
       AccountRepository.clear()
       OperationsRepository.getInstance().clear()
-      TransactionsRepository.getInstance().clear()
       TradesRepository.getInstance().clear()
       KeyStoreWrapper(context).clear()
       return DmcApp.wallet.clearLocalStore()

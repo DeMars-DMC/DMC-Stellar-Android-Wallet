@@ -29,10 +29,11 @@
 
         <TextView
             style="@style/WhiteTitle"
+            android:id="@+id/titleView"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:gravity="center"
-            android:text="@string/receive_payments"
+            android:text="@string/deposit"
             android:textSize="@dimen/text_size_medium" />
     </FrameLayout>
 
@@ -73,7 +74,7 @@
         android:background="@drawable/background_card_transparent">
 
         <TextView
-            android:id="@+id/addressEditText"
+            android:id="@+id/addressTextView"
             style="@style/WhiteTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,5 +100,20 @@
             android:src="@drawable/ic_copy" />
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/bankDepositButton"
+        style="@style/ButtonTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:background="@drawable/background_card_transparent_accent"
+        android:textAllCaps="false"
+        android:text="@string/bank_deposit"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size_big" />
 
 </LinearLayout>

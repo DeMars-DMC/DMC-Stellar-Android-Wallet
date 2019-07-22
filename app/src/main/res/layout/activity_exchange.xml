@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whiteMain"
+    android:id="@+id/rootView"
     android:orientation="vertical"
     tools:context=".activities.ExchangeActivity">
 
@@ -39,7 +40,6 @@
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:elevation="6dp"
         tools:ignore="UnusedAttribute"
         android:id="@+id/tabs"
         android:layout_width="match_parent"

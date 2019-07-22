@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.PinActivity
-import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.models.stellar.MnemonicType
 import org.junit.Before
 import org.junit.Rule
@@ -50,8 +49,6 @@ class ApplicationEspressoTest {
 
         createWallet(MnemonicType.WORD_12, pin)
 
-        onActivity(WalletActivity::class)
-
         clearWallet()
 
         writePin(pin)
@@ -76,8 +73,6 @@ class ApplicationEspressoTest {
      * Must be called from ActivityType.WALLET_ACTIVITY
      */
     private fun clearWallet() {
-        onActivity(WalletActivity::class)
-
         onView(ViewMatchers.withId(R.id.nav_settings)).perform(ViewActions.click())
 
         onView(ViewMatchers.withId(R.id.logOutButton)).perform(ViewActions.click())
@@ -89,10 +84,6 @@ class ApplicationEspressoTest {
         when (activity) {
             LaunchActivity::class -> {
                 onView(ViewMatchers.withId(R.id.loginButton))
-            }
-
-            WalletActivity::class -> {
-                onView(ViewMatchers.withId(R.id.navigationView))
             }
 
             PinActivity::class -> {

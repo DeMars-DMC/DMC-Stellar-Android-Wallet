@@ -1,4 +1,4 @@
-package io.demars.stellarwallet
+package io.demars.stellarwallet.helpers
 
 import android.content.Context
 import androidx.preference.PreferenceManager

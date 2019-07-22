@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.utils
 
 import android.content.Context
-import io.demars.stellarwallet.Preferences
+import io.demars.stellarwallet.helpers.Preferences
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
@@ -19,6 +19,9 @@ class AssetUtils {
         Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
       }
     }
+
+    fun createNonNativeAsset(assetCode: String, assetIssuer: String) =
+      Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(assetIssuer))
 
     fun toAssetFrom(dataAsset: DataAsset): Asset {
       return if (dataAsset.type == "native") {

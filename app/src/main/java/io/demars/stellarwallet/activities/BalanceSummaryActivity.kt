@@ -13,7 +13,7 @@ import io.demars.stellarwallet.utils.StringFormat
 import kotlinx.android.synthetic.main.activity_balance_summary.*
 import kotlinx.android.synthetic.main.activity_balance_summary.toolbar
 
-class BalanceSummaryActivity : BasePopupActivity() {
+class BalanceSummaryActivity : BaseActivity() {
 
   companion object {
     private const val ARG_EXTRA_ASSET = "ARG_EXTRA_ASSET"
@@ -36,9 +36,9 @@ class BalanceSummaryActivity : BasePopupActivity() {
     }
   }
 
-  override fun setContent(): Int = R.layout.activity_balance_summary
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_balance_summary)
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -224,7 +224,6 @@
 
     <!--Add Asset Activity-->
     <string name="asset_code">Asset Code</string>
-    <string name="asset_code_hint">BTC</string>
     <string name="issuer_address">Issuer Address</string>
     <string name="empty_fields">You have one or more empty fields</string>
     <string name="add_asset_title">Add Asset</string>
@@ -246,8 +245,8 @@
     <string name="you_have_no_contacts">You have no contacts</string>
     <string name="no_results_found">No results found</string>
     <string name="no_contacts_found">No contacts found</string>
-    <string name="contact_header">ADDRESS BOOK</string>
-    <string name="stellar_contact_header">STELLAR CONTACT</string>
+    <string name="contact_header">Address book</string>
+    <string name="stellar_contact_header">Stellar contacts</string>
     <string name="contact_list_permission_message">Enable contacts to be able to   send funds to your friends.</string>
     <string name="contact_list_permission_button">Allow</string>
 
@@ -365,6 +364,7 @@
     <string name="select_account_type">Select account type</string>
     <string name="pattern_branch_number">Branch number: %s</string>
     <string name="pattern_deposit_limit">Limit: %s5,000 per deposit and %s25,000 per month</string>
+    <string name="pattern_deposit">Deposit %s</string>
     <string name="request_amount">%s amount</string>
     <string name="deposit_confirm_massage">Deposit requests not matched in 3 days are discarded</string>
     <string name="agree_request_terms">I hereby agree to the %s Terms and Conditions</string>
@@ -401,4 +401,9 @@
     <string name="available">Available</string>
     <string name="enter_public_address">Enter public address</string>
     <string name="finish_payment">Finish payment</string>
+    <string name="withdrawal_not_supported">Withdrawals are not supported for this asset.</string>
+    <string name="add_custom_asset_code_hint">Asset code(ex. BTC)</string>
+    <string name="add_custom_asset_issuer_hint">Issuer address</string>
+    <string name="share_address">Share address</string>
+    <string name="bank_deposit">Bank deposit</string>
 </resources>

@@ -328,7 +328,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   private fun createSnackBar(text: CharSequence, duration: Int): Snackbar? {
     activity?.let {
-      return Snackbar.make(it.findViewById(R.id.content_container), text, duration)
+      return Snackbar.make(it.findViewById(R.id.rootView), text, duration)
     }
     return null
   }

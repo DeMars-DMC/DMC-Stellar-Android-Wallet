@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/padding_micro"
+    android:layout_marginEnd="@dimen/padding_micro"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/DialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_horizontal"
+        android:text="@string/add_custom_asset" />
+
+    <EditText
+        android:id="@+id/customAssetCode"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_marginStart="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_mini"
+        android:background="@drawable/bg_card_white"
+        android:digits="@string/stellar_address_alphabet"
+        android:fontFamily="@font/opensans_regular"
+        android:hint="@string/add_custom_asset_code_hint"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:scrollHorizontally="true"
+        android:textSize="@dimen/text_size_small"
+        tools:ignore="UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/customAssetIssuer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_margin="@dimen/padding_mini"
+        android:background="@drawable/bg_card_white"
+        android:digits="@string/stellar_address_alphabet"
+        android:fontFamily="@font/opensans_regular"
+        android:hint="@string/add_custom_asset_issuer_hint"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:scrollHorizontally="true"
+        android:textSize="@dimen/text_size_small"
+        tools:ignore="UnusedAttribute" />
+
+    <Button
+        android:id="@+id/addAssetButton"
+        style="@style/ButtonStyleAccentFlat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_asset" />
+</LinearLayout>

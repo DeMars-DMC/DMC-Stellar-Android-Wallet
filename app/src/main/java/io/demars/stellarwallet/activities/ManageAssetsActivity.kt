@@ -9,9 +9,12 @@ import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import android.content.Intent
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -42,6 +45,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
   private lateinit var adapter: AssetsAdapter
   private lateinit var reportingAsset: DataAsset
+  private lateinit var bottomSheet: BottomSheetDialog
   private var isCustomizing = false
   private var totalBalance = 0.0
   //endregion
@@ -72,6 +76,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     }
 
     initAssetsView()
+    initBottomSheet()
   }
 
   private fun initAssetsView() {
@@ -99,6 +104,31 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
         }
       }
     })
+  }
+
+  private fun initBottomSheet() {
+    bottomSheet = BottomSheetDialog(this).apply {
+      val sheetView = layoutInflater.inflate(R.layout.dialog_add_asset, rootView, false)
+      val codeView = sheetView.findViewById<EditText>(R.id.customAssetCode)
+      val issuerView = sheetView.findViewById<EditText>(R.id.customAssetIssuer)
+      sheetView.findViewById<Button>(R.id.addAssetButton)?.setOnClickListener {
+        val code = codeView?.text.toString()
+        val issuer = issuerView?.text.toString()
+        if (code.isNotEmpty() && issuer.isNotEmpty()) {
+          try {
+            val asset = AssetUtils.createNonNativeAsset(code, issuer)
+            changeTrustline(asset, false)
+            bottomSheet.dismiss()
+          } catch (ex: Exception) {
+            toast("Invalid input for code or issuer")
+          }
+        } else {
+          toast("Fields cannot be empty")
+        }
+      }
+
+      setContentView(sheetView)
+    }
   }
 
   private fun openSettings() {
@@ -239,7 +269,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   override fun addCustomAsset() {
-    startActivityForResult(AddAssetActivity.newInstance(this), RC_ADD_CUSTOM)
+    bottomSheet.show()
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

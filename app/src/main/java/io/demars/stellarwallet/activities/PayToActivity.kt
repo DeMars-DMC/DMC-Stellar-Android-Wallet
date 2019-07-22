@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.Constants.Companion.STELLAR_ADDRESS_LENGTH
-import io.demars.stellarwallet.models.Contact
 import com.google.zxing.integration.android.IntentIntegrator
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.mvvm.account.AccountRepository
@@ -28,6 +27,7 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
   companion object {
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
+    private const val RC_PAY_TO_CONTACT = 111
     private const val RC_PAY = 222
 
     fun newInstance(context: Context, assetCode: String, assetIssuer: String): Intent =
@@ -68,7 +68,7 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
       }
     } else {
       when (requestCode) {
-        ContactsActivity.RC_PAY_TO_CONTACT -> if (resultCode == RESULT_OK) finish()
+        RC_PAY_TO_CONTACT -> if (resultCode == RESULT_OK) finish()
         RC_PAY -> if (resultCode == RESULT_OK) finish()
         else -> super.onActivityResult(requestCode, resultCode, data)
       }
@@ -92,6 +92,10 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
 
     bottomButton.setOnClickListener {
       validateAndProceed()
+    }
+
+    payToContactButton.setOnClickListener {
+      openPayToContacts()
     }
   }
 
@@ -122,10 +126,15 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
     })
   }
 
+  private fun openPayToContacts() {
+    startActivityForResult(ContactsActivity.newInstance(this, assetCode, assetIssuer), RC_PAY_TO_CONTACT)
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
+  }
+
   override fun onClick(v: View) {
     when (v.id) {
 //      R.id.sendToContactButton -> {
-//        startActivityForResult(ContactsActivity.withKey(this), ContactsActivity.RC_PAY_TO_CONTACT)
+//        startActivityForResult(ContactsActivity.newInstance(this), ContactsActivity.RC_PAY_TO_CONTACT)
 //      }
 //      R.id.bottomButton -> {
 //        when (mode) {

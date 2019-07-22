@@ -4,11 +4,10 @@
     android:id="@+id/list_item_section_text"
     android:layout_width="match_parent"
     android:layout_height="@dimen/padding_vertical_double"
-    android:background="@color/alabaster"
     android:paddingStart="15dp"
     android:paddingEnd="15dp"
     android:gravity="center_vertical"
     tools:text="HEADER"
-    android:textColor="@color/black"
+    android:textColor="@color/colorPrimary"
     android:textSize="16sp" />
 

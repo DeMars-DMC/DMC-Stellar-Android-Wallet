@@ -107,13 +107,20 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_deposit)
 
-    if (!DmcApp.wallet.isVerified()) {
-      finishWithToast(R.string.deposit_not_verified)
+    checkIntent()
+
+    if (mode == Mode.WITHDRAW && assetCode != Constants.ZAR_ASSET_CODE &&
+      assetCode != Constants.NGNT_ASSET_CODE) {
+      finishWithToast(R.string.withdrawal_not_supported)
+      return
+    } else if (!DmcApp.wallet.isVerified()) {
+      finishWithToast(if (mode == Mode.DEPOSIT) R.string.deposit_not_verified
+      else R.string.withdraw_not_verified)
       return
     }
 
     cowrieApi = CowrieRetrofit.create()
-    checkIntent()
+
     setupUI()
 
     Firebase.getCurrentUser()?.let { _ ->

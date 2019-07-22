@@ -66,9 +66,16 @@
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
+    <style name="DialogTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
+    </style>
+
     <style name="ButtonTitle" parent="WhiteDescription">
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
+
     <style name="BlackDescription" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_small</item>

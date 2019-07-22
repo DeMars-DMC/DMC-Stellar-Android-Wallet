@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
+    android:id="@+id/rootView"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,7 +15,6 @@
         android:background="@color/transparent"
         android:stateListAnimator="@null"
         tools:ignore="UnusedAttribute">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -225,5 +225,4 @@
                 android:visibility="gone"/>
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

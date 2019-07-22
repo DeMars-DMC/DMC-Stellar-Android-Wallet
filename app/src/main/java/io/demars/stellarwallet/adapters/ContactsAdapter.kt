@@ -1,6 +1,5 @@
 package io.demars.stellarwallet.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,12 +14,10 @@ import com.github.abdularis.civ.CircleImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.activities.ContactsActivity
-import io.demars.stellarwallet.activities.PayActivity
-import io.demars.stellarwallet.activities.PayToActivity
+import io.demars.stellarwallet.interfaces.ContactListener
 import io.demars.stellarwallet.models.Contact
 
-class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ContactsAdapter(private val contacts: ArrayList<Contact>, val listener: ContactListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, pos: Int): RecyclerView.ViewHolder {
     val listItemView = LayoutInflater.from(parent.context)
@@ -29,7 +26,7 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
   }
 
   override fun onBindViewHolder(contactViewHolder: RecyclerView.ViewHolder, pos: Int) {
-    if (contactViewHolder is ContactViewHolder) contactViewHolder.bind(contacts[pos])
+    if (contactViewHolder is ContactViewHolder) contactViewHolder.bind(contacts[pos], listener)
   }
 
   override fun getItemCount(): Int = contacts.size
@@ -40,12 +37,10 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
     private val letter: TextView = v.findViewById<View>(R.id.contact_letter) as TextView
     private val button: TextView = v.findViewById<View>(R.id.button_add_address) as TextView
 
-    private var mBoundContact: Contact? = null // Can be null
     private val colors: IntArray = intArrayOf(R.color.blueLight, R.color.puce, R.color.colorMantis, R.color.brown,
       R.color.purple, R.color.pink, R.color.colorPaleSky, R.color.colorError, R.color.cornflowerBlue)
 
-    fun bind(contact: Contact) {
-      mBoundContact = contact
+    fun bind(contact: Contact, listener: ContactListener) {
       val appContext = label.context.applicationContext
       label.text = contact.name
       image.visibility = View.INVISIBLE
@@ -76,26 +71,20 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>) : RecyclerView.A
       if (stellarAddress.isNullOrBlank()) {
         button.text = appContext.getString(R.string.add_stellar_address)
         button.background = ContextCompat.getDrawable(appContext, R.drawable.button_accent)
+        button.setOnClickListener {
+          listener.addAddressToContact(contact)
+        }
       } else {
         button.text = appContext.getString(R.string.send_payment)
         button.background = ContextCompat.getDrawable(appContext, R.drawable.button_green)
+        button.setOnClickListener {
+          listener.onPayToContact(contact)
+        }
       }
 
-      button.setOnClickListener {
-//        val context = it.context
-//        stellarAddress?.let { that ->
-//          (context as Activity).startActivityForResult(
-//            PayActivity.newIntent(context, that), ContactsActivity.RC_PAY_TO_CONTACT)
-//        } ?: run {
-//          context.startActivity(PayToActivity.updateContact(context, contact))
-//        }
-      }
 
       itemView.setOnClickListener {
-        val context = it.context
-        if (mBoundContact != null) {
-//          context.startActivity(PayToActivity.updateContact(context, contact))
-        }
+        listener.onContactSelected(contact)
       }
     }
 

@@ -52,6 +52,7 @@ class ReceiveActivity : BaseActivity() {
     addressTextView.text = publicId
     generateQRCode(publicId!!, qrImageView, 500)
     addressCopyButton.setOnClickListener { copyAddressToClipBoard(publicId) }
+    shareButton.setOnClickListener { shareAddress(publicId) }
   }
 
   private fun initBankDepositButton() {
@@ -70,12 +71,22 @@ class ReceiveActivity : BaseActivity() {
     imageView.setImageBitmap(bitmap)
   }
 
-  private fun copyAddressToClipBoard(data: String) {
+  private fun copyAddressToClipBoard(address: String) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("DMC Address", data)
+    val clip = ClipData.newPlainText("DMC Address", address)
     clipboard.primaryClip = clip
 
     Toast.makeText(this, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()
+  }
+
+  private fun shareAddress(address: String) {
+    val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+      type = "text/plain"
+      putExtra(Intent.EXTRA_SUBJECT, "Stellar Address")
+      putExtra(Intent.EXTRA_TEXT, address)
+    }
+
+    startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share_address)))
   }
 
   override fun onBackPressed() {

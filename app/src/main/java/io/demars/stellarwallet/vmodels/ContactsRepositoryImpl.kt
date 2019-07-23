@@ -96,9 +96,9 @@ object ContactsRepositoryImpl : ContactsRepository {
         val ops = java.util.ArrayList<ContentProviderOperation>()
 
         ops.add(ContentProviderOperation
-          .newInsert(ContactsContract.RawContacts.CONTENT_URI)
-          .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, DMC_ACCOUNT_NAME)
-          .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, DMC_ACCOUNT_TYPE)
+          .newInsert(RawContacts.CONTENT_URI)
+          .withValue(RawContacts.ACCOUNT_NAME, DMC_ACCOUNT_NAME)
+          .withValue(RawContacts.ACCOUNT_TYPE, DMC_ACCOUNT_TYPE)
           .build())
 
         ops.add(ContentProviderOperation

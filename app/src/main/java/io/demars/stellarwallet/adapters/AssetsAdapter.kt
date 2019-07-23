@@ -189,42 +189,26 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       var index = 0
       if (isRefreshing) {
         if (currencies.isNotEmpty()) {
-          index += if (isCustomizing) {
-            add("Currencies")
-            addAll(currencies)
-            notifyItemRangeInserted(index, currencies.size + 1)
-            currencies.size + 1
-          } else {
-            addAll(currencies)
-            notifyItemRangeInserted(index, currencies.size)
-            currencies.size
-          }
+          addAll(currencies)
+          notifyItemRangeInserted(index, currencies.size)
+          index += currencies.size
         }
 
         if (customs.isNotEmpty()) {
-          index += if (isCustomizing) {
-            add("Custom assets")
-            addAll(customs)
-            notifyItemRangeInserted(index, customs.size + 1)
-            customs.size
-          } else {
-            addAll(customs)
-            notifyItemRangeInserted(index, customs.size)
-            customs.size
-          }
+          addAll(customs)
+          notifyItemRangeInserted(index, customs.size)
+          index += customs.size
         }
 
         if (isCustomizing) {
-          add("Cryptos")
           addAll(cryptos)
-          notifyItemRangeInserted(index, cryptos.size + 1)
-          index += cryptos.size + 1
+          notifyItemRangeInserted(index, cryptos.size)
+          index += cryptos.size
 
           if (supported.isNotEmpty()) {
-            add("DMC assets")
             addAll(supported)
-            notifyItemRangeInserted(index, supported.size + 1)
-            index += supported.size + 1
+            notifyItemRangeInserted(index, supported.size)
+            index += supported.size
           }
 
           add("Footer")
@@ -238,57 +222,28 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       } else {
         if (currencies.isNotEmpty()) {
           index += if (isCustomizing) {
-            add(index, "Currencies")
-            notifyItemInserted(index)
-            notifyItemRangeChanged(index + 1, currencies.size)
-            currencies.size + 1
+            notifyItemRangeChanged(index, currencies.size)
+            currencies.size
           } else {
-            remove("Currencies")
-            notifyItemRemoved(index)
             notifyItemRangeChanged(index, currencies.size)
             currencies.size
           }
-
-
         }
 
         if (customs.isNotEmpty()) {
           index += if (isCustomizing) {
-            add(index, "Custom assets")
-            notifyItemInserted(index)
-            notifyItemRangeChanged(index + 1, customs.size)
-            customs.size + 1
+            notifyItemRangeChanged(index, customs.size)
+            customs.size
           } else {
-            remove("Custom assets")
-            notifyItemRemoved(index)
             notifyItemRangeChanged(index, customs.size)
             customs.size
           }
         }
 
-        index += if (isCustomizing) {
-          add(index, "Cryptos")
-          notifyItemInserted(index)
-          notifyItemRangeChanged(index + 1, cryptos.size)
-          cryptos.size + 1
-        } else {
-          remove("Cryptos")
-          notifyItemRemoved(index)
           notifyItemRangeChanged(index, cryptos.size)
-          cryptos.size
-        }
+          index += cryptos.size
 
         if (supported.isNotEmpty()) {
-          index += if (isCustomizing) {
-            add(index, "DMC assets")
-            notifyItemInserted(index)
-            1
-          } else {
-            remove("DMC assets")
-            notifyItemRemoved(index)
-            0
-          }
-
           if (isCustomizing) {
             addAll(index, supported)
             notifyItemRangeInserted(index, supported.size)
@@ -374,8 +329,8 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         assetCode != Constants.DMC_ASSET_CODE) {
         holder.rightIcon.visibility = View.VISIBLE
         holder.rightIcon.setImageResource(R.drawable.ic_clear)
-        holder.rightIcon.setPadding(holder.rightIcon.context.resources?.
-          getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+        holder.rightIcon.setPadding(holder.rightIcon.context.resources
+          ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
         holder.rightIcon.setOnClickListener {
           listener.changeTrustline(asset.asset!!, true)
         }
@@ -438,8 +393,8 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
     holder.rightIcon.visibility = View.VISIBLE
     holder.rightIcon.setImageResource(R.drawable.ic_add_green)
-    holder.rightIcon.setPadding(holder.rightIcon.context.resources?.
-      getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+    holder.rightIcon.setPadding(holder.rightIcon.context.resources
+      ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
     holder.rightIcon.setOnClickListener {
       listener.changeTrustline(trustLineAsset, false)
     }

@@ -9,21 +9,21 @@
 
     <TextView
         style="@style/DialogTitle"
+        android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_horizontal"
-        android:text="@string/add_custom_asset" />
+        android:text="@string/add_contact" />
 
     <EditText
-        android:id="@+id/customAssetCode"
+        android:id="@+id/contactNameView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_marginStart="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_mini"
         android:background="@drawable/bg_card_white"
-        android:digits="@string/stellar_address_alphabet"
         android:fontFamily="@font/opensans_regular"
-        android:hint="@string/add_custom_asset_code_hint"
+        android:hint="@string/name"
         android:imeOptions="actionNext"
         android:importantForAutofill="no"
         android:inputType="textCapCharacters"
@@ -35,14 +35,14 @@
         tools:ignore="UnusedAttribute" />
 
     <EditText
-        android:id="@+id/customAssetIssuer"
+        android:id="@+id/contactAddressView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_margin="@dimen/padding_mini"
         android:background="@drawable/bg_card_white"
         android:digits="@string/stellar_address_alphabet"
         android:fontFamily="@font/opensans_regular"
-        android:hint="@string/add_custom_asset_issuer_hint"
+        android:hint="@string/add_contact_address_hint"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="textCapCharacters"
@@ -54,9 +54,9 @@
         tools:ignore="UnusedAttribute" />
 
     <Button
-        android:id="@+id/addAssetButton"
+        android:id="@+id/saveButton"
         style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        android:text="@string/add_asset" />
+        android:text="@string/save_button" />
 </LinearLayout>

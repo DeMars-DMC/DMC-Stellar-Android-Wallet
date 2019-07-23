@@ -232,7 +232,6 @@
     <!--Contacts -->
     <string name="hint_search_bar">Find contact…</string>
     <string name="update_contact_title">Update %1$s</string>
-    <string name="add_contact_title">Add Contact</string>
     <string name="enter_the_contact_name">Enter the contact name</string>
     <string name="name">Name</string>
     <string name="open_camera_to_scan_qr">open camera to scan qr</string>
@@ -404,6 +403,8 @@
     <string name="withdrawal_not_supported">Withdrawals are not supported for this asset.</string>
     <string name="add_custom_asset_code_hint">Asset code(ex. BTC)</string>
     <string name="add_custom_asset_issuer_hint">Issuer address</string>
+    <string name="add_contact_name_hint">Name</string>
+    <string name="add_contact_address_hint">Public address</string>
     <string name="share_address">Share address</string>
     <string name="bank_deposit">Bank deposit</string>
 </resources>

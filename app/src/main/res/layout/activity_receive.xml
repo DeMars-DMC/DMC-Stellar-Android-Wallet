@@ -28,8 +28,8 @@
             android:src="@drawable/ic_chevron_left" />
 
         <TextView
-            style="@style/WhiteTitle"
             android:id="@+id/titleView"
+            style="@style/WhiteTitle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:gravity="center"
@@ -65,41 +65,56 @@
         android:gravity="center"
         android:text="@string/your_wallet_address" />
 
-    <RelativeLayout
-        android:id="@+id/addressCopyButton"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:background="@drawable/background_card_transparent">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/addressTextView"
-            style="@style/WhiteTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@id/copyIcon"
-            android:ellipsize="middle"
-            android:gravity="center"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_zero"
-            android:paddingBottom="@dimen/padding_horizontal"
-            android:singleLine="true"
-            android:textSize="@dimen/text_size_big" />
+        <RelativeLayout
+            android:id="@+id/addressCopyButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_weight="0.9"
+            android:background="@drawable/background_card_transparent">
 
-        <ImageView
-            android:id="@+id/copyIcon"
+            <TextView
+                android:id="@+id/addressTextView"
+                style="@style/WhiteTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/copyIcon"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_zero"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_big"
+                tools:text="FSDFSDFDSGSDGDSGDSGFDSFDSNMFASDFNASDFLA"/>
+
+            <ImageView
+                android:id="@+id/copyIcon"
+                android:layout_width="@dimen/button_height_big"
+                android:layout_height="@dimen/button_height_big"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/copy_address_content_descriptor"
+                android:paddingTop="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_horizontal"
+                android:src="@drawable/ic_copy" />
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/shareButton"
             android:layout_width="@dimen/button_height_big"
             android:layout_height="@dimen/button_height_big"
-            android:layout_alignParentEnd="true"
-            android:contentDescription="@string/copy_address_content_descriptor"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_horizontal"
-            android:src="@drawable/ic_copy" />
-
-    </RelativeLayout>
+            android:layout_marginStart="@dimen/padding_mini"
+            android:background="@drawable/background_card_transparent_yellow"
+            android:src="@drawable/ic_share" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/bankDepositButton"
@@ -107,12 +122,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:background="@drawable/background_card_transparent_accent"
-        android:textAllCaps="false"
         android:text="@string/bank_deposit"
+        android:textAllCaps="false"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_big" />
 

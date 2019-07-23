@@ -13,20 +13,24 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.ContactsAdapter
 import io.demars.stellarwallet.helpers.OnTextChanged
 import io.demars.stellarwallet.interfaces.ContactListener
+import io.demars.stellarwallet.interfaces.ContactsRepository
 import io.demars.stellarwallet.interfaces.OnSearchStateListener
 import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_contacts.*
-import kotlinx.android.synthetic.main.activity_contacts.toolbar
 import timber.log.Timber
 
 class ContactsActivity : BaseActivity(), ContactListener {
@@ -45,6 +49,12 @@ class ContactsActivity : BaseActivity(), ContactListener {
   private lateinit var searchButton: MenuItem
   private lateinit var refreshButton: MenuItem
   private lateinit var addContactButton: MenuItem
+  private lateinit var bottomSheet: BottomSheetDialog
+  private lateinit var contactTitleView: TextView
+  private lateinit var contactNameView: EditText
+  private lateinit var contactAddressView: EditText
+  private lateinit var contactSaveButton: Button
+
   private var menuItemsInitialized = false
 
   companion object {
@@ -69,8 +79,8 @@ class ContactsActivity : BaseActivity(), ContactListener {
 
     checkIntent()
 
-    setupUI()
-
+    initUI()
+    initBottomSheet()
     checkRationale()
     requestContacts()
 
@@ -85,7 +95,7 @@ class ContactsActivity : BaseActivity(), ContactListener {
     assetIssuer = intent.getStringExtra(ARG_ASSET_ISSUER)
   }
 
-  private fun setupUI() {
+  private fun initUI() {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar.setNavigationOnClickListener { onBackPressed() }
@@ -106,6 +116,17 @@ class ContactsActivity : BaseActivity(), ContactListener {
           }
         }
       })
+  }
+
+  private fun initBottomSheet() {
+    bottomSheet = BottomSheetDialog(this).apply {
+      val sheetView = layoutInflater.inflate(R.layout.dialog_contact, rootView, false)
+      contactTitleView = sheetView.findViewById(R.id.dialogTitle)
+      contactNameView = sheetView.findViewById(R.id.contactNameView)
+      contactAddressView = sheetView.findViewById(R.id.contactAddressView)
+      contactSaveButton = sheetView.findViewById(R.id.saveButton)
+      setContentView(sheetView)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -165,10 +186,30 @@ class ContactsActivity : BaseActivity(), ContactListener {
     if (checkNeedPermissions()) {
       toast("Please grant needed permissions to add new Contact")
     } else {
-      //TODO: ADD CONTACT
+      showBottomSheet(null)
     }
   }
 
+  private fun showBottomSheet(contact: Contact?) {
+    if (contact == null) {
+      contactTitleView.setText(R.string.add_contact)
+      contactNameView.visibility = View.VISIBLE
+      contactNameView.setText("")
+      contactAddressView.setText("")
+      contactSaveButton.setOnClickListener {
+        createContact(contactNameView.text.toString(), contactAddressView.text.toString())
+      }
+    } else {
+      contactTitleView.text = contact.name
+      contactNameView.visibility = View.GONE
+      contactAddressView.setText(contact.stellarAddress)
+      contactSaveButton.setOnClickListener {
+        updateContact(contact, contactAddressView.text.toString())
+      }
+    }
+
+    bottomSheet.show()
+  }
   private fun setEnablePermissionsState(shouldShowRationale: Boolean) {
     rv_contact_list.visibility = View.GONE
     empty_view.visibility = View.GONE
@@ -308,13 +349,21 @@ class ContactsActivity : BaseActivity(), ContactListener {
   }
 
   override fun addAddressToContact(contact: Contact) {
-
+    showBottomSheet(contact)
   }
 
   override fun onContactSelected(contact: Contact) {
+    showBottomSheet(contact)
   }
 
   override fun onPayToContact(contact: Contact) {
+    val address = contact.stellarAddress
+    if (address.isNullOrEmpty()) {
+      toast("Can't find stellar address for ${contact.name}")
+    } else {
+      startActivityForResult(PayActivity.newIntent(this, assetCode, assetIssuer, address),
+        RC_PAY_TO_CONTACT)
+    }
   }
 
   /**
@@ -343,5 +392,29 @@ class ContactsActivity : BaseActivity(), ContactListener {
     super.onBackPressed()
     ViewUtils.hideKeyboard(this)
     overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_end)
+  }
+
+  private fun updateContact(contact: Contact, address: String) {
+    val status = ContactsRepositoryImpl(this).createOrUpdateStellarAddress(contact.name, address)
+    if (status == ContactsRepository.ContactOperationStatus.FAILED) {
+      toast("Failed to update ${contact.name}")
+    } else {
+      toast("${contact.name} address updated")
+      bottomSheet.dismiss()
+    }
+  }
+
+  private fun createContact(name: String, address: String) {
+    if (name.isBlank() || address.isBlank()) {
+      toast("All fields are necessary")
+    } else {
+      val contactId = ContactsRepositoryImpl(this).createContact(name, address)
+      if (contactId == -1L) {
+        toast("Failed to create the new contact")
+      } else {
+        toast("Contact has been created")
+        bottomSheet.dismiss()
+      }
+    }
   }
 }

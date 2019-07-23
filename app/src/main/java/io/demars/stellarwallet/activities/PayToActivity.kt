@@ -19,7 +19,7 @@ import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_pay_to.*
 
-class PayToActivity : BaseActivity(), View.OnClickListener {
+class PayToActivity : BaseActivity() {
 
   private var assetCode = ""
   private var assetIssuer = ""
@@ -130,77 +130,6 @@ class PayToActivity : BaseActivity(), View.OnClickListener {
     startActivityForResult(ContactsActivity.newInstance(this, assetCode, assetIssuer), RC_PAY_TO_CONTACT)
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
-
-  override fun onClick(v: View) {
-    when (v.id) {
-//      R.id.sendToContactButton -> {
-//        startActivityForResult(ContactsActivity.newInstance(this), ContactsActivity.RC_PAY_TO_CONTACT)
-//      }
-//      R.id.bottomButton -> {
-//        when (mode) {
-//          Mode.UPDATE_CONTACT -> {
-//            val status = ContactsRepositoryImpl(applicationContext).createOrUpdateStellarAddress(contact.name, address)
-//            when (status) {
-//              ContactOperationStatus.UPDATED -> {
-//                Timber.v("data updated")
-//                Toast.makeText(applicationContext, "stellar address updated", Toast.LENGTH_SHORT).show()
-//                finish()
-//              }
-//              ContactOperationStatus.INSERTED -> {
-//                Timber.v("data inserted")
-//                Toast.makeText(applicationContext, "stellar address inserted", Toast.LENGTH_SHORT).show()
-//                finish()
-//              }
-//              ContactOperationStatus.FAILED -> {
-//                Timber.v("failed to update contact")
-//                Toast.makeText(applicationContext, "stellar address failed to be added", Toast.LENGTH_SHORT).show()
-//                finish()
-//              }
-//            }
-//          }
-//          Mode.CREATE_CONTACT -> {
-//            val name = "" /*contactNameEditText.text.toString()*/
-//            if (name.isBlank() || address.isBlank()) {
-//              Toast.makeText(applicationContext, "one or more fields are empty", Toast.LENGTH_SHORT).show()
-//            } else {
-//              val contactId = ContactsRepositoryImpl(applicationContext).createContact(name, address)
-//              if (contactId == -1L) {
-//                Toast.makeText(applicationContext, "failed to create the new contact", Toast.LENGTH_SHORT).show()
-//              } else {
-//                Toast.makeText(applicationContext, "contact has been created", Toast.LENGTH_SHORT).show()
-//              }
-//              finish()
-//            }
-//          }
-//        }
-//      }
-    }
-  }
-
-  //region Contacts
-//  private fun populateList(list: ArrayList<Contact>, isFilteredList: Boolean = false) {
-//    rv_contact_list?.adapter = ContactsAdapter(list)
-//    when (rv_contact_list?.itemDecorationCount) {
-//      0 -> rv_contact_list?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-//      2 -> rv_contact_list?.removeItemDecorationAt(1)
-//    }
-//    val item = RecyclerSectionItemDecoration(resources.getDimension(R.dimen.padding_vertical_double).toInt(), true, getSectionCallback(list))
-//    rv_contact_list?.addItemDecoration(item)
-//    progress_view?.visibility = View.GONE
-//    if (list.size == 0) {
-//      if (isFilteredList) {
-//        empty_view?.text = getString(R.string.no_results_found)
-//      } else {
-//        empty_view?.text = getString(R.string.no_contacts_found)
-//      }
-//      empty_view?.visibility = View.VISIBLE
-//      rv_contact_list?.visibility = View.GONE
-//    } else {
-//      empty_view?.visibility = View.GONE
-//      rv_contact_list?.visibility = View.VISIBLE
-//    }
-//  }
-  //endregion
 
   override fun onBackPressed() {
     super.onBackPressed()

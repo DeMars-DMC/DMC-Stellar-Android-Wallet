@@ -112,10 +112,10 @@
                 android:id="@+id/buttonsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/padding_horizontal"
                 android:weightSum="4"
-                android:gravity="center_horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/assetBalanceContainer">
 
                 <LinearLayout
@@ -137,8 +137,9 @@
                         style="@style/WhiteTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_micro"
-                        android:text="@string/deposit"/>
+                        android:layout_marginTop="@dimen/padding_micro"
+                        android:text="@string/deposit"
+                        android:textSize="@dimen/text_size_micro" />
 
                 </LinearLayout>
 
@@ -161,8 +162,9 @@
                         style="@style/WhiteTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_micro"
-                        android:text="@string/withdraw" />
+                        android:layout_marginTop="@dimen/padding_micro"
+                        android:text="@string/withdraw"
+                        android:textSize="@dimen/text_size_micro" />
 
                 </LinearLayout>
 
@@ -185,8 +187,9 @@
                         style="@style/WhiteTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_micro"
-                        android:text="@string/exchange"/>
+                        android:layout_marginTop="@dimen/padding_micro"
+                        android:text="@string/exchange"
+                        android:textSize="@dimen/text_size_micro" />
 
                 </LinearLayout>
 
@@ -209,8 +212,9 @@
                         style="@style/WhiteTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_micro"
-                        android:text="@string/pay"/>
+                        android:layout_marginTop="@dimen/padding_micro"
+                        android:text="@string/pay"
+                        android:textSize="@dimen/text_size_micro" />
 
                 </LinearLayout>
 

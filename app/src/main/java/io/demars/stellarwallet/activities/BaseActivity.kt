@@ -20,7 +20,6 @@ abstract class BaseActivity : AppCompatActivity() {
     super.onResume()
 
     val askForPin = !DebugPreferencesHelper(applicationContext).isPinDisabled
-
     if (DmcApp.showPin && askForPin) {
       DmcApp.showPin = false
 

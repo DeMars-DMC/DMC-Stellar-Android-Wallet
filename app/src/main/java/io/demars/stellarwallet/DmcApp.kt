@@ -19,7 +19,13 @@ import io.demars.stellarwallet.remote.ServerType
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.demars.stellarwallet.encryption.PRNGFixes
+import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.helpers.Preferences
+import io.demars.stellarwallet.interfaces.SuccessErrorCallback
+import io.demars.stellarwallet.models.stellar.HorizonException
 import io.demars.stellarwallet.models.stellar.MinimumBalance
+import io.demars.stellarwallet.utils.AccountUtils
+import io.demars.stellarwallet.utils.NetworkUtils
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import shadow.okhttp3.OkHttpClient
 import timber.log.Timber
@@ -79,6 +85,7 @@ class DmcApp : MultiDexApplication() {
     var assetSession: MutableLiveData<SessionAsset> = MutableLiveData()
 
     var showPin = false
+    var latestPinTime = 0L
   }
 
   override fun onCreate() {

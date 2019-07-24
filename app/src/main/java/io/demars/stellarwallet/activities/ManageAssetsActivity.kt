@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.activities
 
+import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
@@ -23,6 +24,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.helpers.Preferences
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.interfaces.OnAssetSelected
 import io.demars.stellarwallet.models.DataAsset
@@ -77,6 +79,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
     initAssetsView()
     initBottomSheet()
+
+    checkInflation()
   }
 
   private fun initAssetsView() {
@@ -417,6 +421,34 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
       // Address not matching show error and restart
       ViewUtils.showWrongWalletDialog(this)
     }
+  }
+
+  // Sets inflation pool if haven't set before
+  private fun checkInflation() {
+    if (Preferences.isInflationSet(this)) {
+      Timber.d("Inflation destination is set already")
+      return
+    }
+
+    if (!NetworkUtils(this).isNetworkAvailable()) {
+      Timber.d("Inflation destination cannot be set - No internet")
+      return
+    }
+
+    val secretSeed = AccountUtils.getSecretSeed(this)
+
+    Horizon.getJoinInflationDestination(object : SuccessErrorCallback {
+      override fun onSuccess() {
+        Timber.d("Inflation destination set successfully")
+        Preferences.inflationSet(this@ManageAssetsActivity)
+      }
+
+      override fun onError(error: HorizonException) {
+        // Nothing we will try it another time
+        Timber.e("Inflation destination set failed")
+      }
+    }, secretSeed, Constants.LUMENAUT_POOL).execute()
+
   }
   //endregion
 }

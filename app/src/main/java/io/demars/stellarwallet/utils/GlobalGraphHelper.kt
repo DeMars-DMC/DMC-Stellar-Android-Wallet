@@ -31,25 +31,21 @@ class GlobalGraphHelper {
     }
 
     fun wipe(context: Context): Boolean {
-      clearSession()
       Firebase.signOut()
       AccountRepository.clear()
       OperationsRepository.getInstance().clear()
       TradesRepository.getInstance().clear()
       KeyStoreWrapper(context).clear()
+      DmcApp.userSession.setPin(null)
       return DmcApp.wallet.clearLocalStore()
     }
 
-    fun restart(activity: FragmentActivity) {
+    private fun restart(activity: FragmentActivity) {
       DmcApp.showPin = true
       val intent = Intent(activity, LaunchActivity::class.java)
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
       activity.startActivity(intent)
       activity.finish()
-    }
-
-    fun clearSession() {
-      DmcApp.userSession.setPin(null)
     }
   }
 }

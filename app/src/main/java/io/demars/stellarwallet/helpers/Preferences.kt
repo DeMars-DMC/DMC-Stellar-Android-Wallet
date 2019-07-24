@@ -5,38 +5,46 @@ import androidx.preference.PreferenceManager
 
 class Preferences {
   companion object {
-    const val PREF_REPORTING_TYPE = "PREF_REPORTING_TYPE"
-    const val PREF_REPORTING_CODE = "PREF_REPORTING_CODE"
-    const val PREF_REPORTING_ISSUER = "PREF_REPORTING_ISSUER"
+    private const val PREF_REPORTING_TYPE = "PREF_REPORTING_TYPE"
+    private const val PREF_REPORTING_CODE = "PREF_REPORTING_CODE"
+    private const val PREF_REPORTING_ISSUER = "PREF_REPORTING_ISSUER"
+    private const val PREF_INFLATION_SET = "PREF_INFLATION_SET"
 
-    fun getReportingAssetType(context: Context): String {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      return prefs.getString(PREF_REPORTING_TYPE, "native") ?: ""
-    }
+    fun getReportingAssetType(context: Context): String =
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(PREF_REPORTING_TYPE, "native") ?: "native"
 
     fun setReportingAssetType(context: Context, type: String) {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      prefs.edit().putString(PREF_REPORTING_TYPE, type).apply()
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .edit().putString(PREF_REPORTING_TYPE, type).apply()
     }
 
-    fun getReportingAssetCode(context: Context): String {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      return prefs.getString(PREF_REPORTING_CODE, "") ?: ""
-    }
+    fun getReportingAssetCode(context: Context): String =
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(PREF_REPORTING_CODE, "") ?: ""
+
 
     fun setReportingAssetCode(context: Context, code: String) {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      prefs.edit().putString(PREF_REPORTING_CODE, code).apply()
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .edit().putString(PREF_REPORTING_CODE, code).apply()
     }
 
-    fun getReportingAssetIssuer(context: Context): String {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      return prefs.getString(PREF_REPORTING_ISSUER, "") ?: ""
-    }
+    fun getReportingAssetIssuer(context: Context): String =
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(PREF_REPORTING_ISSUER, "") ?: ""
 
     fun setReportingAssetIssuer(context: Context, issuer: String) {
-      val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-      prefs.edit().putString(PREF_REPORTING_ISSUER, issuer).apply()
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .edit().putString(PREF_REPORTING_ISSUER, issuer).apply()
     }
+
+    fun inflationSet(context: Context) {
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .edit().putBoolean(PREF_INFLATION_SET, true).apply()
+    }
+
+    fun isInflationSet(context: Context): Boolean =
+      PreferenceManager.getDefaultSharedPreferences(context)
+        .getBoolean(PREF_INFLATION_SET, false)
   }
 }

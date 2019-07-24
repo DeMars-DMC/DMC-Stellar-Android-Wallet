@@ -7,23 +7,30 @@ import androidx.lifecycle.OnLifecycleEvent
 import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
-import io.demars.stellarwallet.utils.GlobalGraphHelper
 
 class WalletLifecycleListener(val context: Context) : LifecycleObserver {
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onMoveToForeground() {
-        DmcApp.showPin = true
-
+  @OnLifecycleEvent(Lifecycle.Event.ON_START)
+  fun onMoveToForeground() {
+    if (canAskPinAgain()) {
+      DmcApp.showPin = true
     }
+  }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onMoveToBackground() {
-        if (BuildConfig.DEBUG && DebugPreferencesHelper(context).isPinDisabled) {
-            // in debug builds it is possible to disable pin in the session
-        } else {
-            DmcApp.showPin = false
-            GlobalGraphHelper.clearSession()
-        }
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+  fun onMoveToBackground() {
+    if (BuildConfig.DEBUG && DebugPreferencesHelper(context).isPinDisabled) {
+      // in debug builds it is possible to disable pin in the session
+    } else if (!DmcApp.showPin && DmcApp.userSession.getPin() != null) {
+      // App is unlocked so let's update last pin time
+      updatePinTime()
     }
+  }
+
+  private fun updatePinTime() {
+    DmcApp.latestPinTime = System.currentTimeMillis()
+  }
+
+  private fun canAskPinAgain(): Boolean =
+    System.currentTimeMillis() - DmcApp.latestPinTime > 60000L
 }

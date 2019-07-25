@@ -8,39 +8,45 @@
 
     <TextView
         android:id="@+id/fromPrice"
-        style="@style/RegularText"
+        style="@style/WhiteRegularText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
+        android:gravity="center"
         android:layout_weight="1"
-        android:padding="@dimen/margin_padding_size_medium"
         tools:text="from price"/>
 
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/colorLightGrey" />
+        android:background="@color/transparent_white" />
 
     <TextView
         android:id="@+id/toAmount"
-        style="@style/RegularText"
+        style="@style/WhiteRegularText"
         android:layout_width="0dp"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_weight="1"
-        android:padding="@dimen/margin_padding_size_medium"
         tools:text="amount"/>
 
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/colorLightGrey" />
+        android:background="@color/transparent_white" />
 
     <TextView
         android:id="@+id/fromValue"
-        style="@style/RegularText"
+        style="@style/WhiteRegularText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
+        android:gravity="center"
         android:layout_weight="1"
-        android:padding="@dimen/margin_padding_size_medium"
         tools:text="from value"/>
 
 </LinearLayout>

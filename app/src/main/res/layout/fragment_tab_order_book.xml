@@ -15,11 +15,12 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            style="@style/WhiteRegularText"
             android:id="@+id/empty_view_order_book"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
+            android:textSize="@dimen/text_size_medium"
             android:text="@string/order_book_empty_list"
             android:visibility="gone"/>
 

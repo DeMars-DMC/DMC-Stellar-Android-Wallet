@@ -51,9 +51,14 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/totalBalanceProgress"
+                        android:layout_width="@dimen/button_height"
+                        android:layout_height="@dimen/button_height" />
 
                     <TextView
                         android:id="@+id/totalBalanceView"

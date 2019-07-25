@@ -14,7 +14,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/main_bg_light"
             android:orientation="vertical"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingTop="@dimen/padding_horizontal"
@@ -23,12 +22,12 @@
 
             <TextView
                 android:id="@+id/availableToSell"
-                style="@style/RegularText"
+                style="@style/WhiteRegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_micro"
                 android:layout_marginBottom="@dimen/padding_mini"
-                android:textColor="@color/colorPaleSky"
+                android:textColor="@color/colorGreen"
                 android:textStyle="bold"
                 tools:text="1,000,000,000.1234567 PTS" />
 
@@ -48,13 +47,15 @@
                 android:weightSum="1">
 
                 <Button
-                    android:id="@+id/all"
-                    style="@style/ButtonStyleYellow"
+                    android:id="@+id/sellAll"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
                     android:layout_weight=".75"
                     android:text="@string/sell_100"
                     android:visibility="invisible"
+                    android:textAllCaps="false"
+                    android:background="@drawable/background_card_transparent_yellow"
+                    android:textColor="@color/colorYellow"
                     android:enabled="false"/>
 
                 <ImageView
@@ -80,24 +81,22 @@
 
             <TextView
                 android:id="@+id/buyingBalance"
-                style="@style/RegularText"
+                style="@style/WhiteRegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_micro"
                 android:layout_marginTop="@dimen/padding_mini"
-                android:textColor="@color/colorPaleSky"
                 android:textStyle="bold"
                 tools:text="1,000,000,000.1234567 PTS" />
 
             <TextView
                 android:id="@+id/prices"
-                style="@style/RegularText"
+                style="@style/WhiteRegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/padding_micro"
                 android:layout_marginTop="@dimen/padding_horizontal"
-                android:textColor="@color/colorPaleSky"
-                tools:text="Quoted Rate\n1,000,000,000.1234567 PTS" />
+                tools:text="Price: 1 XLM = 1.25 DMC" />
 
             <Button
                 android:id="@+id/placeTrade"
@@ -109,7 +108,7 @@
                 android:text="@string/place_trade" />
 
             <TextView
-                style="@style/LongDescription"
+                style="@style/LongWhiteDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding_mini"

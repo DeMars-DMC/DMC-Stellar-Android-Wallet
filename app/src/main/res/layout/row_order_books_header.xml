@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_horizontal">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/orderBookHeader"
         style="@style/WhiteRegularText"
+        android:padding="@dimen/padding_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

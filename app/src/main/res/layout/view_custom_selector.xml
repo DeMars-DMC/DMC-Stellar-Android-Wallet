@@ -18,13 +18,13 @@
             android:id="@+id/editTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/selector_edittext"
+            android:background="@drawable/bg_selector_edittext"
             android:duplicateParentState="true"
             android:fontFamily="@font/opensans_regular"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/button_height_big"
-            android:textColor="@color/black"
-            android:textColorHint="@color/colorDisabled"
+            android:textColor="@color/whiteMain"
+            android:textColorHint="@color/transparent_white"
             android:textSize="@dimen/text_size_small" />
 
         <ImageView
@@ -44,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".25"
-        android:background="@drawable/selector_spinner">
+        android:background="@drawable/background_selector_spinner">
 
         <io.demars.stellarwallet.views.PatchedSearchableSpinner
             android:id="@+id/spinner"

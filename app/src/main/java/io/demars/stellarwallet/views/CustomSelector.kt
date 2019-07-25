@@ -49,8 +49,6 @@ class CustomSelector @JvmOverloads constructor(
       val typedArray = context.obtainStyledAttributes(it,
         R.styleable.CustomSelector, 0, 0)
       setHint(typedArray.getString(R.styleable.CustomSelector_hint)!!)
-      setColor(typedArray.getColor(R.styleable.CustomSelector_customStrokeColor,
-        ContextCompat.getColor(context, R.color.alto)))
       setInputType(typedArray.getInt(R.styleable.CustomSelector_inputType, 0))
       typedArray.recycle()
     }
@@ -58,22 +56,6 @@ class CustomSelector @JvmOverloads constructor(
 
   private fun setHint(hint: String) {
     editText.hint = hint
-  }
-
-  private fun setColor(color: Int) {
-    val editTextSld = editText.background as StateListDrawable
-    val editTextBgChildren = (editTextSld.constantState as DrawableContainer.DrawableContainerState).children
-    val editTextDisabledGd = editTextBgChildren[0] as GradientDrawable
-    val editTextEnabledGd = editTextBgChildren[1] as GradientDrawable
-    editTextDisabledGd.setStroke(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-      1f, resources.displayMetrics).toInt(), color)
-    editTextEnabledGd.setStroke(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-      1f, resources.displayMetrics).toInt(), color)
-    val spinnerGd = spinnerContainer.background as GradientDrawable
-    spinnerGd.setStroke(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-      1f, resources.displayMetrics).toInt(), color)
-    spinnerGd.setColor(color)
-    spinner.setPopupBackgroundDrawable(ColorDrawable(color))
   }
 
   private fun setInputType(inputType: Int) {

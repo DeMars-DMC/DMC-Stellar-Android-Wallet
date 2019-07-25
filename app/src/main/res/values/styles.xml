@@ -111,6 +111,13 @@
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
+    <style name="LongWhiteDescription" parent="LongDescription">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/whiteMain</item>
+        <item name="android:textSize">@dimen/text_size_micro</item>
+        <item name="android:fontFamily">@font/opensans_regular</item>
+    </style>
+
     <style name="RegularText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_small</item>
@@ -120,13 +127,19 @@
     <style name="BoldText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:fontFamily">@font/opensans_bold</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
-    <style name="WhiteRegularText" parent="TextAppearance.AppCompat">
+    <style name="WhiteRegularText" parent="RegularText">
         <item name="android:textColor">@color/whiteMain</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:fontFamily">@font/opensans_regular</item>
+    </style>
+
+    <style name="WhiteBoldText" parent="BoldText">
+        <item name="android:textColor">@color/whiteMain</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
     <style name="WhiteDigitalInput" parent="TextAppearance.AppCompat">
@@ -147,8 +160,8 @@
         <item name="android:fontFamily">@font/opensans_bold</item>
     </style>
 
-    <style name="TabTitle" parent="@android:style/TextAppearance.Widget.TabWidget">
-        <item name="android:fontFamily">@font/roboto_bold</item>
+    <style name="TabTitle" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -227,5 +240,4 @@
     <style name="ClickableItem">
         <item name="colorControlHighlight">@color/transparent_white</item>
     </style>
-
 </resources>

@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.OrderBooksAdapter
@@ -36,13 +36,16 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dividerItemDecoration = DividerItemDecoration(context,
-                LinearLayoutManager(context).orientation)
+        val dividerItemDecoration = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+        ContextCompat.getDrawable(context!!, R.drawable.decoration_divider_white)?.let {
+            dividerItemDecoration.setDrawable(it)
+        }
+
         orderBookRv.addItemDecoration(dividerItemDecoration)
         orderBooksAdapter = OrderBooksAdapter(view.context)
-        val layout = StickyLayoutManager(context, orderBooksAdapter)
+        val layoutManager = StickyLayoutManager(context, orderBooksAdapter)
         orderBookRv.adapter = orderBooksAdapter
-        orderBookRv.layoutManager = layout
+        orderBookRv.layoutManager = layoutManager
         swipeRefresh.setOnRefreshListener(this)
         swipeRefresh.setColorSchemeResources(R.color.colorAccent)
     }

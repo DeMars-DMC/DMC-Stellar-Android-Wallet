@@ -4,15 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteMain"
     android:id="@+id/rootView"
     android:orientation="vertical"
     tools:context=".activities.ExchangeActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark">
+        android:layout_height="?attr/actionBarSize">
 
         <ImageView
             android:id="@+id/backButton"
@@ -44,10 +42,12 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
         android:minHeight="?attr/actionBarSize"
         app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextColor="@color/whiteMain"
+        android:background="@drawable/bg_line_transparent"
+        android:layout_marginStart="-2dp"
+        android:layout_marginEnd="-2dp"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabTextAppearance="@style/TabTitle" />
 

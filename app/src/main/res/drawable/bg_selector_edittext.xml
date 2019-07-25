@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <solid android:color="@color/whiteMain" />
+    <solid android:color="@color/transparent" />
 
     <stroke
         android:width="@dimen/common_stroke"
-        android:color="@color/toggleSelected" />
+        android:color="@color/transparent_white" />
 
     <corners
         android:bottomLeftRadius="@dimen/common_radius"
-        android:bottomRightRadius="0dp"
-        android:topLeftRadius="@dimen/common_radius"
-        android:topRightRadius="0dp" />
+        android:topLeftRadius="@dimen/common_radius"/>
 </shape>

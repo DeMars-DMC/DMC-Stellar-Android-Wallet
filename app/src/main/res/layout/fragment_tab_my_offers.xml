@@ -11,16 +11,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myOffersRv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_view"
-        android:layout_gravity="center_horizontal|center_vertical"
+        style="@style/WhiteRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:text="@string/my_offer_empty_list" />
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="@string/my_offer_empty_list"
+        android:textSize="@dimen/text_size_medium" />
 </FrameLayout>

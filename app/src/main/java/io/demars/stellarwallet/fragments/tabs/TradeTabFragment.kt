@@ -66,7 +66,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun setupListeners() {
-    all.setOnClickListener(this)
+    sellAll.setOnClickListener(this)
     placeTrade.setOnClickListener(this)
 
     sellingCustomSelector.editText.isEnabled = false
@@ -174,8 +174,8 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
       buyingBalance.text = String.format(getString(R.string.balance_amount), StringFormat.truncateDecimalPlaces(
         AccountUtils.getTotalBalance(buyingAssetCode), buyingDecimalPlaces), buyingAssetCode)
 
-      all.visibility = if (hasHoldings) View.VISIBLE else View.INVISIBLE
-      all.isEnabled = hasHoldings
+      sellAll.visibility = if (hasHoldings) View.VISIBLE else View.INVISIBLE
+      sellAll.isEnabled = hasHoldings
       sellingCustomSelector.editText.isEnabled = hasHoldings
       buyingCustomSelector.editText.isEnabled = hasHoldings
     })
@@ -303,7 +303,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
 
   override fun onClick(view: View) {
     when (view.id) {
-      R.id.all -> sellingCustomSelector.editText.setText(
+      R.id.sellAll -> sellingCustomSelector.editText.setText(
         StringFormat.truncateDecimalPlaces(availableAmount.toString(),
           AssetUtils.getMaxDecimals(selectedSellingCurrency.label)))
       R.id.placeTrade -> onPlaceTrade()

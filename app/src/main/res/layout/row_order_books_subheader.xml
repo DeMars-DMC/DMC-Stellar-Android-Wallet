@@ -8,23 +8,29 @@
 
     <TextView
         android:id="@+id/currencyFrom"
-        style="@style/BoldText"
+        style="@style/WhiteBoldText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingTop="@dimen/padding_mini"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_mini"
         android:padding="@dimen/padding_horizontal"
         tools:text="currency from" />
 
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/colorLightGrey" />
+        android:background="@color/transparent_white" />
 
     <TextView
         android:id="@+id/amountTo"
-        style="@style/BoldText"
+        style="@style/WhiteBoldText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
+        android:gravity="center"
         android:layout_weight="1"
         android:padding="@dimen/padding_horizontal"
         tools:text="amount to"/>
@@ -32,14 +38,17 @@
     <View
         android:layout_width="@dimen/divider"
         android:layout_height="match_parent"
-        android:background="@color/colorLightGrey" />
+        android:background="@color/transparent_white" />
 
     <TextView
         android:id="@+id/amountFrom"
-        style="@style/BoldText"
+        style="@style/WhiteBoldText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
         android:padding="@dimen/padding_horizontal"
         tools:text="amount from" />
 

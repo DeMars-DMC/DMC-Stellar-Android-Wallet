@@ -9,6 +9,7 @@ import io.demars.stellarwallet.interfaces.AssetListener
 import kotlinx.android.synthetic.main.activity_manage_assets.*
 import org.stellar.sdk.Asset
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -49,6 +50,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   private lateinit var reportingAsset: DataAsset
   private lateinit var bottomSheet: BottomSheetDialog
   private var isCustomizing = false
+  private var calculationQueue = 0
   private var totalBalance = 0.0
   //endregion
 
@@ -76,6 +78,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     accountButton.setOnClickListener {
       openSettings()
     }
+
+    totalBalanceProgress.indeterminateDrawable.setColorFilter(
+      ContextCompat.getColor(this, R.color.whiteMain), PorterDuff.Mode.MULTIPLY)
 
     initAssetsView()
     initBottomSheet()
@@ -307,11 +312,13 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun calculateTotalBalance() {
+    // Some requests are pending so skip it
+    if (calculationQueue != 0) return
+
     // Reporting currency balance
     totalBalance = DmcApp.wallet.getBalances().find {
       AssetUtils.isReporting(this, it)
     }?.balance?.toDouble() ?: 0.0
-    updateTotalBalanceView()
 
     if (reportingAsset.type == "native") {
       // If reporting currency is Lumen XLM, we need to convert all the other balances
@@ -322,19 +329,22 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
         val dataAsset = AssetUtils.toDataAssetFrom(it.asset)
         Timber.d("Loading order book %s %s", it.assetCode, reportingAsset)
 
+        calculationQueue++
+
         Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
           override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+            decreaseCalculationQueue()
             if (bids.isNotEmpty()) {
               Timber.d("${bids.size} bids in the order book")
               val reportingBalance = (it.balance?.toDouble() ?: 0.0) * bids[0].price.toDouble()
               totalBalance += reportingBalance
-              updateTotalBalanceView()
             } else {
               Timber.d("No bids in the order book")
             }
           }
 
           override fun onFailed(errorMessage: String) {
+            decreaseCalculationQueue()
             Timber.d("failed to load the order book %s", errorMessage)
           }
 
@@ -344,16 +354,20 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
       // If reporting currency is not XLM, we need to know price of the asset in XLM
       // so then we can convert all other assets into XLM and then into reporting currency
       DmcApp.wallet.getBalances().find { it.assetType == "native" }?.let { xlmBalance ->
+        Timber.d("Loading order book %s %s", reportingAsset.code, xlmBalance.assetCode)
+
+        calculationQueue++
+
         val xlmDataAsset = AssetUtils.toDataAssetFrom(xlmBalance.asset)
         Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
           var priceInXlm = 0.0
           override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+            decreaseCalculationQueue()
             if (bids.isNotEmpty()) {
               Timber.d("${bids.size} bids in the order book")
               priceInXlm = bids[0].price.toDouble()
               val reportingBalance = (xlmBalance.balance?.toDouble() ?: 0.0) * priceInXlm
               totalBalance += reportingBalance
-              updateTotalBalanceView()
 
               // Okay now we have a price in XLM for reporting currency
               // and converted XLM balance already and we can go through all the other
@@ -364,10 +378,13 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
               }.forEach { balance ->
                 val dataAsset = AssetUtils.toDataAssetFrom(balance.asset)
 
-                Timber.d("Loading order book %s %s", xlmBalance, dataAsset)
+                Timber.d("Loading order book %s %s", dataAsset, xlmBalance)
+
+                calculationQueue++
 
                 Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
                   override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
+                    decreaseCalculationQueue()
                     if (bids.isNotEmpty()) {
                       Timber.d("${bids.size} bids in the order book")
                       // Now we have balance of currency converted to XLM
@@ -375,7 +392,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
                         ?: 0.0) * bids[0].price.toDouble()
                       // And now we convert it to reporting currency with price in XLM
                       totalBalance += (balanceVal * priceInXlm)
-                      updateTotalBalanceView()
                     } else {
                       Timber.d("No bids in the order book")
                     }
@@ -383,6 +399,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
                   override fun onFailed(errorMessage: String) {
                     Timber.d("failed to load the order book %s", errorMessage)
+                    decreaseCalculationQueue()
                   }
                 }, xlmDataAsset!!, dataAsset!!)
               }
@@ -393,15 +410,35 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
           override fun onFailed(errorMessage: String) {
             Timber.d("failed to load the order book %s", errorMessage)
+            decreaseCalculationQueue()
           }
         }, reportingAsset, xlmDataAsset!!)
       }
     }
+
+    updateTotalBalanceView()
+  }
+
+  private fun decreaseCalculationQueue() {
+    calculationQueue--
+    if (calculationQueue == 0) {
+      // Ok all balances are calculated - now we can update the view
+      updateTotalBalanceView()
+    }
   }
 
   private fun updateTotalBalanceView() {
-    val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
-    totalBalanceView?.text = newBalanceAmount
+    if (calculationQueue > 0) {
+      // Calculating in process
+      totalBalanceProgress?.visibility = View.VISIBLE
+      totalBalanceView?.visibility = View.GONE
+    } else {
+      totalBalanceProgress?.visibility = View.GONE
+      totalBalanceView?.visibility = View.VISIBLE
+
+      val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
+      totalBalanceView?.text = newBalanceAmount
+    }
   }
   //endregion
 

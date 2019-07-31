@@ -126,10 +126,13 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/button1"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
+                        android:src="@drawable/test_deposit"
+                        android:padding="@dimen/padding_mini"
+                        android:tint="@color/whiteMain"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -151,10 +154,13 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/button2"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
+                        android:padding="@dimen/padding_mini"
+                        android:src="@drawable/test_withdraw"
+                        android:tint="@color/whiteMain"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -176,10 +182,13 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/button3"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
+                        android:padding="@dimen/padding_mini"
+                        android:src="@drawable/test_trade"
+                        android:tint="@color/whiteMain"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -201,10 +210,13 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/button4"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
+                        android:padding="@dimen/padding_mini"
+                        android:src="@drawable/test_pay"
+                        android:tint="@color/whiteMain"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView

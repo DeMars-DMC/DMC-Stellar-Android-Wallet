@@ -128,7 +128,7 @@
                 android:layout_marginTop="@dimen/padding_mini"
                 android:layout_marginEnd="@dimen/padding_horizontal"
                 android:layout_marginBottom="@dimen/padding_mini"
-                android:background="@drawable/background_card_transparent_yellow"
+                android:background="@drawable/background_card_transparent_accent"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/addressContainer">
 
@@ -139,14 +139,15 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/pay_to_contact"
-                    android:textColor="@color/colorYellow"/>
+                    android:textColor="@color/colorAccent"/>
 
                 <ImageView
                     android:layout_width="@dimen/button_height_big"
                     android:layout_height="match_parent"
                     android:layout_gravity="end|center_vertical"
-                    android:padding="@dimen/padding_mini"
-                    android:src="@drawable/ic_person_outline" />
+                    android:padding="@dimen/padding_medium"
+                    android:src="@drawable/ic_contact_pay"
+                    android:tint="@color/colorAccent"/>
             </FrameLayout>
 
 

@@ -116,19 +116,33 @@
             android:src="@drawable/ic_share" />
     </LinearLayout>
 
-    <Button
+    <FrameLayout
         android:id="@+id/bankDepositButton"
-        style="@style/ButtonTitle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/padding_mini"
         android:background="@drawable/background_card_transparent_accent"
-        android:text="@string/bank_deposit"
-        android:textAllCaps="false"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_size_big" />
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/ButtonTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/bank_deposit"
+            android:textColor="@color/colorAccent"/>
+
+        <ImageView
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:padding="@dimen/padding_medium"
+            android:tint="@color/colorAccent"
+            android:src="@drawable/ic_bank" />
+    </FrameLayout>
 
 </LinearLayout>

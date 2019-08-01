@@ -130,9 +130,8 @@
                         android:id="@+id/button1"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
-                        android:src="@drawable/test_deposit"
+                        android:src="@drawable/ic_deposit"
                         android:padding="@dimen/padding_mini"
-                        android:tint="@color/whiteMain"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -159,8 +158,7 @@
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
                         android:padding="@dimen/padding_mini"
-                        android:src="@drawable/test_withdraw"
-                        android:tint="@color/whiteMain"
+                        android:src="@drawable/ic_withdraw"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -187,8 +185,7 @@
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
                         android:padding="@dimen/padding_mini"
-                        android:src="@drawable/test_trade"
-                        android:tint="@color/whiteMain"
+                        android:src="@drawable/ic_exchange"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -215,8 +212,7 @@
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
                         android:padding="@dimen/padding_mini"
-                        android:src="@drawable/test_pay"
-                        android:tint="@color/whiteMain"
+                        android:src="@drawable/ic_pay"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView

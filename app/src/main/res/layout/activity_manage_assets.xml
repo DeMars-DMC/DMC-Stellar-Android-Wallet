@@ -85,11 +85,14 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/accountButton"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_width="@dimen/button_height_big"
+                android:layout_height="@dimen/button_height_big"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingTop="@dimen/padding_micro"
+                android:paddingBottom="@dimen/padding_micro"
+                android:layout_marginEnd="@dimen/padding_mini"
                 android:src="@drawable/ic_settings"
                 android:tint="@color/whiteMain"
                 app:layout_constraintBottom_toBottomOf="parent"

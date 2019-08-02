@@ -146,7 +146,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="end|center_vertical"
                     android:padding="@dimen/padding_medium"
-                    android:src="@drawable/ic_contact_pay"
+                    android:src="@drawable/ic_pay_contact"
                     android:tint="@color/colorAccent"/>
             </FrameLayout>
 

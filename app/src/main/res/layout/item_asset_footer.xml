@@ -6,25 +6,24 @@
     android:layout_marginTop="@dimen/padding_mini"
     android:layout_marginEnd="@dimen/padding_horizontal"
     android:layout_marginBottom="@dimen/padding_mini"
-    android:paddingStart="@dimen/padding_horizontal"
-    android:paddingEnd="@dimen/padding_horizontal"
     android:background="@drawable/background_card_transparent_green"
     android:orientation="horizontal">
 
     <TextView
-        style="@style/ButtonTitle"
         android:id="@+id/footerTitle"
+        style="@style/ButtonTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="@color/colorGreen"
         android:singleLine="true"
-        android:text="@string/add_custom_asset" />
+        android:text="@string/add_custom_asset"
+        android:textColor="@color/colorGreen" />
 
     <ImageView
         android:id="@+id/footerIcon"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_height_big"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_add_green"
-        android:layout_gravity="end|center_vertical"/>
+        android:layout_gravity="end|center_vertical"
+        android:padding="@dimen/padding_horizontal"
+        android:src="@drawable/ic_add" />
 </FrameLayout>

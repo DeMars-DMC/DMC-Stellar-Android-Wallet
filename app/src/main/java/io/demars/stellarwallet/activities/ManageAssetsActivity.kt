@@ -333,7 +333,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
         Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
           override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
-            decreaseCalculationQueue()
             if (bids.isNotEmpty()) {
               Timber.d("${bids.size} bids in the order book")
               val reportingBalance = (it.balance?.toDouble() ?: 0.0) * bids[0].price.toDouble()
@@ -341,11 +340,13 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
             } else {
               Timber.d("No bids in the order book")
             }
+
+            decreaseCalculationQueue()
           }
 
           override fun onFailed(errorMessage: String) {
-            decreaseCalculationQueue()
             Timber.d("failed to load the order book %s", errorMessage)
+            decreaseCalculationQueue()
           }
 
         }, reportingAsset, dataAsset!!)
@@ -362,7 +363,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
         Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
           var priceInXlm = 0.0
           override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
-            decreaseCalculationQueue()
             if (bids.isNotEmpty()) {
               Timber.d("${bids.size} bids in the order book")
               priceInXlm = bids[0].price.toDouble()
@@ -384,7 +384,6 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
                 Horizon.getOrderBook(object : Horizon.OnOrderBookListener {
                   override fun onOrderBook(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
-                    decreaseCalculationQueue()
                     if (bids.isNotEmpty()) {
                       Timber.d("${bids.size} bids in the order book")
                       // Now we have balance of currency converted to XLM
@@ -395,6 +394,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
                     } else {
                       Timber.d("No bids in the order book")
                     }
+
+                    decreaseCalculationQueue()
                   }
 
                   override fun onFailed(errorMessage: String) {
@@ -406,6 +407,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
             } else {
               Timber.d("No bids in the order book")
             }
+
+            decreaseCalculationQueue()
           }
 
           override fun onFailed(errorMessage: String) {
@@ -428,16 +431,23 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun updateTotalBalanceView() {
-    if (calculationQueue > 0) {
-      // Calculating in process
-      totalBalanceProgress?.visibility = View.VISIBLE
-      totalBalanceView?.visibility = View.GONE
-    } else {
-      totalBalanceProgress?.visibility = View.GONE
-      totalBalanceView?.visibility = View.VISIBLE
+    when {
+      isCustomizing -> {
+        totalBalanceProgress?.visibility = View.GONE
+        totalBalanceView?.visibility = View.GONE
+      }
+      calculationQueue > 0 -> {
+        // Calculating in process
+        totalBalanceProgress?.visibility = View.VISIBLE
+        totalBalanceView?.visibility = View.GONE
+      }
+      else -> {
+        totalBalanceProgress?.visibility = View.GONE
+        totalBalanceView?.visibility = View.VISIBLE
 
-      val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
-      totalBalanceView?.text = newBalanceAmount
+        val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
+        totalBalanceView?.text = newBalanceAmount
+      }
     }
   }
   //endregion

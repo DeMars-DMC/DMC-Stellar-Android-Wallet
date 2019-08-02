@@ -147,7 +147,7 @@
                 android:id="@+id/addressCopyButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_vertical"
+                android:layout_marginTop="@dimen/padding_vertical_double"
                 android:layout_marginStart="@dimen/padding_horizontal"
                 android:layout_marginEnd="@dimen/padding_horizontal"
                 android:background="@drawable/background_card_transparent"
@@ -181,36 +181,35 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/openAccountButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height_big"
-                android:layout_marginTop="@dimen/padding_mini"
                 android:layout_marginStart="@dimen/padding_horizontal"
+                android:layout_marginTop="@dimen/padding_mini"
                 android:layout_marginEnd="@dimen/padding_horizontal"
+                android:layout_marginBottom="@dimen/padding_mini"
                 android:background="@drawable/background_card_transparent_accent"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                app:layout_constraintTop_toBottomOf="@id/addressContainer">
 
                 <TextView
-                    style="@style/WhiteTitle"
+                    style="@style/ButtonTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@color/colorAccent"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:text="@string/open_account"
-                    android:singleLine="true"/>
+                    android:textColor="@color/colorAccent"/>
 
                 <ImageView
                     android:layout_width="@dimen/button_height_big"
-                    android:layout_height="@dimen/button_height_big"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/copy_address_content_descriptor"
-                    android:paddingTop="@dimen/padding_horizontal"
-                    android:paddingBottom="@dimen/padding_horizontal"
-                    android:src="@drawable/ic_person_accent" />
-
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end|center_vertical"
+                    android:padding="@dimen/padding_medium"
+                    android:src="@drawable/ic_open_account"
+                    android:tint="@color/colorAccent"/>
+            </FrameLayout>
 
             <TextView
                 style="@style/WhiteDescription"
@@ -220,7 +219,7 @@
                 android:gravity="center"
                 android:paddingLeft="@dimen/padding_vertical"
                 android:paddingRight="@dimen/padding_vertical"
-                android:layout_marginTop="@dimen/padding_vertical"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 android:text="@string/fund_account_string" />
 
         </LinearLayout>

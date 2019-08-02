@@ -11,13 +11,13 @@
     <color name="colorYellow">#deaf2a</color>
     <color name="colorYellowHighlight">#AC8722</color>
 
-    <color name="colorGreen">#88D453</color>
+    <color name="colorGreen">#5ec955</color>
     <color name="colorGreenHighlight">#077A00</color>
 
     <color name="colorDisabled">#797979</color>
     <color name="colorDisabledHighlight">#424242</color>
 
-    <color name="colorError">#c93434</color>
+    <color name="colorError">#c45757</color>
 
     <color name="colorLightGrey">@color/alto</color>
 

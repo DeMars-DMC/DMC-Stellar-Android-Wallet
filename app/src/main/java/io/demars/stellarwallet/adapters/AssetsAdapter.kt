@@ -298,7 +298,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.title.setText(R.string.add_custom_asset)
       viewHolder.title.setTextColor(ContextCompat.getColor(
         viewHolder.title.context, R.color.colorGreen))
-      viewHolder.icon.setImageResource(R.drawable.ic_add_green)
+      viewHolder.icon.setImageResource(R.drawable.ic_add)
       viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_green)
       viewHolder.button.setOnClickListener {
         listener.addCustomAsset()
@@ -328,9 +328,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         assetCode != Constants.LUMENS_ASSET_CODE &&
         assetCode != Constants.DMC_ASSET_CODE) {
         holder.rightIcon.visibility = View.VISIBLE
-        holder.rightIcon.setImageResource(R.drawable.ic_clear)
+        holder.rightIcon.setImageResource(R.drawable.ic_remove)
         holder.rightIcon.setPadding(holder.rightIcon.context.resources
-          ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+          ?.getDimensionPixelSize(R.dimen.padding_horizontal) ?: 0)
         holder.rightIcon.setOnClickListener {
           listener.changeTrustline(asset.asset!!, true)
         }
@@ -392,9 +392,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     loadAssetImage(asset.image, holder.assetImage)
 
     holder.rightIcon.visibility = View.VISIBLE
-    holder.rightIcon.setImageResource(R.drawable.ic_add_green)
+    holder.rightIcon.setImageResource(R.drawable.ic_add)
     holder.rightIcon.setPadding(holder.rightIcon.context.resources
-      ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
+      ?.getDimensionPixelSize(R.dimen.padding_horizontal) ?: 0)
     holder.rightIcon.setOnClickListener {
       listener.changeTrustline(trustLineAsset, false)
     }

@@ -6,17 +6,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:windowBackground">@drawable/bg_gradient</item>
-        <item name="colorControlHighlight">@color/whiteMain</item>
-    </style>
+   </style>
 
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="BlackTheme" parent="AppTheme" />
-
     <style name="TransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>

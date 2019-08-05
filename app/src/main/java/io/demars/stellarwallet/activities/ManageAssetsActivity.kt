@@ -431,22 +431,24 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun updateTotalBalanceView() {
-    when {
-      isCustomizing -> {
-        totalBalanceProgress?.visibility = View.GONE
-        totalBalanceView?.visibility = View.GONE
-      }
-      calculationQueue > 0 -> {
-        // Calculating in process
-        totalBalanceProgress?.visibility = View.VISIBLE
-        totalBalanceView?.visibility = View.GONE
-      }
-      else -> {
-        totalBalanceProgress?.visibility = View.GONE
-        totalBalanceView?.visibility = View.VISIBLE
+    runOnUiThread {
+      when {
+        isCustomizing -> {
+          totalBalanceProgress?.visibility = View.GONE
+          totalBalanceView?.visibility = View.GONE
+        }
+        calculationQueue > 0 -> {
+          // Calculating in process
+          totalBalanceProgress?.visibility = View.VISIBLE
+          totalBalanceView?.visibility = View.GONE
+        }
+        else -> {
+          totalBalanceProgress?.visibility = View.GONE
+          totalBalanceView?.visibility = View.VISIBLE
 
-        val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
-        totalBalanceView?.text = newBalanceAmount
+          val newBalanceAmount = "${StringFormat.truncateDecimalPlaces(totalBalance, 2)} ${reportingAsset.code}"
+          totalBalanceView?.text = newBalanceAmount
+        }
       }
     }
   }

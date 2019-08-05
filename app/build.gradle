@@ -19,8 +19,8 @@ android {
         applicationId "io.demars.stellarwallet"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 19
-        versionName "1.2.0"
+        versionCode 20
+        versionName "1.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -159,13 +159,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
     implementation 'commons-lang:commons-lang:20030203.000129'
 
-    implementation 'com.google.firebase:firebase-core:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:18.0.0'
-    implementation 'com.google.firebase:firebase-database:18.0.0'
-    implementation 'com.google.firebase:firebase-storage:18.0.0'
-    implementation 'com.google.firebase:firebase-functions:18.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation 'com.google.firebase:firebase-database:18.0.1'
+    implementation 'com.google.firebase:firebase-storage:18.1.1'
+    implementation 'com.google.firebase:firebase-functions:18.1.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
-    implementation 'com.google.firebase:firebase-messaging:19.0.0'
+    implementation 'com.google.firebase:firebase-messaging:19.0.1'
     implementation 'com.google.firebase:firebase-dynamic-links:18.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

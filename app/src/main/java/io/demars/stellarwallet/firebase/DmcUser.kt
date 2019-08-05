@@ -29,23 +29,23 @@ data class DmcUser(
   var id_back_url = ""
   var id_selfie_url = ""
   var created_at = 0L
-  var state = State.UNCOMPLETED.ordinal
+  var state = State.DIGITAL.ordinal
   var notification_key = ""
   val banksZAR = ArrayList<BankAccount>()
   val banksNGNT = ArrayList<BankAccount>()
 
   enum class State {
-    UNCOMPLETED, VERIFYING, VERIFIED, REVERIFYING, BLOCKED, CLOSED
+    DIGITAL, VERIFYING, VERIFIED, DOCUMENTS_UNCLEAR, ID_EXPIRE_SHORTLY, ID_EXPIRED, BLOCKED, CLOSED
   }
 
   @Exclude
   fun isRegistrationCompleted(): Boolean {
-    return state > State.UNCOMPLETED.ordinal
+    return state == State.DIGITAL.ordinal
   }
 
   @Exclude
   fun isVerified(): Boolean {
-    return state > State.VERIFYING.ordinal
+    return state == State.VERIFYING.ordinal
   }
 
   @Exclude

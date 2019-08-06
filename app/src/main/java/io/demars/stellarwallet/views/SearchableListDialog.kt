@@ -28,6 +28,10 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
     super.onCreate(savedInstanceState)
     setContentView(R.layout.dialog_searchable)
 
+    window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+      WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+    window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
     searchView = findViewById(R.id.searchView)
     searchView?.setOnQueryTextListener(this)
     searchView?.isIconified = false
@@ -44,9 +48,6 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
     show()
     populateList()
 
-    window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-      WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-    window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     ViewUtils.showKeyboard(context, searchView)
   }
 

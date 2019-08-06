@@ -2,7 +2,6 @@ package io.demars.stellarwallet.models
 
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNotSame
-import org.apache.commons.lang.builder.HashCodeBuilder
 import org.junit.Test
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.responses.AccountResponse

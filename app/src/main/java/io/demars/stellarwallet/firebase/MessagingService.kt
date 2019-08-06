@@ -27,6 +27,17 @@ class MessagingService : FirebaseMessagingService() {
         else -> ""
       }
 
+      val title = when (state) {
+        DmcUser.State.VERIFYING.ordinal,
+        DmcUser.State.VERIFIED.ordinal -> "Thank you"
+        DmcUser.State.DOCUMENTS_UNCLEAR.ordinal -> "Documents verification"
+        DmcUser.State.ID_EXPIRE_SHORTLY.ordinal,
+        DmcUser.State.ID_EXPIRED.ordinal -> "Document update needed"
+        DmcUser.State.BLOCKED.ordinal -> "We're sorry"
+        DmcUser.State.CLOSED.ordinal -> "Your account is closed"
+        else -> ""
+      }
+
       if (message.isEmpty()) return
 
       val intent = Intent(this, ManageAssetsActivity::class.java)
@@ -34,7 +45,7 @@ class MessagingService : FirebaseMessagingService() {
       val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
       val notification = NotificationCompat.Builder(this, DmcApp.CHANNEL_ID_ACC)
-        .setContentTitle(getString(R.string.thank_you))
+        .setContentTitle(title)
         .setContentText(message)
         .setSmallIcon(R.drawable.ic_stat_ic_main_logo)
         .setColor(ContextCompat.getColor(this, R.color.colorAccent))

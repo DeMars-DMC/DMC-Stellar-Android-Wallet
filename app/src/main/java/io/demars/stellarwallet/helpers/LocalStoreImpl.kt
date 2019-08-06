@@ -94,7 +94,7 @@ class LocalStoreImpl(context: Context) : LocalStore {
 
   override fun isRegistered(): Boolean = getUserState() > 0
 
-  override fun isVerified(): Boolean = getUserState() > 1
+  override fun isVerified(): Boolean = getUserState() == 2
 
   private operator fun set(key: String, value: String?) {
     sharedPreferences.edit().putString(key, value).apply()

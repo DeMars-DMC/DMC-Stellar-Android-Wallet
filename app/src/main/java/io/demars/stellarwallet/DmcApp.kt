@@ -93,15 +93,16 @@ class DmcApp : MultiDexApplication() {
     Logger.getLogger(OkHttpClient::class.java.name).level = Level.FINE
 
     //removing the default provider coming from Android SDK.
-    Security.removeProvider("BC")
-    Security.addProvider(BouncyCastleProvider() as Provider?)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+      Security.removeProvider("BC")
+      Security.addProvider(BouncyCastleProvider() as Provider?)
+    }
+
+    PRNGFixes.apply()
 
     FirebaseAuth.getInstance().useAppLanguage()
 
     Stetho.initializeWithDefaults(this)
-
-    PRNGFixes.apply()
-
 
     if (DebugPreferencesHelper(applicationContext).isTestNetServerEnabled) {
       Horizon.init(ServerType.TEST_NET)

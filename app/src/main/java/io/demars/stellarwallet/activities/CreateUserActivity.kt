@@ -12,7 +12,6 @@ import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.interfaces.AfterTextChanged
 import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_create_user.*
-import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -30,6 +29,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
@@ -37,7 +37,7 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
-import kotlinx.android.synthetic.main.activity_create_user.toolbar
+import kotlinx.android.synthetic.main.activity_create_user.submitButton
 import org.jetbrains.anko.textColor
 import java.util.*
 
@@ -76,13 +76,13 @@ class CreateUserActivity : AppCompatActivity() {
     setContentView(R.layout.activity_create_user)
 
     Firebase.getUserFresh(userListener)
-
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
   }
 
   private fun initUI() {
+    backButton.setOnClickListener {
+      onBackPressed()
+    }
+
     if (isCreating) {
       showEditableView()
     } else {
@@ -93,18 +93,18 @@ class CreateUserActivity : AppCompatActivity() {
   private fun showExpiryDateDialog() {
     if (expiryDateDialog == null) {
       val today = Calendar.getInstance()
-      expiryDateDialog = DatePickerDialog(this,
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-          val expiryDate = "$year-${month + 1}-$dayOfMonth"
-          expiryDatePicker.setTextColor(Color.BLACK)
-          expiryDatePicker.text = expiryDate
-          expiryDateCheckbox.isChecked = true
-          user?.id_expiry_date = expiryDate
-        }, today[Calendar.YEAR], today[Calendar.MONTH], today[Calendar.DAY_OF_MONTH])
-      expiryDateDialog?.datePicker?.minDate = today.timeInMillis
-      expiryDateDialog?.show()
+      expiryDateDialog = DatePickerDialog.newInstance({ _, year, month, dayOfMonth ->
+        val expiryDate = "$year-${month + 1}-$dayOfMonth"
+        expiryDatePicker.setTextColor(Color.BLACK)
+        expiryDatePicker.text = expiryDate
+        user?.id_expiry_date = expiryDate
+      }, today[Calendar.YEAR], today[Calendar.MONTH], today[Calendar.DAY_OF_MONTH])
+      expiryDateDialog?.minDate = today
+      expiryDateDialog?.setTitle(getString(R.string.expiry_date))
+
+      expiryDateDialog?.show(supportFragmentManager, "")
     } else {
-      expiryDateDialog?.show()
+      expiryDateDialog?.show(supportFragmentManager, "")
     }
   }
 
@@ -112,7 +112,7 @@ class CreateUserActivity : AppCompatActivity() {
     if (birthDateDialog == null) {
       val eighteenYearsBack = Calendar.getInstance()
       eighteenYearsBack.add(Calendar.YEAR, -18)
-      birthDateDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+      birthDateDialog = DatePickerDialog.newInstance({ _, year, month, dayOfMonth ->
         val birthDate = "$year-${month + 1}-$dayOfMonth"
         dateOfBirthPicker.setTextColor(Color.BLACK)
         dateOfBirthPicker.text = birthDate
@@ -120,10 +120,11 @@ class CreateUserActivity : AppCompatActivity() {
       }, eighteenYearsBack[Calendar.YEAR],
         eighteenYearsBack[Calendar.MONTH],
         eighteenYearsBack[Calendar.DAY_OF_MONTH])
-      birthDateDialog?.datePicker?.maxDate = eighteenYearsBack.timeInMillis
-      birthDateDialog?.show()
+      birthDateDialog?.maxDate = eighteenYearsBack
+      expiryDateDialog?.setTitle(getString(R.string.date_of_birth))
+      birthDateDialog?.show(supportFragmentManager, "")
     } else {
-      birthDateDialog?.show()
+      birthDateDialog?.show(supportFragmentManager, "")
     }
   }
 
@@ -294,7 +295,7 @@ class CreateUserActivity : AppCompatActivity() {
   }
 
   private fun showEditableView() {
-    toolbar.setTitle(R.string.open_account)
+    titleView.setText(R.string.open_account)
 
     firstNameText.visibility = GONE
     surnameText.visibility = GONE
@@ -434,11 +435,21 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     expiryDateCheckbox.setOnCheckedChangeListener { _, isChecked ->
-      if (!isChecked) {
+      if (isChecked) {
         val expiryDate = "2999-01-01"
         expiryDatePicker.setTextColor(Color.BLACK)
         expiryDatePicker.text = expiryDate
         user.id_expiry_date = expiryDate
+
+        expiryDatePicker.setOnClickListener(null)
+      } else {
+        expiryDatePicker.setTextColor(ContextCompat.getColor(this, R.color.colorPaleSky))
+        expiryDatePicker.setText(R.string.expiry_date)
+
+        user.id_expiry_date = ""
+        expiryDatePicker.setOnClickListener {
+          showExpiryDateDialog()
+        }
       }
     }
 
@@ -472,7 +483,7 @@ class CreateUserActivity : AppCompatActivity() {
   }
 
   private fun showNonEditableView() {
-    toolbar.setTitle(R.string.personal_information)
+    titleView.setText(R.string.personal_information)
 
     firstNameInput.visibility = GONE
     surnameInput.visibility = GONE
@@ -485,7 +496,6 @@ class CreateUserActivity : AppCompatActivity() {
     documentNumberInput.visibility = GONE
     submitButton.visibility = GONE
     termsConditions.visibility = GONE
-    expiryDateCheckbox.visibility = GONE
 
     dateOfBirthPicker.setOnClickListener(null)
     nationalityPicker.setOnClickListener(null)
@@ -500,8 +510,12 @@ class CreateUserActivity : AppCompatActivity() {
     addressText.visibility = VISIBLE
     emailText.visibility = VISIBLE
     documentNumberText.visibility = VISIBLE
+    expiryDateCheckbox.visibility = VISIBLE
 
     val user = this.user as DmcUser
+
+    // State indicator
+    updateStateIndicator(user.state)
 
     firstNameText.text = user.first_name
     surnameText.text = user.last_name
@@ -513,6 +527,12 @@ class CreateUserActivity : AppCompatActivity() {
     documentTypePicker.text = user.document_type
     documentNumberText.text = user.document_number
     expiryDatePicker.text = user.id_expiry_date
+
+    val noExpiry = user.id_expiry_date == "2999-01-01"
+    expiryDateCheckbox.isChecked = noExpiry
+    expiryDateCheckbox.setOnCheckedChangeListener { _, _ ->
+      expiryDateCheckbox.isChecked = noExpiry
+    }
 
     dateOfBirthPicker.textColor = Color.BLACK
     nationalityPicker.textColor = Color.BLACK
@@ -527,6 +547,46 @@ class CreateUserActivity : AppCompatActivity() {
       R.drawable.ic_check_circle_accent else R.drawable.ic_circle_outline_palesky_24dp)
     idSelfieCheck.setImageResource(if (user.id_selfie_uploaded)
       R.drawable.ic_check_circle_accent else R.drawable.ic_circle_outline_palesky_24dp)
+  }
+
+  private fun updateStateIndicator(state: Int) {
+    var colorRes = R.color.whiteMain
+    var iconRes = 0
+    var textRes = 0
+    when (state) {
+      DmcUser.State.VERIFYING.ordinal -> {
+        iconRes = R.drawable.ic_time
+        textRes = R.string.verifying_low
+        colorRes = R.color.colorYellow
+      }
+      DmcUser.State.VERIFIED.ordinal -> {
+        iconRes = R.drawable.ic_check_white
+        textRes = R.string.verified_low
+        colorRes = R.color.colorGreen
+      }
+      DmcUser.State.BLOCKED.ordinal -> {
+        iconRes = R.drawable.ic_error
+        textRes = R.string.blocked_low
+        colorRes = R.color.colorError
+      }
+      DmcUser.State.CLOSED.ordinal -> {
+        iconRes = R.drawable.ic_closed
+        textRes = R.string.closed_low
+        colorRes = R.color.whiteMain
+      }
+      DmcUser.State.DIGITAL.ordinal,
+      DmcUser.State.DOCUMENTS_UNCLEAR.ordinal,
+      DmcUser.State.ID_EXPIRE_SHORTLY.ordinal,
+      DmcUser.State.ID_EXPIRED.ordinal -> {
+      }
+    }
+
+    stateIconView.setImageResource(iconRes)
+    stateTextView.text = if (textRes != 0) getString(textRes) else ""
+
+    val color = ContextCompat.getColor(this, colorRes)
+    stateIconView.setColorFilter(color)
+    stateTextView.setTextColor(color)
   }
 
   override fun onDestroy() {

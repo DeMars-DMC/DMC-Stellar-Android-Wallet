@@ -131,7 +131,7 @@
                         android:id="@+id/button1"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
-                        android:padding="@dimen/padding_micro"
+                        android:padding="@dimen/padding_mini"
                         android:src="@drawable/ic_arrow_deposit"
                         android:background="@drawable/background_button_round_transparent" />
 
@@ -159,7 +159,7 @@
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
                         android:src="@drawable/ic_arrow_withdraw"
-                        android:padding="@dimen/padding_micro"
+                        android:padding="@dimen/padding_mini"
                         android:background="@drawable/background_button_round_transparent" />
 
                     <TextView
@@ -185,7 +185,7 @@
                         android:id="@+id/button3"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
-                        android:padding="@dimen/padding_micro"
+                        android:padding="@dimen/padding_mini"
                         android:src="@drawable/ic_arrow_exchange"
                         android:background="@drawable/background_button_round_transparent" />
 
@@ -212,7 +212,7 @@
                         android:id="@+id/button4"
                         android:layout_width="@dimen/button_height_big"
                         android:layout_height="@dimen/button_height_big"
-                        android:padding="@dimen/padding_micro"
+                        android:padding="@dimen/padding_mini"
                         android:src="@drawable/ic_arrow_pay"
                         android:background="@drawable/background_button_round_transparent" />
 

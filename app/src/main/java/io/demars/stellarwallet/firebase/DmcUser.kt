@@ -40,12 +40,12 @@ data class DmcUser(
 
   @Exclude
   fun isRegistrationCompleted(): Boolean {
-    return state == State.DIGITAL.ordinal
+    return state > State.DIGITAL.ordinal
   }
 
   @Exclude
   fun isVerified(): Boolean {
-    return state == State.VERIFYING.ordinal
+    return state == State.VERIFIED.ordinal
   }
 
   @Exclude

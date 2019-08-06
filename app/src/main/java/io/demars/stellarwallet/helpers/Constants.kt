@@ -40,12 +40,12 @@ class Constants {
     const val ETH_ASSET_CODE = "ETH"
     const val ETH_ASSET_NAME = "Ethereum"
     const val ETH_ASSET_ISSUER = "GBETHKBL5TCUTQ3JPDIYOZ5RDARTMHMEKIO2QZQ7IOZ4YC5XV3C2IKYU"
-    const val ETH_IMAGE_RES = R.drawable.ic_logo_eth_white
+    const val ETH_IMAGE_RES = R.drawable.ic_logo_eth
 
     const val BTC_ASSET_CODE = "BTC"
     const val BTC_ASSET_NAME = "Bitcoin"
     const val BTC_ASSET_ISSUER = "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
-    const val BTC_IMAGE_RES = R.drawable.ic_logo_btc_white
+    const val BTC_IMAGE_RES = R.drawable.ic_logo_btc
 
     const val FEE_ACCOUNT = "GDENR3NFTMCIHX5GGQCAVG5AYHXH4FENWNRDDLMB7YHUBHKPO4PE2MC5"
 

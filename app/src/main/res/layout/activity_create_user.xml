@@ -1,34 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_light"
+    android:background="@drawable/bg_gradient"
     android:orientation="vertical">
-
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_vertical"
-        android:background="@color/colorPrimaryDark" />
+        android:layout_height="@dimen/padding_vertical" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:title="@string/open_account" />
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/titleView"
+            style="@style/WhiteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="@string/personal_information" />
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_macro"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:layout_marginBottom="@dimen/padding_macro"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/receive"
+            android:paddingStart="@dimen/padding_zero"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:tint="@color/whiteMain" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginEnd="@dimen/padding_mini"
+            android:layout_gravity="end|center_vertical">
+
+            <ImageView
+                android:id="@+id/stateIconView"
+                android:layout_width="@dimen/padding_vertical"
+                android:layout_height="@dimen/padding_vertical" />
+
+            <TextView
+                android:id="@+id/stateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </FrameLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bottom_sheet">
 
         <LinearLayout
+            android:id="@+id/formContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/firstNameLabel"
@@ -63,7 +106,8 @@
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/surnameLabel"
@@ -97,7 +141,8 @@
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/birthDateLabel"
@@ -171,7 +216,7 @@
                 android:maxLines="1"
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
-                android:textColorHint="@color/colorPaleSky"/>
+                android:textColorHint="@color/colorPaleSky" />
 
             <TextView
                 android:id="@+id/addressText"
@@ -182,7 +227,8 @@
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/addressSecondLineInput"
@@ -271,7 +317,8 @@
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/communicationLabel"
@@ -360,32 +407,18 @@
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/expiryDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:paddingStart="@dimen/padding_horizontal"
-                android:paddingEnd="@dimen/padding_horizontal">
-
-                <TextView
-                    android:id="@+id/expiryDateLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/expiry_date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <CheckBox
-                    android:id="@+id/expiryDateCheckbox"
-                    android:theme="@style/CheckBoxTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true" />
-
-            </LinearLayout>
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:text="@string/expiry_date"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/expiryDatePicker"
@@ -401,6 +434,15 @@
                 android:text="@string/expiry_date"
                 android:textColor="@color/colorPaleSky"
                 android:textSize="@dimen/text_size_medium" />
+
+            <CheckBox
+                android:id="@+id/expiryDateCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_mini"
+                android:layout_marginEnd="@dimen/padding_mini"
+                android:text="@string/document_doesnt_expire"
+                android:theme="@style/CheckBoxTheme" />
 
             <TextView
                 android:id="@+id/personalIdLabel"

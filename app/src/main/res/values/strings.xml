@@ -407,4 +407,9 @@
     <string name="add_contact_address_hint">Public address</string>
     <string name="share_address">Share address</string>
     <string name="bank_deposit">Bank deposit</string>
+    <string name="document_doesnt_expire">Document doesn\'t expire</string>
+    <string name="verifying_low">verifying</string>
+    <string name="verified_low">verified</string>
+    <string name="blocked_low">blocked</string>
+    <string name="closed_low">closed</string>
 </resources>

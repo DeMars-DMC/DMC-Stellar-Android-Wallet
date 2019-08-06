@@ -344,6 +344,7 @@ class OpenAccountActivity : AppCompatActivity() {
 
     nationalityPicker.setOnClickListener {
       val nationalities = resources.getStringArray(R.array.nationality)
+      searchableDialog.setHint(getString(R.string.select_nationality))
       searchableDialog.showForList(nationalities.toList(), object : SearchableListDialog.OnItemClick {
         override fun itemClicked(item: String) {
           searchableDialog.hide()
@@ -392,6 +393,7 @@ class OpenAccountActivity : AppCompatActivity() {
 
     countryPicker.setOnClickListener {
       val countries = resources.getStringArray(R.array.country)
+      searchableDialog.setHint(getString(R.string.select_country))
       searchableDialog.showForList(countries.toList(), object : SearchableListDialog.OnItemClick {
         override fun itemClicked(item: String) {
           searchableDialog.hide()

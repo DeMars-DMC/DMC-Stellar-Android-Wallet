@@ -80,6 +80,10 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
     return true
   }
 
+  fun setHint(hint: String) {
+      searchView?.queryHint = hint
+  }
+
   interface OnItemClick {
     fun itemClicked(item: String)
   }

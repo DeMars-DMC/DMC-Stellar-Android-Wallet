@@ -78,6 +78,8 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setupUI() {
+        backButton.setOnClickListener { onBackPressed() }
+
         if (mnemonicString.isNotEmpty()) {
             // Show chips UI
             confirmButton.visibility = View.GONE
@@ -92,14 +94,8 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
             // Create chips UI
             qrImageView.visibility = View.GONE
         }
-        setupActionBar()
-        setupMnemonicView()
-    }
 
-    private fun setupActionBar() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        setupMnemonicView()
     }
 
     private fun setupMnemonicView() {

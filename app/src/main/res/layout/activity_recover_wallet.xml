@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/main_bg_light"
+    android:background="@color/whiteMain"
     tools:context=".activities.RecoverWalletActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/recoverToolbar"
+    <FrameLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/titleView"
+            style="@style/WhiteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/secret_seed"
+            android:textSize="@dimen/text_size_medium" />
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_macro"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:layout_marginBottom="@dimen/padding_macro"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/receive"
+            android:paddingStart="@dimen/padding_zero"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:tint="@color/whiteMain" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/invalidPhraseTextView"
@@ -24,7 +52,7 @@
         android:text="@string/invalid_input_for_phrase"
         android:textColor="@color/colorError"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/recoverToolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/phraseEditText"
@@ -39,8 +67,8 @@
         android:paddingStart="@dimen/padding_horizontal"
         android:paddingEnd="@dimen/padding_horizontal"
         android:textSize="@dimen/text_size_small"
-        app:layout_constraintTop_toBottomOf="@+id/invalidPhraseTextView"
-        app:layout_constraintBottom_toTopOf="@+id/passphraseButton"/>
+        app:layout_constraintBottom_toTopOf="@+id/passphraseButton"
+        app:layout_constraintTop_toBottomOf="@+id/invalidPhraseTextView" />
 
     <EditText
         android:id="@+id/secretKeyEditText"
@@ -54,8 +82,8 @@
         android:paddingStart="@dimen/activity_vertical_margin"
         android:paddingEnd="@dimen/activity_vertical_margin"
         android:textSize="@dimen/text_size_small"
-        app:layout_constraintTop_toBottomOf="@+id/invalidPhraseTextView"
-        app:layout_constraintBottom_toTopOf="@+id/passphraseButton"/>
+        app:layout_constraintBottom_toTopOf="@+id/passphraseButton"
+        app:layout_constraintTop_toBottomOf="@+id/invalidPhraseTextView" />
 
     <TextView
         android:id="@+id/passphraseButton"
@@ -69,18 +97,16 @@
         android:padding="@dimen/activity_vertical_margin"
         android:text="@string/advanced_security"
         app:layout_constraintBottom_toTopOf="@+id/bottomButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/bottomButton"
-        style="@style/ButtonStyleAccent"
+        style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="10dp"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

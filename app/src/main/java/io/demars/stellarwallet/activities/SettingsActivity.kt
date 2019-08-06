@@ -1,8 +1,6 @@
 package io.demars.stellarwallet.activities
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -107,7 +105,7 @@ class SettingsActivity : BaseActivity() {
       if (isRegistered) {
         startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
       } else {
-        startActivity(CreateUserActivity.newInstance(it.context))
+        startActivity(OpenAccountActivity.newInstance(it.context))
       }
     }
   }
@@ -139,7 +137,7 @@ class SettingsActivity : BaseActivity() {
 
 
         SettingsAction.SHOW_ACCOUNT.ordinal -> {
-          startActivityForResult(CreateUserActivity.newInstance(this), RC_CREATE_DMC_ACCOUNT)
+          startActivityForResult(OpenAccountActivity.newInstance(this), RC_CREATE_DMC_ACCOUNT)
         }
 
         SettingsAction.LOG_OUT.ordinal -> {

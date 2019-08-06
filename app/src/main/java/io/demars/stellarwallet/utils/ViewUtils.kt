@@ -47,10 +47,12 @@ object ViewUtils {
   }
 
   @JvmStatic
-  fun showKeyboard(context: Context, editText: EditText) {
-    editText.requestFocus()
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-    imm!!.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+  fun showKeyboard(context: Context, editText: View?) {
+    editText?.let {
+      it.requestFocus()
+      val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+      imm!!.showSoftInput(it, InputMethodManager.SHOW_IMPLICIT)
+    }
   }
   //endregion
 

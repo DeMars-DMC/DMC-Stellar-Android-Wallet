@@ -11,7 +11,7 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.firebase.DmcUser
 import io.demars.stellarwallet.interfaces.AfterTextChanged
 import io.demars.stellarwallet.utils.ViewUtils
-import kotlinx.android.synthetic.main.activity_create_user.*
+import kotlinx.android.synthetic.main.activity_open_account.*
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -37,25 +37,27 @@ import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
-import kotlinx.android.synthetic.main.activity_create_user.submitButton
+import io.demars.stellarwallet.views.SearchableListDialog
+import kotlinx.android.synthetic.main.activity_open_account.submitButton
 import org.jetbrains.anko.textColor
 import java.util.*
 
 
-class CreateUserActivity : AppCompatActivity() {
+class OpenAccountActivity : AppCompatActivity() {
   private var user: DmcUser? = null
   private var isCreating = true
   private var birthDateDialog: DatePickerDialog? = null
   private var expiryDateDialog: DatePickerDialog? = null
   private var address = Address()
   private var infoCheckedOnce = false
+  private lateinit var searchableDialog: SearchableListDialog
 
   companion object {
     private const val REQUEST_CODE_CAMERA_ID_FRONT = 111
     private const val REQUEST_CODE_CAMERA_ID_BACK = 222
     private const val REQUEST_CODE_CAMERA_SELFIE = 333
 
-    fun newInstance(context: Context): Intent = Intent(context, CreateUserActivity::class.java)
+    fun newInstance(context: Context): Intent = Intent(context, OpenAccountActivity::class.java)
   }
 
   private val userListener = object : ValueEventListener {
@@ -73,7 +75,7 @@ class CreateUserActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     ViewUtils.setTransparentStatusBar(this)
-    setContentView(R.layout.activity_create_user)
+    setContentView(R.layout.activity_open_account)
 
     Firebase.getUserFresh(userListener)
   }
@@ -88,6 +90,12 @@ class CreateUserActivity : AppCompatActivity() {
     } else {
       showNonEditableView()
     }
+
+    initSearchDialog()
+  }
+
+  private fun initSearchDialog() {
+    searchableDialog = SearchableListDialog(this)
   }
 
   private fun showExpiryDateDialog() {
@@ -109,6 +117,7 @@ class CreateUserActivity : AppCompatActivity() {
   }
 
   private fun showBirthDateDialog() {
+    searchableDialog.show()
     if (birthDateDialog == null) {
       val eighteenYearsBack = Calendar.getInstance()
       eighteenYearsBack.add(Calendar.YEAR, -18)
@@ -335,13 +344,14 @@ class CreateUserActivity : AppCompatActivity() {
 
     nationalityPicker.setOnClickListener {
       val nationalities = resources.getStringArray(R.array.nationality)
-      AlertDialog.Builder(this).setTitle(getString(R.string.select_nationality))
-        .setItems(nationalities) { _, which ->
-          val nationality = nationalities[which]
+      searchableDialog.showForList(nationalities.toList(), object : SearchableListDialog.OnItemClick {
+        override fun itemClicked(item: String) {
+          searchableDialog.hide()
           nationalityPicker.setTextColor(Color.BLACK)
-          nationalityPicker.text = nationality
-          user.nationality = nationality
-        }.show()
+          nationalityPicker.text = item
+          user.nationality = item
+        }
+      })
     }
 
     addressFirstLineInput.addTextChangedListener(object : AfterTextChanged() {
@@ -382,16 +392,17 @@ class CreateUserActivity : AppCompatActivity() {
 
     countryPicker.setOnClickListener {
       val countries = resources.getStringArray(R.array.country)
-      AlertDialog.Builder(this).setTitle(getString(R.string.select_country))
-        .setItems(countries) { _, which ->
-          val country = countries[which]
+      searchableDialog.showForList(countries.toList(), object : SearchableListDialog.OnItemClick {
+        override fun itemClicked(item: String) {
+          searchableDialog.hide()
           countryPicker.setTextColor(Color.BLACK)
-          countryPicker.text = country
-          address.country = country
+          countryPicker.text = item
+          address.country = item
           if (address.isValid()) {
             user.address = address
           }
-        }.show()
+        }
+      })
     }
 
     emailInput.addTextChangedListener(object : AfterTextChanged() {

@@ -1,6 +1,5 @@
 package io.demars.stellarwallet.activities
 
-import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
@@ -196,7 +195,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     } else {
       openAccountButton?.visibility = View.VISIBLE
       openAccountButton?.setOnClickListener {
-        startActivityForResult(CreateUserActivity.newInstance(this), RC_CREATE_ACC)
+        startActivityForResult(OpenAccountActivity.newInstance(this), RC_CREATE_ACC)
       }
     }
   }

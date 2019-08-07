@@ -54,7 +54,7 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
   private fun populateList() {
       adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, filteredList)
       listListView?.adapter = adapter
-      listListView?.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+      listListView?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
         listener?.itemClicked(filteredList[position])
     }
   }

@@ -126,17 +126,17 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val currencies = ArrayList<DmcAsset>()
     val customs = ArrayList<DmcAsset>()
 
-    val cryptos = ArrayList<DmcAsset>().apply {
-      add(dmc)
+    val peloaded = ArrayList<DmcAsset>().apply {
+      add(ngnt)
+      add(btc)
       add(xlm)
     }
 
     // We will remove assets from here if already added to the wallet
     val supported = ArrayList<DmcAsset>().apply {
       add(zar)
-      add(ngnt)
       add(eth)
-      add(btc)
+      add(dmc)
     }
 
     balances.forEach {
@@ -144,10 +144,15 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         it.assetType == Constants.LUMENS_ASSET_TYPE -> {
           xlm.amount = it.balance
         }
-        it.assetCode.equals(Constants.DMC_ASSET_CODE, true) -> {
-          dmc.amount = it.balance
-          dmc.asset = it.asset
-          dmc.isAdded = true
+        it.assetCode.equals(Constants.BTC_ASSET_CODE, true) -> {
+          btc.amount = it.balance
+          btc.asset = it.asset
+          btc.isAdded = true
+        }
+        it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> {
+          ngnt.amount = it.balance
+          ngnt.asset = it.asset
+          ngnt.isAdded = true
         }
         it.assetCode.equals(Constants.ZAR_ASSET_CODE, true) -> {
           zar.amount = it.balance
@@ -156,26 +161,19 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
           currencies.add(zar)
           supported.remove(zar)
         }
-        it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> {
-          ngnt.amount = it.balance
-          ngnt.asset = it.asset
-          ngnt.isAdded = true
-          currencies.add(ngnt)
-          supported.remove(ngnt)
-        }
         it.assetCode.equals(Constants.ETH_ASSET_CODE, true) -> {
           eth.amount = it.balance
           eth.asset = it.asset
           eth.isAdded = true
-          cryptos.add(eth)
+          currencies.add(eth)
           supported.remove(eth)
         }
-        it.assetCode.equals(Constants.BTC_ASSET_CODE, true) -> {
-          btc.amount = it.balance
-          btc.asset = it.asset
-          btc.isAdded = true
-          cryptos.add(0, btc)
-          supported.remove(btc)
+        it.assetCode.equals(Constants.DMC_ASSET_CODE, true) -> {
+          dmc.amount = it.balance
+          dmc.asset = it.asset
+          dmc.isAdded = true
+          currencies.add(dmc)
+          supported.remove(dmc)
         }
         else -> {
           val custom = DmcAsset(it.assetCode.toLowerCase(), 0,
@@ -201,9 +199,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         }
 
         if (isCustomizing) {
-          addAll(cryptos)
-          notifyItemRangeInserted(index, cryptos.size)
-          index += cryptos.size
+          addAll(peloaded)
+          notifyItemRangeInserted(index, peloaded.size)
+          index += peloaded.size
 
           if (supported.isNotEmpty()) {
             addAll(supported)
@@ -214,10 +212,10 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
           add("Footer")
           notifyItemInserted(index)
         } else {
-          addAll(cryptos)
+          addAll(peloaded)
           add("Footer")
-          notifyItemRangeInserted(index, cryptos.size + 1)
-          index += cryptos.size + 1
+          notifyItemRangeInserted(index, peloaded.size + 1)
+          index += peloaded.size + 1
         }
       } else {
         if (currencies.isNotEmpty()) {
@@ -240,8 +238,8 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
           }
         }
 
-          notifyItemRangeChanged(index, cryptos.size)
-          index += cryptos.size
+          notifyItemRangeChanged(index, peloaded.size)
+          index += peloaded.size
 
         if (supported.isNotEmpty()) {
           if (isCustomizing) {
@@ -264,6 +262,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
   }
 
   class AssetFooterViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    val tradeButton: View = v.findViewById(R.id.tradeButton)
     val button: View = v.findViewById(R.id.footerButton)
     val title: TextView = v.findViewById(R.id.footerTitle)
     val icon: ImageView = v.findViewById(R.id.footerIcon)
@@ -295,6 +294,8 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
   private fun displayAssetFooter(viewHolder: AssetFooterViewHolder) {
     if (isCustomizing) {
+      viewHolder.tradeButton.visibility = View.GONE
+
       viewHolder.title.setText(R.string.add_custom_asset)
       viewHolder.title.setTextColor(ContextCompat.getColor(
         viewHolder.title.context, R.color.colorGreen))
@@ -304,6 +305,11 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         listener.addCustomAsset()
       }
     } else {
+      viewHolder.tradeButton.visibility = View.VISIBLE
+      viewHolder.tradeButton.setOnClickListener {
+        listener.tradeAssets()
+      }
+
       viewHolder.title.setText(R.string.customize_wallet)
       viewHolder.title.setTextColor(ContextCompat.getColor(
         viewHolder.title.context, R.color.colorAccent))
@@ -326,11 +332,12 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     if (isCustomizing) {
       if (asset.amount!!.toDouble() == 0.0 &&
         assetCode != Constants.LUMENS_ASSET_CODE &&
-        assetCode != Constants.DMC_ASSET_CODE) {
+        assetCode != Constants.NGNT_ASSET_CODE &&
+        assetCode != Constants.BTC_ASSET_CODE) {
         holder.rightIcon.visibility = View.VISIBLE
         holder.rightIcon.setImageResource(R.drawable.ic_remove)
         holder.rightIcon.setPadding(holder.rightIcon.context.resources
-          ?.getDimensionPixelSize(R.dimen.padding_horizontal) ?: 0)
+          ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
         holder.rightIcon.setOnClickListener {
           listener.changeTrustline(asset.asset!!, true)
         }
@@ -394,7 +401,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     holder.rightIcon.visibility = View.VISIBLE
     holder.rightIcon.setImageResource(R.drawable.ic_add)
     holder.rightIcon.setPadding(holder.rightIcon.context.resources
-      ?.getDimensionPixelSize(R.dimen.padding_horizontal) ?: 0)
+      ?.getDimensionPixelSize(R.dimen.padding_medium) ?: 0)
     holder.rightIcon.setOnClickListener {
       listener.changeTrustline(trustLineAsset, false)
     }

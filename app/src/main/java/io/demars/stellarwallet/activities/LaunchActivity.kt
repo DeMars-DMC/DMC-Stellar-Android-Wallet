@@ -111,6 +111,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private fun updateViewForInitial() {
     phone = "+${getPhoneCode()}"
 
+    progressBar.visibility = View.GONE
+
     createWalletButton.visibility = View.GONE
     recoverWalletButton.visibility = View.GONE
 
@@ -137,6 +139,8 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   private fun updateViewForCode() {
     smsCode = ""
 
+    progressBar.visibility = View.GONE
+
     createWalletButton.visibility = View.GONE
     recoverWalletButton.visibility = View.GONE
 
@@ -160,6 +164,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateViewForStellar() {
+    progressBar.visibility = View.GONE
     if (!GlobalGraphHelper.isExistingWallet()) {
       verificationLabel.visibility = View.GONE
       verificationText.visibility = View.GONE
@@ -196,6 +201,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateViewForNoInternet() {
+    progressBar.visibility = View.GONE
     verificationText.visibility = View.GONE
     dialerView.visibility = View.GONE
     loginMessage.visibility = View.GONE
@@ -366,7 +372,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
 
   private fun hideUI() {
-    appLogo.visibility = View.GONE
+    progressBar.visibility = View.VISIBLE
     verificationText.visibility = View.GONE
     verificationLabel.visibility = View.GONE
     loginMessage.visibility = View.GONE

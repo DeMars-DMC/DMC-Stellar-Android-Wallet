@@ -1,29 +1,67 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/footerButton"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/button_height_big"
-    android:layout_marginStart="@dimen/padding_horizontal"
-    android:layout_marginTop="@dimen/padding_mini"
-    android:layout_marginEnd="@dimen/padding_horizontal"
-    android:layout_marginBottom="@dimen/padding_mini"
-    android:background="@drawable/background_card_transparent_green"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/footerTitle"
-        style="@style/ButtonTitle"
+    <FrameLayout
+        android:id="@+id/tradeButton"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:singleLine="true"
-        android:text="@string/add_custom_asset"
-        android:textColor="@color/colorGreen" />
+        android:layout_height="@dimen/button_height_big"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:background="@drawable/background_card_transparent_yellow"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/footerIcon"
-        android:layout_width="@dimen/button_height_big"
-        android:layout_height="match_parent"
-        android:layout_gravity="end|center_vertical"
-        android:padding="@dimen/padding_horizontal"
-        android:src="@drawable/ic_add" />
-</FrameLayout>
+        <TextView
+            android:id="@+id/tradeTitle"
+            style="@style/ButtonTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/trade_assets"
+            android:textColor="@color/colorYellow" />
+
+        <ImageView
+            android:id="@+id/tradeIcon"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_arrow_exchange"
+            android:tint="@color/colorYellow"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/footerButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:background="@drawable/background_card_transparent_green"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/footerTitle"
+            style="@style/ButtonTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/add_custom_asset"
+            android:textColor="@color/colorGreen" />
+
+        <ImageView
+            android:id="@+id/footerIcon"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_add" />
+    </FrameLayout>
+</LinearLayout>
+
+

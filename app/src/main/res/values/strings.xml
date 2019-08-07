@@ -412,4 +412,5 @@
     <string name="verified_low">verified</string>
     <string name="blocked_low">blocked</string>
     <string name="closed_low">closed</string>
+    <string name="trade_assets">Trade assets</string>
 </resources>

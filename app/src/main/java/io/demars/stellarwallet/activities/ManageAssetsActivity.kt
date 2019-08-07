@@ -98,7 +98,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
           //Funded account
           updateViewForActive()
           calculateTotalBalance()
-          if (checkDmcAsset()) {
+          if (checkPreloadedAsset()) {
             adapter.refreshAdapter()
           }
         }
@@ -150,18 +150,29 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     AccountRepository.refresh()
   }
 
-  private fun checkDmcAsset(): Boolean {
-    val dmc = DmcApp.wallet.getBalances().find {
-      it.assetCode.equals(Constants.DMC_ASSET_CODE, true) &&
-        it.assetIssuer.accountId == Constants.DMC_ASSET_ISSUER
+  private fun checkPreloadedAsset(): Boolean {
+    val ngnt = DmcApp.wallet.getBalances().find {
+      it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) &&
+        it.assetIssuer.accountId == Constants.NGNT_ASSET_ISSUER
     }
 
-    return if (dmc == null) {
-      changeTrustline(Asset.createNonNativeAsset(Constants.DMC_ASSET_CODE,
-        KeyPair.fromAccountId(Constants.DMC_ASSET_ISSUER)), false)
-      false
-    } else {
-      true
+    val btc = DmcApp.wallet.getBalances().find {
+      it.assetCode.equals(Constants.BTC_ASSET_CODE, true) &&
+        it.assetIssuer.accountId == Constants.BTC_ASSET_ISSUER
+    }
+
+    return when {
+      ngnt == null -> {
+        changeTrustline(Asset.createNonNativeAsset(Constants.NGNT_ASSET_CODE,
+          KeyPair.fromAccountId(Constants.NGNT_ASSET_ISSUER)), false)
+        false
+      }
+      btc == null -> {
+        changeTrustline(Asset.createNonNativeAsset(Constants.BTC_ASSET_CODE,
+          KeyPair.fromAccountId(Constants.BTC_ASSET_ISSUER)), false)
+        false
+      }
+      else -> true
     }
   }
 
@@ -274,6 +285,11 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
     imageView.setImageBitmap(bitmap)
+  }
+
+  override fun tradeAssets() {
+    startActivity(ExchangeActivity.newInstance(this))
+    overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 
   override fun addCustomAsset() {

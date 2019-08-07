@@ -10,6 +10,16 @@
     android:orientation="vertical"
     tools:context=".activities.LaunchActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/button_height_big"
+        android:layout_height="@dimen/button_height_big"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/appLogo"
         android:layout_width="@dimen/logo_width_main"

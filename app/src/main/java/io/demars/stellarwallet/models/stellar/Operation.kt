@@ -1,11 +1,13 @@
 package io.demars.stellarwallet.models.stellar
 
+import java.io.Serializable
+
 data class Operation(var id: String, var sourceAccount: String, var type: String,
                      var createdAt: String, var transactionSuccessful: Boolean,
                      var transactionHash: String?, var transactionLink: String?,
                      var amount: String?, var from: String?, var to: String?,
                      var asset: String?, var counterAsset: String?,
-                     var price: String?, var memo: String?) {
+                     var price: String?, var memo: String?): Serializable {
 
    enum class OperationType(val value : String) {
     CREATED("create_account"),

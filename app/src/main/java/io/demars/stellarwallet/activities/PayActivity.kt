@@ -75,7 +75,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
     addressEditText.text = address
 
-    send_button.setOnClickListener {
+    payButton.setOnClickListener {
       if (amount <= amountAvailable && amount != 0.0) {
         if (DmcApp.wallet.getShowPinOnSend()) {
           startActivityForResult(WalletManagerActivity.verifyPin(it.context), REQUEST_PIN)

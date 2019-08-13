@@ -126,10 +126,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val currencies = ArrayList<DmcAsset>()
     val customs = ArrayList<DmcAsset>()
 
-    val peloaded = ArrayList<DmcAsset>().apply {
+    val preloaded = ArrayList<DmcAsset>().apply {
       add(ngnt)
       add(btc)
-      add(xlm)
     }
 
     // We will remove assets from here if already added to the wallet
@@ -186,38 +185,35 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     items = items.apply {
       var index = 0
       if (isRefreshing) {
+        addAll(preloaded)
+        notifyItemRangeInserted(index, preloaded.size)
+        index += preloaded.size
+
+        currencies.addAll(customs)
+        currencies.add(xlm)
         if (currencies.isNotEmpty()) {
           addAll(currencies)
           notifyItemRangeInserted(index, currencies.size)
           index += currencies.size
         }
 
-        if (customs.isNotEmpty()) {
-          addAll(customs)
-          notifyItemRangeInserted(index, customs.size)
-          index += customs.size
-        }
 
         if (isCustomizing) {
-          addAll(peloaded)
-          notifyItemRangeInserted(index, peloaded.size)
-          index += peloaded.size
-
           if (supported.isNotEmpty()) {
             addAll(supported)
             notifyItemRangeInserted(index, supported.size)
             index += supported.size
           }
-
-          add("Footer")
-          notifyItemInserted(index)
-        } else {
-          addAll(peloaded)
-          add("Footer")
-          notifyItemRangeInserted(index, peloaded.size + 1)
-          index += peloaded.size + 1
         }
+
+        add("Footer")
+        notifyItemInserted(index)
       } else {
+        notifyItemRangeChanged(index, preloaded.size)
+        index += preloaded.size
+
+        currencies.addAll(customs)
+        currencies.add(xlm)
         if (currencies.isNotEmpty()) {
           index += if (isCustomizing) {
             notifyItemRangeChanged(index, currencies.size)
@@ -227,19 +223,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
             currencies.size
           }
         }
-
-        if (customs.isNotEmpty()) {
-          index += if (isCustomizing) {
-            notifyItemRangeChanged(index, customs.size)
-            customs.size
-          } else {
-            notifyItemRangeChanged(index, customs.size)
-            customs.size
-          }
-        }
-
-          notifyItemRangeChanged(index, peloaded.size)
-          index += peloaded.size
 
         if (supported.isNotEmpty()) {
           if (isCustomizing) {

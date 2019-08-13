@@ -10,7 +10,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.TransactionsAdapter
+import io.demars.stellarwallet.interfaces.TransactionsListener
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
+import io.demars.stellarwallet.models.stellar.Operation
+import io.demars.stellarwallet.models.stellar.Trade
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.AssetUtils
@@ -20,8 +23,7 @@ import kotlinx.android.synthetic.main.activity_asset.*
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
 
-class AssetActivity : BaseActivity() {
-
+class AssetActivity : BaseActivity(), TransactionsListener {
   companion object {
     const val RC_PAY = 111
     const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
@@ -93,7 +95,7 @@ class AssetActivity : BaseActivity() {
 
     transactionsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-    transactionsAdapter = TransactionsAdapter(this)
+    transactionsAdapter = TransactionsAdapter(this, this)
     transactionsRecyclerView.adapter = transactionsAdapter
 
     ContactsRepositoryImpl(this).getContactsListLiveData(true)
@@ -153,6 +155,18 @@ class AssetActivity : BaseActivity() {
   private fun withdraw() {
     startActivity(
       DepositActivity.newInstance(this, DepositActivity.Mode.WITHDRAW, assetCode, assetIssuer))
+  }
+
+  override fun onTransactionClicked(transaction: Any) {
+    when (transaction) {
+      is Operation -> {
+        startActivity(TransactionDetailsActivity.newInstance(this,transaction))
+      }
+      is Trade -> {
+        startActivity(TransactionDetailsActivity.newInstance(this,transaction))
+      }
+    }
+
   }
 
   override fun onResume() {

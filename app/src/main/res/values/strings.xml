@@ -134,10 +134,10 @@
     <!--Pay Screen-->
     <string name="pay_to_text">Pay to</string>
     <string name="next">Next</string>
-    <string name="send_button_text">Pay</string>
     <string name="to">To:</string>
     <string name="optional">(Optional)</string>
     <string name="memo">Memo:</string>
+    <string name="contact_name">Contact name:</string>
     <string name="send_address_hint">Enter address here</string>
     <string name="send_success_message">Transaction sent successfully</string>
     <string name="send_error_message">There was an error sending your transaction. Please try again later.</string>
@@ -413,4 +413,6 @@
     <string name="blocked_low">blocked</string>
     <string name="closed_low">closed</string>
     <string name="trade_assets">Trade assets</string>
+    <string name="pay_again">Pay again</string>
+    <string name="trade_again">Trade again</string>
 </resources>

@@ -6,12 +6,40 @@
     android:layout_height="match_parent"
     android:background="@color/main_bg_light">
 
-    <androidx.appcompat.widget.Toolbar
+    <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:title="@string/deposit" />
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/titleView"
+            style="@style/WhiteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/secret_seed"
+            android:textSize="@dimen/text_size_medium" />
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_macro"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:layout_marginBottom="@dimen/padding_macro"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/receive"
+            android:paddingStart="@dimen/padding_zero"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:tint="@color/whiteMain" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/bankingInfoLabel"

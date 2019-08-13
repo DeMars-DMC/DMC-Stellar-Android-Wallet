@@ -57,5 +57,15 @@ class StringFormat {
      * Capitalizes the first character of a string
      */
     fun capitalize(s: String?): String = if (s.isNullOrEmpty()) "" else s.capitalize()
+
+    fun formatNumber4Decimals(amount: String?, asset: String): String? =
+      if (amount == null) "--" else truncateDecimalPlaces(amount, AssetUtils.getMaxDecimals(asset))
+
+    fun formatAddress(address:String?) : String {
+      if (address == null) return ""
+      val length = address.length
+      return if (length < 12) address else
+        "${address.substring(0, 4)}...${address.substring(length - 5, length - 1)}"
+    }
   }
 }

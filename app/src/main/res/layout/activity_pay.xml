@@ -137,7 +137,7 @@
         android:layout_marginTop="2dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/send_button"
+        app:layout_constraintBottom_toTopOf="@id/payButton"
         app:layout_constraintTop_toBottomOf="@id/topContainer">
 
         <TextView
@@ -154,12 +154,12 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/send_button"
+        android:id="@+id/payButton"
         style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_send"
         android:elevation="0dp"
-        android:text="@string/send_button_text"
+        android:text="@string/pay"
         android:textColor="@color/whiteMain"
         app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
         tool:ignore="UnusedAttribute" />

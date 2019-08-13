@@ -12,7 +12,6 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.models.*
 import io.demars.stellarwallet.utils.StringFormat
-import io.demars.stellarwallet.utils.StringFormat.Companion.getFormattedDateTime
 import io.demars.stellarwallet.utils.StringFormat.Companion.truncateDecimalPlaces
 import android.text.format.DateFormat
 import android.view.View.GONE
@@ -20,12 +19,12 @@ import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.interfaces.TransactionsListener
 import io.demars.stellarwallet.models.stellar.*
 import io.demars.stellarwallet.utils.AssetUtils
 
 
-class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class TransactionsAdapter(var context: Context, var listener: TransactionsListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var contacts: ArrayList<Contact>? = null
   private var items: ArrayList<Any>? = null
 
@@ -98,15 +97,13 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
 
   //region View Holders
   class OperationViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    var rootView: View = v.findViewById(R.id.rootView)
     var amount: TextView = v.findViewById(R.id.amountTextView)
     var date: TextView = v.findViewById(R.id.dateTextView)
     var transactionType: TextView = v.findViewById(R.id.transactionTypeTextView)
     var info: TextView = v.findViewById(R.id.transactionInfoTextView)
     var dot: ImageView = v.findViewById(R.id.dotImageView)
   }
-
-  private fun formatNumber4Decimals(amount: String?, asset: String): String? =
-    if (amount == null) "--" else truncateDecimalPlaces(amount, AssetUtils.getMaxDecimals(asset))
 
   private fun formatAddress(address: String?): String {
     if (address == null) return "--"
@@ -115,9 +112,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
       if (it.stellarAddress == address) return it.name
     }
 
-    val length = address.length
-    return if (length < 12) address else
-      "${address.substring(0, 4)}...${address.substring(length - 5, length - 1)}"
+    return StringFormat.formatAddress(address)
   }
 
   @SuppressLint("SetTextI18n")
@@ -127,7 +122,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
     viewHolder.transactionType.text = "Transaction"
     viewHolder.amount.text = truncateDecimalPlaces(transaction.amount,
       AssetUtils.getMaxDecimals(transaction.assetCode ?: "XLM"))
-    viewHolder.date.text = getFormattedDateTime(transaction.createdAt,
+    viewHolder.date.text = StringFormat.getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
     when {
@@ -143,6 +138,10 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
   private fun configureTradeViewHolder(viewHolder: OperationViewHolder, position: Int) {
     val trade = items!![position] as Trade
 
+    viewHolder.rootView.setOnClickListener {
+      listener.onTransactionClicked(trade)
+    }
+
     viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
       StringFormat.formatAssetCode(trade.baseAsset), StringFormat.formatAssetCode(trade.counterAsset))
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
@@ -153,7 +152,7 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
       viewHolder.amount.text = truncateDecimalPlaces(trade.counterAmount,
         AssetUtils.getMaxDecimals(trade.counterAsset))
     }
-    viewHolder.date.text = getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
+    viewHolder.date.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
     viewHolder.info.visibility = VISIBLE
@@ -165,10 +164,15 @@ class TransactionsAdapter(var context: Context) : RecyclerView.Adapter<RecyclerV
   private fun configureOperationViewHolder(viewHolder: OperationViewHolder, position: Int) {
     val operation = items!![position] as Operation
     val accountId = DmcApp.wallet.getStellarAccountId()
+
+    viewHolder.rootView.setOnClickListener {
+      listener.onTransactionClicked(operation)
+    }
+
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
 
-    viewHolder.amount.text = formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
-    viewHolder.date.text = getFormattedDateTime(operation.createdAt,
+    viewHolder.amount.text = StringFormat.formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
+    viewHolder.date.text = StringFormat.getFormattedDateTime(operation.createdAt,
       DateFormat.is24HourFormat(context))
 
     val memoToUse = if (operation.memo == null) ""

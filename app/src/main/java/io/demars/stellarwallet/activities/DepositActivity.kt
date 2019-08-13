@@ -155,9 +155,12 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun setupUI() {
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.title = "$modeString $assetCode"
+    backButton.setOnClickListener {
+      onBackPressed()
+    }
+
+    val title = "$modeString $assetCode"
+    titleView.text = title
 
     numberKeyboard.mDialerListener = this
 

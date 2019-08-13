@@ -129,10 +129,12 @@ class TransactionDetailsActivity : BaseActivity() {
         }
       }
       Operation.OperationType.ALLOW_TRUST.value -> {
-//        viewHolder.transactionType.text = "Trustline allowed"
+        titleView.text = "Trustline allowed"
+        infoContainer.visibility = View.GONE
       }
       Operation.OperationType.CHANGE_TRUST.value -> {
-//        viewHolder.transactionType.text = "Trustline changed"
+        titleView.text = "Trustline changed"
+        infoContainer.visibility = View.GONE
       }
       Operation.OperationType.PATH_PAYMENT.value,
       Operation.OperationType.MANAGE_OFFER.value,

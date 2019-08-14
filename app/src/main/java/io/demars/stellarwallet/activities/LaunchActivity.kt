@@ -94,7 +94,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       Firebase.getCurrentUser()?.let { user ->
         uid = user.uid
         Firebase.getUserFresh(userListener)
-      } ?: updateForMode(Mode.INITIAL)
+      } ?: updateForMode(Mode.WALLET)
     } else updateForMode(Mode.NO_INTERNET)
   }
 
@@ -103,7 +103,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     when (mode) {
       Mode.INITIAL -> updateViewForInitial()
       Mode.CODE -> updateViewForCode()
-      Mode.WALLET -> updateViewForStellar()
+      Mode.WALLET -> updateViewForWallet()
       Mode.NO_INTERNET -> updateViewForNoInternet()
     }
   }
@@ -163,7 +163,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
     smsTimer.start()
   }
 
-  private fun updateViewForStellar() {
+  private fun updateViewForWallet() {
     progressBar.visibility = View.GONE
     if (!GlobalGraphHelper.isExistingWallet()) {
       verificationLabel.visibility = View.GONE

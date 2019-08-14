@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/button_height_big"
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,22 +22,15 @@
             android:text="@string/secret_seed"
             android:textSize="@dimen/text_size_medium" />
 
+
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_macro"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:layout_marginBottom="@dimen/padding_macro"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/receive"
-            android:paddingStart="@dimen/padding_zero"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
-            android:src="@drawable/ic_close"
-            android:tint="@color/whiteMain" />
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close" />
+
 
     </FrameLayout>
 

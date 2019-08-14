@@ -11,35 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/titleView"
-                style="@style/WhiteTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_size_medium"
-                tools:text="@string/personal_information" />
+            android:layout_height="@dimen/button_height_big">
 
             <ImageView
                 android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:layout_marginTop="@dimen/padding_macro"
-                android:layout_marginEnd="@dimen/padding_horizontal"
-                android:layout_marginBottom="@dimen/padding_macro"
+                android:layout_width="@dimen/button_height"
+                android:layout_height="@dimen/button_height_big"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/receive"
-                android:paddingStart="@dimen/padding_zero"
-                android:paddingTop="@dimen/padding_mini"
-                android:paddingEnd="@dimen/padding_horizontal"
-                android:paddingBottom="@dimen/padding_mini"
-                android:src="@drawable/ic_close"
-                android:tint="@color/whiteMain" />
+                android:padding="@dimen/padding_medium"
+                android:src="@drawable/ic_chevron_left" />
+
+            <TextView
+                style="@style/WhiteTitle"
+                android:id="@+id/titleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

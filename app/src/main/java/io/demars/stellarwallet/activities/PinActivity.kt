@@ -13,108 +13,155 @@ import kotlinx.android.synthetic.main.activity_pin.*
 import timber.log.Timber
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.interfaces.OnPinLockCompleteListener
+import android.os.Build
+import android.annotation.TargetApi
+import androidx.biometric.BiometricPrompt
 
 class PinActivity : AppCompatActivity() {
 
-    private var numAttempts = 0
-    private val MAX_ATTEMPTS = 3
-    private var PIN : String? = null
-    private lateinit var appContext : Context
+  private var numAttempts = 0
+  private val MAX_ATTEMPTS = 3
+  private var PIN: String? = null
+  private lateinit var appContext: Context
+  private lateinit var biometricPrompt: BiometricPrompt
 
-    companion object {
-        private const val INTENT_ARG_MESSAGE: String = "INTENT_ARG_MESSAGE"
-        private const val INTENT_ARG_PIN: String = "INTENT_ARG_PIN"
+  companion object {
+    private const val INTENT_ARG_MESSAGE: String = "INTENT_ARG_MESSAGE"
+    private const val INTENT_ARG_PIN: String = "INTENT_ARG_PIN"
+    private const val INTENT_ARG_BIOMETRIC: String = "INTENT_ARG_BIOMETRIC"
 
-        /**
-         * New Instance of Intent to launch a {@link PinActivity}
-         * @param context the activityContext of the requestor
-         * @param pin pin to verified otherwise it will simple return the inserted pin, it must contain 4 number characters.
-         * @param message message to show on the top of the pinlock.
-         */
-        fun newInstance(context: Context, pin : String?, message: String = context.getString(R.string.please_enter_your_pin)): Intent {
-            val intent = Intent(context, PinActivity::class.java)
-                intent.putExtra(INTENT_ARG_MESSAGE, message)
-            if (pin != null) {
-                if (pin.length == 4) {
-                    pin.toCharArray().forEach {
-                        if (!it.isDigit()) throw IllegalStateException("Character (Unicode code point) has to be a digit, found ='$it'.")
-                    }
-                    intent.putExtra(INTENT_ARG_PIN, pin)
-                } else {
-                    throw IllegalStateException("pin ahs to contain 4 characters, found = '${pin.length}")
-                }
-            }
-            return intent
+    /**
+     * New Instance of Intent to launch a {@link PinActivity}
+     * @param context the activityContext of the requestor
+     * @param pin pin to verified otherwise it will simple return the inserted pin, it must contain 4 number characters.
+     * @param message message to show on the top of the pinlock.
+     */
+    fun newInstance(context: Context, pin: String?, message: String = context.getString(R.string.please_enter_your_pin),
+                    askBiometrics: Boolean): Intent {
+      val intent = Intent(context, PinActivity::class.java)
+      intent.putExtra(INTENT_ARG_MESSAGE, message)
+      intent.putExtra(INTENT_ARG_BIOMETRIC, askBiometrics)
+      if (pin != null) {
+        if (pin.length == 4) {
+          pin.toCharArray().forEach {
+            if (!it.isDigit()) throw IllegalStateException("Character (Unicode code point) has to be a digit, found ='$it'.")
+          }
+          intent.putExtra(INTENT_ARG_PIN, pin)
+        } else {
+          throw IllegalStateException("pin ahs to contain 4 characters, found = '${pin.length}")
         }
+      }
+      return intent
+    }
 
-        fun getPinFromIntent(intent:Intent?) : String? {
-            if(intent == null) return null
-            return intent.getStringExtra(INTENT_ARG_PIN)
+    fun getPinFromIntent(intent: Intent?): String? {
+      if (intent == null) return null
+      return intent.getStringExtra(INTENT_ARG_PIN)
+    }
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_pin)
+
+    appContext = applicationContext
+
+    pinLockView.setPinLockListener(object : OnPinLockCompleteListener() {
+      override fun onComplete(pin: String) {
+        Timber.d("OnComplete")
+        if (PIN == null || PIN == pin) {
+          finishResultOK(pin)
+        } else {
+          processIncorrectPin()
         }
+      }
+    })
+
+    pinLockView.attachIndicatorDots(indicatorDots)
+
+    if (!intent.hasExtra(INTENT_ARG_MESSAGE)) throw IllegalStateException("missing argument {$INTENT_ARG_MESSAGE}, did you use #newInstance(..)?")
+
+    val message = intent.getStringExtra(INTENT_ARG_MESSAGE)
+    customMessageTextView.text = message
+
+    PIN = intent.getStringExtra(INTENT_ARG_PIN)
+
+    val askBiometrics = intent.getBooleanExtra(INTENT_ARG_BIOMETRIC, false)
+    if (askBiometrics && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      displayBiometricPrompt()
     }
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pin)
+  //region User Interface
 
-        appContext = applicationContext
+  private fun processIncorrectPin() {
+    showWrongPinDots(true)
+    val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake)
+    shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
+      override fun onAnimationStart(arg0: Animation) {}
+      override fun onAnimationRepeat(arg0: Animation) {}
+      override fun onAnimationEnd(arg0: Animation) {
+        showWrongPinDots(false)
+        pinLockView.resetPinLockView()
+        numAttempts++
+        customMessageTextView.text = resources.getQuantityString(R.plurals.attempts_template,
+          MAX_ATTEMPTS - numAttempts, MAX_ATTEMPTS - numAttempts)
+        if (numAttempts == MAX_ATTEMPTS) {
+          GlobalGraphHelper.wipeAndRestart(this@PinActivity)
+        }
+      }
+    })
+    wrongPinDots.startAnimation(shakeAnimation)
+  }
 
-        pinLockView.setPinLockListener(object : OnPinLockCompleteListener() {
-            override fun onComplete(pin: String) {
-                Timber.d("OnComplete")
-                if (PIN == null || PIN == pin) {
-                    val intent = Intent()
-                    intent.putExtra(INTENT_ARG_PIN, pin)
-                    setResult(Activity.RESULT_OK, intent)
-                    overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
-                    finish()
-                } else {
-                    processIncorrectPin()
-                }
-            }
+  private fun showWrongPinDots(show: Boolean) {
+    indicatorDots.visibility = if (show) View.GONE else View.VISIBLE
+    wrongPinDots.visibility = if (show) View.VISIBLE else View.GONE
+  }
+
+  override fun onBackPressed() {
+    setResult(RESULT_CANCELED)
+    super.onBackPressed()
+    overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
+  }
+
+  private fun finishResultOK(pin: String?) {
+    val intent = Intent()
+    intent.putExtra(INTENT_ARG_PIN, pin)
+    setResult(Activity.RESULT_OK, intent)
+    overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
+    finish()
+  }
+  //endregion
+
+  //region Biometrics
+  @TargetApi(Build.VERSION_CODES.P)
+  private fun initBiometricPrompt() {
+    if (!::biometricPrompt.isInitialized) {
+      biometricPrompt = BiometricPrompt(this, mainExecutor,
+        object : BiometricPrompt.AuthenticationCallback() {
+          override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            biometricPrompt.cancelAuthentication()
+          }
+
+          override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+            finishResultOK(PIN)
+          }
         })
-
-        pinLockView.attachIndicatorDots(indicatorDots)
-
-        if (!intent.hasExtra(INTENT_ARG_MESSAGE)) throw IllegalStateException("missing argument {$INTENT_ARG_MESSAGE}, did you use #newInstance(..)?")
-
-        val message = intent.getStringExtra(INTENT_ARG_MESSAGE)
-        customMessageTextView.text = message
-
-        PIN = intent.getStringExtra(INTENT_ARG_PIN)
     }
+  }
 
-    //region User Interface
+  @TargetApi(Build.VERSION_CODES.P)
+  private fun displayBiometricPrompt() {
+    initBiometricPrompt()
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+      .setTitle("Biometric scanner")
+      .setNegativeButtonText("Enter PIN")
+      .build()
 
-    private fun processIncorrectPin() {
-        showWrongPinDots(true)
-        val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake)
-        shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(arg0: Animation) {}
-            override fun onAnimationRepeat(arg0: Animation) {}
-            override fun onAnimationEnd(arg0: Animation) {
-                showWrongPinDots(false)
-                pinLockView.resetPinLockView()
-                numAttempts++
-                customMessageTextView.text = resources.getQuantityString(R.plurals.attempts_template,
-                        MAX_ATTEMPTS - numAttempts, MAX_ATTEMPTS - numAttempts)
-                if (numAttempts == MAX_ATTEMPTS) {
-                    GlobalGraphHelper.wipeAndRestart(this@PinActivity)
-                }
-            }
-        })
-        wrongPinDots.startAnimation(shakeAnimation)
-    }
-
-    private fun showWrongPinDots(show: Boolean) {
-        indicatorDots.visibility = if (show) View.GONE else View.VISIBLE
-        wrongPinDots.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
-        overridePendingTransition(R.anim.stay, R.anim.slide_out_down)
-    }
-    //endregion
+    biometricPrompt.authenticate(promptInfo)
+  }
+  //endregion
 }

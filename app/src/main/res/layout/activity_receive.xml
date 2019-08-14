@@ -6,32 +6,25 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
+
     <FrameLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/transparent">
+        android:layout_height="@dimen/button_height_big">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_macro"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:layout_marginBottom="@dimen/padding_macro"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/receive"
-            android:paddingStart="@dimen/padding_zero"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_horizontal"
+            android:padding="@dimen/padding_medium"
             android:src="@drawable/ic_chevron_left" />
 
         <TextView
-            android:id="@+id/titleView"
             style="@style/WhiteTitle"
+            android:id="@+id/titleView"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/deposit"
             android:textSize="@dimen/text_size_medium" />
@@ -93,7 +86,7 @@
                 android:paddingEnd="@dimen/padding_zero"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size_big"
-                tools:text="FSDFSDFDSGSDGDSGDSGFDSFDSNMFASDFNASDFLA"/>
+                tools:text="FSDFSDFDSGSDGDSGDSGFDSFDSNMFASDFNASDFLA" />
 
             <ImageView
                 android:id="@+id/copyIcon"
@@ -134,15 +127,15 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/bank_deposit"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@color/colorAccent" />
 
         <ImageView
             android:layout_width="@dimen/button_height_big"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             android:padding="@dimen/padding_medium"
-            android:tint="@color/colorAccent"
-            android:src="@drawable/ic_bank" />
+            android:src="@drawable/ic_bank"
+            android:tint="@color/colorAccent" />
     </FrameLayout>
 
 </LinearLayout>

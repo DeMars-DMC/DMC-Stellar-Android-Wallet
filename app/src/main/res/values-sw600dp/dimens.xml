@@ -18,7 +18,7 @@
     <dimen name="button_height_send">@dimen/button_height_big</dimen>
 
     <dimen name="text_size_small">18sp</dimen>
-    <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_medium">22sp</dimen>
     <dimen name="text_size_big">24sp</dimen>
     <dimen name="text_size_xbig">28sp</dimen>
     <dimen name="text_size_xxbig">32sp</dimen>

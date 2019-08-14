@@ -91,7 +91,6 @@ class MnemonicActivity : BaseActivity(), View.OnClickListener {
                 mnemonicView.visibility = View.GONE
             }
         } else {
-            // Create chips UI
             qrImageView.visibility = View.GONE
         }
 

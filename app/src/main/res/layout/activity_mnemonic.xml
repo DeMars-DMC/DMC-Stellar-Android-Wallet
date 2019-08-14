@@ -1,58 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
+    android:orientation="vertical"
     tools:context=".activities.MnemonicActivity">
 
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/titleView"
-            style="@style/WhiteTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/secret_phrase"
-            android:textSize="@dimen/text_size_medium" />
+        android:layout_height="@dimen/button_height_big">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_macro"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:layout_marginBottom="@dimen/padding_macro"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/receive"
-            android:paddingStart="@dimen/padding_zero"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
-            android:src="@drawable/ic_close"
-            android:tint="@color/whiteMain" />
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close" />
 
+        <TextView
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/secret_seed"
+            android:textSize="@dimen/text_size_medium" />
     </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/whiteMain"
-        app:layout_constraintBottom_toTopOf="@+id/passphraseContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        android:layout_weight="1">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/warningPhraseTextView"
@@ -75,6 +62,7 @@
                 android:background="@drawable/qr_code"
                 android:contentDescription="@string/secret_phrase"
                 android:elevation="@dimen/elevation_mini"
+                android:layout_gravity="center"
                 android:padding="@dimen/padding_mini"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,8 +72,9 @@
             <io.demars.stellarwallet.views.ChipView
                 android:id="@+id/mnemonicView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:overScrollMode="never"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/qrImageView" />
@@ -96,7 +85,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/mnemonicView" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 
     <FrameLayout
@@ -104,9 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/whiteMain"
-        app:layout_constraintBottom_toTopOf="@id/confirmButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/confirmButton">
 
         <TextView
             android:id="@+id/passphraseButton"
@@ -125,8 +112,6 @@
         style="@style/ButtonStyleAccentFlat"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        android:layout_alignParentBottom="true"
-        android:text="@string/confirm_written"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:text="@string/confirm_written" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -79,7 +79,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/padding_horizontal"
                 app:keypadButtonSize="@dimen/button_height_big"
                 app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
                 app:keypadHorizontalSpacing="@dimen/pin_spacing_horizontal"

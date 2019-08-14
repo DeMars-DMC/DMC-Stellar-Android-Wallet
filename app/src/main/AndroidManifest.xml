@@ -89,8 +89,7 @@
         <activity
             android:name=".activities.PinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
-            android:launchMode="singleTop"/>
+            android:theme="@style/SplashTheme"/>
         <activity
             android:name=".activities.PayActivity"
             android:screenOrientation="portrait"

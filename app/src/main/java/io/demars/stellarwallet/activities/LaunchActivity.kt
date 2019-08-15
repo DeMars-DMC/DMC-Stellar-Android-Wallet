@@ -94,7 +94,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
       Firebase.getCurrentUser()?.let { user ->
         uid = user.uid
         Firebase.getUserFresh(userListener)
-      } ?: updateForMode(Mode.WALLET)
+      } ?: updateForMode(Mode.INITIAL)
     } else updateForMode(Mode.NO_INTERNET)
   }
 

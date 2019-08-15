@@ -43,6 +43,8 @@ class RecoverWalletActivity : BaseActivity() {
     if (requestCode == RESTORE_REQUEST) {
       if (resultCode == Activity.RESULT_OK) {
         GlobalGraphHelper.launchWallet(this)
+      } else {
+        bottomButton.isEnabled = true
       }
     }
   }
@@ -70,6 +72,7 @@ class RecoverWalletActivity : BaseActivity() {
       try {
         recoveryString = StellarRecoveryString(getMnemonicString(), isRecoveryPhrase, passphrase).getString()
         DmcApp.wallet.setIsRecoveryPhrase(isRecoveryPhrase)
+        bottomButton.isEnabled = false
         startActivityForResult(WalletManagerActivity.restore(it.context, recoveryString, passphrase), RESTORE_REQUEST)
       } catch (e: Exception) {
         showErrorMessage(e.message)

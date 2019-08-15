@@ -19,12 +19,7 @@ class WalletManagerActivity : AppCompatActivity() {
     DECRYPT_SECRET_SEED,
     DISPLAY_MNEMONIC,
     DISPLAY_ACCOUNT,
-
-    /**
-     * These are interim action types used in the actions NEW_WALLET & RESTORE_WALLET
-     */
-    ENTER_PIN,
-    REENTER_PIN,
+    SET_PIN
   }
 
   private lateinit var actionType: ActionType
@@ -91,6 +86,7 @@ class WalletManagerActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     if (!intent.hasExtra(INTENT_ARG_TYPE)) throw IllegalStateException("missing bundle extra {$INTENT_ARG_TYPE}")
     intent.getSerializableExtra(INTENT_ARG_TYPE)?.let {
       actionType = it as ActionType
@@ -99,7 +95,7 @@ class WalletManagerActivity : AppCompatActivity() {
     when (actionType) {
       ActionType.RESTORE_WALLET,
       ActionType.NEW_WALLET -> {
-        startActivityForResult(PinActivity.newInstance(this, null, getString(R.string.please_create_a_pin), false), ActionType.ENTER_PIN.ordinal)
+        startActivityForResult(PinActivity.newInstance(this, null, getString(R.string.please_create_a_pin), false), ActionType.SET_PIN.ordinal)
       }
       ActionType.DISPLAY_MNEMONIC -> {
         startActivityForResult(PinActivity.newInstance(this, getPinFromKeyStore(), getString(R.string.please_enter_your_pin), true), ActionType.DISPLAY_MNEMONIC.ordinal)
@@ -123,14 +119,7 @@ class WalletManagerActivity : AppCompatActivity() {
     super.onActivityResult(requestCode, resultCode, data)
     isPinShowing = false
     when (requestCode) {
-      ActionType.ENTER_PIN.ordinal -> {
-        if (resultCode == Activity.RESULT_OK && data != null) {
-          val pin = PinActivity.getPinFromIntent(data)
-          startActivityForResult(PinActivity.newInstance(this, pin, getString(R.string.please_reenter_your_pin), false), ActionType.REENTER_PIN.ordinal)
-          return
-        }
-      }
-      ActionType.REENTER_PIN.ordinal -> {
+      ActionType.SET_PIN.ordinal -> {
         if (resultCode == Activity.RESULT_OK) {
           if (actionType == ActionType.NEW_WALLET || actionType == ActionType.RESTORE_WALLET) {
             val phrase = intent.getStringExtra(INTENT_PHRASE)

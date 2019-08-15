@@ -22,7 +22,6 @@ class PinActivity : AppCompatActivity() {
   private var numAttempts = 0
   private val MAX_ATTEMPTS = 3
   private var PIN: String? = null
-  private lateinit var appContext: Context
   private lateinit var biometricPrompt: BiometricPrompt
 
   companion object {
@@ -43,9 +42,6 @@ class PinActivity : AppCompatActivity() {
       intent.putExtra(INTENT_ARG_BIOMETRIC, askBiometrics)
       if (pin != null) {
         if (pin.length == 4) {
-          pin.toCharArray().forEach {
-            if (!it.isDigit()) throw IllegalStateException("Character (Unicode code point) has to be a digit, found ='$it'.")
-          }
           intent.putExtra(INTENT_ARG_PIN, pin)
         } else {
           throw IllegalStateException("pin ahs to contain 4 characters, found = '${pin.length}")
@@ -64,15 +60,13 @@ class PinActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pin)
 
-    appContext = applicationContext
-
     pinLockView.setPinLockListener(object : OnPinLockCompleteListener() {
       override fun onComplete(pin: String) {
         Timber.d("OnComplete")
-        if (PIN == null || PIN == pin) {
-          finishResultOK(pin)
-        } else {
-          processIncorrectPin()
+        when (PIN) {
+          null -> setPin(pin)
+          pin -> finishResultOK(pin)
+          else -> processIncorrectPin()
         }
       }
     })
@@ -93,6 +87,12 @@ class PinActivity : AppCompatActivity() {
   }
 
   //region User Interface
+  private fun setPin(pin: String) {
+    PIN = pin
+
+    pinLockView.resetPinLockView()
+    customMessageTextView.text = getString(R.string.please_reenter_your_pin)
+  }
 
   private fun processIncorrectPin() {
     showWrongPinDots(true)

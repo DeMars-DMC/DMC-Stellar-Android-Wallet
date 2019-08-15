@@ -253,7 +253,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
   class AssetViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val assetImage: ImageView = v.findViewById(R.id.assetImage)
-    val defaultImage: TextView = v.findViewById(R.id.defaultImage)
     val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
     val rightIcon: ImageView = v.findViewById(R.id.rightIcon)
@@ -261,7 +260,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
   class SupportedAssetViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val assetImage: ImageView = v.findViewById(R.id.assetImage)
-    val defaultImage: TextView = v.findViewById(R.id.defaultImage)
     val assetCode: TextView = v.findViewById(R.id.assetName)
     val assetBalance: TextView = v.findViewById(R.id.assetBalance)
     val rightIcon: ImageView = v.findViewById(R.id.rightIcon)
@@ -334,24 +332,10 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       holder.rightIcon.setOnClickListener(null)
     }
 
-    holder.defaultImage.visibility = View.GONE
-
     // Image
     when {
-      assetCode == Constants.ZAR_ASSET_CODE ->
-        loadAssetImage(Constants.ZAR_IMAGE_RES, holder.assetImage)
-      assetCode == Constants.DMC_ASSET_CODE ->
-        loadAssetImage(Constants.DMC_IMAGE_RES, holder.assetImage)
-      assetCode == Constants.NGNT_ASSET_CODE ->
-        loadAssetImage(Constants.NGNT_IMAGE_RES, holder.assetImage)
-      asset.image != 0 -> {
-        loadAssetImage(asset.image, holder.assetImage)
-      }
-      else -> {
-        holder.defaultImage.text = assetCode
-        holder.defaultImage.visibility = View.VISIBLE
-        holder.assetImage.setImageDrawable(null)
-      }
+      asset.image != 0 -> loadAssetImage(asset.image, holder.assetImage)
+      else -> loadAssetImage(Constants.CUSTOM_ASSET_IMAGE_RES, holder.assetImage)
     }
 
     // Transition names
@@ -372,8 +356,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val asset = items[position] as DmcAsset
     val assetCode = asset.code.toUpperCase()
     val trustLineAsset = Asset.createNonNativeAsset(assetCode, KeyPair.fromAccountId(asset.issuer))
-
-    holder.defaultImage.visibility = View.GONE
 
     holder.assetCode.text = assetCode
     holder.assetBalance.text = asset.name

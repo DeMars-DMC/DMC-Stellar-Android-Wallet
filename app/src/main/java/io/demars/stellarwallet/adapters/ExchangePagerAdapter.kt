@@ -9,14 +9,14 @@ import io.demars.stellarwallet.fragments.tabs.TradeTabFragment
 import io.demars.stellarwallet.helpers.TradingTabs
 import io.demars.stellarwallet.helpers.TradingTabs.*
 
-class ExchangePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class ExchangePagerAdapter(fm: FragmentManager, val assetCode: String, val assetIssuer:String) : FragmentPagerAdapter(fm) {
     override fun getCount(): Int {
         return TradingTabs.values().size
     }
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            Trade.ordinal -> TradeTabFragment()
+            Trade.ordinal -> TradeTabFragment(assetCode, assetIssuer)
             OrderBook.ordinal -> OrderBookTabFragment()
             MyTrades.ordinal -> MyTradesTabFragment()
             else -> throw IllegalStateException("position not valid for" + ExchangePagerAdapter::class.simpleName)

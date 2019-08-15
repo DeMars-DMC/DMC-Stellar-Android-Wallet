@@ -8,26 +8,37 @@ import android.hardware.Camera
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import io.demars.stellarwallet.R
 import kotlinx.android.synthetic.main.activity_camera.*
-import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import android.app.Activity
 import android.app.AlertDialog
 import android.net.Uri
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.ViewUtils
+import timber.log.Timber
+import java.io.IOException
+import android.graphics.SurfaceTexture
+import io.demars.stellarwallet.enums.FlashMode
+import kotlinx.android.synthetic.main.activity_camera.cameraButton
+import kotlinx.android.synthetic.main.activity_camera.ensureImageMessage
+import kotlinx.android.synthetic.main.activity_camera.flashButton
+import kotlinx.android.synthetic.main.activity_camera.galleryButton
+import kotlinx.android.synthetic.main.activity_camera.imagePreview
+import kotlinx.android.synthetic.main.activity_camera.mainTitle
+import kotlinx.android.synthetic.main.activity_camera.retakeButton
+import kotlinx.android.synthetic.main.activity_camera.sendButton
+import kotlinx.android.synthetic.main.activity_camera2.*
 
 @Suppress("DEPRECATION")
 class CameraActivity : AppCompatActivity() {
+  //TODO: FIX PREVIEW SIZE AND RATIO AND FLIP IMAGE 90 DEGREES
   companion object {
     private const val REQUEST_GALLERY = 111
     private const val ARG_CAMERA_MODE = "ARG_CAMERA_MODE"
@@ -41,11 +52,14 @@ class CameraActivity : AppCompatActivity() {
 
   private lateinit var file: File
   private var camera: Camera? = null
+  private var previewTexture: SurfaceTexture? = null
   private var cameraMode = CameraMode.ID_FRONT
   private var pictureBytes: ByteArray? = null
   private var hasCamera = false
   private var frontCameraIndex = -1
   private var useFront = false
+  private var flashMode = FlashMode.OFF
+
   private val picture = Camera.PictureCallback { data, _ ->
     pictureBytes = data
     updateView()
@@ -65,9 +79,16 @@ class CameraActivity : AppCompatActivity() {
   }
 
   private fun updateView() {
+    mainTitle.text = when (cameraMode) {
+      CameraMode.ID_FRONT -> getString(R.string.front_of_id)
+      CameraMode.ID_BACK -> getString(R.string.back_of_id)
+      else -> getString(R.string.selfie_with_id)
+    }
+
     if (pictureBytes != null) {
       cameraButton.visibility = GONE
       galleryButton.visibility = GONE
+      flashButton.visibility = GONE
 
       retakeButton.visibility = VISIBLE
       sendButton.visibility = VISIBLE
@@ -86,8 +107,6 @@ class CameraActivity : AppCompatActivity() {
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
 
-      mainTitle.text = title
-
       if (hasCamera) {
         cameraButton.visibility = VISIBLE
         ensureImageMessage.visibility = GONE
@@ -95,7 +114,7 @@ class CameraActivity : AppCompatActivity() {
         camera = getCameraInstance()
         camera?.let {
           // Create our Preview view & add it to container
-          cameraPreview.addView(CameraPreview(this, it))
+          cameraPreview.addView(CameraPreview(this, it, flashMode))
         }
       } else {
         cameraButton.visibility = GONE
@@ -107,6 +126,8 @@ class CameraActivity : AppCompatActivity() {
 
       imagePreview.setImageDrawable(null)
       cameraPreview.visibility = VISIBLE
+
+      flashButton.visibility = if (useFront) GONE else VISIBLE
 
       try {
         camera?.startPreview()
@@ -120,6 +141,10 @@ class CameraActivity : AppCompatActivity() {
 
       galleryButton.setOnClickListener {
         pickFromGallery()
+      }
+
+      flashButton.setOnClickListener {
+        changeFlashMode()
       }
 
       cameraPreview.setOnClickListener {
@@ -148,8 +173,27 @@ class CameraActivity : AppCompatActivity() {
     startActivityForResult(intent, REQUEST_GALLERY)
   }
 
+  private fun changeFlashMode() {
+    when (flashMode) {
+      FlashMode.OFF -> {
+        flashMode = FlashMode.ON
+        flashButton.setImageResource(R.drawable.ic_flash_on)
+      }
+      FlashMode.ON -> {
+        flashMode = FlashMode.OFF
+        flashButton.setImageResource(R.drawable.ic_flash_off)
+      }
+    }
+
+    updateView()
+  }
+
   private fun takePicture() {
-    camera?.takePicture(null, null, picture)
+    try {
+      camera?.takePicture(null, null, picture)
+    } catch (e: Exception) {
+      // Ignore
+    }
   }
 
   private fun sendPictureToFirebase() {
@@ -220,7 +264,8 @@ class CameraActivity : AppCompatActivity() {
   @SuppressLint("ViewConstructor")
   internal class CameraPreview(
     context: Context,
-    private val mCamera: Camera
+    private val mCamera: Camera,
+    private val flashMode: FlashMode
   ) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val mHolder: SurfaceHolder = holder.apply {
@@ -272,14 +317,32 @@ class CameraActivity : AppCompatActivity() {
       // reformatting changes here
 
       // start preview with new settings
-      mCamera.apply {
-        try {
-          setPreviewDisplay(mHolder)
-          startPreview()
-        } catch (e: Exception) {
-          Timber.d("Error starting camera preview: ${e.message}")
-        }
+      try {
+        //Turn flash on
+        val p = mCamera.parameters
+        p.flashMode = if (flashMode == FlashMode.ON) Camera.Parameters.FLASH_MODE_TORCH else Camera.Parameters.FLASH_MODE_OFF
+        mCamera.parameters = p
+
+        mCamera.setPreviewDisplay(mHolder)
+        mCamera.startPreview()
+
+      } catch (e: Exception) {
+        Timber.d("Error starting camera preview: ${e.message}")
       }
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (pictureBytes == null) {
+      camera?.startPreview()
+    }
+  }
+
+  override fun onStop() {
+    super.onStop()
+    if (pictureBytes == null) {
+      camera?.stopPreview()
     }
   }
 
@@ -287,6 +350,7 @@ class CameraActivity : AppCompatActivity() {
     super.onDestroy()
     camera?.stopPreview()
     camera?.release()
+    previewTexture?.release()
   }
 
   override fun onBackPressed() {

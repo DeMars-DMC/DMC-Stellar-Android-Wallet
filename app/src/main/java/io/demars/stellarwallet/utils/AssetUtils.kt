@@ -114,7 +114,7 @@ class AssetUtils {
       Constants.BTC_ASSET_CODE -> Constants.BTC_IMAGE_RES
       Constants.ZAR_ASSET_CODE -> Constants.ZAR_IMAGE_RES
       Constants.NGNT_ASSET_CODE -> Constants.NGNT_IMAGE_RES
-      else -> 0
+      else -> Constants.CUSTOM_ASSET_IMAGE_RES
     }
 
     fun getShortCode(assetCode: String): String = when (assetCode) {

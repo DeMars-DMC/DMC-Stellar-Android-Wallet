@@ -34,7 +34,8 @@ import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.views.ConfirmTradeDialog
 
 
-class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, ConfirmTradeDialog.DialogListener {
+class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragment(), View.OnClickListener, OnUpdateTradeTab, ConfirmTradeDialog.DialogListener {
+
   private lateinit var appContext: Context
   private lateinit var parentListener: OnTradeCurrenciesChanged
   private lateinit var selectedSellingCurrency: SelectionModel
@@ -58,6 +59,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     refreshAddedCurrencies()
     setupListeners()
     setupSpinners()
+    setupAsset()
   }
 
   override fun onResume() {
@@ -107,8 +109,14 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     }
   }
 
+  private fun setupAsset() {
+    val position = addedCurrencies.indexOfFirst { it.code == assetCode }
+    sellingCustomSelector.spinner.setSelection(position)
+    onSellingCurrencyChanged(position)
+  }
+
   private fun onSellingCurrencyChanged(position: Int) {
-    if (sellingCurrencies.size <= position) return // safety
+    if (sellingCurrencies.size <= position || position == -1) return // safety
 
     selectedSellingCurrency = sellingCurrencies[position]
     updateAvailableBalance()
@@ -124,7 +132,7 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
   }
 
   private fun onBuyingCurrencyChanged(position: Int) {
-    if (buyingCurrencies.size <= position) return // safety
+    if (buyingCurrencies.size <= position || position == -1) return // safety
 
     selectedBuyingCurrency = buyingCurrencies[position]
 
@@ -451,5 +459,5 @@ class TradeTabFragment : Fragment(), View.OnClickListener, OnUpdateTradeTab, Con
     ::selectedSellingCurrency.isInitialized &&
       ::selectedBuyingCurrency.isInitialized
 
-  private fun isUiReady():Boolean = sellingCustomSelector != null && buyingCustomSelector != null
+  private fun isUiReady(): Boolean = sellingCustomSelector != null && buyingCustomSelector != null
 }

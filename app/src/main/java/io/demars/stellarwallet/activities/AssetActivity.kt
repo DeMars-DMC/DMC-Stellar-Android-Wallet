@@ -138,7 +138,7 @@ class AssetActivity : BaseActivity(), TransactionsListener {
       AccountUtils.getAvailableBalance(assetCode), AssetUtils.getMaxDecimals(assetCode)))
 
   private fun exchange() {
-    startActivity(ExchangeActivity.newInstance(this))
+    startActivity(ExchangeActivity.newInstance(this, assetCode, assetIssuer))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 

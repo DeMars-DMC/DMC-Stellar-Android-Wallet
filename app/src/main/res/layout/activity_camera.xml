@@ -10,21 +10,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black">
 
     <FrameLayout
-        android:id="@+id/mainToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
         android:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="lollipop">
 
         <TextView
@@ -36,25 +34,22 @@
             android:textSize="24sp"
             android:gravity="center"
             android:layout_marginTop="@dimen/padding_vertical"
-            android:layout_marginBottom="@dimen/padding_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginBottom="@dimen/padding_vertical"/>
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/mainToolbar"/>
+        android:layout_below="@id/toolbar"/>
 
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/mainToolbar"/>
+        android:layout_below="@id/toolbar"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/controlPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +60,8 @@
         android:paddingStart="@dimen/padding_vertical"
         android:paddingEnd="@dimen/padding_vertical"
         android:paddingBottom="@dimen/padding_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingTop="@dimen/padding_vertical"
+        android:clipToPadding="false"
         tools:targetApi="lollipop">
 
         <ImageView
@@ -79,10 +75,9 @@
             android:layout_marginTop="@dimen/padding_horizontal"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_gallery"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible"/>
+            android:layout_centerVertical="true"
+            tools:visibility="visible"
+            android:contentDescription="@string/gallery" />
 
         <ImageView
             android:id="@+id/cameraButton"
@@ -95,11 +90,24 @@
             android:layout_marginTop="@dimen/padding_horizontal"
             android:src="@drawable/ic_camera_black"
             android:background="@drawable/background_button_round_white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerInParent="true"
             tools:visibility="visible"/>
+
+        <ImageView
+            android:theme="@android:style/ThemeOverlay.Material.Dark"
+            android:id="@+id/flashButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="26dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_flash_off"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            tools:visibility="visible"
+            android:contentDescription="@string/gallery" />
 
         <TextView
             android:id="@+id/ensureImageMessage"
@@ -111,42 +119,37 @@
             android:textColor="@color/whiteMain"
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/retakeButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_above="@id/buttonsContainer"
+            android:layout_centerHorizontal="true"
             tools:visibility="gone"/>
 
-        <Button
-            style="@style/ButtonStyleYellow"
-            android:id="@+id/retakeButton"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height_big"
-            android:layout_marginEnd="@dimen/padding_mini"
-            android:text="@string/retake"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
-            tools:visibility="gone"/>
+        <LinearLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_big">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.5"
-            android:id="@+id/guideline"/>
+            <Button
+                style="@style/ButtonStyleYellow"
+                android:id="@+id/retakeButton"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="@dimen/button_height_big"
+                android:layout_marginEnd="@dimen/padding_mini"
+                android:text="@string/retake"
+                tools:visibility="gone"/>
 
-        <Button
-            style="@style/ButtonStyleAccent"
-            android:id="@+id/sendButton"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height_big"
-            android:layout_marginStart="@dimen/padding_mini"
-            android:text="@string/send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            tools:visibility="gone"/>
+            <Button
+                style="@style/ButtonStyleAccent"
+                android:id="@+id/sendButton"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="@dimen/button_height_big"
+                android:layout_marginStart="@dimen/padding_mini"
+                android:text="@string/send"
+                tools:visibility="gone"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

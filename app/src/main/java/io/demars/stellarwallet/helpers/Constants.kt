@@ -47,6 +47,8 @@ class Constants {
     const val BTC_ASSET_ISSUER = "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
     const val BTC_IMAGE_RES = R.drawable.ic_logo_btc
 
+    const val CUSTOM_ASSET_IMAGE_RES = R.drawable.ic_logo_asset
+
     const val FEE_ACCOUNT = "GDENR3NFTMCIHX5GGQCAVG5AYHXH4FENWNRDDLMB7YHUBHKPO4PE2MC5"
 
     // Maximum double representation in string ((2^63)-1)/(10^7)

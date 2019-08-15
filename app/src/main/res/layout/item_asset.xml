@@ -45,17 +45,6 @@
         android:src="@drawable/ic_logo_stellar"
         tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/defaultImage"
-        style="@style/WhiteTitle"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_round_button_grey"
-        android:gravity="center"
-        android:textColor="@color/whiteMain"
-        android:layout_margin="@dimen/padding_horizontal"
-        android:textSize="@dimen/text_size_small" />
-
     <ImageView
         android:id="@+id/rightIcon"
         android:layout_width="?attr/actionBarSize"

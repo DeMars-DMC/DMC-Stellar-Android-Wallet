@@ -29,23 +29,39 @@ class ExchangeActivity : BaseActivity(), ViewPager.OnPageChangeListener, OnTrade
   private var currentSell: DataAsset? = null
   private var currentBuy: DataAsset? = null
 
+  private var assetCode = ""
+  private var assetIssuer = ""
+
   companion object {
-    fun newInstance(context: Context): Intent = Intent(context, ExchangeActivity::class.java)
+    private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
+    private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
+
+    fun newInstance(context: Context, assetCode: String, assetIssuer: String): Intent =
+      Intent(context, ExchangeActivity::class.java).apply {
+        putExtra(ARG_ASSET_CODE, assetCode)
+        putExtra(ARG_ASSET_ISSUER, assetIssuer)
+      }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_exchange)
+    checkIntent()
 
     backButton.setOnClickListener {
       onBackPressed()
     }
 
-    fragmentAdapter = ExchangePagerAdapter(supportFragmentManager)
+    fragmentAdapter = ExchangePagerAdapter(supportFragmentManager, assetCode, assetIssuer)
     viewPager.adapter = fragmentAdapter
     viewPager.offscreenPageLimit = fragmentAdapter.count
     viewPager.addOnPageChangeListener(this)
     tabs.setupWithViewPager(viewPager)
+  }
+
+  private fun checkIntent() {
+    assetCode = intent.getStringExtra(ARG_ASSET_CODE)
+    assetIssuer = intent.getStringExtra(ARG_ASSET_ISSUER)
   }
 
   override fun onAttachFragment(fragment: Fragment?) {

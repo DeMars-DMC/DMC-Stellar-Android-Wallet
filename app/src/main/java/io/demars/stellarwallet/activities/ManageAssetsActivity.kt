@@ -288,7 +288,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   override fun tradeAssets() {
-    startActivity(ExchangeActivity.newInstance(this))
+    startActivity(ExchangeActivity.newInstance(this, reportingAsset.code, reportingAsset.issuer))
     overridePendingTransition(R.anim.slide_in_start, R.anim.slide_out_start)
   }
 

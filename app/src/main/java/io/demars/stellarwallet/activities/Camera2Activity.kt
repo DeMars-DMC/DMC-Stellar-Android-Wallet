@@ -25,15 +25,17 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
+import io.demars.stellarwallet.enums.FlashMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.views.AutoFitTextureView
 import kotlinx.android.synthetic.main.activity_camera2.*
+import org.jetbrains.anko.cameraManager
 import timber.log.Timber
-import java.io.File
 import java.lang.Long.signum
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Camera2Activity : AppCompatActivity() {
@@ -62,6 +64,7 @@ class Camera2Activity : AppCompatActivity() {
    */
   private lateinit var cameraId: String
   private var cameraMode = CameraMode.ID_FRONT
+  private var flashMode = FlashMode.OFF
 
   /**
    * An [AutoFitTextureView] for camera preview.
@@ -121,11 +124,6 @@ class Camera2Activity : AppCompatActivity() {
    * An [ImageReader] that handles still image capture.
    */
   private var imageReader: ImageReader? = null
-
-  /**
-   * This is the output file for our picture.
-   */
-  private lateinit var file: File
 
   /**
    * This a callback object for the [ImageReader]. "onImageAvailable" will be called when a
@@ -289,7 +287,7 @@ class Camera2Activity : AppCompatActivity() {
    * @param height The height of available size for camera preview
    */
   private fun setUpCameraOutputs(width: Int, height: Int) {
-    val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    val manager = cameraManager
     try {
       for (cameraId in manager.cameraIdList) {
         val characteristics = manager.getCameraCharacteristics(cameraId)
@@ -421,7 +419,7 @@ class Camera2Activity : AppCompatActivity() {
     }
     setUpCameraOutputs(width, height)
     configureTransform(width, height)
-    val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    val manager = cameraManager
     try {
       // Wait for camera to open - 2.5 seconds is sufficient
       if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
@@ -496,11 +494,23 @@ class Camera2Activity : AppCompatActivity() {
       previewRequestBuilder = cameraDevice!!.createCaptureRequest(
         CameraDevice.TEMPLATE_PREVIEW
       )
+
+      when(flashMode) {
+        FlashMode.ON  -> {
+          previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
+          previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH)
+        }
+        FlashMode.OFF -> {
+          previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
+          previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF)
+        }
+      }
+
       previewRequestBuilder.addTarget(surface)
 
       // Here, we create a CameraCaptureSession for camera preview.
       cameraDevice?.createCaptureSession(
-        Arrays.asList(surface, imageReader?.surface),
+        listOf(surface, imageReader?.surface),
         object : CameraCaptureSession.StateCallback() {
 
           override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
@@ -515,15 +525,11 @@ class Camera2Activity : AppCompatActivity() {
                 CaptureRequest.CONTROL_AF_MODE,
                 CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
               )
-              // Flash is automatically enabled when necessary.
-              setAutoFlash(previewRequestBuilder)
 
               // Finally, we start displaying the camera preview.
               previewRequest = previewRequestBuilder.build()
               captureSession?.setRepeatingRequest(
-                previewRequest,
-                captureCallback, backgroundHandler
-              )
+                previewRequest, captureCallback, backgroundHandler)
             } catch (e: CameraAccessException) {
               Timber.e(e.toString())
             }
@@ -559,10 +565,7 @@ class Camera2Activity : AppCompatActivity() {
 
     if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
       bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-      val scale = Math.max(
-        viewHeight.toFloat() / previewSize.height,
-        viewWidth.toFloat() / previewSize.width
-      )
+      val scale = max(viewHeight.toFloat() / previewSize.height, viewWidth.toFloat() / previewSize.width)
       with(matrix) {
         setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
         postScale(scale, scale, centerX, centerY)
@@ -584,6 +587,7 @@ class Camera2Activity : AppCompatActivity() {
         CaptureRequest.CONTROL_AF_TRIGGER,
         CameraMetadata.CONTROL_AF_TRIGGER_START
       )
+
       // Tell #captureCallback to wait for the lock.
       state = STATE_WAITING_LOCK
       captureSession?.capture(
@@ -647,7 +651,7 @@ class Camera2Activity : AppCompatActivity() {
           CaptureRequest.CONTROL_AF_MODE,
           CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
         )
-      }?.also { setAutoFlash(it) }
+      }
 
       val captureCallback = object : CameraCaptureSession.CaptureCallback() {
 
@@ -681,7 +685,7 @@ class Camera2Activity : AppCompatActivity() {
         CaptureRequest.CONTROL_AF_TRIGGER,
         CameraMetadata.CONTROL_AF_TRIGGER_CANCEL
       )
-      setAutoFlash(previewRequestBuilder)
+
       captureSession?.capture(
         previewRequestBuilder.build(), captureCallback,
         backgroundHandler
@@ -694,15 +698,6 @@ class Camera2Activity : AppCompatActivity() {
       )
     } catch (e: CameraAccessException) {
       Timber.e(e.toString())
-    }
-  }
-
-  private fun setAutoFlash(requestBuilder: CaptureRequest.Builder) {
-    if (flashSupported) {
-      requestBuilder.set(
-        CaptureRequest.CONTROL_AE_MODE,
-        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
-      )
     }
   }
 
@@ -836,6 +831,7 @@ class Camera2Activity : AppCompatActivity() {
     if (pictureBytes != null) {
       cameraButton.visibility = GONE
       galleryButton.visibility = GONE
+      flashButton.visibility = GONE
 
       ensureImageMessage.visibility = VISIBLE
       retakeButton.visibility = VISIBLE
@@ -855,6 +851,7 @@ class Camera2Activity : AppCompatActivity() {
 
       cameraButton.visibility = VISIBLE
       galleryButton.visibility = VISIBLE
+      flashButton.visibility = VISIBLE
 
       mainTitle.text = when (cameraMode) {
         CameraMode.ID_FRONT -> getString(R.string.front_of_id)
@@ -876,7 +873,36 @@ class Camera2Activity : AppCompatActivity() {
       galleryButton.setOnClickListener {
         pickFromGallery()
       }
+
+      setupFlashButton()
     }
+  }
+
+  private fun setupFlashButton() {
+    if (cameraMode == CameraMode.ID_SELFIE) {
+      flashButton.visibility = GONE
+    } else {
+      flashButton.visibility = VISIBLE
+      flashButton.setOnClickListener {
+        changeFlashMode()
+      }
+    }
+  }
+
+  private fun changeFlashMode() {
+    when (flashMode) {
+      FlashMode.OFF -> {
+        flashMode = FlashMode.ON
+        flashButton.setImageResource(R.drawable.ic_flash_on)
+      }
+      FlashMode.ON -> {
+        flashMode = FlashMode.OFF
+        flashButton.setImageResource(R.drawable.ic_flash_off)
+      }
+    }
+
+    closeCamera()
+    openCamera(textureView.width, textureView.height)
   }
 
   private fun pickFromGallery() {

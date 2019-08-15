@@ -70,11 +70,12 @@ class RecoverWalletActivity : BaseActivity() {
 
     bottomButton.setOnClickListener {
       try {
+        bottomButton.isEnabled = false
         recoveryString = StellarRecoveryString(getMnemonicString(), isRecoveryPhrase, passphrase).getString()
         DmcApp.wallet.setIsRecoveryPhrase(isRecoveryPhrase)
-        bottomButton.isEnabled = false
         startActivityForResult(WalletManagerActivity.restore(it.context, recoveryString, passphrase), RESTORE_REQUEST)
       } catch (e: Exception) {
+        bottomButton.isEnabled = true
         showErrorMessage(e.message)
       }
     }

@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.interfaces.OnPinLockCompleteListener
 import android.os.Build
 import android.annotation.TargetApi
+import android.content.pm.PackageManager
 import androidx.biometric.BiometricPrompt
+import io.demars.stellarwallet.utils.BiometricUtils
 
 class PinActivity : AppCompatActivity() {
 
@@ -155,6 +157,12 @@ class PinActivity : AppCompatActivity() {
 
   @TargetApi(Build.VERSION_CODES.P)
   private fun displayBiometricPrompt() {
+    if (!BiometricUtils.isSdkVersionSupported) return
+    if (!BiometricUtils.isBiometricPromptEnabled) return
+    if (!BiometricUtils.isHardwareSupported(this)) return
+    if (!BiometricUtils.isPermissionGranted(this)) return
+    if (!BiometricUtils.isFingerprintAvailable(this)) return
+
     initBiometricPrompt()
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
       .setTitle("Biometric scanner")

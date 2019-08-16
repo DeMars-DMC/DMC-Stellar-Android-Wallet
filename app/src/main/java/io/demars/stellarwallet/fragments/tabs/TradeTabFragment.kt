@@ -259,12 +259,14 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
 
   private fun updatePrices() {
     prices?.let {
-      val price = latestBid?.price?.toFloatOrNull()
+      val price = latestBid?.price?.toDoubleOrNull()
       val ssBuilder = SpannableStringBuilder("")
       if (price != null) {
+        val formattedPrice = StringFormat.truncateDecimalPlaces(price, 7)
+        val revertedPrice = StringFormat.truncateDecimalPlaces((1.0 / price), 7)
         val priceString = "Price: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
-          "\u00A0$price\u00A0${selectedBuyingCurrency.label}\n"
-        val invertedString = "1 ${selectedBuyingCurrency.label} = ${1F / price} ${selectedSellingCurrency.label}"
+          "\u00A0$formattedPrice\u00A0${selectedBuyingCurrency.label}\n"
+        val invertedString = "1 ${selectedBuyingCurrency.label} = $revertedPrice ${selectedSellingCurrency.label}"
 
         val indexBold = priceString.length
 

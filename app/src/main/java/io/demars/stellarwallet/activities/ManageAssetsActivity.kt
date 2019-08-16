@@ -33,6 +33,7 @@ import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.remote.Horizon
 import io.demars.stellarwallet.utils.*
 import kotlinx.android.synthetic.main.activity_manage_assets.addressEditText
+import org.stellar.sdk.AssetTypeCreditAlphaNum4
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
@@ -150,24 +151,39 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     AccountRepository.refresh()
   }
 
+  private fun updatePreloadedAssetsPreferences(asset: Asset) {
+
+    if (asset is AssetTypeCreditAlphaNum4) {
+      when {
+        (asset.code.equals(Constants.NGNT_ASSET_CODE, true) &&
+          asset.issuer.accountId.equals(Constants.NGNT_ASSET_ISSUER, true)) -> Preferences.ngntSetOnce(this)
+        asset.code.equals(Constants.BTC_ASSET_CODE, true) &&
+          asset.issuer.accountId.equals(Constants.BTC_ASSET_ISSUER, true) -> Preferences.btcSetOnce(this)
+      }
+    }
+  }
+
   private fun checkPreloadedAsset(): Boolean {
     val ngnt = DmcApp.wallet.getBalances().find {
       it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) &&
         it.assetIssuer.accountId == Constants.NGNT_ASSET_ISSUER
-    }
+    }?.let { Preferences.ngntSetOnce(this) }
 
     val btc = DmcApp.wallet.getBalances().find {
       it.assetCode.equals(Constants.BTC_ASSET_CODE, true) &&
         it.assetIssuer.accountId == Constants.BTC_ASSET_ISSUER
-    }
+    }?.let { Preferences.ngntSetOnce(this) }
+
+    val ngntSet = Preferences.isNgntSetOnce(this) || ngnt != null
+    val btcSet = Preferences.isBtcSetOnce(this) || btc != null
 
     return when {
-      ngnt == null -> {
+      !ngntSet -> {
         changeTrustline(Asset.createNonNativeAsset(Constants.NGNT_ASSET_CODE,
           KeyPair.fromAccountId(Constants.NGNT_ASSET_ISSUER)), false)
         false
       }
-      btc == null -> {
+      !btcSet -> {
         changeTrustline(Asset.createNonNativeAsset(Constants.BTC_ASSET_CODE,
           KeyPair.fromAccountId(Constants.BTC_ASSET_ISSUER)), false)
         false
@@ -225,6 +241,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     if (NetworkUtils(this).isNetworkAvailable()) {
       Horizon.getChangeTrust(object : SuccessErrorCallback {
         override fun onSuccess() {
+          updatePreloadedAssetsPreferences(asset)
           refreshAssets()
         }
 
@@ -489,7 +506,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
 
   // Sets inflation pool if haven't set before
   private fun checkInflation() {
-    if (Preferences.isInflationSet(this)) {
+    if (Preferences.isInflationSetOnce(this)) {
       Timber.d("Inflation destination is set already")
       return
     }
@@ -504,7 +521,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     Horizon.getJoinInflationDestination(object : SuccessErrorCallback {
       override fun onSuccess() {
         Timber.d("Inflation destination set successfully")
-        Preferences.inflationSet(this@ManageAssetsActivity)
+        Preferences.inflationSetOnce(this@ManageAssetsActivity)
       }
 
       override fun onError(error: HorizonException) {

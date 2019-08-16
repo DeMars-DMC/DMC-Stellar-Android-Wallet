@@ -126,13 +126,10 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val currencies = ArrayList<DmcAsset>()
     val customs = ArrayList<DmcAsset>()
 
-    val preloaded = ArrayList<DmcAsset>().apply {
-      add(ngnt)
-      add(btc)
-    }
-
     // We will remove assets from here if already added to the wallet
     val supported = ArrayList<DmcAsset>().apply {
+      add(ngnt)
+      add(btc)
       add(zar)
       add(eth)
       add(dmc)
@@ -147,11 +144,15 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
           btc.amount = it.balance
           btc.asset = it.asset
           btc.isAdded = true
+          currencies.add(btc)
+          supported.remove(btc)
         }
         it.assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> {
           ngnt.amount = it.balance
           ngnt.asset = it.asset
           ngnt.isAdded = true
+          currencies.add(ngnt)
+          supported.remove(ngnt)
         }
         it.assetCode.equals(Constants.ZAR_ASSET_CODE, true) -> {
           zar.amount = it.balance
@@ -185,10 +186,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     items = items.apply {
       var index = 0
       if (isRefreshing) {
-        addAll(preloaded)
-        notifyItemRangeInserted(index, preloaded.size)
-        index += preloaded.size
-
         currencies.addAll(customs)
         currencies.add(xlm)
         if (currencies.isNotEmpty()) {
@@ -209,9 +206,6 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
         add("Footer")
         notifyItemInserted(index)
       } else {
-        notifyItemRangeChanged(index, preloaded.size)
-        index += preloaded.size
-
         currencies.addAll(customs)
         currencies.add(xlm)
         if (currencies.isNotEmpty()) {
@@ -312,9 +306,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
 
     if (isCustomizing) {
       if (asset.amount!!.toDouble() == 0.0 &&
-        assetCode != Constants.LUMENS_ASSET_CODE &&
-        assetCode != Constants.NGNT_ASSET_CODE &&
-        assetCode != Constants.BTC_ASSET_CODE) {
+        assetCode != Constants.LUMENS_ASSET_CODE) {
         holder.rightIcon.visibility = View.VISIBLE
         holder.rightIcon.setImageResource(R.drawable.ic_remove)
         holder.rightIcon.setPadding(holder.rightIcon.context.resources

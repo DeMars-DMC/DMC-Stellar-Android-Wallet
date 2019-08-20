@@ -25,6 +25,16 @@
         android:elevation="4dp"
         tools:targetApi="lollipop">
 
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:layout_margin="@dimen/padding_mini"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_close" />
+
         <TextView
             android:id="@+id/mainTitle"
             android:layout_width="match_parent"
@@ -37,17 +47,23 @@
             android:layout_marginBottom="@dimen/padding_vertical"/>
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/controlPanel"/>
 
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar"
+        android:background="@color/black"
+        android:visibility="gone"
+        android:layout_above="@+id/controlPanel"/>
 
     <RelativeLayout
         android:id="@+id/controlPanel"
@@ -115,18 +131,25 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
+            android:layout_centerHorizontal="true"
             android:text="@string/ensure_image"
             android:textColor="@color/whiteMain"
-            android:paddingTop="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_horizontal"
-            android:layout_above="@id/buttonsContainer"
-            android:layout_centerHorizontal="true"
             tools:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:layout_below="@id/ensureImageMessage"/>
 
         <LinearLayout
             android:id="@+id/buttonsContainer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height_big">
+            android:layout_height="@dimen/button_height_big"
+            android:layout_below="@id/ensureImageMessage">
 
             <Button
                 style="@style/ButtonStyleYellow"
@@ -149,7 +172,6 @@
                 tools:visibility="gone"/>
 
         </LinearLayout>
-
     </RelativeLayout>
 
 </RelativeLayout>

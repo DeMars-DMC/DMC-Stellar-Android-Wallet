@@ -33,6 +33,7 @@ import org.jetbrains.anko.cameraManager
 import timber.log.Timber
 import java.lang.Long.signum
 import java.util.*
+import java.util.Collections.max
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
@@ -304,8 +305,8 @@ class Camera2Activity : AppCompatActivity() {
         }
 
         // For still image captures, we use the largest available size.
-        val largest = Collections.max(
-          Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
+        val largest = max(
+          listOf(*map.getOutputSizes(ImageFormat.JPEG)),
           CompareSizesByArea()
         )
         imageReader = ImageReader.newInstance(
@@ -802,7 +803,7 @@ class Camera2Activity : AppCompatActivity() {
       // largest of those not big enough.
       return when {
         bigEnough.size > 0 -> Collections.min(bigEnough, CompareSizesByArea())
-        notBigEnough.size > 0 -> Collections.max(notBigEnough, CompareSizesByArea())
+        notBigEnough.size > 0 -> max(notBigEnough, CompareSizesByArea())
         else -> {
           Timber.e("Couldn't find any suitable preview size")
           choices[0]
@@ -828,6 +829,10 @@ class Camera2Activity : AppCompatActivity() {
   }
 
   private fun updateView() {
+    backButton.setOnClickListener {
+      super.onBackPressed()
+    }
+
     if (pictureBytes != null) {
       cameraButton.visibility = GONE
       galleryButton.visibility = GONE

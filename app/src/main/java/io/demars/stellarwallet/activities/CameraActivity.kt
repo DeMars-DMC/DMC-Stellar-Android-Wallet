@@ -1,20 +1,16 @@
 package io.demars.stellarwallet.activities
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.os.Bundle
-import android.view.SurfaceHolder
-import android.view.SurfaceView
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import android.app.Activity
 import android.app.AlertDialog
 import android.net.Uri
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -22,10 +18,13 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.ViewUtils
-import timber.log.Timber
-import java.io.IOException
 import android.graphics.SurfaceTexture
+import android.os.Build
+import android.view.View.*
+import androidx.core.content.ContextCompat
 import io.demars.stellarwallet.enums.FlashMode
+import io.demars.stellarwallet.views.AutoFitSurfaceView
+import kotlinx.android.synthetic.main.activity_camera.backButton
 import kotlinx.android.synthetic.main.activity_camera.cameraButton
 import kotlinx.android.synthetic.main.activity_camera.ensureImageMessage
 import kotlinx.android.synthetic.main.activity_camera.flashButton
@@ -34,13 +33,12 @@ import kotlinx.android.synthetic.main.activity_camera.imagePreview
 import kotlinx.android.synthetic.main.activity_camera.mainTitle
 import kotlinx.android.synthetic.main.activity_camera.retakeButton
 import kotlinx.android.synthetic.main.activity_camera.sendButton
-import kotlinx.android.synthetic.main.activity_camera2.*
 
 @Suppress("DEPRECATION")
 class CameraActivity : AppCompatActivity() {
-  //TODO: FIX PREVIEW SIZE AND RATIO AND FLIP IMAGE 90 DEGREES
   companion object {
     private const val REQUEST_GALLERY = 111
+    private const val REQUEST_CAMERA_PERMISSION = 222
     private const val ARG_CAMERA_MODE = "ARG_CAMERA_MODE"
     private const val PIC_FILE_NAME = "USER_TEST_ID_PICTURE"
     fun newInstance(context: Context, cameraMode: CameraMode): Intent {
@@ -52,16 +50,19 @@ class CameraActivity : AppCompatActivity() {
 
   private lateinit var file: File
   private var camera: Camera? = null
-  private var previewTexture: SurfaceTexture? = null
   private var cameraMode = CameraMode.ID_FRONT
   private var pictureBytes: ByteArray? = null
   private var hasCamera = false
   private var frontCameraIndex = -1
-  private var useFront = false
+  private var wantUseFront = false
   private var flashMode = FlashMode.OFF
+  private var previewView: AutoFitSurfaceView? = null
 
   private val picture = Camera.PictureCallback { data, _ ->
     pictureBytes = data
+    val rotateAngle = if (useFrontCamera()) 270f else 90f
+    imagePreview.setImageBitmap(ViewUtils.handleBytes(data, rotateAngle))
+    imagePreview.visibility = VISIBLE
     updateView()
   }
 
@@ -73,12 +74,16 @@ class CameraActivity : AppCompatActivity() {
 
     file = File(getExternalFilesDir(null), PIC_FILE_NAME)
     hasCamera = checkCameraHardware(this)
-    useFront = checkFrontCamera()
+    wantUseFront = checkFrontCamera()
 
     updateView()
   }
 
   private fun updateView() {
+    backButton.setOnClickListener {
+      super.onBackPressed()
+    }
+
     mainTitle.text = when (cameraMode) {
       CameraMode.ID_FRONT -> getString(R.string.front_of_id)
       CameraMode.ID_BACK -> getString(R.string.back_of_id)
@@ -110,12 +115,8 @@ class CameraActivity : AppCompatActivity() {
       if (hasCamera) {
         cameraButton.visibility = VISIBLE
         ensureImageMessage.visibility = GONE
-        // Create an instance of Camera
-        camera = getCameraInstance()
-        camera?.let {
-          // Create our Preview view & add it to container
-          cameraPreview.addView(CameraPreview(this, it, flashMode))
-        }
+
+        openCamera()
       } else {
         cameraButton.visibility = GONE
         ensureImageMessage.visibility = VISIBLE
@@ -125,9 +126,11 @@ class CameraActivity : AppCompatActivity() {
       galleryButton.visibility = VISIBLE
 
       imagePreview.setImageDrawable(null)
+      imagePreview.visibility = GONE
+
       cameraPreview.visibility = VISIBLE
 
-      flashButton.visibility = if (useFront) GONE else VISIBLE
+      flashButton.visibility = if (useFrontCamera()) GONE else VISIBLE
 
       try {
         camera?.startPreview()
@@ -151,6 +154,27 @@ class CameraActivity : AppCompatActivity() {
         autoFocus()
       }
     }
+  }
+
+  private fun openCamera() {
+    val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+    if (permission != PackageManager.PERMISSION_GRANTED) {
+      requestCameraPermission()
+      return
+    }
+
+    // Create an instance of Camera
+    camera = getCameraInstance()
+    camera?.let {
+      // Create our Preview view & add it to container
+      previewView = AutoFitSurfaceView(this, it, flashMode)
+      cameraPreview.removeAllViews()
+      cameraPreview.addView(previewView)
+    }
+  }
+
+  private fun useFrontCamera(): Boolean {
+    return wantUseFront && frontCameraIndex != -1
   }
 
   private fun autoFocus() {
@@ -248,7 +272,7 @@ class CameraActivity : AppCompatActivity() {
   /** A safe way to get an instance of the Camera object. */
   private fun getCameraInstance(): Camera? {
     return try {
-      if (useFront && frontCameraIndex != -1) {
+      if (wantUseFront && frontCameraIndex != -1) {
         Camera.open(frontCameraIndex)
       } else {
         Camera.open() // attempt to get a Camera instance
@@ -257,78 +281,6 @@ class CameraActivity : AppCompatActivity() {
       AlertDialog.Builder(this).setMessage(e.localizedMessage).show()
       // Camera is not available (in use or does not exist)
       null // returns null if camera is unavailable
-    }
-  }
-
-  /** A basic Camera preview class */
-  @SuppressLint("ViewConstructor")
-  internal class CameraPreview(
-    context: Context,
-    private val mCamera: Camera,
-    private val flashMode: FlashMode
-  ) : SurfaceView(context), SurfaceHolder.Callback {
-
-    private val mHolder: SurfaceHolder = holder.apply {
-      // Install a SurfaceHolder.Callback so we get notified when the
-      // underlying surface is created and destroyed.
-      addCallback(this@CameraPreview)
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder) {
-      // Set portrait mode
-      mCamera.setDisplayOrientation(90)
-
-      //set camera to continually auto-focus
-      val params = mCamera.parameters
-
-      mCamera.parameters = params
-
-      // Setup & start preview
-      mCamera.apply {
-        try {
-          setPreviewDisplay(holder)
-          startPreview()
-        } catch (e: IOException) {
-          Timber.d("Error setting camera preview: ${e.message}")
-        }
-      }
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-      // empty. Take care of releasing the Camera preview in your activity.
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {
-      // If your preview can change or rotate, take care of those events here.
-      // Make sure to stop the preview before resizing or reformatting it.
-      if (mHolder.surface == null) {
-        // preview surface does not exist
-        return
-      }
-
-      // stop preview before making changes
-      try {
-        mCamera.stopPreview()
-      } catch (e: Exception) {
-        // ignore: tried to stop a non-existent preview
-      }
-
-      // set preview size and make any resize, rotate or
-      // reformatting changes here
-
-      // start preview with new settings
-      try {
-        //Turn flash on
-        val p = mCamera.parameters
-        p.flashMode = if (flashMode == FlashMode.ON) Camera.Parameters.FLASH_MODE_TORCH else Camera.Parameters.FLASH_MODE_OFF
-        mCamera.parameters = p
-
-        mCamera.setPreviewDisplay(mHolder)
-        mCamera.startPreview()
-
-      } catch (e: Exception) {
-        Timber.d("Error starting camera preview: ${e.message}")
-      }
     }
   }
 
@@ -350,7 +302,6 @@ class CameraActivity : AppCompatActivity() {
     super.onDestroy()
     camera?.stopPreview()
     camera?.release()
-    previewTexture?.release()
   }
 
   override fun onBackPressed() {
@@ -372,6 +323,7 @@ class CameraActivity : AppCompatActivity() {
           val picFromGallery = data?.data
           pictureBytes = getBitesFromUri(picFromGallery)
           imagePreview.setImageURI(picFromGallery)
+          imagePreview.visibility = VISIBLE
 
           cameraPreview.visibility = GONE
           camera?.stopPreview()
@@ -392,12 +344,16 @@ class CameraActivity : AppCompatActivity() {
   private fun showUploadingView() {
     ensureImageMessage.setText(R.string.uploading_photo)
 
+    progressBar.visibility = VISIBLE
+
     retakeButton.visibility = GONE
     sendButton.visibility = GONE
   }
 
   private fun hideUploadingView() {
     ensureImageMessage.setText(R.string.uploading_photo_error)
+
+    progressBar.visibility = GONE
 
     retakeButton.visibility = VISIBLE
     sendButton.visibility = VISIBLE
@@ -407,4 +363,24 @@ class CameraActivity : AppCompatActivity() {
     ViewUtils.showToast(this, message)
     if (finish) finish()
   }
+
+  //region Permission
+  private fun requestCameraPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+    }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    if (requestCode == REQUEST_CAMERA_PERMISSION) {
+      if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        openCamera()
+      } else {
+        onError("Permission should be granted", true)
+      }
+    } else {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+  }
+  //endregion
 }

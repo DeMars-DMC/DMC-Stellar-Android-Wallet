@@ -8,13 +8,16 @@ import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.interfaces.OnAssetSelected
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.hardware.Camera
 
 object ViewUtils {
 
@@ -159,5 +162,22 @@ object ViewUtils {
     clipboard.primaryClip = clip
     showToast(context, toastMessage)
   }
+  //endregion
+
+  //region Bitmap
+  fun handleBytes(source: ByteArray, angle: Float): Bitmap {
+    val bitmap = BitmapFactory.decodeByteArray(source, 0, source.size)
+    val matrix = Matrix()
+
+    matrix.postRotate(angle)
+    val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    return makeSquareBitmap(rotatedBitmap)
+  }
+
+  fun makeSquareBitmap(source: Bitmap) =
+    if (source.width > source.height)
+      Bitmap.createBitmap(source, 0, 0, source.height, source.height)
+    else Bitmap.createBitmap(source, 0, 0, source.width, source.width)
+
   //endregion
 }

@@ -182,7 +182,7 @@ object ViewUtils {
 
   fun bitmapToBytes(bitmap: Bitmap) : ByteArray {
     val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
     return stream.toByteArray()
   }
   //endregion

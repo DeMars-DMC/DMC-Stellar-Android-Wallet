@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
-        android:elevation="4dp"
         tools:targetApi="lollipop">
 
         <ImageView
@@ -41,10 +40,23 @@
             android:layout_height="@dimen/button_height"
             android:textColor="@color/whiteMain"
             android:text="@string/photo_of_id"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_xxbig"
             android:gravity="center"
             android:layout_marginTop="@dimen/padding_vertical"
             android:layout_marginBottom="@dimen/padding_vertical"/>
+
+        <TextView
+            android:id="@+id/previewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="@string/preview"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/padding_micro"/>
+
+
     </FrameLayout>
 
     <LinearLayout
@@ -134,8 +146,7 @@
             android:layout_centerHorizontal="true"
             android:text="@string/ensure_image"
             android:textColor="@color/whiteMain"
-            android:paddingBottom="@dimen/padding_horizontal"
-            tools:visibility="gone"/>
+            android:paddingBottom="@dimen/padding_horizontal"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

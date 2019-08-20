@@ -117,7 +117,6 @@ class OpenAccountActivity : AppCompatActivity() {
   }
 
   private fun showBirthDateDialog() {
-    searchableDialog.show()
     if (birthDateDialog == null) {
       val eighteenYearsBack = Calendar.getInstance()
       eighteenYearsBack.add(Calendar.YEAR, -18)

@@ -17,7 +17,8 @@ import io.demars.stellarwallet.interfaces.OnAssetSelected
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.hardware.Camera
+import java.io.ByteArrayOutputStream
+
 
 object ViewUtils {
 
@@ -174,10 +175,15 @@ object ViewUtils {
     return makeSquareBitmap(rotatedBitmap)
   }
 
-  fun makeSquareBitmap(source: Bitmap) =
+  private fun makeSquareBitmap(source: Bitmap): Bitmap =
     if (source.width > source.height)
       Bitmap.createBitmap(source, 0, 0, source.height, source.height)
     else Bitmap.createBitmap(source, 0, 0, source.width, source.width)
 
+  fun bitmapToBytes(bitmap: Bitmap) : ByteArray {
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    return stream.toByteArray()
+  }
   //endregion
 }

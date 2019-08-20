@@ -18,7 +18,6 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.ViewUtils
-import android.graphics.SurfaceTexture
 import android.os.Build
 import android.view.View.*
 import androidx.core.content.ContextCompat
@@ -59,10 +58,12 @@ class CameraActivity : AppCompatActivity() {
   private var previewView: AutoFitSurfaceView? = null
 
   private val picture = Camera.PictureCallback { data, _ ->
-    pictureBytes = data
     val rotateAngle = if (useFrontCamera()) 270f else 90f
-    imagePreview.setImageBitmap(ViewUtils.handleBytes(data, rotateAngle))
+    val editedBitmap = ViewUtils.handleBytes(data, rotateAngle)
+    pictureBytes = ViewUtils.bitmapToBytes(editedBitmap)
+    imagePreview.setImageBitmap(editedBitmap)
     imagePreview.visibility = VISIBLE
+    hideUploadingView()
     updateView()
   }
 
@@ -91,10 +92,9 @@ class CameraActivity : AppCompatActivity() {
     }
 
     if (pictureBytes != null) {
-      cameraButton.visibility = GONE
-      galleryButton.visibility = GONE
-      flashButton.visibility = GONE
+      hideCameraButtons()
 
+      previewText.visibility = VISIBLE
       retakeButton.visibility = VISIBLE
       sendButton.visibility = VISIBLE
 
@@ -109,6 +109,7 @@ class CameraActivity : AppCompatActivity() {
         sendPictureToFirebase()
       }
     } else {
+      previewText.visibility = GONE
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
 
@@ -214,6 +215,8 @@ class CameraActivity : AppCompatActivity() {
 
   private fun takePicture() {
     try {
+      hideCameraButtons()
+      showUploadingView(R.string.preparing_photo)
       camera?.takePicture(null, null, picture)
     } catch (e: Exception) {
       // Ignore
@@ -222,7 +225,7 @@ class CameraActivity : AppCompatActivity() {
 
   private fun sendPictureToFirebase() {
     pictureBytes?.let { bytes ->
-      showUploadingView()
+      showUploadingView(R.string.uploading_photo)
       Firebase.uploadBytes(bytes, cameraMode,
         OnSuccessListener {
           onFirebaseResult(it)
@@ -286,30 +289,48 @@ class CameraActivity : AppCompatActivity() {
 
   override fun onResume() {
     super.onResume()
-    if (pictureBytes == null) {
-      camera?.startPreview()
+
+    try {
+      if (pictureBytes == null) {
+        camera?.startPreview()
+      }
+    } catch (e: Exception) {
+      // Ignore
     }
   }
 
   override fun onStop() {
     super.onStop()
-    if (pictureBytes == null) {
-      camera?.stopPreview()
+
+    try {
+      if (pictureBytes == null) {
+        camera?.stopPreview()
+      }
+    } catch (e: Exception) {
+      // Ignore
     }
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    camera?.stopPreview()
-    camera?.release()
+    try {
+      camera?.stopPreview()
+      camera?.release()
+    } catch (e: Exception) {
+      // Ignore
+    }
   }
 
   override fun onBackPressed() {
-    if (pictureBytes != null) {
-      pictureBytes = null
-      camera?.startPreview()
-      updateView()
-    } else {
+    try {
+      if (pictureBytes != null) {
+        pictureBytes = null
+        camera?.startPreview()
+        updateView()
+      } else {
+        super.onBackPressed()
+      }
+    } catch (e: Exception) {
       super.onBackPressed()
     }
   }
@@ -341,9 +362,16 @@ class CameraActivity : AppCompatActivity() {
     } ?: return null
   }
 
-  private fun showUploadingView() {
-    ensureImageMessage.setText(R.string.uploading_photo)
+  private fun hideCameraButtons() {
+    cameraButton.visibility = GONE
+    galleryButton.visibility = GONE
+    flashButton.visibility = GONE
+  }
 
+  private fun showUploadingView(messageId: Int) {
+    ensureImageMessage.setText(messageId)
+
+    ensureImageMessage.visibility = VISIBLE
     progressBar.visibility = VISIBLE
 
     retakeButton.visibility = GONE

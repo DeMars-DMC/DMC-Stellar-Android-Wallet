@@ -416,4 +416,6 @@
     <string name="pay_again">Pay again</string>
     <string name="trade_again">Trade again</string>
     <string name="gallery">Gallery</string>
+    <string name="preview">Preview</string>
+    <string name="preparing_photo">Preparing photo…</string>
 </resources>

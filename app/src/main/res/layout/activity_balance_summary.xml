@@ -7,12 +7,28 @@
     android:orientation="vertical"
     tools:context=".activities.BalanceSummaryActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:title="@string/balance_summary" />
+        android:layout_height="@dimen/button_height_big">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
+
+        <TextView
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/balance_summary"
+            android:textSize="@dimen/text_size_medium" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

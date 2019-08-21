@@ -10,12 +10,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,18 +22,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.ContactsAdapter
-import io.demars.stellarwallet.helpers.OnTextChanged
 import io.demars.stellarwallet.interfaces.ContactListener
 import io.demars.stellarwallet.interfaces.ContactsRepository
-import io.demars.stellarwallet.interfaces.OnSearchStateListener
 import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_contacts.*
 import timber.log.Timber
 
-class ContactsActivity : BaseActivity(), ContactListener {
-
+class ContactsActivity : BaseActivity(), ContactListener, SearchView.OnQueryTextListener {
   enum class Mode {
     ALL, STELLAR
   }
@@ -46,9 +42,6 @@ class ContactsActivity : BaseActivity(), ContactListener {
 
   private var currentContactList = ArrayList<Contact>()
 
-  private lateinit var searchButton: MenuItem
-  private lateinit var refreshButton: MenuItem
-  private lateinit var addContactButton: MenuItem
   private lateinit var bottomSheet: BottomSheetDialog
   private lateinit var contactTitleView: TextView
   private lateinit var contactNameView: EditText
@@ -96,26 +89,19 @@ class ContactsActivity : BaseActivity(), ContactListener {
   }
 
   private fun initUI() {
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
+    backButton.setOnClickListener { onBackPressed() }
 
+    searchView.setOnQueryTextListener(this)
+    searchView.isIconified = false
+
+    addContactButton.setOnClickListener { addContact() }
+
+    swipeRefresh.setColorSchemeResources(R.color.colorAccent)
+    swipeRefresh.setOnRefreshListener {
+      refreshContacts()
+    }
 
     rv_contact_list.layoutManager = LinearLayoutManager(this)
-
-    val clearButton = searchBar.findViewById<View>(R.id.mt_clear)
-    clearButton.visibility = View.GONE
-    searchBar.addTextChangeListener(
-      object : OnTextChanged() {
-        override fun onTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
-          filterResults(text.toString())
-          if (text.isEmpty()) {
-            clearButton.visibility = View.GONE
-          } else {
-            clearButton.visibility = View.VISIBLE
-          }
-        }
-      })
   }
 
   private fun initBottomSheet() {
@@ -129,57 +115,15 @@ class ContactsActivity : BaseActivity(), ContactListener {
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    // Inflate the menu to use in the action bar
-    menuInflater.inflate(R.menu.contacts_fragment_menu, menu)
-    refreshButton = menu.findItem(R.id.refresh_contacts)
-    searchButton = menu.findItem(R.id.search_contacts)
-    addContactButton = menu.findItem(R.id.add_contact)
-    menuItemsInitialized = true
-    setMenuItemsEnable(true)
-    return super.onCreateOptionsMenu(menu)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    // Handle presses on the action bar menu items
-    return when (item?.itemId) {
-      R.id.refresh_contacts -> {
-        refreshContacts()
-        true
-      }
-      R.id.search_contacts -> {
-        enableSearch()
-        true
-      }
-      R.id.add_contact -> {
-        addContact()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
-  }
-
   private fun refreshContacts() {
+    swipeRefresh.isRefreshing = false
     if (checkNeedPermissions()) {
       toast("Please grant needed permissions to add refresh Contacts")
     } else {
       setInitialStateContacts()
-      refreshButton.isEnabled = false
+      swipeRefresh.isEnabled = false
       showContacts(true)
     }
-  }
-
-  private fun enableSearch() {
-    viewFlipper.showNext()
-    searchBar.enableSearch()
-    searchBar.setOnSearchActionListener(object : OnSearchStateListener() {
-      override fun onSearchStateChanged(enabled: Boolean) {
-        if (!enabled) {
-          searchBar.text = null
-          viewFlipper.showPrevious()
-        }
-      }
-    })
   }
 
   private fun addContact() {
@@ -210,6 +154,7 @@ class ContactsActivity : BaseActivity(), ContactListener {
 
     bottomSheet.show()
   }
+
   private fun setEnablePermissionsState(shouldShowRationale: Boolean) {
     rv_contact_list.visibility = View.GONE
     empty_view.visibility = View.GONE
@@ -231,16 +176,7 @@ class ContactsActivity : BaseActivity(), ContactListener {
     }
   }
 
-  private fun setMenuItemsEnable(isEnabled: Boolean) {
-    if (menuItemsInitialized) {
-      refreshButton.isEnabled = isEnabled
-      searchButton.isEnabled = isEnabled
-      addContactButton.isEnabled = isEnabled
-    }
-  }
-
   private fun setInitialStateContacts() {
-    setMenuItemsEnable(true)
     rv_contact_list?.visibility = View.GONE
     empty_view?.visibility = View.GONE
     progress_view?.visibility = View.VISIBLE
@@ -304,11 +240,18 @@ class ContactsActivity : BaseActivity(), ContactListener {
 
 
         populateList(currentContactList)
-        if (::refreshButton.isInitialized) {
-          refreshButton.isEnabled = true
-        }
+        swipeRefresh.isEnabled = true
       }
     })
+  }
+
+  override fun onQueryTextSubmit(query: String?): Boolean {
+    return true
+  }
+
+  override fun onQueryTextChange(newText: String?): Boolean {
+    filterResults(newText ?: "")
+    return true
   }
 
   private fun filterResults(input: String) {

@@ -29,7 +29,8 @@
             android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_mini"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
 
 
     </FrameLayout>

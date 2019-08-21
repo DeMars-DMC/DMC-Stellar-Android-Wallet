@@ -255,7 +255,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
 
     PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, SMS_TIMEOUT,
       TimeUnit.SECONDS, this, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-      override fun onCodeSent(verificationId: String?, forceResendingToken: PhoneAuthProvider.ForceResendingToken?) {
+      override fun onCodeSent(verificationId: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
         super.onCodeSent(verificationId, forceResendingToken)
 
         this@LaunchActivity.token = forceResendingToken
@@ -264,17 +264,17 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         updateForMode(Mode.CODE)
       }
 
-      override fun onVerificationCompleted(authCredential: PhoneAuthCredential?) {
-        Timber.d("onVerificationCompleted:$authCredential")
-        signInWithPhoneAuthCredential(authCredential!!)
+      override fun onVerificationCompleted(authCredential: PhoneAuthCredential) {
+        Timber.d("onVerificationCompleted: $authCredential")
+        signInWithPhoneAuthCredential(authCredential)
       }
 
-      override fun onVerificationFailed(ex: FirebaseException?) {
-        Timber.w("onVerificationFailed:${ex.toString()}")
+      override fun onVerificationFailed(ex: FirebaseException) {
+        Timber.w("onVerificationFailed: $ex")
         when (ex) {
           is FirebaseAuthInvalidCredentialsException -> onError("Invalid phone number")
           is FirebaseTooManyRequestsException -> onError("Too many requests")
-          else -> onError(ex?.localizedMessage)
+          else -> onError(ex.localizedMessage)
         }
 
       }

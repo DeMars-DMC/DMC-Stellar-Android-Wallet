@@ -8,11 +8,11 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import io.demars.stellarwallet.R
-import kotlinx.android.synthetic.main.chip_view.view.*
+import kotlinx.android.synthetic.main.view_chips.view.*
 
 class ChipView(context: Context, attrs: AttributeSet?) : ScrollView(context, attrs) {
   init {
-    inflate(getContext(), R.layout.chip_view, this)
+    inflate(getContext(), R.layout.view_chips, this)
   }
 
   fun loadChips(chips: List<String>, chipsIndexes: List<String>? = null) {
@@ -34,7 +34,7 @@ class ChipView(context: Context, attrs: AttributeSet?) : ScrollView(context, att
     val margins = context.resources.getDimensionPixelSize(R.dimen.padding_mini)
 
     @SuppressLint("InflateParams")
-    val itemView = LayoutInflater.from(context).inflate(R.layout.item_view_phrase_word, null)
+    val itemView = LayoutInflater.from(context).inflate(R.layout.item_word, null)
 
     val numberTextView = itemView.findViewById<TextView>(R.id.numberItem)
     val wordTextView = itemView.findViewById<TextView>(R.id.wordItem)

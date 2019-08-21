@@ -40,9 +40,7 @@ class BalanceSummaryActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_balance_summary)
 
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
+    backButton.setOnClickListener { onBackPressed() }
 
     setupUI()
   }

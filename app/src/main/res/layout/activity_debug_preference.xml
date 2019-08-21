@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar_debug"
+    <FrameLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="@string/debug_preferences"
-        android:theme="@style/ToolbarTheme" />
+        android:layout_height="@dimen/button_height_big">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
+
+        <TextView
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/debug_preferences"
+            android:textSize="@dimen/text_size_medium" />
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/root_container"
-        android:background="@color/whiteMain"
-        android:paddingTop="?attr/actionBarSize"/>
+        android:background="@color/whiteMain"/>
 
-</merge>
+</LinearLayout>

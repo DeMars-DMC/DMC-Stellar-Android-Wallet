@@ -18,7 +18,8 @@
             android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_medium"
-            android:src="@drawable/ic_chevron_left" />
+            android:src="@drawable/ic_chevron_left"
+            android:theme="@style/ClickableItem" />
 
         <TextView
             style="@style/WhiteTitle"

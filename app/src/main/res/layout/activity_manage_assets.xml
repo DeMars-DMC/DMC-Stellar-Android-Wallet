@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    android:id="@+id/rootView"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -89,15 +89,17 @@
                 android:id="@+id/accountButton"
                 android:layout_width="@dimen/button_height_big"
                 android:layout_height="@dimen/button_height_big"
+                android:layout_marginEnd="@dimen/padding_mini"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:paddingTop="@dimen/padding_micro"
                 android:paddingBottom="@dimen/padding_micro"
-                android:layout_marginEnd="@dimen/padding_mini"
                 android:src="@drawable/ic_settings"
+                android:theme="@style/ClickableItem"
                 android:tint="@color/whiteMain"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="lollipop" />
 
             <View
                 android:id="@+id/walletDivider"
@@ -121,108 +123,110 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/fundingState"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:ignore="UseCompoundDrawables">
 
-            <ImageView
-                android:id="@+id/qrCode"
-                android:layout_width="@dimen/qr_code_size_mini"
-                android:layout_height="@dimen/qr_code_size_mini"
-                android:layout_gravity="center"
-                android:background="@drawable/qr_code"
-                android:contentDescription="@string/public_address"
-                android:elevation="@dimen/elevation_mini"
-                android:padding="@dimen/padding_mini"
-                tools:ignore="ContentDescription,UnusedAttribute" />
-
-            <RelativeLayout
-                android:id="@+id/addressCopyButton"
+            <LinearLayout
+                android:id="@+id/fundingState"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_vertical_double"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:layout_marginEnd="@dimen/padding_horizontal"
-                android:background="@drawable/background_card_transparent"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/qrCode"
+                    android:layout_width="@dimen/qr_code_size_mini"
+                    android:layout_height="@dimen/qr_code_size_mini"
+                    android:layout_gravity="center"
+                    android:background="@drawable/qr_code"
+                    android:contentDescription="@string/public_address"
+                    android:elevation="@dimen/elevation_mini"
+                    android:padding="@dimen/padding_mini"
+                    tools:ignore="ContentDescription,UnusedAttribute" />
+
+                <RelativeLayout
+                    android:id="@+id/addressCopyButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_horizontal"
+                    android:layout_marginTop="@dimen/padding_vertical_double"
+                    android:layout_marginEnd="@dimen/padding_horizontal"
+                    android:background="@drawable/background_card_transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/addressEditText"
+                        style="@style/WhiteTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/copyIcon"
+                        android:ellipsize="middle"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/padding_horizontal"
+                        android:paddingTop="@dimen/padding_horizontal"
+                        android:paddingEnd="@dimen/padding_zero"
+                        android:paddingBottom="@dimen/padding_horizontal"
+                        android:singleLine="true"
+                        android:textSize="@dimen/text_size_big" />
+
+                    <ImageView
+                        android:id="@+id/copyIcon"
+                        android:layout_width="@dimen/button_height_big"
+                        android:layout_height="@dimen/button_height_big"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/copy_address_content_descriptor"
+                        android:paddingTop="@dimen/padding_horizontal"
+                        android:paddingBottom="@dimen/padding_horizontal"
+                        android:src="@drawable/ic_copy" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/openAccountButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_big"
+                    android:layout_marginStart="@dimen/padding_horizontal"
+                    android:layout_marginTop="@dimen/padding_mini"
+                    android:layout_marginEnd="@dimen/padding_horizontal"
+                    android:layout_marginBottom="@dimen/padding_mini"
+                    android:background="@drawable/background_card_transparent_accent"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/addressContainer">
+
+                    <TextView
+                        style="@style/ButtonTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/open_account"
+                        android:textColor="@color/colorAccent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/button_height_big"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end|center_vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:src="@drawable/ic_open_account"
+                        android:tint="@color/colorAccent" />
+                </FrameLayout>
 
                 <TextView
-                    android:id="@+id/addressEditText"
-                    style="@style/WhiteTitle"
+                    style="@style/WhiteDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/copyIcon"
-                    android:ellipsize="middle"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_horizontal"
                     android:gravity="center"
-                    android:paddingStart="@dimen/padding_horizontal"
-                    android:paddingTop="@dimen/padding_horizontal"
-                    android:paddingEnd="@dimen/padding_zero"
-                    android:paddingBottom="@dimen/padding_horizontal"
-                    android:singleLine="true"
-                    android:textSize="@dimen/text_size_big" />
+                    android:paddingLeft="@dimen/padding_vertical"
+                    android:paddingRight="@dimen/padding_vertical"
+                    android:text="@string/fund_account_string" />
 
-                <ImageView
-                    android:id="@+id/copyIcon"
-                    android:layout_width="@dimen/button_height_big"
-                    android:layout_height="@dimen/button_height_big"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/copy_address_content_descriptor"
-                    android:paddingTop="@dimen/padding_horizontal"
-                    android:paddingBottom="@dimen/padding_horizontal"
-                    android:src="@drawable/ic_copy" />
+            </LinearLayout>
 
-            </RelativeLayout>
-
-            <FrameLayout
-                android:id="@+id/openAccountButton"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height_big"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:layout_marginTop="@dimen/padding_mini"
-                android:layout_marginEnd="@dimen/padding_horizontal"
-                android:layout_marginBottom="@dimen/padding_mini"
-                android:background="@drawable/background_card_transparent_accent"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/addressContainer">
-
-                <TextView
-                    style="@style/ButtonTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="@string/open_account"
-                    android:textColor="@color/colorAccent"/>
-
-                <ImageView
-                    android:layout_width="@dimen/button_height_big"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end|center_vertical"
-                    android:padding="@dimen/padding_medium"
-                    android:src="@drawable/ic_open_account"
-                    android:tint="@color/colorAccent"/>
-            </FrameLayout>
-
-            <TextView
-                style="@style/WhiteDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:paddingLeft="@dimen/padding_vertical"
-                android:paddingRight="@dimen/padding_vertical"
-                android:layout_marginTop="@dimen/padding_horizontal"
-                android:text="@string/fund_account_string" />
-
-        </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/assetsRecyclerView"
                 android:layout_width="match_parent"

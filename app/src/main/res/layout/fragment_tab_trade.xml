@@ -66,7 +66,9 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
-                    android:src="@drawable/ic_swap_vert_palesky" />
+                    android:src="@drawable/ic_swap_vert_palesky"
+                    android:theme="@style/ClickableItem" />
+
             </LinearLayout>
 
 

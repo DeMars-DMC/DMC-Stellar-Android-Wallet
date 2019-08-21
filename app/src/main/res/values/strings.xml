@@ -42,7 +42,7 @@
     <string name="create_wallet_message">The App will now create an account number (public key) for your wallet on the Stellar network.\n\nRemember to write down your 12 or 24 word seed phase and keep it somewhere safe, as it is the only way you will be able to restore your wallet if you lose your phone.\n\nAfter you have written down this phase and activated your account, you’ll be presented with a screen asking you to deposit lumens into your account.\n\nDeposit lumens to get started, or proceed to the DMC account opening page.\n\nAll DMC account holders are rewarded with 5 Stellar Lumens (XLM) on successful account validation.
 </string>
     <string name="recover_wallet">Recover wallet</string>
-    <string name="phrase_warning">Please write down and safely store this phrase. It\'s the ONLY WAY to retrieve your wallet.</string>
+    <string name="phrase_warning">Please write down and safely store this phrase.\nIt\'s the ONLY WAY to retrieve your wallet.</string>
     <string name="no_mnemonic_set">Your wallet was recovered using a secret key and does not use a mnemonic.</string>
     <string name="confirm_written">I have written it down</string>
     <string name="advanced_security">Advanced Security</string>
@@ -189,7 +189,8 @@
     <string name="locale">Locale</string>
     <string name="dmc_app_version">DMC App version</string>
     <string name="public_address_of_stellar_account">Public address of Stellar account</string>
-    <string name="send_report">Report issue</string>
+    <string name="report_issue">Report issue</string>
+    <string name="send_a_bug_report">Report issue</string>
     <string name="recovery_type">Recovery type</string>
     <string name="mnemonic_phrase_12_words">Recovered with 12-word Mnemonic</string>
     <string name="mnemonic_phrase_24_words">Recovered with 24-word Mnemonic</string>
@@ -418,4 +419,6 @@
     <string name="gallery">Gallery</string>
     <string name="preview">Preview</string>
     <string name="preparing_photo">Preparing photo…</string>
+    <string name="type_contact_name">Type contact name</string>
+    <string name="go_back">Go back</string>
 </resources>

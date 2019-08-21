@@ -11,7 +11,7 @@ class DebugActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debug_preference)
 
-        setupActionBar()
+        backButton.setOnClickListener { onBackPressed() }
 
         if (savedInstanceState == null) {
             supportFragmentManager
@@ -22,8 +22,5 @@ class DebugActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar() {
-        setSupportActionBar(toolBar_debug)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolBar_debug.setNavigationOnClickListener { onBackPressed() }
     }
 }

@@ -3,22 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/main_bg_light"
+    android:background="@drawable/bg_gradient"
     tools:context=".activities.DiagnosticActivity">
 
-    <androidx.appcompat.widget.Toolbar
+
+    <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="Send a Bug Report"
-        android:theme="@style/ToolbarTheme"/>
+        android:layout_height="@dimen/button_height_big">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
+
+        <TextView
+            style="@style/WhiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/send_a_bug_report"
+            android:textSize="@dimen/text_size_medium" />
+    </FrameLayout>
 
     <ScrollView
         android:fadeScrollbars="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -159,9 +176,8 @@
                 android:id="@+id/sendReportButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/send_report"
-                style="@style/ButtonStyleAccent"
-                android:layout_margin="@dimen/activity_vertical_margin"/>
+                android:text="@string/report_issue"
+                style="@style/ButtonStyleAccentFlat"/>
 
         </LinearLayout>
     </ScrollView>

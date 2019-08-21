@@ -12,28 +12,28 @@ import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.activities.ManageAssetsActivity
 
 class MessagingService : FirebaseMessagingService() {
-  override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+  override fun onMessageReceived(remoteMessage: RemoteMessage) {
     super.onMessageReceived(remoteMessage)
-    remoteMessage?.data?.get("state")?.toIntOrNull()?.let { state ->
+    remoteMessage.data["state"]?.toIntOrNull()?.let { state ->
       val message = when (state) {
         DmcUser.State.DIGITAL.ordinal -> ""
         DmcUser.State.VERIFYING.ordinal -> "Your account will be verified soon"
         DmcUser.State.VERIFIED.ordinal -> "Your account has successfully been verified"
-        DmcUser.State.DOCUMENTS_UNCLEAR.ordinal -> "Your account application is still pending"
-        DmcUser.State.ID_EXPIRE_SHORTLY.ordinal -> "Your ID is expiring shortly. Please update it"
-        DmcUser.State.ID_EXPIRED.ordinal -> "Your ID is expired. Please update it"
-        DmcUser.State.BLOCKED.ordinal -> "Your account is blocked"
-        DmcUser.State.CLOSED.ordinal -> "Your account is closed"
+        DmcUser.State.DOCUMENTS_UNCLEAR.ordinal -> "We regret to inform you that your account has not passed verification. Please contact backoffice@demars.io for further info."
+        DmcUser.State.ID_EXPIRE_SHORTLY.ordinal -> "Your ID document will be expiring soon. Kindly email a clear image of an updated document to backoffice@demars.io."
+        DmcUser.State.ID_EXPIRED.ordinal -> "Your ID document is expired. Kindly email a clear image of an updated document to backoffice@demars.io."
+        DmcUser.State.BLOCKED.ordinal -> " We regret to inform you that your DMC App account has been blocked, pending further investigation. Contact backoffice@demars.io for further info."
+        DmcUser.State.CLOSED.ordinal -> "We can confirm that your account has been closed. You may now uninstall your wallet App."
         else -> ""
       }
 
       val title = when (state) {
         DmcUser.State.VERIFYING.ordinal,
         DmcUser.State.VERIFIED.ordinal -> "Thank you"
-        DmcUser.State.DOCUMENTS_UNCLEAR.ordinal -> "Documents verification"
+        DmcUser.State.DOCUMENTS_UNCLEAR.ordinal -> "Account verification"
         DmcUser.State.ID_EXPIRE_SHORTLY.ordinal,
-        DmcUser.State.ID_EXPIRED.ordinal -> "Document update needed"
-        DmcUser.State.BLOCKED.ordinal -> "We're sorry"
+        DmcUser.State.ID_EXPIRED.ordinal -> "KYC Documents update needed"
+        DmcUser.State.BLOCKED.ordinal -> "Your account is blocked"
         DmcUser.State.CLOSED.ordinal -> "Your account is closed"
         else -> ""
       }

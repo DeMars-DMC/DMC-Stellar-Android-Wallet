@@ -24,13 +24,13 @@ class PinLockAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val inflater = LayoutInflater.from(parent.context)
 
     if (viewType == VIEW_TYPE_NUMBER) {
-      val view = inflater.inflate(R.layout.layout_number_item, parent, false)
+      val view = inflater.inflate(R.layout.item_pin_number, parent, false)
       viewHolder = NumberViewHolder(view)
     } else if (viewType == VIEW_TYPE_DELETE){
-      val view = inflater.inflate(R.layout.layout_delete_item, parent, false)
+      val view = inflater.inflate(R.layout.item_pin_delete, parent, false)
       viewHolder = DeleteViewHolder(view)
     } else {
-      val view = inflater.inflate(R.layout.layout_delete_item, parent, false)
+      val view = inflater.inflate(R.layout.item_pin_delete, parent, false)
       viewHolder = DotViewHolder(view)
     }
     return viewHolder

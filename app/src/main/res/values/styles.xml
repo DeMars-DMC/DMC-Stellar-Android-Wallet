@@ -235,7 +235,7 @@
         <item name="android:padding">@dimen/padding_horizontal</item>
     </style>
 
-    <style name="ClickableItem">
+    <style name="ClickableItem" parent="AppTheme">
         <item name="colorControlHighlight">@color/transparent_white</item>
     </style>
 </resources>

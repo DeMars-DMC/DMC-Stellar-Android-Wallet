@@ -53,6 +53,7 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ic_chevron_right_transparent"
         android:background="?attr/selectableItemBackgroundBorderless"
-        tools:ignore="ContentDescription" />
+        android:theme="@style/ClickableItem"
+        android:contentDescription="@string/go_back" />
 
 </RelativeLayout>

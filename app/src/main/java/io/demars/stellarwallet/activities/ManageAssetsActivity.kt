@@ -222,7 +222,8 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     } else {
       openAccountButton?.visibility = View.VISIBLE
       openAccountButton?.setOnClickListener {
-        startActivityForResult(OpenAccountActivity.newInstance(this), RC_CREATE_ACC)
+        startActivityForResult(OpenAccountActivity.newInstance(this,
+          R.string.open_account), RC_CREATE_ACC)
       }
     }
   }

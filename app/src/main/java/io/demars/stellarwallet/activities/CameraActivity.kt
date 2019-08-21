@@ -62,7 +62,10 @@ class CameraActivity : AppCompatActivity() {
     val editedBitmap = ViewUtils.handleBytes(data, rotateAngle)
     pictureBytes = ViewUtils.bitmapToBytes(editedBitmap)
     imagePreview.setImageBitmap(editedBitmap)
-    imagePreview.visibility = VISIBLE
+
+    cameraPreview.visibility = GONE
+    camera?.stopPreview()
+
     hideUploadingView()
     updateView()
   }
@@ -97,6 +100,7 @@ class CameraActivity : AppCompatActivity() {
       previewText.visibility = VISIBLE
       retakeButton.visibility = VISIBLE
       sendButton.visibility = VISIBLE
+      imagePreview.visibility = VISIBLE
 
       ensureImageMessage.visibility = VISIBLE
       ensureImageMessage.setText(R.string.ensure_image)
@@ -344,7 +348,6 @@ class CameraActivity : AppCompatActivity() {
           val picFromGallery = data?.data
           pictureBytes = getBitesFromUri(picFromGallery)
           imagePreview.setImageURI(picFromGallery)
-          imagePreview.visibility = VISIBLE
 
           cameraPreview.visibility = GONE
           camera?.stopPreview()

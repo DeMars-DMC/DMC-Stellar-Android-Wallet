@@ -26,9 +26,8 @@ class DiagnosticActivity : BaseActivity() {
         setupUI()
     }
 
-    fun setupUI() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    private fun setupUI() {
+        backButton.setOnClickListener { onBackPressed() }
 
         val isPassphrase = DmcApp.wallet.getEncryptedPhrase() != null
         recoveryType = getRecoveryType()

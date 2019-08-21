@@ -11,7 +11,6 @@
  limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,7 +31,8 @@
             android:padding="@dimen/padding_mini"
             android:layout_margin="@dimen/padding_mini"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem"/>
 
         <TextView
             android:id="@+id/mainTitle"
@@ -85,7 +85,7 @@
             android:focusable="true"
             android:padding="26dp"
             android:src="@drawable/ic_gallery"
-            android:theme="@android:style/ThemeOverlay.Material.Dark"
+            android:theme="@style/ClickableItem"
             tools:visibility="visible" />
 
         <ImageView
@@ -115,7 +115,7 @@
             android:focusable="true"
             android:padding="26dp"
             android:src="@drawable/ic_flash_off"
-            android:theme="@android:style/ThemeOverlay.Material.Dark"
+            android:theme="@style/ClickableItem"
             tools:visibility="visible" />
 
         <TextView

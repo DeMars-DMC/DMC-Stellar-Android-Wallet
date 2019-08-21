@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <FrameLayout
@@ -26,7 +27,8 @@
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_horizontal"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
 
         <TextView
             android:id="@+id/titleView"

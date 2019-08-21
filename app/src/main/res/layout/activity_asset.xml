@@ -22,7 +22,8 @@
             android:layout_marginEnd="@dimen/padding_horizontal"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/receive"
-            android:src="@drawable/ic_chevron_left" />
+            android:src="@drawable/ic_chevron_left"
+            android:theme="@style/ClickableItem" />
 
         <ImageView
             android:id="@+id/assetLogo"

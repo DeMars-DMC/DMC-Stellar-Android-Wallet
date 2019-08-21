@@ -19,21 +19,21 @@
             android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_mini"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
 
         <TextView
             style="@style/WhiteTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/secret_seed"
+            android:text="@string/secret_phrase"
             android:textSize="@dimen/text_size_medium" />
     </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/whiteMain"
         android:layout_weight="1">
 
         <LinearLayout
@@ -42,11 +42,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/WhiteDescription"
                 android:id="@+id/warningPhraseTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_horizontal"
-                android:layout_marginTop="@dimen/padding_vertical"
+                android:layout_marginTop="@dimen/padding_horizontal"
                 android:layout_marginEnd="@dimen/padding_horizontal"
                 android:gravity="center"
                 android:text="@string/phrase_warning"
@@ -88,24 +89,21 @@
         </LinearLayout>
     </ScrollView>
 
-    <FrameLayout
-        android:id="@+id/passphraseContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/whiteMain"
-        app:layout_constraintBottom_toTopOf="@id/confirmButton">
 
-        <TextView
+        <Button
+            style="@style/ButtonStyle"
             android:id="@+id/passphraseButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/background_card_transparent_yellow"
             android:clickable="true"
             android:focusable="true"
-            android:padding="@dimen/padding_horizontal"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:textColor="@color/colorYellow"
+            android:layout_marginBottom="@dimen/padding_mini"
             android:text="@string/advanced_security" />
-    </FrameLayout>
 
     <Button
         android:id="@+id/confirmButton"

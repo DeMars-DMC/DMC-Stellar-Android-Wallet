@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.WebViewActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBarWeb"
+    <FrameLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
-        app:title="@string/terms_of_service" />
+        android:layout_height="@dimen/button_height_big">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
+
+        <TextView
+            style="@style/WhiteTitle"
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/terms_of_service"
+            android:textSize="@dimen/text_size_medium" />
+    </FrameLayout>
 
     <WebView
         android:id="@+id/webview"

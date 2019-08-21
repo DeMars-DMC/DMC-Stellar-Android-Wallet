@@ -57,7 +57,11 @@ class OpenAccountActivity : AppCompatActivity() {
     private const val REQUEST_CODE_CAMERA_ID_BACK = 222
     private const val REQUEST_CODE_CAMERA_SELFIE = 333
 
-    fun newInstance(context: Context): Intent = Intent(context, OpenAccountActivity::class.java)
+    private const val ARG_TITLE = "ARG_TITLE"
+    fun newInstance(context: Context, titleRes: Int): Intent =
+      Intent(context, OpenAccountActivity::class.java).apply {
+        putExtra(ARG_TITLE, titleRes)
+      }
   }
 
   private val userListener = object : ValueEventListener {
@@ -77,21 +81,30 @@ class OpenAccountActivity : AppCompatActivity() {
     ViewUtils.setTransparentStatusBar(this)
     setContentView(R.layout.activity_open_account)
 
-    Firebase.getUserFresh(userListener)
-  }
-
-  private fun initUI() {
     backButton.setOnClickListener {
       onBackPressed()
     }
 
+    titleView.setText(intent.getIntExtra(ARG_TITLE, 0))
+
+    Firebase.getUserFresh(userListener)
+  }
+
+  private fun initUI() {
     if (isCreating) {
-      showEditableView()
+      initEditableView()
     } else {
-      showNonEditableView()
+      initNonEditableView()
     }
 
     initSearchDialog()
+
+    showUI()
+  }
+
+  private fun showUI() {
+    progressBar.visibility = GONE
+    formContainer.visibility = VISIBLE
   }
 
   private fun initSearchDialog() {
@@ -143,7 +156,7 @@ class OpenAccountActivity : AppCompatActivity() {
       else -> CameraMode.ID_SELFIE
     }
 
-    val useCamera2 = false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/
+    val useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     startActivityForResult(if (useCamera2) Camera2Activity.newInstance(this, cameraMode)
     else CameraActivity.newInstance(this, cameraMode), requestCode)
   }
@@ -302,7 +315,7 @@ class OpenAccountActivity : AppCompatActivity() {
     textView.setText(spannable, TextView.BufferType.SPANNABLE)
   }
 
-  private fun showEditableView() {
+  private fun initEditableView() {
     titleView.setText(R.string.open_account)
 
     firstNameText.visibility = GONE
@@ -494,7 +507,7 @@ class OpenAccountActivity : AppCompatActivity() {
     termsConditions.movementMethod = LinkMovementMethod.getInstance()
   }
 
-  private fun showNonEditableView() {
+  private fun initNonEditableView() {
     titleView.setText(R.string.personal_information)
 
     firstNameInput.visibility = GONE

@@ -12,5 +12,6 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
-        android:padding="@dimen/padding_horizontal" />
+        android:padding="@dimen/padding_horizontal"
+        android:theme="@style/ClickableItem"/>
 </FrameLayout>

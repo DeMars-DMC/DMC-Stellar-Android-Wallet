@@ -1,58 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
-    android:layout_height="match_parent">
-
-    <ViewFlipper
-        android:id="@+id/viewFlipper"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolbarTheme"
-            app:popupTheme="@style/ToolbarTheme"
-            app:title="@string/contacts" />
-
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolbarTheme"
-            app:mt_clearIconTint="@color/transparent_white"
-            app:mt_hint="@string/hint_search_bar"
-            app:mt_hintColor="@color/transparent_white"
-            app:mt_maxSuggestionsCount="5"
-            app:mt_backIconTint="@color/whiteMain"
-            app:mt_speechMode="false"
-            app:mt_textColor="@color/whiteMain" />
-
-    </ViewFlipper>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_contact_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/viewFlipper"
-        android:background="@color/whiteMain"/>
-
-    <ProgressBar
-        android:id="@+id/progress_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/you_have_no_contacts" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    tools:context=".activities.ContactsActivity">
 
     <LinearLayout
         android:id="@+id/enable_permissions"
@@ -61,20 +15,101 @@
         android:layout_centerInParent="true"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/contact_list_permission_message" />
-
         <Button
             android:id="@+id/allow_permissions_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="@string/contact_list_permission_button" />
+            android:background="@drawable/background_card_transparent_green"
+            android:text="@string/contact_list_permission_button"
+            android:textColor="@color/colorGreen" />
+
+        <TextView
+            style="@style/LongWhiteDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/contact_list_permission_message" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_marginEnd="@dimen/padding_mini"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_chevron_left"
+            android:theme="@style/ClickableItem" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_big"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_big"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_toEndOf="@id/backButton"
+            android:layout_toStartOf="@id/addContactButton"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/type_contact_name" />
+
+        <ImageView
+            android:id="@+id/addContactButton"
+            android:layout_width="@dimen/button_height"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/padding_mini"
+            android:layout_marginEnd="@dimen/padding_mini"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_add_circle_outline"
+            android:theme="@style/ClickableItem" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/empty_view"
+        style="@style/LongWhiteDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/you_have_no_contacts" />
+
+    <View
+        android:id="@+id/topDivider"
+        style="@style/HorizontalDividerWhite"
+        android:layout_below="@id/toolbar"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topDivider">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_contact_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/padding_horizontal" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </RelativeLayout>

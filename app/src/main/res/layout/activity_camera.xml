@@ -10,11 +10,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black">
 
     <FrameLayout
@@ -28,133 +27,115 @@
             android:id="@+id/backButton"
             android:layout_width="@dimen/button_height"
             android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/padding_mini"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_mini"
-            android:layout_margin="@dimen/padding_mini"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
 
         <TextView
             android:id="@+id/mainTitle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
-            android:textColor="@color/whiteMain"
-            android:text="@string/photo_of_id"
-            android:textSize="@dimen/text_size_xxbig"
-            android:gravity="center"
             android:layout_marginTop="@dimen/padding_vertical"
-            android:layout_marginBottom="@dimen/padding_vertical"/>
+            android:layout_marginBottom="@dimen/padding_vertical"
+            android:gravity="center"
+            android:text="@string/photo_of_id"
+            android:textColor="@color/whiteMain"
+            android:textSize="@dimen/text_size_xxbig" />
 
         <TextView
             android:id="@+id/previewText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="@string/preview"
-            android:visibility="gone"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/padding_micro"
             android:gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/padding_micro"/>
+            android:text="@string/preview"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone" />
 
 
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/cameraPreview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:layout_below="@id/toolbar"
-        android:layout_above="@+id/controlPanel"/>
 
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/controlPanel"
         android:layout_below="@id/toolbar"
         android:background="@color/black"
-        android:visibility="gone"
-        android:layout_above="@+id/controlPanel"/>
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/controlPanel"
+        android:layout_below="@id/toolbar"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" />
 
     <RelativeLayout
         android:id="@+id/controlPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:background="@color/black"
+        android:clipToPadding="false"
         android:elevation="4dp"
         android:paddingStart="@dimen/padding_vertical"
+        android:paddingTop="@dimen/padding_vertical"
         android:paddingEnd="@dimen/padding_vertical"
         android:paddingBottom="@dimen/padding_vertical"
-        android:paddingTop="@dimen/padding_vertical"
-        android:clipToPadding="false"
         tools:targetApi="lollipop">
 
         <ImageView
-            android:theme="@android:style/ThemeOverlay.Material.Dark"
             android:id="@+id/galleryButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:padding="26dp"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/gallery"
+            android:focusable="true"
+            android:padding="26dp"
             android:src="@drawable/ic_gallery"
-            android:layout_centerVertical="true"
-            tools:visibility="visible"
-            android:contentDescription="@string/gallery" />
+            android:theme="@style/ClickableItem"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/cameraButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:padding="20dp"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:background="@drawable/background_button_round_white"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="@dimen/padding_horizontal"
+            android:padding="20dp"
             android:src="@drawable/ic_camera_black"
-            android:background="@drawable/background_button_round_white"
-            android:layout_centerInParent="true"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
         <ImageView
-            android:theme="@android:style/ThemeOverlay.Material.Dark"
             android:id="@+id/flashButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:padding="26dp"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/gallery"
+            android:focusable="true"
+            android:padding="26dp"
             android:src="@drawable/ic_flash_off"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            tools:visibility="visible"
-            android:contentDescription="@string/gallery" />
-
-        <TextView
-            android:id="@+id/ensureImageMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:layout_centerHorizontal="true"
-            android:text="@string/ensure_image"
-            android:textColor="@color/whiteMain"
-            android:paddingBottom="@dimen/padding_horizontal"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_height_big"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"
-            android:layout_below="@id/ensureImageMessage"/>
+            android:theme="@style/ClickableItem"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/buttonsContainer"
@@ -163,26 +144,45 @@
             android:layout_below="@id/ensureImageMessage">
 
             <Button
-                style="@style/ButtonStyleYellow"
                 android:id="@+id/retakeButton"
+                style="@style/ButtonStyleYellow"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="@dimen/button_height_big"
                 android:layout_marginEnd="@dimen/padding_mini"
+                android:layout_weight="0.5"
                 android:text="@string/retake"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <Button
-                style="@style/ButtonStyleAccent"
                 android:id="@+id/sendButton"
+                style="@style/ButtonStyleAccent"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="@dimen/button_height_big"
                 android:layout_marginStart="@dimen/padding_mini"
+                android:layout_weight="0.5"
                 android:text="@string/send"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_below="@id/ensureImageMessage"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/ensureImageMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_horizontal"
+            android:text="@string/ensure_image"
+            android:textColor="@color/whiteMain"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class PatchedSearchableSpinner extends AppCompatSpinner implements View.OnTouchListener,
         PatchedSearchableListDialog.SearchableItem {
-
+    // TODO: REMOVE
     public static final int NO_ITEM_SELECTED = -1;
     private Context _context;
     private List _items;

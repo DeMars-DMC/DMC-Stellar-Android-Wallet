@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PatchedSearchableListDialog extends DialogFragment implements
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-
+    //TODO: REMOVE
     private static final String ITEMS = "items";
 
     private ArrayAdapter listAdapter;

@@ -29,12 +29,11 @@ class WebViewActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_web_view)
 
-    setSupportActionBar(toolBarWeb)
-    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    backButton.setOnClickListener { onBackPressed()}
 
     if (intent.hasExtra(ARGS_INTENT_URL) && intent.hasExtra(ARGS_INTENT_TITLE)) {
       setupContent(intent.getStringExtra(ARGS_INTENT_URL))
-      toolBarWeb.title = intent.getStringExtra(ARGS_INTENT_TITLE)
+      titleView.text = intent.getStringExtra(ARGS_INTENT_TITLE)
     } else {
       throw IllegalStateException("missing intent arguments, please use " + WebViewActivity::class.java.simpleName + "#newIntent(...)")
     }

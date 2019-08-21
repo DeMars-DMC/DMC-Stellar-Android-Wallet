@@ -22,7 +22,7 @@ class SettingsActivity : BaseActivity() {
   }
 
   companion object {
-    const val RC_CREATE_DMC_ACCOUNT = 111
+    const val RC_PERSONAL_INFO = 111
     fun newInstance(context: Context): Intent {
       return Intent(context, SettingsActivity::class.java)
     }
@@ -105,7 +105,7 @@ class SettingsActivity : BaseActivity() {
       if (isRegistered) {
         startActivityForResult(WalletManagerActivity.showDmcAccount(it.context), SettingsAction.SHOW_ACCOUNT.ordinal)
       } else {
-        startActivity(OpenAccountActivity.newInstance(it.context))
+        startActivity(OpenAccountActivity.newInstance(it.context, R.string.open_account))
       }
     }
   }
@@ -137,7 +137,7 @@ class SettingsActivity : BaseActivity() {
 
 
         SettingsAction.SHOW_ACCOUNT.ordinal -> {
-          startActivityForResult(OpenAccountActivity.newInstance(this), RC_CREATE_DMC_ACCOUNT)
+          startActivityForResult(OpenAccountActivity.newInstance(this, R.string.personal_information), RC_PERSONAL_INFO)
         }
 
         SettingsAction.LOG_OUT.ordinal -> {

@@ -3,9 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/button_height_big"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/selectableItemBackground"
+    android:background="@drawable/background_card_transparent"
     android:orientation="horizontal"
-    android:padding="@dimen/padding_mini">
+    android:padding="@dimen/padding_mini"
+    android:layout_marginStart="@dimen/padding_horizontal"
+    android:layout_marginTop="@dimen/padding_micro"
+    android:layout_marginEnd="@dimen/padding_horizontal">
 
     <com.github.abdularis.civ.CircleImageView
         android:id="@+id/rounded_iv_profile"
@@ -30,17 +33,18 @@
         android:layout_height="@dimen/badge_height" />
 
     <Button
-        style="@style/ButtonStyleAccent"
+        style="@style/ButtonStyle"
         android:id="@+id/button_add_address"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:background="@drawable/background_card_transparent_accent"
         android:text="@string/add_stellar_address"
         android:elevation="@dimen/padding_zero"
         android:layout_marginEnd="@dimen/padding_mini"
         android:textAllCaps="false"
-        android:textColor="@color/whiteMain"
+        android:textColor="@color/colorAccent"
         android:textSize="11sp"
         tools:ignore="SmallSp,UnusedAttribute" />
 
@@ -54,7 +58,7 @@
         android:layout_toStartOf="@+id/button_add_address"
         android:layout_alignBaseline="@+id/rounded_iv_profile"
         android:gravity="center_vertical"
-        android:textColor="@color/black"
+        android:textColor="@color/whiteMain"
         android:textSize="@dimen/text_size_small"
         tools:text="Name Surname" />
 </RelativeLayout>

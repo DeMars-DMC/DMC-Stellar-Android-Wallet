@@ -11,8 +11,8 @@ import android.widget.Toast
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.stellar.HorizonException
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.model.HorizonException
+import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.utils.*
 import io.demars.stellarwallet.utils.StringFormat.Companion.getNumDecimals
 import io.demars.stellarwallet.utils.StringFormat.Companion.hasDecimalPoint

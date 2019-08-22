@@ -1,6 +1,6 @@
 package io.demars.stellarwallet.helpers
 
-import io.demars.stellarwallet.firebase.DmcUser
+import io.demars.stellarwallet.api.firebase.model.DmcUser
 import io.demars.stellarwallet.models.Deposit
 import io.demars.stellarwallet.models.Withdrawal
 import org.jetbrains.anko.doAsync

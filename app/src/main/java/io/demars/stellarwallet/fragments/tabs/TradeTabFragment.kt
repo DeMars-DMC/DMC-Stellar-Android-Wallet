@@ -15,7 +15,7 @@ import io.demars.stellarwallet.interfaces.*
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.Currency
 import io.demars.stellarwallet.models.SelectionModel
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import kotlinx.android.synthetic.main.fragment_tab_trade.*
 import org.stellar.sdk.Asset

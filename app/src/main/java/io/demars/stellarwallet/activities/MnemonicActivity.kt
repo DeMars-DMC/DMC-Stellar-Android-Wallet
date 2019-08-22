@@ -9,7 +9,7 @@ import android.widget.ImageView
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.helpers.PassphraseDialogHelper
-import io.demars.stellarwallet.models.stellar.MnemonicType
+import io.demars.stellarwallet.api.horizon.model.MnemonicType
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -124,7 +124,7 @@ class MnemonicActivity : BaseActivity() {
 
   private fun loadIntent() {
     if (!intent.hasExtra(MNEMONIC_PHRASE) && !intent.hasExtra(WALLET_LENGTH)) {
-      throw IllegalStateException("inconsistent intent extras, please use companion methods to create the intent")
+      throw IllegalStateException("inconsistent intent extras, please use companion methods to createAuth the intent")
     }
 
     if (intent.hasExtra(MNEMONIC_PHRASE)) {

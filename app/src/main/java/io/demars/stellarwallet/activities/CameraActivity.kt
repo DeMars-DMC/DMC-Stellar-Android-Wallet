@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.utils.ViewUtils
 import android.os.Build
 import android.view.View.*

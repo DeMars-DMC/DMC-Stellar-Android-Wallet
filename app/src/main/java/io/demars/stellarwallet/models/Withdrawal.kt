@@ -1,3 +1,5 @@
 package io.demars.stellarwallet.models
 
-data class Withdrawal(val assetCode: String, val amount: String, val fee: String, val bankAccount: BankAccount)
+import io.demars.stellarwallet.api.firebase.model.DmcUser
+
+data class Withdrawal(val assetCode: String, val amount: String, val fee: String, val bankAccount: DmcUser.BankAccount)

@@ -15,7 +15,7 @@ import io.demars.stellarwallet.interfaces.OnUpdateTradeTab
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.models.DataAsset
 import io.demars.stellarwallet.models.SelectionModel
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.Horizon
 import kotlinx.android.synthetic.main.activity_exchange.*
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber

@@ -1,6 +1,8 @@
 package io.demars.stellarwallet.models
 
-data class Deposit(val assetCode: String, val amount: String, val ref: String, val anchorBank: BankAccount, val userBank: BankAccount) {
+import io.demars.stellarwallet.api.firebase.model.DmcUser
+
+data class Deposit(val assetCode: String, val amount: String, val ref: String, val anchorBank: DmcUser.BankAccount, val userBank: DmcUser.BankAccount) {
   fun toReadableTitle() = "New $assetCode Deposit Request"
   fun toReadableMessage() = "Please deposit $amount $assetCode at any ${anchorBank.bankName}\n" +
     "${anchorBank.name}\n" +

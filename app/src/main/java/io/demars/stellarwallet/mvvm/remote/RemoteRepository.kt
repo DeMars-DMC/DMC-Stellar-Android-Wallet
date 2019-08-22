@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.mvvm.remote
 
 import io.demars.stellarwallet.interfaces.*
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.Horizon
 import org.stellar.sdk.requests.EventListener
 import org.stellar.sdk.requests.SSEStream
 import org.stellar.sdk.responses.TradeResponse

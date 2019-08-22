@@ -26,7 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.enums.FlashMode
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.views.AutoFitTextureView
 import kotlinx.android.synthetic.main.activity_camera2.*
 import org.jetbrains.anko.cameraManager
@@ -40,6 +40,7 @@ import kotlin.math.max
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Camera2Activity : AppCompatActivity() {
+  //Todo: apply changes from CameraActivity
   /**
    * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
    * [TextureView].
@@ -509,7 +510,7 @@ class Camera2Activity : AppCompatActivity() {
 
       previewRequestBuilder.addTarget(surface)
 
-      // Here, we create a CameraCaptureSession for camera preview.
+      // Here, we createAuth a CameraCaptureSession for camera preview.
       cameraDevice?.createCaptureSession(
         listOf(surface, imageReader?.surface),
         object : CameraCaptureSession.StateCallback() {

@@ -1,7 +1,7 @@
 package io.demars.stellarwallet.models
 
 import android.content.Context
-import io.demars.stellarwallet.models.stellar.MinimumBalance
+import io.demars.stellarwallet.api.horizon.model.MinimumBalance
 
 interface UserSession {
   fun getSessionAsset(): SessionAsset

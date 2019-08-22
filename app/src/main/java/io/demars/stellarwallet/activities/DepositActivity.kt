@@ -9,15 +9,13 @@ import android.text.style.ClickableSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.firebase.DmcUser
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.model.DmcUser
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.interfaces.AfterTextChanged
-import io.demars.stellarwallet.models.BankAccount
 import io.demars.stellarwallet.views.pin.PinLockView
 import kotlinx.android.synthetic.main.activity_deposit.*
 import kotlinx.android.synthetic.main.activity_deposit.amountTextView
 import kotlinx.android.synthetic.main.activity_deposit.numberKeyboard
-import kotlinx.android.synthetic.main.activity_deposit.toolbar
 import androidx.core.content.ContextCompat
 import android.text.TextPaint
 import android.text.Spanned
@@ -27,18 +25,18 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.firebase.DmcAsset
+import io.demars.stellarwallet.api.firebase.model.DmcAsset
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.models.Deposit
-import io.demars.stellarwallet.models.stellar.HorizonException
+import io.demars.stellarwallet.api.horizon.model.HorizonException
 import io.demars.stellarwallet.models.Withdrawal
-import io.demars.stellarwallet.models.cowrie.DepositResponse
-import io.demars.stellarwallet.models.cowrie.WithdrawalResponse
-import io.demars.stellarwallet.remote.CowrieApi
-import io.demars.stellarwallet.remote.CowrieRetrofit
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.cowrie.model.DepositResponse
+import io.demars.stellarwallet.api.cowrie.model.WithdrawResponse
+import io.demars.stellarwallet.api.cowrie.CowrieApi
+import io.demars.stellarwallet.api.horizon.Horizon
+import io.demars.stellarwallet.api.stellarport.StellarPort
 import io.demars.stellarwallet.utils.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -69,9 +67,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var modeString = ""
   private var assetCode = ""
   private var assetIssuer = ""
-  private var userBankAccounts = ArrayList<BankAccount>()
+  private var userBankAccounts = ArrayList<DmcUser.BankAccount>()
   private var supportedBanks = HashMap<String, String>()
-  private var bankToAdd = BankAccount()
+  private var bankToAdd = DmcUser.BankAccount()
   private var amount = 0.0
   private var minAmount = 0.0
   private var maxAmount = 0.0
@@ -109,9 +107,12 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     checkIntent()
 
-    if (mode == Mode.WITHDRAW && assetCode != Constants.ZAR_ASSET_CODE &&
-      assetCode != Constants.NGNT_ASSET_CODE) {
-      finishWithToast(R.string.withdrawal_not_supported)
+    if (!AssetUtils.isDepositSupported(assetCode, assetIssuer)) {
+      if (mode == Mode.DEPOSIT) {
+        finishWithToast(R.string.deposit_not_supported)
+      } else {
+        finishWithToast(R.string.withdrawal_not_supported)
+      }
       return
     } else if (!DmcApp.wallet.isVerified()) {
       finishWithToast(if (mode == Mode.DEPOSIT) R.string.deposit_not_verified
@@ -119,12 +120,16 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       return
     }
 
-    cowrieApi = CowrieRetrofit.create()
+    cowrieApi = CowrieApi.Creator.create()
+
+    StellarPort.authenticateDeposit(this, assetCode)
 
     setupUI()
 
     Firebase.getCurrentUser()?.let { _ ->
       Firebase.getUserFresh(userListener)
+      if (AssetUtils.isZar(assetCode, assetIssuer) ||
+        AssetUtils.isNgnt(assetCode, assetIssuer))
       Firebase.getAssetFresh(assetCode, assetListener)
     } ?: finishWithToast("Can't find user. Please try again")
   }
@@ -377,8 +382,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       }
       Constants.NGNT_ASSET_CODE -> {
         // Verify NGNT bank account with cowrie exchange API first
-        cowrieApi.ngntForNgn(bankToAdd.branch, bankToAdd.number).enqueue(object : Callback<WithdrawalResponse> {
-          override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
+        cowrieApi.ngntForNgn(bankToAdd.branch, bankToAdd.number).enqueue(object : Callback<WithdrawResponse> {
+          override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
             if (response.isSuccessful) {
               userBankAccounts.add(bankToAdd)
               Firebase.getUserBanksNgntRef(dmcUser.uid).setValue(userBankAccounts)
@@ -392,7 +397,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             }
           }
 
-          override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
+          override fun onFailure(call: Call<WithdrawResponse>, t: Throwable) {
             bankInputError(t.localizedMessage
               ?: "Error adding bank account, check your input and try again")
           }
@@ -501,7 +506,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           cowrieApi.ngnForNgnt(dmcUser.stellar_address).enqueue(object : Callback<DepositResponse> {
             override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
               response.body()?.let {
-                val anchorBank = BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
+                val anchorBank = DmcUser.BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
                 val deposit = Deposit(assetCode, amount, it.depositRef, anchorBank, userBankAccounts[0])
                 MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
                 showDepositInfoDialog(deposit)
@@ -518,7 +523,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         }
         Constants.ZAR_ASSET_CODE -> {
           // Notify user with our ZAR banking info
-          val anchorBank = BankAccount("DMC Rand (Pty) Ltd", "250655",
+          val anchorBank = DmcUser.BankAccount("DMC Rand (Pty) Ltd", "250655",
             "Current/Cheque Account", "62756496496", "FNB")
           val depositRef = "${dmcUser.email_address}*demars.io"
           val deposit = Deposit(assetCode, amount, depositRef, anchorBank, userBankAccounts[0])
@@ -569,8 +574,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String) {
     val bankAccount = userBankAccounts[0]
-    cowrieApi.ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawalResponse> {
-      override fun onResponse(call: Call<WithdrawalResponse>, response: Response<WithdrawalResponse>) {
+    cowrieApi.ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawResponse> {
+      override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
         if (!response.isSuccessful) {
           toast("Error requesting $assetCode withdrawal")
           hideProgressBar()
@@ -595,7 +600,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         }
       }
 
-      override fun onFailure(call: Call<WithdrawalResponse>, t: Throwable) {
+      override fun onFailure(call: Call<WithdrawResponse>, t: Throwable) {
         Timber.e(t)
         toast(t.localizedMessage ?: "Unknown error while requesting withdraw $assetCode")
         hideProgressBar()

@@ -14,7 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.PinActivity
-import io.demars.stellarwallet.models.stellar.MnemonicType
+import io.demars.stellarwallet.api.horizon.model.MnemonicType
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -73,7 +73,7 @@ class ApplicationEspressoTest {
      * Must be called from ActivityType.WALLET_ACTIVITY
      */
     private fun clearWallet() {
-        onView(ViewMatchers.withId(R.id.nav_settings)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.settingsButton)).perform(ViewActions.click())
 
         onView(ViewMatchers.withId(R.id.logOutButton)).perform(ViewActions.click())
 
@@ -109,7 +109,7 @@ class ApplicationEspressoTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withId(R.id.confirmButton)).perform(ViewActions.click())
-        // create pin
+        // createAuth pin
         writePin(pin)
         // re-enter
         writePin(pin)

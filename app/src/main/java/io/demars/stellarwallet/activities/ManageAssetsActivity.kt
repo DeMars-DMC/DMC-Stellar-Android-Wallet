@@ -22,15 +22,15 @@ import com.google.firebase.database.ValueEventListener
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.Preferences
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
 import io.demars.stellarwallet.interfaces.OnAssetSelected
 import io.demars.stellarwallet.models.DataAsset
-import io.demars.stellarwallet.models.stellar.HorizonException
+import io.demars.stellarwallet.api.horizon.model.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.utils.*
 import kotlinx.android.synthetic.main.activity_manage_assets.addressEditText
 import org.stellar.sdk.AssetTypeCreditAlphaNum4
@@ -75,7 +75,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
       refreshAssets()
     }
 
-    accountButton.setOnClickListener {
+    settingsButton.setOnClickListener {
       openSettings()
     }
 
@@ -278,9 +278,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
       ViewUtils.showReportingCurrencyDialog(this, this)
     }
 
-    accountButton.setImageResource(R.drawable.ic_check_white)
+    settingsButton.setImageResource(R.drawable.ic_check_white)
     swipeRefresh.isEnabled = false
-    accountButton.setOnClickListener {
+    settingsButton.setOnClickListener {
       disableCustomization()
     }
   }
@@ -292,9 +292,9 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     totalBalanceLabel.setText(R.string.total_balance)
     totalBalanceView.visibility = View.VISIBLE
     reportingCurrency.visibility = View.GONE
-    accountButton.setImageResource(R.drawable.ic_settings)
-    accountButton.setColorFilter(ContextCompat.getColor(this, R.color.whiteMain))
-    accountButton.setOnClickListener {
+    settingsButton.setImageResource(R.drawable.ic_settings)
+    settingsButton.setColorFilter(ContextCompat.getColor(this, R.color.whiteMain))
+    settingsButton.setOnClickListener {
       openSettings()
     }
   }

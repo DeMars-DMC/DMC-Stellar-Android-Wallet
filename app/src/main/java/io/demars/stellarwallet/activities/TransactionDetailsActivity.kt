@@ -10,12 +10,12 @@ import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.models.Contact
-import io.demars.stellarwallet.models.stellar.Operation
-import io.demars.stellarwallet.models.stellar.Trade
+import io.demars.stellarwallet.api.horizon.model.Operation
+import io.demars.stellarwallet.api.horizon.model.Trade
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.StringFormat
 import io.demars.stellarwallet.utils.ViewUtils
-import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
+import io.demars.stellarwallet.mvvm.contacts.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_transaction_details.*
 import java.io.Serializable
 

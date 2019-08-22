@@ -18,9 +18,11 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.demars.stellarwallet.api.horizon.model.Operation
+import io.demars.stellarwallet.api.horizon.model.Trade
+import io.demars.stellarwallet.api.horizon.model.Transaction
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.interfaces.TransactionsListener
-import io.demars.stellarwallet.models.stellar.*
 import io.demars.stellarwallet.utils.AssetUtils
 
 

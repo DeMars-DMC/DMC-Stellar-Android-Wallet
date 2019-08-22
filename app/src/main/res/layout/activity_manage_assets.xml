@@ -86,7 +86,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/accountButton"
+                android:id="@+id/settingsButton"
                 android:layout_width="@dimen/button_height_big"
                 android:layout_height="@dimen/button_height_big"
                 android:layout_marginEnd="@dimen/padding_mini"

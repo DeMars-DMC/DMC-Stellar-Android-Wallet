@@ -137,5 +137,21 @@ class AssetUtils {
       assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> 2
       else -> 7
     }
+
+    fun isDepositSupported(assetCode: String, assetIssuer: String) =
+      isZar(assetCode, assetIssuer) || isNgnt(assetCode, assetIssuer) ||
+        isBtc(assetCode, assetIssuer) || isEth(assetCode, assetIssuer)
+
+    fun isZar(assetCode: String, assetIssuer: String) =
+      assetCode == Constants.ZAR_ASSET_CODE && assetIssuer == Constants.ZAR_ASSET_ISSUER
+
+    fun isNgnt(assetCode: String, assetIssuer: String) =
+      assetCode == Constants.NGNT_ASSET_CODE && assetIssuer == Constants.NGNT_ASSET_ISSUER
+
+    private fun isBtc(assetCode: String, assetIssuer: String) =
+      assetCode == Constants.BTC_ASSET_CODE && assetIssuer == Constants.BTC_ASSET_ISSUER
+
+    private fun isEth(assetCode: String, assetIssuer: String) =
+      assetCode == Constants.ETH_ASSET_CODE && assetIssuer == Constants.ETH_ASSET_ISSUER
   }
 }

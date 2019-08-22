@@ -402,6 +402,7 @@
     <string name="enter_public_address">Enter public address</string>
     <string name="finish_payment">Finish payment</string>
     <string name="withdrawal_not_supported">Withdrawals are not supported for this asset.</string>
+    <string name="deposit_not_supported">Deposits are not supported for this asset.</string>
     <string name="add_custom_asset_code_hint">Asset code(ex. BTC)</string>
     <string name="add_custom_asset_issuer_hint">Issuer address</string>
     <string name="add_contact_name_hint">Name</string>

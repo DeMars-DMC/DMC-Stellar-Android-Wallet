@@ -20,9 +20,11 @@
                 android:layout_width="@dimen/button_height"
                 android:layout_height="@dimen/button_height_big"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="@dimen/padding_medium"
-                android:src="@drawable/ic_chevron_left"
-                android:theme="@style/ClickableItem" />
+                android:padding="@dimen/padding_mini"
+                android:layout_margin="@dimen/padding_mini"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_close"
+                android:theme="@style/ClickableItem"/>
 
             <TextView
                 android:id="@+id/titleView"

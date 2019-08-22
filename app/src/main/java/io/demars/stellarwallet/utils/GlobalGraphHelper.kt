@@ -7,7 +7,7 @@ import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.activities.LaunchActivity
 import io.demars.stellarwallet.activities.ManageAssetsActivity
 import io.demars.stellarwallet.encryption.KeyStoreWrapper
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.mvvm.local.OperationsRepository
 import io.demars.stellarwallet.mvvm.local.TradesRepository

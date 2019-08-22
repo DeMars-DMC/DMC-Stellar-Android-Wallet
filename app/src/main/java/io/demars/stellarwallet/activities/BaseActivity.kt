@@ -5,7 +5,7 @@ import android.content.Intent
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.utils.DebugPreferencesHelper
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import io.demars.stellarwallet.utils.ViewUtils

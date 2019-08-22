@@ -158,7 +158,7 @@ public class PatchedSearchableListDialog extends DialogFragment implements
 
         _listViewItems = (ListView) rootView.findViewById(R.id.listItems);
 
-        //create the adapter by passing your ArrayList data
+        //createAuth the adapter by passing your ArrayList data
         listAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,
                 items);
         //attach the adapter to the list

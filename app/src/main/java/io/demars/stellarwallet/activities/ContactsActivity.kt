@@ -26,7 +26,7 @@ import io.demars.stellarwallet.interfaces.ContactListener
 import io.demars.stellarwallet.interfaces.ContactsRepository
 import io.demars.stellarwallet.models.Contact
 import io.demars.stellarwallet.utils.ViewUtils
-import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
+import io.demars.stellarwallet.mvvm.contacts.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_contacts.*
 import timber.log.Timber
 
@@ -353,7 +353,7 @@ class ContactsActivity : BaseActivity(), ContactListener, SearchView.OnQueryText
     } else {
       val contactId = ContactsRepositoryImpl(this).createContact(name, address)
       if (contactId == -1L) {
-        toast("Failed to create the new contact")
+        toast("Failed to createAuth the new contact")
       } else {
         toast("Contact has been created")
         bottomSheet.dismiss()

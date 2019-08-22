@@ -1,12 +1,9 @@
 package io.demars.stellarwallet.fragments
 
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.os.Process
 import androidx.preference.PreferenceFragmentCompat
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.firebase.Firebase
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 
 class DebugFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {

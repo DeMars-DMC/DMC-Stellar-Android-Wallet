@@ -12,12 +12,14 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.interfaces.OnAssetSelected
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import java.io.ByteArrayOutputStream
+import android.content.Intent
+import android.net.Uri
 
 
 object ViewUtils {
@@ -36,13 +38,22 @@ object ViewUtils {
   }
   //endregion
 
+  //region Url
+  @JvmStatic
+  fun openUrl(activity:Activity, url:String) {
+    val i = Intent(Intent.ACTION_VIEW)
+    i.data = Uri.parse(url)
+    activity.startActivity(i)
+  }
+  //endregion
+
   //region Keyboard
   @JvmStatic
   fun hideKeyboard(activity: Activity) {
     val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     //Find the currently focused view, so we can grab the correct window token from it.
     var view = activity.currentFocus
-    //If no view currently has focus, create a new one, just so we can grab a window token from it
+    //If no view currently has focus, createAuth a new one, just so we can grab a window token from it
     if (view == null) {
       view = View(activity)
     }

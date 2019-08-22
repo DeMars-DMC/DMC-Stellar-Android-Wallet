@@ -1,9 +1,9 @@
 package io.demars.stellarwallet.models
 
 import io.demars.stellarwallet.helpers.Constants
-import io.demars.stellarwallet.models.stellar.EffectType
-import io.demars.stellarwallet.models.stellar.Operation
-import io.demars.stellarwallet.models.stellar.Trade
+import io.demars.stellarwallet.api.horizon.model.EffectType
+import io.demars.stellarwallet.api.horizon.model.Operation
+import io.demars.stellarwallet.api.horizon.model.Trade
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.Response
 import org.stellar.sdk.responses.TradeResponse

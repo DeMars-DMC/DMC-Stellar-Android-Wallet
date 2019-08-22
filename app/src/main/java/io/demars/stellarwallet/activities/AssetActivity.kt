@@ -2,7 +2,6 @@ package io.demars.stellarwallet.activities
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -12,13 +11,13 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.TransactionsAdapter
 import io.demars.stellarwallet.interfaces.TransactionsListener
 import io.demars.stellarwallet.models.WalletHeterogeneousWrapper
-import io.demars.stellarwallet.models.stellar.Operation
-import io.demars.stellarwallet.models.stellar.Trade
+import io.demars.stellarwallet.api.horizon.model.Operation
+import io.demars.stellarwallet.api.horizon.model.Trade
 import io.demars.stellarwallet.mvvm.WalletViewModel
 import io.demars.stellarwallet.utils.AccountUtils
 import io.demars.stellarwallet.utils.AssetUtils
 import io.demars.stellarwallet.utils.StringFormat
-import io.demars.stellarwallet.vmodels.ContactsRepositoryImpl
+import io.demars.stellarwallet.mvvm.contacts.ContactsRepositoryImpl
 import kotlinx.android.synthetic.main.activity_asset.*
 import org.jetbrains.anko.doAsync
 import timber.log.Timber

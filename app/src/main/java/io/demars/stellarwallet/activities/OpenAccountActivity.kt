@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.View.GONE
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.firebase.DmcUser
+import io.demars.stellarwallet.api.firebase.model.DmcUser
 import io.demars.stellarwallet.interfaces.AfterTextChanged
 import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_open_account.*
@@ -32,10 +32,9 @@ import com.google.firebase.database.ValueEventListener
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.enums.CameraMode
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
-import io.demars.stellarwallet.models.Address
 import io.demars.stellarwallet.views.DmcURLSpan
 import io.demars.stellarwallet.views.SearchableListDialog
 import kotlinx.android.synthetic.main.activity_open_account.submitButton
@@ -48,7 +47,7 @@ class OpenAccountActivity : AppCompatActivity() {
   private var isCreating = true
   private var birthDateDialog: DatePickerDialog? = null
   private var expiryDateDialog: DatePickerDialog? = null
-  private var address = Address()
+  private var address = DmcUser.Address()
   private var infoCheckedOnce = false
   private lateinit var searchableDialog: SearchableListDialog
 

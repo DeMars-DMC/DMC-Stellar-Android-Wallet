@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.models.stellar.MnemonicType
+import io.demars.stellarwallet.api.horizon.model.MnemonicType
 import io.demars.stellarwallet.utils.GlobalGraphHelper
 import kotlinx.android.synthetic.main.activity_launch.*
 import timber.log.Timber
@@ -25,8 +25,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.firebase.DmcUser
-import io.demars.stellarwallet.firebase.Firebase
+import io.demars.stellarwallet.api.firebase.model.DmcUser
+import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.utils.NetworkUtils
 import io.demars.stellarwallet.utils.ViewUtils
 import io.demars.stellarwallet.views.pin.PinLockView
@@ -71,7 +71,7 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         dmcUser = dataSnapshot.getValue(DmcUser::class.java)
         dmcUser?.let { user ->
           DmcApp.wallet.setUserState(user.state)
-          Firebase.initFcm(user.uid, "create")
+          Firebase.initFcm(user.uid, "createAuth")
           updateForMode(Mode.WALLET)
         } ?: createNewUser()
       } else createNewUser()

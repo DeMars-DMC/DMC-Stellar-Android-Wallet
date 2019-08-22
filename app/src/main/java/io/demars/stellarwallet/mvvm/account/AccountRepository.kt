@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import io.demars.stellarwallet.DmcApp
 import io.demars.stellarwallet.interfaces.OnLoadAccount
 import io.demars.stellarwallet.models.StellarAccount
-import io.demars.stellarwallet.models.stellar.MinimumBalance
-import io.demars.stellarwallet.remote.Horizon
+import io.demars.stellarwallet.api.horizon.model.MinimumBalance
+import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.utils.AccountUtils
 import org.stellar.sdk.requests.ErrorResponse
 import org.stellar.sdk.responses.AccountResponse

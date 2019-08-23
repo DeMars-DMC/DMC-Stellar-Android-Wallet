@@ -111,7 +111,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/bankDepositButton"
+        android:id="@+id/depositButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
         android:layout_marginStart="@dimen/padding_horizontal"
@@ -123,6 +123,7 @@
 
         <TextView
             style="@style/ButtonTitle"
+            android:id="@+id/depositTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -131,6 +132,7 @@
             android:textColor="@color/colorAccent" />
 
         <ImageView
+            android:id="@+id/depositIcon"
             android:layout_width="@dimen/button_height_big"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"

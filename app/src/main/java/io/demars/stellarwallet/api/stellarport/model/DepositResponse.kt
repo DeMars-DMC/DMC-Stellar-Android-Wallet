@@ -10,16 +10,16 @@ class DepositResponse {
   @SerializedName("max_amount")
   var maxAmount = -1.0
   @SerializedName("fee_fixed")
-  var feeFixed = 0
+  var feeFixed = 0.0
   @SerializedName("fee_percent")
-  var feePercent = 0
+  var feePercent = 0.0
   @SerializedName("eta")
-  var eta = -1.0
+  var eta = -1
   @SerializedName("extra_info")
   var extraInfo = ExtraInfo()
 
   class ExtraInfo{
-    @SerializedName("message")
+    @SerializedName("messageFromAnchor")
     var message = ""
   }
 }

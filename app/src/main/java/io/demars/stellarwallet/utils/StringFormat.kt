@@ -48,7 +48,7 @@ class StringFormat {
     }
 
     /**
-     * Converts native to xlm, otherwise returns the same asset code
+     * Converts native to xlm, otherwise returns the same baseAssetCode code
      */
     fun formatAssetCode(assetCode: String): String =
       if (assetCode == Constants.LUMENS_ASSET_TYPE) Constants.LUMENS_ASSET_CODE else assetCode

@@ -16,9 +16,6 @@ class WalletHeterogeneousWrapper {
   var array: ArrayList<Any> = ArrayList()
 
   //region Update methods
-
-
-
   fun updateOperationsList(activeAsset: String, list: ArrayList<Pair<OperationResponse, String?>>?) {
     array.clear()
     addFilteredOperations(activeAsset, list)

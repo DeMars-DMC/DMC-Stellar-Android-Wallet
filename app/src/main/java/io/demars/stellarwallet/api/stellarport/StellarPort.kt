@@ -15,8 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object StellarPort {
-
-  fun authenticateDeposit(activity: BaseActivity, assetCode: String) {
+  fun authenticate(activity: BaseActivity, listener: AuthListener) {
     val account = DmcApp.wallet.getStellarAccountId()
     if (account == null) {
       activity.toast("Error - Stellar account can't be null")
@@ -24,7 +23,6 @@ object StellarPort {
     }
 
     val seed = AccountUtils.getSecretSeed(activity)
-
     val apiAuth = StellarPortApi.Creator.createAuth()
     apiAuth.getAuthToken(account).enqueue(object : Callback<GetAuthResponse> {
       override fun onResponse(call: Call<GetAuthResponse>, response: Response<GetAuthResponse>) {
@@ -44,7 +42,7 @@ object StellarPort {
                 val postBody = response.body()
                 if (postBody != null && postBody.token.isNotEmpty()) {
                   // Ok here we got JWT token that we can use for Authorization on Transfer Server
-                  withdraw(activity, postBody.token, assetCode, account)
+                  listener.onTokenResponse(account, postBody.token)
                 } else {
                   handleError(activity, response.errorBody())
                 }
@@ -68,7 +66,23 @@ object StellarPort {
     })
   }
 
-  private fun deposit(activity: BaseActivity, token: String, assetCode: String, account: String) {
+  fun authenticatedWithdraw(activity: BaseActivity, assetCode: String, dest: String, listener: WithdrawListener) {
+    authenticate(activity, object : AuthListener {
+      override fun onTokenResponse(account: String, token: String) {
+        withdraw(activity, token, assetCode, account, dest, listener)
+      }
+    })
+  }
+
+  fun authenticatedDeposit(activity: BaseActivity, assetCode: String, listener: DepositListener) {
+    authenticate(activity, object : AuthListener {
+      override fun onTokenResponse(account: String, token: String) {
+        deposit(activity, token, assetCode, account, listener)
+      }
+    })
+  }
+
+  private fun deposit(activity: BaseActivity, token: String, assetCode: String, account: String, listener: DepositListener) {
     val apiTransfer = StellarPortApi.Creator.createTransfer()
     val tokenHeader = "Bearer $token"
     apiTransfer.deposit(tokenHeader, assetCode, account).enqueue(object : Callback<DepositResponse> {
@@ -77,29 +91,29 @@ object StellarPort {
         val body = response.body()
         val errorBody = response.errorBody()
         when {
-          response.isSuccessful && body != null -> activity.toast(body.extraInfo.message)
+          response.isSuccessful && body != null -> listener.onDepositResponse(body)
           else -> handleError(activity, errorBody)
         }
       }
 
       override fun onFailure(call: Call<DepositResponse>, t: Throwable) {
-        activity.toast("Error - $assetCode Deposit request failed")
+        activity.toast("Error - $assetCode BankDeposit request failed")
       }
 
     })
   }
 
-  private fun withdraw(activity: BaseActivity, token: String, assetCode: String, dest: String) {
+  private fun withdraw(activity: BaseActivity, token: String, assetCode: String, account: String, dest: String, listener: WithdrawListener) {
     val apiTransfer = StellarPortApi.Creator.createTransfer()
     val tokenHeader = "Bearer $token"
 
-    apiTransfer.withdraw(tokenHeader, assetCode, dest).enqueue(object : Callback<WithdrawResponse> {
+    apiTransfer.withdraw(tokenHeader, assetCode, account, dest).enqueue(object : Callback<WithdrawResponse> {
       override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
         val body = response.body()
         val errorBody = response.errorBody()
 
         when {
-          response.isSuccessful && body != null -> activity.toast("Success")
+          response.isSuccessful && body != null -> listener.onWithdrawResponse(body)
           else -> handleError(activity, errorBody)
         }
       }
@@ -128,5 +142,18 @@ object StellarPort {
         }
       }
     }
+  }
+
+  interface Listener
+  interface AuthListener : Listener {
+    fun onTokenResponse(account: String, token: String)
+  }
+
+  interface DepositListener : Listener {
+    fun onDepositResponse(response: DepositResponse)
+  }
+
+  interface WithdrawListener : Listener {
+    fun onWithdrawResponse(response: WithdrawResponse)
   }
 }

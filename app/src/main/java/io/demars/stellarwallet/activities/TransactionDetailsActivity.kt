@@ -51,8 +51,7 @@ class TransactionDetailsActivity : BaseActivity() {
     copyAddressIcon.visibility = View.VISIBLE
     copyAddressIcon.setOnClickListener {
       toAddress?.let {
-        ViewUtils.copyToClipBoard(this, it,
-          "Stellar address", R.string.address_copied_message)
+        ViewUtils.copyToClipBoard(this, it, R.string.address_copied_message)
       }
     }
 

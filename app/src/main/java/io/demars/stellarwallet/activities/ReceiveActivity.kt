@@ -12,7 +12,7 @@ import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import io.demars.stellarwallet.helpers.Constants
+import io.demars.stellarwallet.utils.AssetUtils
 import kotlinx.android.synthetic.main.activity_receive.*
 
 class ReceiveActivity : BaseActivity() {
@@ -56,10 +56,25 @@ class ReceiveActivity : BaseActivity() {
   }
 
   private fun initBankDepositButton() {
-    val bankDepositSupported = (assetCode == Constants.ZAR_ASSET_CODE && assetIssuer == Constants.ZAR_ASSET_ISSUER)
-      || (assetCode == Constants.NGNT_ASSET_CODE && assetIssuer == Constants.NGNT_ASSET_ISSUER)
-    bankDepositButton.visibility = if (bankDepositSupported) View.VISIBLE else View.GONE
-    bankDepositButton.setOnClickListener {
+    val bankDepositSupported = AssetUtils.isZar(assetCode, assetIssuer)
+      || AssetUtils.isNgnt(assetCode, assetIssuer)
+
+    val directDepositSupported = AssetUtils.isBtc(assetCode, assetIssuer)
+      || AssetUtils.isEth(assetCode, assetIssuer)
+
+    when {
+      bankDepositSupported -> {
+        depositButton.visibility = View.VISIBLE
+        depositTitle.setText(R.string.bank_deposit)
+      }
+      directDepositSupported -> {
+        depositButton.visibility = View.VISIBLE
+        depositTitle.setText(R.string.direct_deposit)
+      }
+      else -> depositButton.visibility = View.GONE
+    }
+
+    depositButton.setOnClickListener {
       startActivity(DepositActivity.newInstance(this,
         DepositActivity.Mode.DEPOSIT, assetCode, assetIssuer))
     }

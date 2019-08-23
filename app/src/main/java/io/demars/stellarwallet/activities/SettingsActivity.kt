@@ -69,12 +69,12 @@ class SettingsActivity : BaseActivity() {
     }
 
     supportEmailButton.setOnClickListener {
-      ViewUtils.copyToClipBoard(this, "support@demars.io", "DMC Email",
+      ViewUtils.copyToClipBoard(this, "support@demars.io",
         R.string.email_copied_message)
     }
 
     supportWhatsAppButton.setOnClickListener {
-      ViewUtils.copyToClipBoard(this, "+230 5 775 8837", "DMC WhatsApp",
+      ViewUtils.copyToClipBoard(this, "+230 5 775 8837",
         R.string.number_copied_message)
     }
 

@@ -117,7 +117,7 @@ class KeyStoreWrapper(private val context: Context) {
     val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
     val builder = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
       .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-      // Require the user to authenticateDeposit with a fingerprint to authorize every use of the key
+      // Require the user to authenticatedDeposit with a fingerprint to authorize every use of the key
       .setUserAuthenticationRequired(userAuthenticationRequired)
       .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
       .setUserAuthenticationValidityDurationSeconds(userAuthenticationValidityDurationSeconds)

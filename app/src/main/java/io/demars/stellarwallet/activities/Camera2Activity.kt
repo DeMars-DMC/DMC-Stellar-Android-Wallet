@@ -681,6 +681,8 @@ class Camera2Activity : AppCompatActivity() {
    * finished.
    */
   private fun unlockFocus() {
+    if (!::previewRequestBuilder.isInitialized) return
+
     try {
       // Reset the auto-focus trigger
       previewRequestBuilder.set(

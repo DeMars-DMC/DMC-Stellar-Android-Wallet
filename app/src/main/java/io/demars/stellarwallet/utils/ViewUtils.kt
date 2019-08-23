@@ -160,17 +160,17 @@ object ViewUtils {
 
   //region Clipboard
   @JvmStatic
-  fun copyToClipBoard(context: Context, data: String, label: String, toastMessage: String) {
+  fun copyToClipBoard(context: Context, data: String, toastMessage: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText(label, data)
+    val clip = ClipData.newPlainText("", data)
     clipboard.primaryClip = clip
     showToast(context, toastMessage)
   }
 
   @JvmStatic
-  fun copyToClipBoard(context: Context, data: String, label: String, toastMessage: Int) {
+  fun copyToClipBoard(context: Context, data: String, toastMessage: Int) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText(label, data)
+    val clip = ClipData.newPlainText("", data)
     clipboard.primaryClip = clip
     showToast(context, toastMessage)
   }

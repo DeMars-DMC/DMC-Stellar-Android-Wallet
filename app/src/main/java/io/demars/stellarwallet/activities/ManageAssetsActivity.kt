@@ -211,8 +211,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     val publicId = DmcApp.wallet.getStellarAccountId() ?: ""
     addressEditText.text = publicId
     addressCopyButton.setOnClickListener {
-      ViewUtils.copyToClipBoard(this, publicId, "Account Id",
-        R.string.address_copied_message)
+      ViewUtils.copyToClipBoard(this, publicId, R.string.address_copied_message)
     }
 
     generateQRCode(publicId, qrCode, 500)
@@ -385,7 +384,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
         }, reportingAsset, dataAsset!!)
       }
     } else {
-      // If reporting currency is not XLM, we need to know price of the asset in XLM
+      // If reporting currency is not XLM, we need to know price of the baseAssetCode in XLM
       // so then we can convert all other assets into XLM and then into reporting currency
       DmcApp.wallet.getBalances().find { it.assetType == "native" }?.let { xlmBalance ->
         Timber.d("Loading order book %s %s", reportingAsset.code, xlmBalance.assetCode)

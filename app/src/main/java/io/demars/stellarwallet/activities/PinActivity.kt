@@ -35,7 +35,7 @@ class PinActivity : AppCompatActivity() {
      * New Instance of Intent to launch a {@link PinActivity}
      * @param context the activityContext of the requestor
      * @param pin pin to verified otherwise it will simple return the inserted pin, it must contain 4 number characters.
-     * @param message message to show on the top of the pinlock.
+     * @param message messageFromAnchor to show on the top of the pinlock.
      */
     fun newInstance(context: Context, pin: String?, message: String = context.getString(R.string.please_enter_your_pin),
                     askBiometrics: Boolean): Intent {

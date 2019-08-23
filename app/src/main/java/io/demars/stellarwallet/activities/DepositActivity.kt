@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
+import android.text.*
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.activity_deposit.*
 import kotlinx.android.synthetic.main.activity_deposit.amountTextView
 import kotlinx.android.synthetic.main.activity_deposit.numberKeyboard
 import androidx.core.content.ContextCompat
-import android.text.TextPaint
-import android.text.Spanned
-import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,19 +26,21 @@ import io.demars.stellarwallet.api.firebase.model.DmcAsset
 import io.demars.stellarwallet.helpers.Constants
 import io.demars.stellarwallet.helpers.MailHelper
 import io.demars.stellarwallet.interfaces.SuccessErrorCallback
-import io.demars.stellarwallet.models.Deposit
 import io.demars.stellarwallet.api.horizon.model.HorizonException
-import io.demars.stellarwallet.models.Withdrawal
 import io.demars.stellarwallet.api.cowrie.model.DepositResponse
 import io.demars.stellarwallet.api.cowrie.model.WithdrawResponse
 import io.demars.stellarwallet.api.cowrie.CowrieApi
 import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.api.stellarport.StellarPort
+import io.demars.stellarwallet.models.local.*
 import io.demars.stellarwallet.utils.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   enum class Mode {
@@ -52,7 +51,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     private const val ARG_MODE = "ARG_MODE"
     private const val ARG_ASSET_CODE = "ARG_ASSET_CODE"
     private const val ARG_ASSET_ISSUER = "ARG_ASSET_ISSUER"
-    private const val MAX_DECIMALS = 2
     fun newInstance(context: Context, mode: Mode, assetCode: String, assetIssuer: String): Intent =
       Intent(context, DepositActivity::class.java).apply {
         putExtra(ARG_MODE, mode)
@@ -67,14 +65,19 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var modeString = ""
   private var assetCode = ""
   private var assetIssuer = ""
-  private var userBankAccounts = ArrayList<DmcUser.BankAccount>()
   private var supportedBanks = HashMap<String, String>()
+  private var userBankAccounts = ArrayList<DmcUser.BankAccount>()
   private var bankToAdd = DmcUser.BankAccount()
+  private var accountDest = ""
+  private var anchorAccount = ""
+  private var anchorMemo = ""
   private var amount = 0.0
   private var minAmount = 0.0
   private var maxAmount = 0.0
   private var amountText = "0"
   private var maxAmountText = "0.0"
+  private var maxDecimals = 2
+  private var termsChecked = false
 
   private val userListener = object : ValueEventListener {
     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -122,15 +125,13 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     cowrieApi = CowrieApi.Creator.create()
 
-    StellarPort.authenticateDeposit(this, assetCode)
-
     setupUI()
 
     Firebase.getCurrentUser()?.let { _ ->
       Firebase.getUserFresh(userListener)
       if (AssetUtils.isZar(assetCode, assetIssuer) ||
         AssetUtils.isNgnt(assetCode, assetIssuer))
-      Firebase.getAssetFresh(assetCode, assetListener)
+        Firebase.getAssetFresh(assetCode, assetListener)
     } ?: finishWithToast("Can't find user. Please try again")
   }
 
@@ -142,6 +143,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       assetCode = it.getString(ARG_ASSET_CODE, "")
       assetIssuer = it.getString(ARG_ASSET_ISSUER, "")
+      maxDecimals = AssetUtils.getMaxDecimals(assetCode)
+
       when (mode) {
         Mode.DEPOSIT -> {
           maxAmount = 5000.0
@@ -150,7 +153,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         Mode.WITHDRAW -> {
           val available = AccountUtils.getAvailableBalance(assetCode)
           maxAmount = available.toDouble()
-          maxAmountText = StringFormat.truncateDecimalPlaces(available, MAX_DECIMALS)
+          maxAmountText = StringFormat.truncateDecimalPlaces(available, maxDecimals)
           when (assetCode) {
             Constants.NGNT_ASSET_CODE -> minAmount = 500.0
           }
@@ -175,61 +178,30 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     bankPicker?.setOnClickListener {
-      val banks = supportedBanks.values.toTypedArray()
-      val branchCodes = supportedBanks.keys.toTypedArray()
-
-      AlertDialog.Builder(this)
-        .setTitle(R.string.select_bank)
-        .setItems(banks) { _, which ->
-          val bankName = banks[which]
-          val branchCode = branchCodes[which]
-          bankPicker?.setTextColor(Color.BLACK)
-          bankPicker?.text = bankName
-
-          bankToAdd.bankName = bankName
-          bankToAdd.branch = branchCode
-
-          if (bankToAdd.number.isEmpty()) {
-            ViewUtils.showKeyboard(this, accountNumberInput)
-          }
-
-          checkAddBankButton()
-        }.show()
+      showBankPicker()
     }
 
-    accountNumberInput.addTextChangedListener(object : AfterTextChanged() {
+    accountNumberInput?.inputType = if (isBank()) InputType.TYPE_CLASS_NUMBER else InputType.TYPE_CLASS_TEXT
+    accountNumberInput?.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
-        bankToAdd.number = editable.trim().toString()
-        checkAddBankButton()
+        onAccountInput(editable.trim().toString())
       }
     })
 
     accountTypePicker?.setOnClickListener {
-      val accountTypes = resources.getStringArray(R.array.bank_account_types)
-      AlertDialog.Builder(this)
-        .setTitle(R.string.select_account_type)
-        .setItems(accountTypes) { _, which ->
-          val accountType = accountTypes[which]
-          accountTypePicker?.setTextColor(Color.BLACK)
-          accountTypePicker?.text = accountType
-
-          bankToAdd.type = accountType
-
-          if (bankToAdd.isValid()) {
-            //hide keyboard if user already filled all the fields needed to add new bank
-            ViewUtils.hideKeyboard(this)
-          }
-
-          checkAddBankButton()
-        }.show()
+      showAccountTypePicker()
     }
 
     addBankButton.setOnClickListener {
-      addBank()
+      when {
+        isBank() -> addBank()
+        isCrypto() -> addDestination()
+      }
     }
 
     agreeCheckBox.setOnCheckedChangeListener { _, isChecked ->
-      confirmButton.isEnabled = isChecked
+      termsChecked = isChecked
+      updateConfirmButton()
     }
 
     // Agree Terms & Conditions clickable text
@@ -253,7 +225,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     // initialize a new SpannableStringBuilder instance
     val requestType = if (mode == Mode.WITHDRAW) getString(R.string.withdrawal) else modeString
-    val agreeStr = getString(R.string.agree_request_terms, requestType.toLowerCase())
+    val agreeStr = getString(R.string.agree_request_terms, requestType.toLowerCase(Locale.getDefault()))
     val strForSpan = "Terms and Conditions"
     val ssBuilder = SpannableStringBuilder(agreeStr)
 
@@ -286,7 +258,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       Mode.WITHDRAW -> {
         var minWithdrawalText = ""
         if (minAmount != 0.0) {
-          val minAmountText = StringFormat.truncateDecimalPlaces(minAmount, MAX_DECIMALS)
+          val minAmountText = StringFormat.truncateDecimalPlaces(minAmount, maxDecimals)
           minWithdrawalText = getString(R.string.pattern_min_withdrawal, "$shortAssetCode$minAmountText. ")
         }
         val limitStr = minWithdrawalText + getString(R.string.pattern_available, "$shortAssetCode$maxAmountText")
@@ -313,40 +285,135 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun updateView() {
+    when {
+      isBank() -> updateForBankDeposit()
+      isCrypto() -> updateForCryptoDeposit()
+      else -> finishWithToast("Error - $assetCode $modeString not supported")
+    }
+  }
+
+  private fun updateForBankDeposit() {
     if (userBankAccounts.isEmpty()) {
-      showAddBankView()
-      hideSelectedBankView()
+      showAddAccount()
+      hideSelectedAccount()
       hideAmountInput()
     } else {
-      hideAddBankView()
-      showSelectedBankView()
+      hideAddAccount()
+      showSelectedAccount()
       showAmountInput()
     }
   }
 
-  private fun showSelectedBankView() {
-    val selectedBankAccount = userBankAccounts[0]
-    selectedBankName?.text = selectedBankAccount.bankName
-    selectedBankBranch?.text = getString(R.string.pattern_branch_number, selectedBankAccount.branch)
-    selectedBankAccountNumber?.text = selectedBankAccount.number
-    selectedBankAccountType?.text = selectedBankAccount.type.toLowerCase()
-    selectedBankContainer?.visibility = View.VISIBLE
+  private fun showSelectedAccount() {
+    if (isBank()) {
+      val selectedBankAccount = userBankAccounts[0]
+      selectedBankName?.text = selectedBankAccount.bankName
+      selectedBankBranch?.text = getString(R.string.pattern_branch_number, selectedBankAccount.branch)
+      selectedBankAccountNumber?.text = selectedBankAccount.number
+      selectedBankAccountType?.text = selectedBankAccount.type.toLowerCase(Locale.getDefault())
+      selectedBankContainer?.visibility = View.VISIBLE
+    } else if (isCrypto()) {
+      selectedBankName?.text = AssetUtils.getName(assetCode)
+      selectedBankBranch?.text = accountDest
+      selectedBankContainer?.visibility = View.VISIBLE
+    }
   }
 
-  private fun hideSelectedBankView() {
+  private fun hideSelectedAccount() {
     selectedBankContainer?.visibility = View.GONE
   }
 
-  private fun showAddBankView() {
+  private fun showAddAccount() {
     addBankContainer?.visibility = View.VISIBLE
   }
 
-  private fun hideAddBankView() {
+  private fun hideAddAccount() {
     addBankContainer?.visibility = View.GONE
   }
 
-  private fun checkAddBankButton() {
-    addBankButton.isEnabled = bankToAdd.isValid()
+  private fun updateForCryptoDeposit() {
+    val cryptoName = AssetUtils.getName(assetCode)
+
+    if (accountDest.isEmpty()) {
+      showAddAccount()
+      // Hide bank picker and account type picker
+      bankPicker?.visibility = View.GONE
+      accountTypePicker?.visibility = View.GONE
+
+      bankingInfoLabel?.setText(R.string.destination_account)
+      accountNumberInput?.hint = getString(R.string.pattern_enter_account, cryptoName)
+      addBankButton?.setText(R.string.next)
+    } else {
+      hideAddAccount()
+      showSelectedAccount()
+      showAmountInput()
+    }
+  }
+
+  private fun onAccountInput(input: String) {
+    bankToAdd.number = input
+
+    updateAddBankButton()
+  }
+
+  private fun showBankPicker() {
+    val banks = supportedBanks.values.toTypedArray()
+    val branchCodes = supportedBanks.keys.toTypedArray()
+
+    AlertDialog.Builder(this)
+      .setTitle(R.string.select_bank)
+      .setItems(banks) { _, which ->
+        val bankName = banks[which]
+        val branchCode = branchCodes[which]
+        bankPicker?.setTextColor(Color.BLACK)
+        bankPicker?.text = bankName
+
+        bankToAdd.bankName = bankName
+        bankToAdd.branch = branchCode
+
+        if (bankToAdd.number.isEmpty()) {
+          ViewUtils.showKeyboard(this, accountNumberInput)
+        }
+
+        updateAddBankButton()
+      }.show()
+  }
+
+  private fun showAccountTypePicker() {
+    val accountTypes = resources.getStringArray(R.array.bank_account_types)
+    AlertDialog.Builder(this)
+      .setTitle(R.string.select_account_type)
+      .setItems(accountTypes) { _, which ->
+        val accountType = accountTypes[which]
+        accountTypePicker?.setTextColor(Color.BLACK)
+        accountTypePicker?.text = accountType
+
+        bankToAdd.type = accountType
+
+        if (bankToAdd.isValid()) {
+          //hide keyboard if user already filled all the fields needed to add new bank
+          ViewUtils.hideKeyboard(this)
+        }
+
+        updateAddBankButton()
+      }.show()
+  }
+
+  private fun updateAddBankButton() {
+    when {
+      AssetUtils.isZar(assetCode, assetIssuer) || AssetUtils.isNgnt(assetCode, assetIssuer) ->
+        addBankButton.isEnabled = bankToAdd.isValid()
+      AssetUtils.isBtc(assetCode, assetIssuer) || AssetUtils.isEth(assetCode, assetIssuer) ->
+        addBankButton.isEnabled = accountNumberInput?.text.toString().trim().length in 25..35
+      else -> addBankButton.isEnabled = false
+    }
+  }
+
+  private fun updateConfirmButton() {
+    when {
+      isBank() -> confirmButton.isEnabled = termsChecked
+      isCrypto() -> confirmButton.isEnabled = termsChecked && anchorAccount.isNotEmpty()
+    }
   }
 
   private fun showAmountInput() {
@@ -370,8 +437,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     userBankAccounts.clear()
 
-    when (assetCode) {
-      Constants.ZAR_ASSET_CODE -> {
+    when {
+      AssetUtils.isZar(assetCode, assetIssuer) -> {
         userBankAccounts.add(bankToAdd)
         Firebase.getUserBanksZarRef(dmcUser.uid).setValue(userBankAccounts)
           .addOnSuccessListener {
@@ -380,7 +447,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             bankInputError("Something went wrong please try to add bank Account again")
           }
       }
-      Constants.NGNT_ASSET_CODE -> {
+      AssetUtils.isNgnt(assetCode, assetIssuer) -> {
         // Verify NGNT bank account with cowrie exchange API first
         cowrieApi.ngntForNgn(bankToAdd.branch, bankToAdd.number).enqueue(object : Callback<WithdrawResponse> {
           override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
@@ -406,6 +473,13 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
   }
 
+  private fun addDestination() {
+    accountDest = accountNumberInput?.text.toString()
+    if (accountDest.isEmpty()) return
+    ViewUtils.hideKeyboard(this)
+    updateView()
+  }
+
   private fun bankInputError(message: String) {
     toast(message)
     addBankButton?.isEnabled = true
@@ -415,21 +489,46 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun showDepositAmount() {
     depositAmountContainer.visibility = View.VISIBLE
     depositAmountTextView.text = String.format("%s %s", StringFormat.truncateDecimalPlaces(
-      amount, MAX_DECIMALS), assetCode)
+      amount, maxDecimals), assetCode)
     feeTextView.visibility = View.VISIBLE
 
     if (mode == Mode.WITHDRAW) {
-      // count and show fee(s) for withdrawal
       val shortCode = AssetUtils.getShortCode(assetCode)
       // 1% DMC withdrawal fee
-      val dmcFeeValue = "$shortCode${StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)}"
-      val assetFeeString = if (assetCode == Constants.NGNT_ASSET_CODE)
-        "\n${getString(R.string.pattern_withdrawal_fee_asset, "${shortCode}200.00", assetCode)}" else ""
-      val feesString = "${getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue)}$assetFeeString"
-      feeTextView.text = feesString
+      val dmcFeeValue = "$shortCode${StringFormat.truncateDecimalPlaces(amount * getDmcFeePercent(), maxDecimals)}"
+
+      // count and show fee(s) for withdrawal
+      val assetFeeString = if (isBank() && assetCode == Constants.NGNT_ASSET_CODE) {
+        "\n${getString(R.string.pattern_withdrawal_fee_asset, "200.00", assetCode)}"
+      } else if (isCrypto()) {
+        StellarPort.authenticatedWithdraw(this, assetCode, accountDest, object : StellarPort.WithdrawListener {
+          override fun onWithdrawResponse(response: io.demars.stellarwallet.api.stellarport.model.WithdrawResponse) {
+            //Update Fee
+            val fixedFeeFormatted = StringFormat.truncateDecimalPlaces(response.feeFixed, maxDecimals)
+            val assetFeeString = "\nFixed: $fixedFeeFormatted $assetCode\nPercent: ${response.feePercent}%"
+            updateFeeView(dmcFeeValue, assetFeeString)
+
+            // Update confirm button if have Anchor stellar account & memo
+            anchorAccount = response.accountId
+            anchorMemo = response.memo
+            updateConfirmButton()
+          }
+        })
+        "\nLoading $assetCode fee..."
+      } else {
+        ""
+      }
+
+      updateFeeView(dmcFeeValue, assetFeeString)
     } else {
       feeTextView.visibility = View.GONE
     }
+  }
+
+  private fun updateFeeView(dmcFeeValue: String, assetFeeString: String) {
+    val percents = (getDmcFeePercent() * 100).toString()
+    val feesString = getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue, percents, assetFeeString)
+    feeTextView.text = feesString
   }
 
   private fun hideDepositAmount() {
@@ -499,7 +598,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     if (NetworkUtils(applicationContext).isNetworkAvailable()) {
       showProgressBar()
 
-      val amount = StringFormat.truncateDecimalPlaces(amount, MAX_DECIMALS)
+      val amount = StringFormat.truncateDecimalPlaces(amount, maxDecimals)
       when (assetCode) {
         Constants.NGNT_ASSET_CODE -> {
           // Use Cowrie exchange api to request deposit NGNT
@@ -507,7 +606,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             override fun onResponse(call: Call<DepositResponse>, response: Response<DepositResponse>) {
               response.body()?.let {
                 val anchorBank = DmcUser.BankAccount(it.accountName, "", "", it.accountNumber, it.bankName)
-                val deposit = Deposit(assetCode, amount, it.depositRef, anchorBank, userBankAccounts[0])
+                val deposit = BankDeposit(assetCode, amount, it.depositRef, anchorBank, userBankAccounts[0])
                 MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
                 showDepositInfoDialog(deposit)
                 hideProgressBar()
@@ -526,10 +625,21 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
           val anchorBank = DmcUser.BankAccount("DMC Rand (Pty) Ltd", "250655",
             "Current/Cheque Account", "62756496496", "FNB")
           val depositRef = "${dmcUser.email_address}*demars.io"
-          val deposit = Deposit(assetCode, amount, depositRef, anchorBank, userBankAccounts[0])
+          val deposit = BankDeposit(assetCode, amount, depositRef, anchorBank, userBankAccounts[0])
           MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
           showDepositInfoDialog(deposit)
           hideProgressBar()
+        }
+        Constants.BTC_ASSET_CODE,
+        Constants.ETH_ASSET_CODE -> {
+          StellarPort.authenticatedDeposit(this, assetCode, object : StellarPort.DepositListener {
+            override fun onDepositResponse(response: io.demars.stellarwallet.api.stellarport.model.DepositResponse) {
+              val deposit = CryptoDeposit(assetCode, amount, response.how, response.extraInfo.message)
+              MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
+              showDepositInfoDialog(deposit)
+            }
+
+          })
         }
       }
     } else {
@@ -543,16 +653,30 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       .setTitle(deposit.toReadableTitle())
       .setMessage(deposit.toReadableMessage())
       .setCancelable(false)
-      .setPositiveButton(R.string.ok) { _, _ -> finish() }
+      .setPositiveButton(R.string.copy_and_finish) { _, _ ->
+        copyAndFinish(deposit)
+      }
       .show()
 
+  }
+
+  private fun copyAndFinish(deposit: Deposit) {
+    when (deposit) {
+      is BankDeposit -> ViewUtils.copyToClipBoard(this, deposit.anchorBank.number,
+        R.string.bank_account_number_copied)
+      is CryptoDeposit -> ViewUtils.copyToClipBoard(this, deposit.anchorAccount,
+        getString(R.string.pattern_account_copied, AssetUtils.getName(deposit.assetCode)))
+    }
+
+    finish()
   }
 
   private fun confirmWithdrawal() {
     confirmButton.isEnabled = false
 
-    val fee = StringFormat.truncateDecimalPlaces(amount * 0.01, MAX_DECIMALS)
-    val amount = StringFormat.truncateDecimalPlaces(amount * 0.99, MAX_DECIMALS)
+    val feePercent = getDmcFeePercent()
+    val fee = StringFormat.truncateDecimalPlaces(amount * feePercent, maxDecimals)
+    val amount = StringFormat.truncateDecimalPlaces(amount * (1.0 - feePercent), maxDecimals)
     val secretSeed = AccountUtils.getSecretSeed(applicationContext)
 
     if (NetworkUtils(applicationContext).isNetworkAvailable()) {
@@ -565,11 +689,33 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         Constants.ZAR_ASSET_CODE -> {
           withdrawZar(secretSeed, amount, fee)
         }
+        Constants.BTC_ASSET_CODE,
+        Constants.ETH_ASSET_CODE -> {
+          withdrawCrypto(secretSeed, amount, fee)
+        }
       }
     } else {
       confirmButton.isEnabled = true
       NetworkUtils(applicationContext).displayNoNetwork()
     }
+  }
+
+  private fun withdrawZar(secretSeed: CharArray, amount: String, fee: String) {
+    Horizon.getWithdrawTask(object : SuccessErrorCallback {
+      override fun onSuccess() {
+        val withdrawal = BankWithdrawal(assetCode, amount, fee, userBankAccounts[0])
+
+        MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+        finishWithToast(getString(R.string.request_sent_message,
+          getString(R.string.withdrawal)))
+      }
+
+      override fun onError(error: HorizonException) {
+        finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
+        hideProgressBar()
+      }
+    }, getAsset(), secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
   }
 
   private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String) {
@@ -585,7 +731,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         response.body()?.let { info ->
           Horizon.getWithdrawTask(object : SuccessErrorCallback {
             override fun onSuccess() {
-              val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
+              val withdrawal = BankWithdrawal(assetCode, amount, fee, userBankAccounts[0])
 
               MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
 
@@ -608,10 +754,10 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     })
   }
 
-  private fun withdrawZar(secretSeed: CharArray, amount: String, fee: String) {
+  private fun withdrawCrypto(secretSeed: CharArray, amount: String, fee: String) {
     Horizon.getWithdrawTask(object : SuccessErrorCallback {
       override fun onSuccess() {
-        val withdrawal = Withdrawal(assetCode, amount, fee, userBankAccounts[0])
+        val withdrawal = CryptoWithdrawal(assetCode, amount, fee)
 
         MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
 
@@ -621,9 +767,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       override fun onError(error: HorizonException) {
         finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
-        hideProgressBar()
       }
-    }, getAsset(), secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
+    }, getAsset(), secretSeed, anchorAccount, anchorMemo, amount, fee).execute()
   }
 
   override fun onDestroy() {
@@ -633,4 +778,12 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   }
 
   private fun getAsset() = AssetUtils.getAsset(assetCode, assetIssuer)
+
+  private fun isBank(): Boolean = AssetUtils.isZar(assetCode, assetIssuer) ||
+    AssetUtils.isNgnt(assetCode, assetIssuer)
+
+  private fun isCrypto(): Boolean = AssetUtils.isBtc(assetCode, assetIssuer) ||
+    AssetUtils.isEth(assetCode, assetIssuer)
+
+  private fun getDmcFeePercent(): Double = if (isCrypto()) 0.005 else 0.01
 }

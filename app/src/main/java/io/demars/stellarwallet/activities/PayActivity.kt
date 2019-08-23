@@ -200,9 +200,9 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
 
   override fun onError(error: HorizonException) {
     progressBar.visibility = View.GONE
-    // Showing op_low_reserve message when is confusing to the user,
+    // Showing op_low_reserve messageFromAnchor when is confusing to the user,
     // specially when the other account was not created and the funds sent are lower than 1 XML.
-    // Let's add a generic message for now for any error sending funds.
+    // Let's add a generic messageFromAnchor for now for any error sending funds.
     Toast.makeText(applicationContext, getString(HorizonException.HorizonExceptionType.SEND.value), Toast.LENGTH_LONG).show()
   }
 

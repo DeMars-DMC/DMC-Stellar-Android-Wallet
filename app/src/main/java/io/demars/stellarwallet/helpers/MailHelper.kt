@@ -1,8 +1,7 @@
 package io.demars.stellarwallet.helpers
 
 import io.demars.stellarwallet.api.firebase.model.DmcUser
-import io.demars.stellarwallet.models.Deposit
-import io.demars.stellarwallet.models.Withdrawal
+import io.demars.stellarwallet.models.local.*
 import org.jetbrains.anko.doAsync
 import timber.log.Timber
 import javax.mail.Message
@@ -51,7 +50,7 @@ object MailHelper {
       transport.sendMessage(message, message.allRecipients)
       transport.close()
 
-      Timber.d("Successfully sent message to - $email, subject - $subject, content - $content")
+      Timber.d("Successfully sent messageFromAnchor to - $email, subject - $subject, content - $content")
     } catch (mex: MessagingException) {
       mex.printStackTrace()
     }
@@ -71,13 +70,14 @@ object MailHelper {
 
   fun notifyAboutNewDeposit(user: DmcUser, deposit: Deposit) {
     // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE, deposit.toReadableTitle(), "New deposit(${deposit.assetCode}) was just requested\n\n$deposit\n\n$user")
+//    sendMailAsync(EMAIL_OFFICE, deposit.toReadableTitle(), "New deposit(${deposit.baseAssetCode}) was just requested\n\n$deposit\n\n$user")
+    sendMailAsync(user.email_address, "TEST " + deposit.toReadableTitle(), "New deposit(${deposit.baseAssetCode}) was just requested\n\n$deposit\n\n$user")
     // Notifying User with deposit payment information
-    sendMailAsync(user.email_address, deposit.toReadableTitle(), deposit.toReadableMessage())
-  }
+    sendMailAsync(user.email_address, "TEST " + deposit.toReadableTitle(), deposit.toReadableMessage())
+}
 
-  fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {
-    // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE, "New ${withdrawal.assetCode} Withdrawal Request", "New withdrawal(${withdrawal.assetCode}) was just requested\n\n$withdrawal\n\n$user")
-   }
+fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {
+  // Notifying Back office
+  sendMailAsync(EMAIL_OFFICE, "New ${withdrawal.baseAssetCode} BankWithdrawal Request", "New withdrawal(${withdrawal.baseAssetCode}) was just requested\n\n$withdrawal\n\n$user")
+}
 }

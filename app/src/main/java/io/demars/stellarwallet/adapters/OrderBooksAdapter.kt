@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.demars.stellarwallet.R
-import io.demars.stellarwallet.models.OrderBook
-import io.demars.stellarwallet.models.OrderBookAdapterTypes
+import io.demars.stellarwallet.models.ui.OrderBook
+import io.demars.stellarwallet.models.ui.OrderBookAdapterTypes
 import com.brandongogetap.stickyheaders.exposed.StickyHeaderHandler
 import kotlinx.android.synthetic.main.row_order_books.view.*
 import kotlinx.android.synthetic.main.row_order_books_header.view.*

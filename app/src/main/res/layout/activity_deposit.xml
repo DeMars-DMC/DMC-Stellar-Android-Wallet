@@ -165,7 +165,7 @@
         <TextView
             android:id="@+id/depositAmountTextView"
             style="@style/BoldText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/amountLabel"
             android:gravity="center_vertical"
@@ -267,9 +267,8 @@
             android:focusable="true"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
+            android:layout_marginTop="@dimen/padding_horizontal"
             android:text="@string/select_bank"
             android:textColor="@color/colorPaleSky"
             android:textSize="@dimen/text_size_small" />
@@ -283,10 +282,9 @@
             android:imeOptions="actionDone"
             android:inputType="number"
             android:maxLines="1"
+            android:layout_marginTop="@dimen/padding_horizontal"
             android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_mini"
             android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
             android:textColorHint="@color/colorPaleSky"
             android:textSize="@dimen/text_size_small" />
 
@@ -300,9 +298,8 @@
             android:focusable="true"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_mini"
             android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
+            android:layout_marginTop="@dimen/padding_horizontal"
             android:text="@string/account_type"
             android:textColor="@color/colorPaleSky"
             android:textSize="@dimen/text_size_small" />

@@ -363,6 +363,7 @@
     <string name="bank_account_explain">You may only make a deposit or withdrawal to an account in your name. For compliance purposes no third party deposit or withdrawal are permitted.</string>
     <string name="select_account_type">Select account type</string>
     <string name="pattern_branch_number">Branch number: %s</string>
+    <string name="pattern_enter_account">Enter %s account</string>
     <string name="pattern_deposit_limit">Limit: %s5,000 per deposit and %s25,000 per month</string>
     <string name="pattern_deposit">Deposit %s</string>
     <string name="request_amount">%s amount</string>
@@ -380,7 +381,7 @@
     <string name="withdrawal">Withdrawal</string>
     <string name="withdrawal_fee">Withdrawal fee</string>
     <string name="pattern_min_withdrawal">Minimal withdrawal: %s</string>
-    <string name="pattern_withdrawal_fee_dmc">Following fee(s) will be applied:\n%s - 1%% DMC withdrawal fee</string>
+    <string name="pattern_withdrawal_fee_dmc">Following fee(s) will be applied:\n%s - %s%% DMC withdrawal fee%s</string>
     <string name="pattern_withdrawal_fee_asset">%s - %s withdrawal fee</string>
     <string name="reporting_currency">Reporting currency</string>
     <string name="manage_assets">Manage assets</string>
@@ -422,4 +423,9 @@
     <string name="preparing_photo">Preparing photo…</string>
     <string name="type_contact_name">Type contact name</string>
     <string name="go_back">Go back</string>
+    <string name="direct_deposit">Direct deposit</string>
+    <string name="destination_account">Destination account</string>
+    <string name="bank_account_number_copied">Bank account number copied</string>
+    <string name="pattern_account_copied">%s account copied</string>
+    <string name="copy_and_finish">Copy &amp; Finish</string>
 </resources>

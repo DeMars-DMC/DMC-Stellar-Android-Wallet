@@ -20,7 +20,7 @@ interface StellarPortApi {
   fun deposit(@Header("Authorization") authHeader: String, @Query("asset_code") assetCode: String, @Query("account") account: String): Call<DepositResponse>
 
   @GET("/v2/GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5/withdraw")
-  fun withdraw(@Header("Authorization") authHeader: String, @Query("asset_code") assetCode: String, @Query("dest") dest: String): Call<WithdrawResponse>
+  fun withdraw(@Header("Authorization") authHeader: String, @Query("asset_code") assetCode: String, @Query("account") account: String, @Query("dest") dest: String): Call<WithdrawResponse>
 
   object Creator {
     private var okHttpClientAuth = OkHttpClient.Builder().build()

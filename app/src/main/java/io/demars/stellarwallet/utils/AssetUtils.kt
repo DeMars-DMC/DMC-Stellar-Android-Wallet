@@ -117,6 +117,15 @@ class AssetUtils {
       else -> Constants.CUSTOM_ASSET_IMAGE_RES
     }
 
+    fun getName(assetCode: String): String = when (assetCode) {
+      Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_ASSET_NAME
+      Constants.BTC_ASSET_CODE -> Constants.BTC_ASSET_NAME
+      Constants.ETH_ASSET_CODE -> Constants.ETH_ASSET_NAME
+      Constants.ZAR_ASSET_CODE -> Constants.ZAR_ASSET_NAME
+      Constants.NGNT_ASSET_CODE -> Constants.NGNT_ASSET_NAME
+      else -> ""
+    }
+
     fun getShortCode(assetCode: String): String = when (assetCode) {
       Constants.LUMENS_ASSET_CODE -> "L"
       Constants.BTC_ASSET_CODE -> "B"
@@ -132,9 +141,8 @@ class AssetUtils {
       else -> ""
     }
 
-    fun getMaxDecimals(assetCode: String): Int = when {
-      assetCode.equals(Constants.ZAR_ASSET_CODE, true) -> 2
-      assetCode.equals(Constants.NGNT_ASSET_CODE, true) -> 2
+    fun getMaxDecimals(assetCode: String): Int = when (assetCode) {
+      Constants.ZAR_ASSET_CODE, Constants.NGNT_ASSET_CODE -> 2
       else -> 7
     }
 
@@ -148,10 +156,10 @@ class AssetUtils {
     fun isNgnt(assetCode: String, assetIssuer: String) =
       assetCode == Constants.NGNT_ASSET_CODE && assetIssuer == Constants.NGNT_ASSET_ISSUER
 
-    private fun isBtc(assetCode: String, assetIssuer: String) =
+    fun isBtc(assetCode: String, assetIssuer: String) =
       assetCode == Constants.BTC_ASSET_CODE && assetIssuer == Constants.BTC_ASSET_ISSUER
 
-    private fun isEth(assetCode: String, assetIssuer: String) =
+    fun isEth(assetCode: String, assetIssuer: String) =
       assetCode == Constants.ETH_ASSET_CODE && assetIssuer == Constants.ETH_ASSET_ISSUER
   }
 }

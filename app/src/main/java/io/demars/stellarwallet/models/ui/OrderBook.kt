@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.models
+package io.demars.stellarwallet.models.ui
 
 import java.util.*
 

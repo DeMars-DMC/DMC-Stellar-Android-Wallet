@@ -28,7 +28,7 @@ import io.demars.stellarwallet.enums.CameraMode
 import io.demars.stellarwallet.enums.FlashMode
 import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.views.AutoFitTextureView
-import kotlinx.android.synthetic.main.activity_camera2.*
+import kotlinx.android.synthetic.main.activity_camera.*
 import org.jetbrains.anko.cameraManager
 import timber.log.Timber
 import java.lang.Long.signum
@@ -40,7 +40,6 @@ import kotlin.math.max
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Camera2Activity : AppCompatActivity() {
-  //Todo: apply changes from CameraActivity
   /**
    * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
    * [TextureView].
@@ -841,6 +840,7 @@ class Camera2Activity : AppCompatActivity() {
       galleryButton.visibility = GONE
       flashButton.visibility = GONE
 
+      previewText.visibility = VISIBLE
       ensureImageMessage.visibility = VISIBLE
       retakeButton.visibility = VISIBLE
       sendButton.visibility = VISIBLE
@@ -853,6 +853,7 @@ class Camera2Activity : AppCompatActivity() {
         sendPictureToFirebase()
       }
     } else {
+      previewText.visibility = GONE
       ensureImageMessage.visibility = GONE
       retakeButton.visibility = GONE
       sendButton.visibility = GONE
@@ -989,12 +990,17 @@ class Camera2Activity : AppCompatActivity() {
   private fun showUploadingView() {
     ensureImageMessage.setText(R.string.uploading_photo)
 
+    ensureImageMessage.visibility = VISIBLE
+    progressBar.visibility = VISIBLE
+
     retakeButton.visibility = GONE
     sendButton.visibility = GONE
   }
 
   private fun hideUploadingView() {
     ensureImageMessage.setText(R.string.uploading_photo_error)
+
+    progressBar.visibility = GONE
 
     retakeButton.visibility = VISIBLE
     sendButton.visibility = VISIBLE

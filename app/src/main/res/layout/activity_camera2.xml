@@ -27,12 +27,12 @@
             android:id="@+id/backButton"
             android:layout_width="@dimen/button_height"
             android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/padding_mini"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_mini"
-            android:layout_margin="@dimen/padding_mini"
-            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_close"
-            android:theme="@style/ClickableItem"/>
+            android:theme="@style/ClickableItem" />
 
         <TextView
             android:id="@+id/mainTitle"
@@ -44,19 +44,26 @@
             android:text="@string/photo_of_id"
             android:textColor="@color/whiteMain"
             android:textSize="24sp" />
-    </FrameLayout>
 
-    <io.demars.stellarwallet.views.AutoFitTextureView
-        android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        <TextView
+            android:id="@+id/previewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/padding_micro"
+            android:gravity="center_horizontal"
+            android:text="@string/preview"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_above="@+id/controlPanel"
+        android:layout_below="@id/toolbar" />
 
     <RelativeLayout
         android:id="@+id/controlPanel"
@@ -118,24 +125,11 @@
             android:theme="@style/ClickableItem"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/ensureImageMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/buttonsContainer"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_horizontal"
-            android:text="@string/ensure_image"
-            android:textColor="@color/whiteMain"
-            android:textSize="14sp"
-            tools:visibility="gone" />
-
         <LinearLayout
             android:id="@+id/buttonsContainer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height_big">
+            android:layout_height="@dimen/button_height_big"
+            android:layout_below="@id/ensureImageMessage">
 
             <Button
                 android:id="@+id/retakeButton"
@@ -156,9 +150,35 @@
                 android:layout_weight="0.5"
                 android:text="@string/send"
                 tools:visibility="gone" />
-
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_below="@id/ensureImageMessage"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/ensureImageMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_horizontal"
+            android:text="@string/ensure_image"
+            android:textColor="@color/whiteMain"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
     </RelativeLayout>
+
+    <io.demars.stellarwallet.views.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

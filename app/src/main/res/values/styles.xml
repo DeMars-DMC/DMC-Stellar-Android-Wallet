@@ -23,7 +23,9 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="BlackTheme" parent="AppTheme"/>
+    <style name="BlackTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="selectableItemBackground">?android:selectableItemBackground</item>

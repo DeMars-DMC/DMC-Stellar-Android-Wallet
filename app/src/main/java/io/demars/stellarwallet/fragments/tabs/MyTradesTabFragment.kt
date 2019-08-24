@@ -32,7 +32,6 @@ class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
   private lateinit var appContext: Context
   private var myOffers = mutableListOf<MyOffer>()
   private var offerResponses = mutableListOf<OfferResponse>()
-  private var rootView: View? = null
 
   private lateinit var myOffersAdapter: MyOffersAdapter
 
@@ -43,7 +42,6 @@ class MyTradesTabFragment : Fragment(), OnDeleteRequest, SwipeRefreshLayout.OnRe
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     appContext = view.context.applicationContext
-    rootView = view.findViewById(R.id.rootView)
     myOffersRv.layoutManager = LinearLayoutManager(appContext)
     myOffersAdapter = MyOffersAdapter(myOffers, view.context, this)
     myOffersRv.adapter = myOffersAdapter

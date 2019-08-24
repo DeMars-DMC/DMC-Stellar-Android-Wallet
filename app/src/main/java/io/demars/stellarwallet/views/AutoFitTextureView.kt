@@ -26,9 +26,7 @@ class AutoFitTextureView @JvmOverloads constructor(
    * @param height Relative vertical size
    */
   fun setAspectRatio(width: Int, height: Int) {
-    if (width < 0 || height < 0) {
-      throw IllegalArgumentException("Size cannot be negative.")
-    }
+    require(!(width < 0 || height < 0)) { "Size cannot be negative." }
     ratioWidth = width
     ratioHeight = height
     requestLayout()

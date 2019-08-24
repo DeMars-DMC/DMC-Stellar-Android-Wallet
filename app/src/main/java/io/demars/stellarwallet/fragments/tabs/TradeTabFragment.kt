@@ -380,22 +380,28 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
 
     Horizon.getCreateMarketOffer(object : Horizon.OnMarketOfferListener {
       override fun onExecuted() {
-        snackBar.dismiss()
-        createSnackBar("Order executed", Snackbar.LENGTH_SHORT)?.show()
-        updateAvailableBalance()
-        placeTrade.isEnabled = true
-        sellingCustomSelector.editText.isEnabled = true
-        buyingCustomSelector.editText.isEnabled = true
-      }
+        if (isAdded) {
+          snackBar.dismiss()
+          createSnackBar("Order executed", Snackbar.LENGTH_SHORT)?.show()
+          placeTrade?.isEnabled = true
+          sellingCustomSelector?.editText?.isEnabled = true
+          buyingCustomSelector?.editText?.isEnabled = true
+          updateAvailableBalance()
+        } else {
+          ViewUtils.showToast(appContext, "Order executed")
+        }
+       }
 
       override fun onFailed(errorMessage: String) {
-        snackBar.dismiss()
-
-        createSnackBar("Order failed: $errorMessage", Snackbar.LENGTH_SHORT)?.show()
-
-        placeTrade.isEnabled = true
-        sellingCustomSelector.editText.isEnabled = false
-        buyingCustomSelector.editText.isEnabled = false
+        if (isAdded) {
+          snackBar.dismiss()
+          createSnackBar("Order failed: $errorMessage", Snackbar.LENGTH_SHORT)?.show()
+          placeTrade?.isEnabled = true
+          sellingCustomSelector?.editText?.isEnabled = false
+          buyingCustomSelector?.editText?.isEnabled = false
+        } else {
+          ViewUtils.showToast(appContext, "Order failed: $errorMessage")
+        }
       }
     }, AccountUtils.getSecretSeed(appContext), sellingAsset, buyingAsset,
       sellingAmountFormatted, priceFormatted)

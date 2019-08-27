@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/padding_vertical"
+    android:paddingStart="@dimen/padding_vertical"
+    android:paddingEnd="@dimen/padding_vertical">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_mini"
+        android:gravity="center_vertical"
+        android:text="@string/confirm_trade_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_big"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/dialogMessage"
+        style="@style/BlackDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_deposit_terms_message_stellarport"
+        android:linksClickable="true"
+        android:autoLink="all"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_big"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/positiveButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/confirm"
+            android:textColor="@color/colorAccent" />
+
+
+    </LinearLayout>
+</LinearLayout>

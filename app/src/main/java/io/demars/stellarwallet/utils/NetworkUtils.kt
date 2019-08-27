@@ -15,6 +15,6 @@ class NetworkUtils(private val context: Context) {
     }
 
     fun displayNoNetwork() {
-        Toast.makeText(context, context.getString(R.string.no_network), Toast.LENGTH_SHORT).show()
+        ViewUtils.showToast(context, context.getString(R.string.no_network))
     }
 }

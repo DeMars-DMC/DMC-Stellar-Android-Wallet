@@ -107,8 +107,9 @@ class AssetUtils {
       return code
     }
 
-    fun getLogo(assetCode: String): Int = when (assetCode) {
-      Constants.LUMENS_ASSET_TYPE, Constants.LUMENS_ASSET_CODE -> Constants.LUMENS_IMAGE_RES
+    fun getLogo(assetCode: String, useBlack: Boolean = false): Int = when (assetCode) {
+      Constants.LUMENS_ASSET_TYPE, Constants.LUMENS_ASSET_CODE -> if (useBlack)
+      Constants.LUMENS_IMAGE_RES_BLACK else Constants.LUMENS_IMAGE_RES
       Constants.DMC_ASSET_CODE -> Constants.DMC_IMAGE_RES
       Constants.ETH_ASSET_CODE -> Constants.ETH_IMAGE_RES
       Constants.BTC_ASSET_CODE -> Constants.BTC_IMAGE_RES

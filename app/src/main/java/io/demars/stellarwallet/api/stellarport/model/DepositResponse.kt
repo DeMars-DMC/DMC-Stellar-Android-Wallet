@@ -19,7 +19,7 @@ class DepositResponse {
   var extraInfo = ExtraInfo()
 
   class ExtraInfo{
-    @SerializedName("messageFromAnchor")
+    @SerializedName("message")
     var message = ""
   }
 }

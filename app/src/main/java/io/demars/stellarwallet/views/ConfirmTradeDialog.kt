@@ -25,8 +25,8 @@ class ConfirmTradeDialog(context: Context,
     findViewById<TextView>(R.id.sellingCode)?.text = sellingCode
     findViewById<TextView>(R.id.buyingCode)?.text = buyingCode
 
-    findViewById<ImageView>(R.id.sellingLogo)?.setImageResource(AssetUtils.getLogo(sellingCode))
-    findViewById<ImageView>(R.id.buyingLogo)?.setImageResource(AssetUtils.getLogo(buyingCode))
+    findViewById<ImageView>(R.id.sellingLogo)?.setImageResource(AssetUtils.getLogo(sellingCode, true))
+    findViewById<ImageView>(R.id.buyingLogo)?.setImageResource(AssetUtils.getLogo(buyingCode, true))
 
     findViewById<Button>(R.id.negativeButton)?.setOnClickListener {
       dismiss()

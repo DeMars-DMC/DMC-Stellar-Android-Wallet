@@ -294,7 +294,12 @@ class LaunchActivity : BaseActivity(), PinLockView.DialerListener {
         if (task.isSuccessful) {
           task.result?.user?.let { user ->
             uid = user.uid
+            user.phoneNumber?.let {
+              phone = it
+            }
+
             if (dmcUser == null) {
+              // It will create new user if doesn't exist yet
               Firebase.getUserFresh(userListener)
             } else {
               updateForMode(Mode.WALLET)

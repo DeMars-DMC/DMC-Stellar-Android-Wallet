@@ -34,6 +34,7 @@ import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.api.stellarport.StellarPort
 import io.demars.stellarwallet.models.local.*
 import io.demars.stellarwallet.utils.*
+import io.demars.stellarwallet.views.LinkifiedDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,8 +70,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private var userBankAccounts = ArrayList<DmcUser.BankAccount>()
   private var bankToAdd = DmcUser.BankAccount()
   private var accountDest = ""
-  private var anchorAccount = ""
-  private var anchorMemo = ""
   private var amount = 0.0
   private var minAmount = 0.0
   private var maxAmount = 0.0
@@ -207,11 +206,15 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     // Agree Terms & Conditions clickable text
     val clickableSpan = object : ClickableSpan() {
       override fun onClick(widget: View) {
-        AlertDialog.Builder(this@DepositActivity)
-          .setTitle(R.string.dialog_deposit_terms_title)
-          .setMessage(R.string.dialog_deposit_terms_message)
-          .setPositiveButton(R.string.back_to_deposit) { _, _ -> }
-          .show()
+        val termsTitle = getString(R.string.dialog_deposit_terms_title, AssetUtils.getName(assetCode), assetCode)
+        val termsMessage = when {
+          isCrypto() -> getString(R.string.dialog_deposit_terms_message_stellarport)
+          assetCode == Constants.NGNT_ASSET_CODE -> getString(R.string.dialog_deposit_terms_message_ngnt)
+          else -> getString(R.string.dialog_deposit_terms_message_zar) // ZAR
+        }
+
+        LinkifiedDialog(this@DepositActivity, termsTitle,
+          termsMessage, getString(R.string.back_to_deposit)).show()
       }
 
       override fun updateDrawState(ds: TextPaint) {
@@ -253,7 +256,11 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     val shortAssetCode = AssetUtils.getShortCode(assetCode)
     when (mode) {
       Mode.DEPOSIT -> {
-        limitText.text = getString(R.string.pattern_deposit_limit, shortAssetCode, shortAssetCode)
+        limitText.text = when (assetCode) {
+          Constants.ZAR_ASSET_CODE -> getString(R.string.pattern_deposit_limit, shortAssetCode, shortAssetCode)
+          else -> getString(R.string.enter_deposit_sum)
+
+        }
       }
       Mode.WITHDRAW -> {
         var minWithdrawalText = ""
@@ -268,6 +275,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
     depositConfirmExplain.visibility = if (mode == Mode.DEPOSIT &&
       assetCode == Constants.ZAR_ASSET_CODE) View.VISIBLE else View.GONE
+
+    bankAccountExplain.visibility = if (assetCode == Constants.ZAR_ASSET_CODE
+      || assetCode == Constants.NGNT_ASSET_CODE) View.VISIBLE else View.GONE
   }
 
   private fun onUserFetched(user: DmcUser) {
@@ -341,7 +351,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       accountTypePicker?.visibility = View.GONE
 
       bankingInfoLabel?.setText(R.string.destination_account)
-      accountNumberInput?.hint = getString(R.string.pattern_enter_account, cryptoName)
+      accountNumberInput?.hint = getString(R.string.pattern_enter_your_address, cryptoName)
       addBankButton?.setText(R.string.next)
     } else {
       hideAddAccount()
@@ -412,7 +422,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun updateConfirmButton() {
     when {
       isBank() -> confirmButton.isEnabled = termsChecked
-      isCrypto() -> confirmButton.isEnabled = termsChecked && anchorAccount.isNotEmpty()
+      isCrypto() -> confirmButton.isEnabled = termsChecked
     }
   }
 
@@ -492,43 +502,22 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       amount, maxDecimals), assetCode)
     feeTextView.visibility = View.VISIBLE
 
-    if (mode == Mode.WITHDRAW) {
+    if (mode == Mode.DEPOSIT && assetCode == Constants.ZAR_ASSET_CODE) {
+      feeTextView.visibility = View.GONE
+    } else {
       val shortCode = AssetUtils.getShortCode(assetCode)
       // 1% DMC withdrawal fee
       val dmcFeeValue = "$shortCode${StringFormat.truncateDecimalPlaces(amount * getDmcFeePercent(), maxDecimals)}"
 
       // count and show fee(s) for withdrawal
-      val assetFeeString = if (isBank() && assetCode == Constants.NGNT_ASSET_CODE) {
+      val assetFeeString =
         "\n${getString(R.string.pattern_withdrawal_fee_asset, "200.00", assetCode)}"
-      } else if (isCrypto()) {
-        StellarPort.authenticatedWithdraw(this, assetCode, accountDest, object : StellarPort.WithdrawListener {
-          override fun onWithdrawResponse(response: io.demars.stellarwallet.api.stellarport.model.WithdrawResponse) {
-            //Update Fee
-            val fixedFeeFormatted = StringFormat.truncateDecimalPlaces(response.feeFixed, maxDecimals)
-            val assetFeeString = "\nFixed: $fixedFeeFormatted $assetCode\nPercent: ${response.feePercent}%"
-            updateFeeView(dmcFeeValue, assetFeeString)
 
-            // Update confirm button if have Anchor stellar account & memo
-            anchorAccount = response.accountId
-            anchorMemo = response.memo
-            updateConfirmButton()
-          }
-        })
-        "\nLoading $assetCode fee..."
-      } else {
-        ""
-      }
-
-      updateFeeView(dmcFeeValue, assetFeeString)
-    } else {
-      feeTextView.visibility = View.GONE
+      val percents = (getDmcFeePercent() * 100).toString()
+      val feesString = if (assetCode != Constants.ZAR_ASSET_CODE) getString(R.string.fee_message_crypto)
+      else getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue, percents, assetFeeString)
+      feeTextView.text = feesString
     }
-  }
-
-  private fun updateFeeView(dmcFeeValue: String, assetFeeString: String) {
-    val percents = (getDmcFeePercent() * 100).toString()
-    val feesString = getString(R.string.pattern_withdrawal_fee_dmc, dmcFeeValue, percents, assetFeeString)
-    feeTextView.text = feesString
   }
 
   private fun hideDepositAmount() {
@@ -638,7 +627,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
               MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
               showDepositInfoDialog(deposit)
             }
-
           })
         }
       }
@@ -691,7 +679,11 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         }
         Constants.BTC_ASSET_CODE,
         Constants.ETH_ASSET_CODE -> {
-          withdrawCrypto(secretSeed, amount, fee)
+          StellarPort.authenticatedWithdraw(this, assetCode, accountDest, object : StellarPort.WithdrawListener {
+            override fun onWithdrawResponse(response: io.demars.stellarwallet.api.stellarport.model.WithdrawResponse) {
+              withdrawCrypto(secretSeed, amount, fee, response.accountId, response.memo)
+            }
+          })
         }
       }
     } else {
@@ -754,7 +746,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     })
   }
 
-  private fun withdrawCrypto(secretSeed: CharArray, amount: String, fee: String) {
+  private fun withdrawCrypto(secretSeed: CharArray, amount: String, fee: String,
+                             anchorAddress: String, anchorMemo: String) {
     Horizon.getWithdrawTask(object : SuccessErrorCallback {
       override fun onSuccess() {
         val withdrawal = CryptoWithdrawal(assetCode, amount, fee)
@@ -768,7 +761,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       override fun onError(error: HorizonException) {
         finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
       }
-    }, getAsset(), secretSeed, anchorAccount, anchorMemo, amount, fee).execute()
+    }, getAsset(), secretSeed, anchorAddress, anchorMemo, amount, fee).execute()
   }
 
   override fun onDestroy() {
@@ -785,5 +778,5 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun isCrypto(): Boolean = AssetUtils.isBtc(assetCode, assetIssuer) ||
     AssetUtils.isEth(assetCode, assetIssuer)
 
-  private fun getDmcFeePercent(): Double = if (isCrypto()) 0.005 else 0.01
+  private fun getDmcFeePercent(): Double = if (assetCode == Constants.ZAR_ASSET_CODE) 0.01 else 0.005
 }

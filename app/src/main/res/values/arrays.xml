@@ -705,6 +705,7 @@
     <string-array name="document_type">
         <item>National ID</item>
         <item>Passport</item>
+        <item>Drivers License</item>
     </string-array>
     <string-array name="communication_type">
         <item>Email</item>

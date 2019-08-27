@@ -20,6 +20,7 @@ class Constants {
     const val LUMENS_ASSET_CODE = "XLM"
     const val LUMENS_ASSET_NAME = "Stellar Lumens"
     const val LUMENS_IMAGE_RES = R.drawable.ic_logo_stellar_white
+    const val LUMENS_IMAGE_RES_BLACK = R.drawable.ic_logo_stellar_black
 
     const val ZAR_ASSET_CODE = "ZAR"
     const val ZAR_ASSET_NAME = "South African Rand"

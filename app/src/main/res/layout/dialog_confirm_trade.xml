@@ -117,7 +117,7 @@
                 android:layout_height="@dimen/button_height"
                 android:layout_gravity="end"
                 android:padding="@dimen/padding_mini"
-                tools:src="@drawable/ic_logo_stellar" />
+                tools:src="@drawable/ic_logo_stellar_black" />
 
             <TextView
                 android:id="@+id/buyingCode"

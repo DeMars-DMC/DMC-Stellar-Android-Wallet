@@ -12,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/assetImage"
+        android:layout_toStartOf="@id/rightIcon"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         android:layout_centerVertical="true"
         android:gravity="start"
         android:orientation="vertical">
@@ -20,7 +22,7 @@
         <TextView
             android:id="@+id/assetName"
             style="@style/WhiteTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:textSize="@dimen/text_size_xbig"
@@ -29,7 +31,7 @@
         <TextView
             android:id="@+id/assetBalance"
             style="@style/WhiteTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:textSize="@dimen/text_size_big"

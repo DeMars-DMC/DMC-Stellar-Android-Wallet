@@ -48,6 +48,21 @@ class Constants {
     const val BTC_ASSET_ISSUER = "GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5"
     const val BTC_IMAGE_RES = R.drawable.ic_logo_btc
 
+    const val EURT_ASSET_CODE = "EURT"
+    const val EURT_ASSET_NAME = "Euro"
+    const val EURT_ASSET_ISSUER = "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
+    const val EURT_IMAGE_RES = R.drawable.ic_logo_eurt
+
+    const val XOF_ASSET_CODE = "XOF"
+    const val XOF_ASSET_NAME = "West African CFA Franc"
+    const val XOF_ASSET_ISSUER = "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
+    const val XOF_IMAGE_RES = R.drawable.ic_logo_asset
+
+    const val XAF_ASSET_CODE = "XAF"
+    const val XAF_ASSET_NAME = "Central African CFA Franc"
+    const val XAF_ASSET_ISSUER = "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
+    const val XAF_IMAGE_RES = R.drawable.ic_logo_asset
+
     const val CUSTOM_ASSET_IMAGE_RES = R.drawable.ic_logo_asset
 
     const val FEE_ACCOUNT = "GDENR3NFTMCIHX5GGQCAVG5AYHXH4FENWNRDDLMB7YHUBHKPO4PE2MC5"

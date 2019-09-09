@@ -109,12 +109,13 @@ class AssetUtils {
 
     fun getLogo(assetCode: String, useBlack: Boolean = false): Int = when (assetCode) {
       Constants.LUMENS_ASSET_TYPE, Constants.LUMENS_ASSET_CODE -> if (useBlack)
-      Constants.LUMENS_IMAGE_RES_BLACK else Constants.LUMENS_IMAGE_RES
+        Constants.LUMENS_IMAGE_RES_BLACK else Constants.LUMENS_IMAGE_RES
       Constants.DMC_ASSET_CODE -> Constants.DMC_IMAGE_RES
       Constants.ETH_ASSET_CODE -> Constants.ETH_IMAGE_RES
       Constants.BTC_ASSET_CODE -> Constants.BTC_IMAGE_RES
       Constants.ZAR_ASSET_CODE -> Constants.ZAR_IMAGE_RES
       Constants.NGNT_ASSET_CODE -> Constants.NGNT_IMAGE_RES
+      Constants.EURT_ASSET_CODE -> Constants.EURT_IMAGE_RES
       else -> Constants.CUSTOM_ASSET_IMAGE_RES
     }
 
@@ -124,6 +125,7 @@ class AssetUtils {
       Constants.ETH_ASSET_CODE -> Constants.ETH_ASSET_NAME
       Constants.ZAR_ASSET_CODE -> Constants.ZAR_ASSET_NAME
       Constants.NGNT_ASSET_CODE -> Constants.NGNT_ASSET_NAME
+      Constants.EURT_ASSET_CODE -> Constants.EURT_ASSET_NAME
       else -> ""
     }
 
@@ -133,6 +135,7 @@ class AssetUtils {
       Constants.ETH_ASSET_CODE -> "L"
       Constants.ZAR_ASSET_CODE -> "R"
       Constants.NGNT_ASSET_CODE -> "N"
+      Constants.EURT_ASSET_CODE -> "E"
       else -> ""
     }
 
@@ -149,7 +152,8 @@ class AssetUtils {
 
     fun isDepositSupported(assetCode: String, assetIssuer: String) =
       isZar(assetCode, assetIssuer) || isNgnt(assetCode, assetIssuer) ||
-        isBtc(assetCode, assetIssuer) || isEth(assetCode, assetIssuer)
+        isBtc(assetCode, assetIssuer) || isEth(assetCode, assetIssuer) ||
+        isEurt(assetCode, assetIssuer)
 
     fun isZar(assetCode: String, assetIssuer: String) =
       assetCode == Constants.ZAR_ASSET_CODE && assetIssuer == Constants.ZAR_ASSET_ISSUER
@@ -162,5 +166,8 @@ class AssetUtils {
 
     fun isEth(assetCode: String, assetIssuer: String) =
       assetCode == Constants.ETH_ASSET_CODE && assetIssuer == Constants.ETH_ASSET_ISSUER
+
+    fun isEurt(assetCode: String, assetIssuer: String) =
+      assetCode == Constants.EURT_ASSET_CODE && assetIssuer == Constants.EURT_ASSET_ISSUER
   }
 }

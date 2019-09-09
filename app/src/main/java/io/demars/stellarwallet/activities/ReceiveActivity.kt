@@ -50,14 +50,14 @@ class ReceiveActivity : BaseActivity() {
 
     val publicId = DmcApp.wallet.getStellarAccountId()
     addressTextView.text = publicId
-    generateQRCode(publicId!!, qrImageView, 500)
+    generateQRCode(publicId!!, qrImageView)
     addressCopyButton.setOnClickListener { copyAddressToClipBoard(publicId) }
     shareButton.setOnClickListener { shareAddress(publicId) }
   }
 
   private fun initBankDepositButton() {
     val bankDepositSupported = AssetUtils.isZar(assetCode, assetIssuer)
-      || AssetUtils.isNgnt(assetCode, assetIssuer)
+      || AssetUtils.isNgnt(assetCode, assetIssuer) || AssetUtils.isEurt(assetCode, assetIssuer)
 
     val directDepositSupported = AssetUtils.isBtc(assetCode, assetIssuer)
       || AssetUtils.isEth(assetCode, assetIssuer)
@@ -80,7 +80,7 @@ class ReceiveActivity : BaseActivity() {
     }
   }
 
-  private fun generateQRCode(data: String, imageView: ImageView, size: Int) {
+  private fun generateQRCode(data: String, imageView: ImageView, size: Int = 500) {
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
     imageView.setImageBitmap(bitmap)

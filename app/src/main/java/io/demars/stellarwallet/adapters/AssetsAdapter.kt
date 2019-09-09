@@ -19,6 +19,8 @@ import io.demars.stellarwallet.models.ui.DmcAsset
 import io.demars.stellarwallet.utils.AssetUtils
 import org.stellar.sdk.Asset
 import org.stellar.sdk.KeyPair
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   companion object {
@@ -123,6 +125,15 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
     val ngnt = DmcAsset(Constants.NGNT_ASSET_CODE, Constants.NGNT_IMAGE_RES,
       Constants.NGNT_ASSET_ISSUER, Constants.NGNT_ASSET_NAME, "", false, null)
 
+    val eurt = DmcAsset(Constants.EURT_ASSET_CODE, Constants.EURT_IMAGE_RES,
+      Constants.EURT_ASSET_ISSUER, Constants.EURT_ASSET_NAME, "", false, null)
+
+    val xof = DmcAsset(Constants.XOF_ASSET_CODE, Constants.XOF_IMAGE_RES,
+      Constants.XOF_ASSET_ISSUER, Constants.XOF_ASSET_NAME, "", false, null)
+
+    val xaf = DmcAsset(Constants.XAF_ASSET_CODE, Constants.XAF_IMAGE_RES,
+      Constants.XAF_ASSET_ISSUER, Constants.XAF_ASSET_NAME, "", false, null)
+
     val currencies = ArrayList<DmcAsset>()
     val customs = ArrayList<DmcAsset>()
 
@@ -133,6 +144,9 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       add(zar)
       add(eth)
       add(dmc)
+      add(eurt)
+      add(xof)
+      add(xaf)
     }
 
     balances.forEach {
@@ -175,8 +189,29 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
           currencies.add(dmc)
           supported.remove(dmc)
         }
+        it.assetCode.equals(Constants.EURT_ASSET_CODE, true) -> {
+          eurt.amount = it.balance
+          eurt.asset = it.asset
+          eurt.isAdded = true
+          currencies.add(eurt)
+          supported.remove(eurt)
+        }
+        it.assetCode.equals(Constants.XOF_ASSET_CODE, true) -> {
+          xof.amount = it.balance
+          xof.asset = it.asset
+          xof.isAdded = true
+          currencies.add(xof)
+          supported.remove(xof)
+        }
+        it.assetCode.equals(Constants.XAF_ASSET_CODE, true) -> {
+          xaf.amount = it.balance
+          xaf.asset = it.asset
+          xaf.isAdded = true
+          currencies.add(xaf)
+          supported.remove(xaf)
+        }
         else -> {
-          val custom = DmcAsset(it.assetCode.toLowerCase(), 0,
+          val custom = DmcAsset(it.assetCode.toLowerCase(Locale.getDefault()), 0,
             it.assetIssuer.accountId, it.assetCode, it.balance, true, it.asset)
           customs.add(custom)
         }

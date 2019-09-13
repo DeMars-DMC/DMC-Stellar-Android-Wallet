@@ -509,7 +509,7 @@ class Camera2Activity : AppCompatActivity() {
 
       previewRequestBuilder.addTarget(surface)
 
-      // Here, we createAuth a CameraCaptureSession for camera preview.
+      // Here, we create a CameraCaptureSession for camera preview.
       cameraDevice?.createCaptureSession(
         listOf(surface, imageReader?.surface),
         object : CameraCaptureSession.StateCallback() {

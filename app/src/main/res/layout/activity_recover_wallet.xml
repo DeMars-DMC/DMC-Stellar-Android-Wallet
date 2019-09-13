@@ -39,7 +39,7 @@
         android:layout_margin="@dimen/activity_vertical_margin"
         android:gravity="center"
         android:text="@string/invalid_input_for_phrase"
-        android:textColor="@color/colorError"
+        android:textColor="@color/colorRed"
         android:visibility="gone"
         android:layout_below="@+id/toolbar" />
 

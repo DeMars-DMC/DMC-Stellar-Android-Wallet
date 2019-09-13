@@ -10,7 +10,7 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        app:iconifiedByDefault="false"/>
+        app:iconifiedByDefault="false" />
 
     <ListView
         android:id="@+id/listView"

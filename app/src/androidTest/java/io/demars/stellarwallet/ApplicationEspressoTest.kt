@@ -109,7 +109,7 @@ class ApplicationEspressoTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withId(R.id.confirmButton)).perform(ViewActions.click())
-        // createAuth pin
+        // create pin
         writePin(pin)
         // re-enter
         writePin(pin)

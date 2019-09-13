@@ -39,7 +39,7 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>, val listener: Co
     private val button: TextView = v.findViewById<View>(R.id.button_add_address) as TextView
 
     private val colors: IntArray = intArrayOf(R.color.blueLight, R.color.puce, R.color.colorMantis, R.color.brown,
-      R.color.purple, R.color.pink, R.color.colorPaleSky, R.color.colorError, R.color.cornflowerBlue)
+      R.color.purple, R.color.pink, R.color.colorPaleSky, R.color.colorRed, R.color.cornflowerBlue)
 
     fun bind(contact: Contact, listener: ContactListener) {
       val appContext = label.context.applicationContext

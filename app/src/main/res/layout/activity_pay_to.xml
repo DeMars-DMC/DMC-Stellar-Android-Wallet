@@ -129,7 +129,6 @@
             android:tint="@color/colorAccent" />
     </FrameLayout>
 
-
     <Button
         android:id="@+id/bottomButton"
         style="@style/ButtonStyleAccentFlat"

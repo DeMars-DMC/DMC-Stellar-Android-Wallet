@@ -36,7 +36,7 @@ class WalletCreationTest {
 
     private fun createWallet(type: MnemonicType, pin: String) {
       LaunchPage.createWallet(type, pin)
-        // createAuth pin > re-enter
+        // create pin > re-enter
       PinPage.proceedWithPin(pin)
 
       WalletPage.pressSettings()

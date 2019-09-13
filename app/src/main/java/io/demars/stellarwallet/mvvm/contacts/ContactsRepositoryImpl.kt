@@ -46,7 +46,7 @@ object ContactsRepositoryImpl : ContactsRepository {
 
   /**
    *  Create contact with stellar address
-   *  @return the long that represents the contactId otherwise -1 when the createAuth operation has failed
+   *  @return the long that represents the contactId otherwise -1 when the create operation has failed
    */
   override fun createContact(name: String, stellarAddress: String): Long {
     val ops = ArrayList<ContentProviderOperation>()
@@ -186,7 +186,7 @@ object ContactsRepositoryImpl : ContactsRepository {
   }
 
   /**
-   * it will createAuth and return a new cursor, the cursor will be not closed by {@link ContactsRepository}
+   * it will create and return a new cursor, the cursor will be not closed by {@link ContactsRepository}
    */
   private fun getStellarContacts(): List<StellarContact> {
     val list: ArrayList<StellarContact> = arrayListOf()
@@ -214,7 +214,7 @@ object ContactsRepositoryImpl : ContactsRepository {
   }
 
   /**
-   * it will createAuth and return a new cursor, the cursor will be not closed by {@link ContactsRepository}
+   * it will create and return a new cursor, the cursor will be not closed by {@link ContactsRepository}
    */
   private fun getContactsList(): Cursor? {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&

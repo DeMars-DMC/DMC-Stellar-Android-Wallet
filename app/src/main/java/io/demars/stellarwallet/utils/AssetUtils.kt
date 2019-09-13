@@ -146,7 +146,9 @@ class AssetUtils {
     }
 
     fun getMaxDecimals(assetCode: String): Int = when (assetCode) {
-      Constants.ZAR_ASSET_CODE, Constants.NGNT_ASSET_CODE -> 2
+      Constants.ZAR_ASSET_CODE, Constants.NGNT_ASSET_CODE,
+      Constants.EURT_ASSET_CODE, Constants.XOF_ASSET_CODE,
+      Constants.XAF_ASSET_CODE -> 2
       else -> 7
     }
 

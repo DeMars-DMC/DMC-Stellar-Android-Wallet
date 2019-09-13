@@ -17,7 +17,8 @@
     <color name="colorDisabled">#797979</color>
     <color name="colorDisabledHighlight">#424242</color>
 
-    <color name="colorError">#c45757</color>
+    <color name="colorRed">#c45757</color>
+    <color name="colorRedHighlight">#C53B3B</color>
 
     <color name="colorLightGrey">@color/alto</color>
 
@@ -32,6 +33,7 @@
     <color name="transparent_accent">#80F79E02</color>
     <color name="transparent_green">#8088D453</color>
     <color name="transparent_yellow">#80deaf2a</color>
+    <color name="transparent_red">#80c45757</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>

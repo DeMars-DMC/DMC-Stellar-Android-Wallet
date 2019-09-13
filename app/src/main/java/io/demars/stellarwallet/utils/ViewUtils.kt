@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.R
 import io.demars.stellarwallet.api.firebase.Firebase
 import io.demars.stellarwallet.interfaces.OnAssetSelected
 import android.graphics.Bitmap
@@ -20,6 +19,12 @@ import android.graphics.Matrix
 import java.io.ByteArrayOutputStream
 import android.content.Intent
 import android.net.Uri
+import android.graphics.PorterDuff
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.content.ContextCompat
+import android.widget.ImageView
+import io.demars.stellarwallet.R
+import kotlinx.android.synthetic.main.activity_deposit.*
 
 
 object ViewUtils {
@@ -40,7 +45,7 @@ object ViewUtils {
 
   //region Url
   @JvmStatic
-  fun openUrl(activity:Activity, url:String) {
+  fun openUrl(activity: Activity, url: String) {
     val i = Intent(Intent.ACTION_VIEW)
     i.data = Uri.parse(url)
     activity.startActivity(i)
@@ -53,7 +58,7 @@ object ViewUtils {
     val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     //Find the currently focused view, so we can grab the correct window token from it.
     var view = activity.currentFocus
-    //If no view currently has focus, createAuth a new one, just so we can grab a window token from it
+    //If no view currently has focus, create a new one, just so we can grab a window token from it
     if (view == null) {
       view = View(activity)
     }
@@ -191,10 +196,37 @@ object ViewUtils {
       Bitmap.createBitmap(source, 0, 0, source.height, source.height)
     else Bitmap.createBitmap(source, 0, 0, source.width, source.width)
 
-  fun bitmapToBytes(bitmap: Bitmap) : ByteArray {
+  fun bitmapToBytes(bitmap: Bitmap): ByteArray {
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
     return stream.toByteArray()
+  }
+  //endregion
+
+  //region Drawable
+  fun tintDrawable(context: Context, view: ImageView, colorRes: Int) {
+    // https://stackoverflow.com/a/30928051/2170109
+    val drawable = DrawableCompat.wrap(view.drawable)
+    view.setImageDrawable(drawable)
+
+    /*
+     * need to use the filter | https://stackoverflow.com/a/30880522/2170109
+     * (even if compat should use it for pre-API21-devices | https://stackoverflow.com/a/27812472/2170109)
+     */
+    val color = ContextCompat.getColor(context, colorRes)
+    drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN)
+  }
+
+  fun setButtonEnabled(imageView: ImageView?, isEnabled: Boolean) {
+    imageView?.let {
+      if (isEnabled) {
+        imageView.alpha = 1.0f
+        imageView.isEnabled = true
+      } else {
+        imageView.alpha = 0.5f
+        imageView.isEnabled = false
+      }
+    }
   }
   //endregion
 }

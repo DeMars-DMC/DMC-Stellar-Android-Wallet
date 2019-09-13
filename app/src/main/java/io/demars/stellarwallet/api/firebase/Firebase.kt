@@ -212,7 +212,7 @@ object Firebase {
 
   private fun manageFcmGroupBody(operation: String, groupKey: String): HashMap<String, Any> {
     val body = HashMap<String, Any>()
-    body["operation"] = if (groupKey.isNotEmpty() && operation == "createAuth") "add" else operation
+    body["operation"] = if (groupKey.isNotEmpty() && operation == "create") "add" else operation
     body["notification_key_name"] = uid
     body["registration_ids"] = listOf(registrationToken)
     if (groupKey.isNotEmpty()) {

@@ -1,8 +1,8 @@
-package io.demars.stellarwallet.api.stellarport.model
+package io.demars.stellarwallet.api.sep
 
 import com.google.gson.annotations.SerializedName
 
-class  WithdrawResponse {
+class  Sep6WithdrawResponse {
   @SerializedName("account_id")
   var accountId = ""
   @SerializedName("memo_type")
@@ -16,7 +16,7 @@ class  WithdrawResponse {
   @SerializedName("fee_percent")
   var feePercent = 0.0
   @SerializedName("eta")
-  var eta = -1
+  var eta = ""
   @SerializedName("extra_info")
   var extraInfo = ExtraInfo()
 

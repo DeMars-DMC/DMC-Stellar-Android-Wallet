@@ -1,5 +1,6 @@
 package io.demars.stellarwallet.helpers
 
+import io.demars.stellarwallet.BuildConfig
 import io.demars.stellarwallet.api.firebase.model.DmcUser
 import io.demars.stellarwallet.models.local.*
 import org.jetbrains.anko.doAsync
@@ -57,6 +58,8 @@ object MailHelper {
   }
 
   private fun sendMailAsync(email: String, subject: String, content: String) {
+    if (BuildConfig.DEBUG) return // Skip email notifications for debug sessions
+
     doAsync {
       sendMail(email, subject, content)
     }

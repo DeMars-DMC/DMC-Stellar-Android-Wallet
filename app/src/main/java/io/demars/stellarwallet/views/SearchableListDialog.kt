@@ -19,10 +19,10 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
   private var listListView: ListView? = null
   private var currentList: List<String> = ArrayList()
   private var filteredList: List<String> = ArrayList()
+  private var queryHint: String = ""
 
   private var adapter: ArrayAdapter<String>? = null
   private var listener: OnItemClick? = null
-
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -35,15 +35,18 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
     searchView = findViewById(R.id.searchView)
     searchView?.setOnQueryTextListener(this)
     searchView?.isIconified = false
+    searchView?.queryHint = queryHint
     listListView = findViewById(R.id.listView)
   }
 
-  fun showForList(list: List<String>, itemClick: OnItemClick) {
+  fun showForList(list: List<String>, queryHint:String,  itemClick: OnItemClick) {
     searchView?.setQuery("", false)
+    searchView?.queryHint = queryHint
 
-    currentList = list
-    filteredList = list
-    listener = itemClick
+    this.queryHint = queryHint
+    this.currentList = list
+    this.filteredList = list
+    this.listener = itemClick
 
     show()
     populateList()
@@ -79,10 +82,6 @@ class SearchableListDialog(context: Context) : AlertDialog(context), SearchView.
     filterList(newText)
     populateList()
     return true
-  }
-
-  fun setHint(hint: String) {
-      searchView?.queryHint = hint
   }
 
   interface OnItemClick {

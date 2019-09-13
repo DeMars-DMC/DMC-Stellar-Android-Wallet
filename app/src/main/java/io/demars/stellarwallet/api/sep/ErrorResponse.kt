@@ -1,4 +1,4 @@
-package io.demars.stellarwallet.api.stellarport.model
+package io.demars.stellarwallet.api.sep
 
 import com.google.gson.annotations.SerializedName
 
@@ -7,8 +7,6 @@ class ErrorResponse {
   var type = ""
   @SerializedName("url")
   var url = ""
-  @SerializedName("interactive_deposit")
-  var interactiveDeposit = ""
   @SerializedName("error")
   var error = ""
 }

@@ -353,7 +353,7 @@ class ContactsActivity : BaseActivity(), ContactListener, SearchView.OnQueryText
     } else {
       val contactId = ContactsRepositoryImpl(this).createContact(name, address)
       if (contactId == -1L) {
-        toast("Failed to createAuth the new contact")
+        toast("Failed to create the new contact")
       } else {
         toast("Contact has been created")
         bottomSheet.dismiss()

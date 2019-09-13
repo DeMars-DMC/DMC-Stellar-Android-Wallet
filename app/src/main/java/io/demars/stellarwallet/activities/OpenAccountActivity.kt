@@ -303,7 +303,7 @@ class OpenAccountActivity : AppCompatActivity() {
     val spannable = SpannableStringBuilder(if (infoCheckedOnce)
       textView.text.substring(0, textView.text.length - 2) else textView.text)
     val color = ContextCompat.getColor(this,
-      if (verified) R.color.colorGreen else R.color.colorError)
+      if (verified) R.color.colorGreen else R.color.colorRed)
     val textToInsert = if (verified) " ✓" else " ✗"
     val spanIndex = spannable.length
 
@@ -355,8 +355,8 @@ class OpenAccountActivity : AppCompatActivity() {
 
     nationalityPicker.setOnClickListener {
       val nationalities = resources.getStringArray(R.array.nationality)
-      searchableDialog.setHint(getString(R.string.select_nationality))
-      searchableDialog.showForList(nationalities.toList(), object : SearchableListDialog.OnItemClick {
+      searchableDialog.showForList(nationalities.toList(), getString(R.string.select_nationality),
+        object : SearchableListDialog.OnItemClick {
         override fun itemClicked(item: String) {
           searchableDialog.hide()
           nationalityPicker.setTextColor(Color.BLACK)
@@ -404,8 +404,7 @@ class OpenAccountActivity : AppCompatActivity() {
 
     countryPicker.setOnClickListener {
       val countries = resources.getStringArray(R.array.country)
-      searchableDialog.setHint(getString(R.string.select_country))
-      searchableDialog.showForList(countries.toList(), object : SearchableListDialog.OnItemClick {
+      searchableDialog.showForList(countries.toList(), getString(R.string.select_country), object : SearchableListDialog.OnItemClick {
         override fun itemClicked(item: String) {
           searchableDialog.hide()
           countryPicker.setTextColor(Color.BLACK)
@@ -591,7 +590,7 @@ class OpenAccountActivity : AppCompatActivity() {
       DmcUser.State.BLOCKED.ordinal -> {
         iconRes = R.drawable.ic_error
         textRes = R.string.blocked_low
-        colorRes = R.color.colorError
+        colorRes = R.color.colorRed
       }
       DmcUser.State.CLOSED.ordinal -> {
         iconRes = R.drawable.ic_closed

@@ -43,7 +43,7 @@
     </style>
 
     <style name="CheckBoxTheme" parent="AppTheme">
-        <item name="colorControlNormal">@color/colorPaleSky</item>
+        <item name="colorControlNormal">@color/whiteMain</item>
     </style>
 
     <style name="TitleText" parent="TextAppearance.AppCompat">

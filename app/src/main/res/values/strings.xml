@@ -30,8 +30,8 @@
     <string name="title_activity_wallets">Wallets</string>
     <string name="title_activity_my_wallet">Wallet</string>
     <string name="learn_more">Learn more</string>
-    <string name="activity">ACTIVITY</string>
-    <string name="amount">AMOUNT</string>
+    <string name="activity">Activity</string>
+    <string name="amount">Amount</string>
     <string name="no_transactions">You currently have no transactions</string>
     <string name="load_account_error">There was an error loading your account balance</string>
     <string name="load_effects_error">There was an error loading your account activity</string>
@@ -360,7 +360,7 @@
     <string name="select_bank">Select Bank</string>
     <string name="account_number">Account number</string>
     <string name="account_type">Account type</string>
-    <string name="bank_account_explain">You may only make a deposit or withdrawal to an account in your name. For compliance purposes no third party deposit or withdrawal are permitted.</string>
+    <string name="bank_account_explain">You may only make a deposit or withdraw to an account in your name. For compliance purposes no third party deposit or withdrawal are permitted.</string>
     <string name="select_account_type">Select account type</string>
     <string name="pattern_branch_number">Branch number: %s</string>
     <string name="pattern_enter_your_address">Enter your %s address here</string>
@@ -375,7 +375,6 @@
     <string name="dialog_deposit_terms_message_ngnt">Deposits and withdrawals are managed by Cowrie Integrated Systems (link to https://cowrie.exchange), the Nigerian Naira collateral provider. Cowrie levy a small N100 fee for deposits and N200 for withdrawals. The DMC fee is an additional 0.5%. Note the minimum sum for deposits and withdrawals is N500.</string>
     <string name="dialog_deposit_terms_message_stellarport">Deposits and withdrawals are managed by Stellarport (link to https://stellarport.io/home) , the collateral provider. Note that Stellarport fees and T&amp;C’s  (Link to https://stellarport.io/home) https://stellarportio.zendesk.com/hc/en-us/articles/360000952593-Stellarport-Fee-Structure) will apply and you will need to complete an additional level of KYC with Stellarport.</string>
     <string name="back_to_deposit">Back to deposit</string>
-    <string name="other_amount">Other amount</string>
     <string name="deposit_not_verified">You\'ll be able to deposit once your account is verified</string>
     <string name="withdraw_not_verified">You\'ll be able to withdraw once your account is verified</string>
     <string name="request_sent_message">Thank you. %s request successfully sent</string>
@@ -432,4 +431,17 @@
     <string name="copy_and_finish">Copy &amp; Finish</string>
     <string name="enter_deposit_sum">Enter the sum you wish to deposit</string>
     <string name="fee_message_crypto">A 0,5% fee is applied to each deposit and withdrawal, in addition to any third party fees which may be levied by the collateral provider.</string>
+    <string name="enter_bank_name">Enter bank name</string>
+    <string name="enter_account_number">Enter account number</string>
+    <string name="enter_swift_or_bic">Enter SWIFT or BIC</string>
+    <string name="enter_iban">Enter IBAN</string>
+    <string name="interactive_customer_info_title">Customer info needed</string>
+    <string name="proceed">Proceed</string>
+    <string name="interactive_customer_info_message">This action will need to complete interactive KYC information flow</string>
+    <string name="pattern_swift_code">SWIFT(BIC) code: %s</string>
+    <string name="bank_account">Bank account</string>
+    <string name="to_proceed_enter_valid">To proceed enter valid %s </string>
+    <string name="iban_and_swift">IBAN and SWIFT(BIC)</string>
+    <string name="pattern_account">%s account</string>
+    <string name="pattern_address">%s address</string>
 </resources>

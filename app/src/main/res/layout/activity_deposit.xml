@@ -4,14 +4,32 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_light">
+    android:background="@drawable/bg_gradient">
 
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height_big"
-        android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingEnd="@dimen/padding_medium"
+            android:src="@drawable/ic_close"
+            android:theme="@style/ClickableItem" />
+
+        <ImageView
+            android:id="@+id/assetLogo"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_logo_asset" />
 
         <TextView
             android:id="@+id/titleView"
@@ -19,82 +37,323 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/secret_seed"
+            android:text="@string/deposit"
             android:textSize="@dimen/text_size_medium" />
-
-
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="@dimen/button_height"
-            android:layout_height="@dimen/button_height_big"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/padding_mini"
-            android:src="@drawable/ic_close"
-            android:theme="@style/ClickableItem" />
-
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/bankingInfoLabel"
-        style="@style/BoldText"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_marginTop="@dimen/padding_horizontal"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
-        android:text="@string/banking_information"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold" />
+        android:layout_above="@+id/amountTip"
+        android:layout_below="@+id/amountDivider">
 
-    <TextView
-        android:id="@+id/nameText"
-        style="@style/BoldText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bankingInfoLabel"
-        android:layout_alignParentStart="true"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingTop="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
-        tool:text="Ivan Ivanov" />
+        <ImageView
+            android:id="@+id/submitButton"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:background="@drawable/background_round_transparent_green"
+            android:enabled="false"
+            android:padding="@dimen/padding_mini"
+            android:rotation="270"
+            android:src="@drawable/ic_arrow_deposit"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/phoneText"
-        style="@style/BoldText"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/amountTextView"
+            style="@style/BoldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/default_value"
+            android:textAlignment="center"
+            android:textColor="@color/whiteMain"
+            android:textSize="@dimen/text_size_xxbig"
+            android:visibility="gone"
+            tool:visibility="visible" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/addBankContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topDivider"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/addBankForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_mini"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:background="@drawable/bg_card_transparent"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/padding_micro"
+            android:paddingBottom="@dimen/padding_micro">
+
+            <TextView
+                android:id="@+id/bankPicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingTop="@dimen/padding_micro"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_micro"
+                android:text="@string/select_bank"
+                android:textColor="@color/transparent_white"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/accountTypePicker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_arrow_drop_down"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingTop="@dimen/padding_micro"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_micro"
+                android:text="@string/account_type"
+                android:textColor="@color/transparent_white"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/accountNumberInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="@null"
+                android:hint="@string/enter_account_number"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingTop="@dimen/padding_micro"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_micro"
+                android:textColor="@color/whiteMain"
+                android:textColorHint="@color/transparent_white"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/accountExtraInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_big"
+                android:background="@null"
+                android:hint="@string/enter_swift_or_bic"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingTop="@dimen/padding_micro"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:paddingBottom="@dimen/padding_micro"
+                android:textColor="@color/whiteMain"
+                android:textColorHint="@color/transparent_white"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bankAccountExplain"
+            style="@style/LongWhiteDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:text="@string/bank_account_explain" />
+
+        <LinearLayout
+            android:id="@+id/addBankButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/addDestanationButton"
+                android:layout_width="@dimen/logo_width_pin"
+                android:layout_height="@dimen/logo_width_pin"
+                android:layout_gravity="center_horizontal"
+                android:alpha="0.5"
+                android:background="@drawable/background_round_transparent_green"
+                android:enabled="false"
+                android:padding="@dimen/padding_mini"
+                android:rotation="270"
+                android:src="@drawable/ic_arrow_deposit" />
+
+            <TextView
+                android:id="@+id/addBankLabel"
+                style="@style/WhiteDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_horizontal"
+                android:text="@string/to_proceed_enter_valid" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/depositAmountContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bankingInfoLabel"
-        android:layout_alignParentEnd="true"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingTop="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
+        android:layout_below="@id/amountDivider"
+        android:orientation="vertical"
         android:visibility="gone"
-        tool:text="+1234567890" />
+        tool:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_mini"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:background="@drawable/background_card_transparent"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_horizontal">
+
+            <TextView
+                android:id="@+id/depositAmountTextView"
+                style="@style/WhiteBoldText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingEnd="@dimen/padding_horizontal"
+                android:textSize="@dimen/text_size_big"
+                tool:text="5000.00 ZAR" />
+
+            <TextView
+                android:id="@+id/feeTextView"
+                style="@style/LongWhiteDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:gravity="start"
+                android:paddingStart="@dimen/padding_horizontal"
+                android:paddingTop="@dimen/padding_mini"
+                android:paddingEnd="@dimen/padding_horizontal"
+                tool:text="Following fee(s) will be applied:\nR5.00 - 1% DMC withdrawal fee\nR10.00 - ZAR withdrawal fee" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/depositConfirmExplain"
+            style="@style/LongWhiteDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingEnd="@dimen/padding_horizontal"
+            android:paddingBottom="@dimen/padding_mini"
+            android:text="@string/deposit_confirm_massage" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:paddingStart="@dimen/padding_horizontal"
+            android:paddingEnd="@dimen/padding_horizontal">
+
+            <CheckBox
+                android:id="@+id/agreeCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_micro"
+                android:theme="@style/CheckBoxTheme" />
+
+            <TextView
+                android:id="@+id/agreeText"
+                style="@style/WhiteDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/agree_request_terms" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/confirmButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/confirmButton"
+                android:layout_width="@dimen/logo_width_pin"
+                android:layout_height="@dimen/logo_width_pin"
+                android:layout_gravity="center_horizontal"
+                android:alpha="0.5"
+                android:background="@drawable/background_round_transparent_green"
+                android:enabled="false"
+                android:padding="@dimen/padding_mini"
+                android:rotation="270"
+                android:src="@drawable/ic_arrow_deposit" />
+
+            <TextView
+                android:id="@+id/confirmButtonLabel"
+                style="@style/WhiteDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_horizontal"
+                android:text="@string/confirm_and_submit" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_margin="@dimen/padding_mini"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/selectedBankContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nameText"
+        android:layout_below="@id/topDivider"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_horizontal"
+        android:background="@drawable/background_card_transparent"
         android:orientation="vertical"
         android:paddingTop="@dimen/padding_horizontal"
-        android:paddingBottom="@dimen/padding_horizontal">
+        android:paddingBottom="@dimen/padding_horizontal"
+        android:visibility="gone"
+        tool:visibility="visible">
 
         <TextView
             android:id="@+id/selectedBankName"
-            style="@style/BoldText"
+            style="@style/WhiteBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_horizontal"
-            android:textSize="@dimen/text_size_small"
             tool:text="Absa Bank" />
 
         <TextView
@@ -105,16 +364,17 @@
             android:layout_below="@+id/selectedBankName"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_mini"
+            android:alpha="0.6"
+            android:textColor="@color/whiteMain"
             tool:text="Branch number: 591000" />
 
         <TextView
             android:id="@+id/selectedBankAccountNumber"
-            style="@style/BoldText"
+            style="@style/WhiteBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:textSize="@dimen/text_size_small"
             tool:text="32423423423" />
 
         <TextView
@@ -126,259 +386,112 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/padding_mini"
             android:layout_marginEnd="@dimen/padding_horizontal"
+            android:alpha="0.6"
+            android:textColor="@color/whiteMain"
             tool:text="current/cheque account" />
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/depositAmountContainer"
+    <TextView
+        android:id="@+id/bankAccountTitle"
+        style="@style/WhiteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectedBankContainer"
-        android:visibility="gone"
-        tool:visibility="visible">
-
-        <TextView
-            android:id="@+id/amountLabel"
-            style="@style/BoldText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:text="@string/request_amount"
-            android:textColor="@color/colorPrimaryDark" />
-
-
-        <TextView
-            android:id="@+id/editAmountButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackground"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:text="@string/other_amount"
-            android:textAllCaps="true"
-            android:textColor="@color/colorError" />
-
-        <TextView
-            android:id="@+id/depositAmountTextView"
-            style="@style/BoldText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/amountLabel"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_small"
-            tool:text="5000.00 ZAR" />
-
-        <TextView
-            android:id="@+id/feeTextView"
-            style="@style/LongDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:layout_below="@id/depositAmountTextView"
-            tool:text="Following fee(s) will be applied:\nR5.00 - 1% DMC withdrawal fee\nR10.00 - ZAR withdrawal fee"/>
-
-        <CheckBox
-            android:id="@+id/agreeCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/feeTextView"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_horizontal"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="start|center_vertical"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_micro"
-            android:theme="@style/CheckBoxTheme" />
-
-        <TextView
-            android:id="@+id/agreeText"
-            style="@style/LongDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/agreeCheckBox"
-            android:layout_toEndOf="@+id/agreeCheckBox"
-            android:gravity="start"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingBottom="@dimen/padding_mini"
-            android:text="@string/agree_request_terms"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_small" />
-
-        <Button
-            android:id="@+id/confirmButton"
-            style="@style/ButtonStyleAccent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_below="@+id/agreeText"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_mini"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:enabled="false"
-            android:text="@string/confirm_and_submit" />
-
-        <TextView
-            android:id="@+id/depositConfirmExplain"
-            style="@style/LongDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/confirmButton"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
-            android:text="@string/deposit_confirm_massage" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_below="@id/depositConfirmExplain"
-            android:layout_margin="@dimen/padding_mini"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/addBankContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nameText"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/bankPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawableEnd="@drawable/ic_arrow_drop_down"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_horizontal"
-            android:text="@string/select_bank"
-            android:textColor="@color/colorPaleSky"
-            android:textSize="@dimen/text_size_small" />
-
-        <EditText
-            android:id="@+id/accountNumberInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="@string/account_number"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:maxLines="1"
-            android:layout_marginTop="@dimen/padding_horizontal"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:textColorHint="@color/colorPaleSky"
-            android:textSize="@dimen/text_size_small" />
-
-        <TextView
-            android:id="@+id/accountTypePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawableEnd="@drawable/ic_arrow_drop_down"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_horizontal"
-            android:text="@string/account_type"
-            android:textColor="@color/colorPaleSky"
-            android:textSize="@dimen/text_size_small" />
-
-        <Button
-            android:id="@+id/addBankButton"
-            style="@style/ButtonStyleAccent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_horizontal"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:enabled="false"
-            android:text="@string/add_bank_account" />
-
-        <TextView
-            style="@style/LongDescription"
-            android:id="@+id/bankAccountExplain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding_horizontal"
-            android:paddingTop="@dimen/padding_mini"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_mini"
-            android:text="@string/bank_account_explain" />
-
-    </LinearLayout>
+        android:layout_below="@+id/toolbar"
+        android:layout_marginStart="@dimen/padding_mini"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_mini"
+        android:padding="@dimen/padding_mini"
+        android:text="@string/bank_account"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_big" />
 
     <TextView
-        android:id="@+id/amountTextView"
-        style="@style/BoldText"
+        android:id="@+id/amountTitle"
+        style="@style/WhiteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/limitText"
         android:layout_below="@+id/selectedBankContainer"
-        android:gravity="center"
-        android:text="@string/default_value"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size_xxbig"
+        android:layout_marginStart="@dimen/padding_mini"
+        android:layout_marginTop="@dimen/padding_mini"
+        android:layout_marginEnd="@dimen/padding_mini"
+        android:padding="@dimen/padding_mini"
+        android:text="@string/amount"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_big"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/limitText"
-        style="@style/LongDescription"
+        android:id="@+id/editAmountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:layout_above="@id/amountDivider"
+        android:layout_alignParentEnd="true"
+        android:paddingStart="@dimen/padding_horizontal"
+        android:paddingEnd="@dimen/padding_horizontal"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:fontFamily="@font/opensans_semibold"
+        android:gravity="center"
+        android:text="@string/edit"
+        android:textAllCaps="true"
+        android:textColor="@color/colorYellow"
+        android:textSize="@dimen/text_size_small"
+        android:theme="@style/ClickableItem"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/amountTip"
+        style="@style/LongWhiteDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/submitButton"
+        android:layout_above="@+id/numberKeyboard"
         android:paddingStart="@dimen/padding_horizontal"
-        android:paddingTop="@dimen/padding_horizontal"
+        android:paddingTop="@dimen/padding_mini"
         android:paddingEnd="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_mini"
         android:text="@string/pattern_deposit_limit"
+        android:visibility="gone"
+        tool:visibility="visible" />
+
+    <View
+        android:id="@+id/topDivider"
+        style="@style/HorizontalDividerWhite"
+        android:layout_below="@id/bankAccountTitle"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal" />
+
+    <View
+        android:id="@+id/amountDivider"
+        style="@style/HorizontalDividerWhite"
+        android:layout_below="@id/amountTitle"
+        android:layout_marginStart="@dimen/padding_horizontal"
+        android:layout_marginEnd="@dimen/padding_horizontal"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/submitButton"
-        style="@style/ButtonStyleAccentFlat"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height_send"
-        android:layout_above="@+id/numberKeyboard"
-        android:elevation="0dp"
-        android:enabled="false"
-        android:text="@string/submit"
-        android:textColor="@color/whiteMain"
-        android:visibility="gone"
-        tool:ignore="UnusedAttribute" />
+    <View
+        android:id="@+id/keyboardDivider"
+        style="@style/HorizontalDividerWhite"
+        android:layout_above="@id/numberKeyboard"
+        android:visibility="gone" />
 
     <io.demars.stellarwallet.views.pin.PinLockView
         android:id="@+id/numberKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/bgWhiteTransparent"
+        android:paddingTop="@dimen/padding_mini"
+        android:paddingBottom="@dimen/padding_mini"
         android:visibility="gone"
         app:keypadButtonSize="@dimen/button_height_big"
         app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
-        app:keypadDotButtonDrawable="@drawable/ic_dot_decimal"
+        app:keypadHorizontalSpacing="@dimen/padding_horizontal"
         app:keypadShowDeleteButton="true"
-        app:keypadShowDotButton="true"
-        app:keypadTextColor="@color/colorPrimary"
-        app:keypadTextSize="@dimen/keypad_size" />
+        app:keypadTextColor="@color/whiteMain"
+        app:keypadTextSize="@dimen/keypad_size"
+        app:keypadVerticalSpacing="@dimen/pin_spacing_vertical"
+        app:pinLength="4"
+        tool:visibility="visible" />
+
 </RelativeLayout>

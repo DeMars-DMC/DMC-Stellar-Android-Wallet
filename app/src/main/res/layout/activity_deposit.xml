@@ -72,8 +72,7 @@
             android:textAlignment="center"
             android:textColor="@color/whiteMain"
             android:textSize="@dimen/text_size_xxbig"
-            android:visibility="gone"
-            tool:visibility="visible" />
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -268,7 +267,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height_big"
             android:layout_marginTop="@dimen/padding_horizontal"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal">
@@ -287,7 +286,7 @@
                 android:id="@+id/agreeText"
                 style="@style/WhiteDescription"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/agree_request_terms" />
 
         </LinearLayout>
@@ -296,9 +295,9 @@
             android:id="@+id/confirmButtonContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/padding_horizontal"
             android:layout_weight="0.9"
             android:gravity="center"
+            android:layout_marginTop="@dimen/padding_horizontal"
             android:orientation="vertical">
 
             <ImageView
@@ -450,8 +449,7 @@
         android:paddingEnd="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_mini"
         android:text="@string/pattern_deposit_limit"
-        android:visibility="gone"
-        tool:visibility="visible" />
+        android:visibility="gone" />
 
     <View
         android:id="@+id/topDivider"
@@ -491,7 +489,6 @@
         app:keypadTextColor="@color/whiteMain"
         app:keypadTextSize="@dimen/keypad_size"
         app:keypadVerticalSpacing="@dimen/pin_spacing_vertical"
-        app:pinLength="4"
-        tool:visibility="visible" />
+        app:pinLength="4"/>
 
 </RelativeLayout>

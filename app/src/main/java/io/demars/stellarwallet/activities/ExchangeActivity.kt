@@ -64,7 +64,7 @@ class ExchangeActivity : BaseActivity(), ViewPager.OnPageChangeListener, OnTrade
     assetIssuer = intent.getStringExtra(ARG_ASSET_ISSUER)
   }
 
-  override fun onAttachFragment(fragment: Fragment?) {
+  override fun onAttachFragment(fragment: Fragment) {
     Timber.d("onAttachFragment %s", fragment.toString())
 
     if (fragment is OnUpdateOrderBook) {

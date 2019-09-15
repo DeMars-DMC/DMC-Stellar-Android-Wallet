@@ -58,8 +58,6 @@ object MailHelper {
   }
 
   private fun sendMailAsync(email: String, subject: String, content: String) {
-    if (BuildConfig.DEBUG) return // Skip email notifications for debug sessions
-
     doAsync {
       sendMail(email, subject, content)
     }

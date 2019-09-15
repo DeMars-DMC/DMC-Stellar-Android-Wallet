@@ -407,7 +407,7 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
       sellingAmountFormatted, priceFormatted)
   }
 
-  override fun onAttach(context: Context?) {
+  override fun onAttach(context: Context) {
     super.onAttach(context)
     try {
       parentListener = activity as OnTradeCurrenciesChanged

@@ -6,19 +6,20 @@ import io.demars.stellarwallet.helpers.Constants
 class BankDeposit(val assetCode: String, val amount: String, val ref: String, val anchorBank: DmcUser.BankAccount, val userBank: DmcUser.BankAccount) : Deposit(assetCode) {
   override fun toReadableMessage(): String = when (assetCode) {
     Constants.NGNT_ASSET_CODE ->
-      "Please deposit $amount Niara at any Guaranty Trust Bank\n" +
+      "Deposit $amount Niara at any Guaranty Trust Bank\n" +
         "Cowrie Integrated Systems Limited\n" +
         "Account Number: 0174408645\n" +
         "Narration/Description/Remarks: F34C2D5\n" +
         "\n" +
         "Your peer to peer digital Naira will be credited to your wallet instantly on receipt."
     else -> // ZAR
-      "Please deposit $amount $assetCode at any ${anchorBank.bankName}\n" +
-        "${anchorBank.name}\n" +
-        (if (anchorBank.branch.isEmpty()) "" else "Branch Code:  ${anchorBank.branch}\n") +
+      "Deposit $amount $assetCode at:\n" +
+        "${anchorBank.bankName}\n" +
+        "Account name: ${anchorBank.name}\n" +
+        (if (anchorBank.branch.isEmpty()) "" else "Branch Code: ${anchorBank.branch}\n") +
         "Account Number: ${anchorBank.number}\n" +
-        (if (anchorBank.type.isEmpty()) "" else "Type: ${anchorBank.type}\n") +
-        "Narration/Description/Remarks: $ref"
+        (if (anchorBank.type.isEmpty()) "" else "Account Type: ${anchorBank.type}\n") +
+        "Reference (this is essential): $ref"
   }
 
   override fun toString(): String {

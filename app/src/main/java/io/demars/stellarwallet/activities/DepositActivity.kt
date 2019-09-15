@@ -218,6 +218,9 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       ViewUtils.setButtonEnabled(confirmButton, isChecked)
     }
 
+    // String "Deposit" or "Withdrawal" depends on mode.
+    val requestType = if (mode == Mode.WITHDRAW) getString(R.string.withdrawal) else modeString
+
     // Agree Terms & Conditions clickable text
     val clickableSpan = object : ClickableSpan() {
       override fun onClick(widget: View) {
@@ -229,7 +232,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         }
 
         LinkifiedDialog(this@DepositActivity, termsTitle,
-          termsMessage, getString(R.string.back_to_deposit)).show()
+          termsMessage, getString(R.string.pattern_back_to, requestType)).show()
       }
 
       override fun updateDrawState(ds: TextPaint) {
@@ -242,7 +245,6 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     }
 
     // initialize a new SpannableStringBuilder instance
-    val requestType = if (mode == Mode.WITHDRAW) getString(R.string.withdrawal) else modeString
     val agreeStr = getString(R.string.agree_request_terms, requestType.toLowerCase(Locale.getDefault()))
     val strForSpan = "Terms and Conditions"
     val ssBuilder = SpannableStringBuilder(agreeStr)

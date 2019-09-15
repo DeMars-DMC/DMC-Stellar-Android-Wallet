@@ -13,18 +13,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_mini"
         android:gravity="center_vertical"
-        android:text="@string/confirm_trade_title"
+        android:text="@string/terms_of_service"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/dialogMessage"
         style="@style/BlackDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="300dp"
         android:text="@string/dialog_deposit_terms_message_stellarport"
+        android:scrollbars="vertical"
         android:linksClickable="true"
         android:autoLink="all"/>
 
@@ -43,7 +44,6 @@
             android:background="?attr/selectableItemBackground"
             android:text="@string/confirm"
             android:textColor="@color/colorAccent" />
-
 
     </LinearLayout>
 </LinearLayout>

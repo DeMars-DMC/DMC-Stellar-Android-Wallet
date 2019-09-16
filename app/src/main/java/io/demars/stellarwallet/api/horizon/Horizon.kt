@@ -58,7 +58,7 @@ object Horizon : HorizonApi {
     return SendTask(listener, asset, destAddress, secretSeed, memo, amount)
   }
 
-  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
+  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String?, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
     return WithdrawTask(listener, asset, secretSeed, destination, memo, amount, fee)
   }
 
@@ -493,7 +493,7 @@ object Horizon : HorizonApi {
                              private val asset: Asset,
                              private val secretSeed: CharArray,
                              private val destination: String,
-                             private val memo: String,
+                             private val memo: String?,
                              private val amount: String,
                              private val fee: String)
     : AsyncTask<Void, Void, HorizonException>() {
@@ -513,7 +513,7 @@ object Horizon : HorizonApi {
         // Send fee(1%) to Fee Account
         transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
 
-        if (memo.isNotEmpty()) {
+        if (memo != null && memo.isNotEmpty()) {
           transactionBuilder.addMemo(Memo.text(memo))
         }
 

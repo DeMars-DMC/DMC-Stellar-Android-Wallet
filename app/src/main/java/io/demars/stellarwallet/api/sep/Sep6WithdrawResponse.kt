@@ -8,7 +8,7 @@ class  Sep6WithdrawResponse {
   @SerializedName("memo_type")
   var memoType = ""
   @SerializedName("memo")
-  var memo = ""
+  var memo : String? = ""
   @SerializedName("min_amount")
   var minAmount = -1.0
   @SerializedName("fee_fixed")

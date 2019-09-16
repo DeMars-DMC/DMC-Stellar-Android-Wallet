@@ -701,8 +701,8 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             object : Sep6.DepositListener {
               override fun onDepositResponse(response: Sep6DepositResponse) {
                 val extraInfo = response.extraInfo
-                val anchorBank = DmcUser.BankAccount("DMC Rand (Pty) Ltd", "250655",
-                  extraInfo.bankAccountName, extraInfo.bankAccountNumber, extraInfo.bankName)
+                val anchorBank = DmcUser.BankAccount(extraInfo.bankAccountName,
+                  "250655", "Cheque Account", extraInfo.bankAccountNumber, extraInfo.bankName)
                 val deposit = BankDeposit(assetCode, amount, response.extraInfo.depositRef, anchorBank, userBankAccounts[0])
                 MailHelper.notifyAboutNewDeposit(dmcUser, deposit)
                 showDepositInfoDialog(deposit)
@@ -770,16 +770,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
         }
         Constants.BTC_ASSET_CODE,
         Constants.ETH_ASSET_CODE -> {
-          val authUrl = Constants.STELLARPORT_AUTH_URL
-          val transferUrl = Constants.STELLARPORT_TRANSFER_URL
-          val withdrawPath = "/v2/GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5/withdraw"
-
-          Sep6.authenticatedWithdraw(this, authUrl, transferUrl,
-            withdrawPath, assetCode, Sep6.TYPE_CRYPTO, dest, "", email, object : Sep6.WithdrawListener {
-            override fun onWithdrawResponse(response: Sep6WithdrawResponse) {
-              withdrawCrypto(secretSeed, amount, fee, response.accountId, response.memo)
-            }
-          })
+          withdrawCrypto(secretSeed, amount, fee, email)
         }
       }
     } else {
@@ -797,7 +788,20 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     Sep6.withdraw(this, transferUrl, withdrawPath, null, assetCode, Sep6.TYPE_BANK, account,
       dest, destExtra, email, object : Sep6.WithdrawListener {
       override fun onWithdrawResponse(response: Sep6WithdrawResponse) {
-        toast("olalala ${response.accountId}")
+        Horizon.getWithdrawTask(object : SuccessErrorCallback {
+          override fun onSuccess() {
+            val withdrawal = BankWithdrawal(assetCode, amount, fee, userBankAccounts[0])
+
+            MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+            finishWithToast(getString(R.string.request_sent_message,
+              getString(R.string.withdrawal)))
+          }
+
+          override fun onError(error: HorizonException) {
+            finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
+          }
+        }, getAsset(), secretSeed, response.accountId, response.memo, amount, fee).execute()
       }
     })
 
@@ -828,7 +832,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
             finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
             hideProgressBar()
           }
-        }, getAsset(), secretSeed, Constants.ZAR_ASSET_ISSUER, "", amount, fee).execute()
+        }, getAsset(), secretSeed, response.accountId, response.memo, amount, fee).execute()
       }
     })
   }
@@ -869,22 +873,30 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     })
   }
 
-  private fun withdrawCrypto(secretSeed: CharArray, amount: String, fee: String,
-                             anchorAddress: String, anchorMemo: String) {
-    Horizon.getWithdrawTask(object : SuccessErrorCallback {
-      override fun onSuccess() {
-        val withdrawal = CryptoWithdrawal(assetCode, amount, fee)
+  private fun withdrawCrypto(secretSeed: CharArray, amount: String, fee: String, email: String) {
+    val authUrl = Constants.STELLARPORT_AUTH_URL
+    val transferUrl = Constants.STELLARPORT_TRANSFER_URL
+    val withdrawPath = "/v2/GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5/withdraw"
 
-        MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+    Sep6.authenticatedWithdraw(this, authUrl, transferUrl,
+      withdrawPath, assetCode, Sep6.TYPE_CRYPTO, dest, "", email, object : Sep6.WithdrawListener {
+      override fun onWithdrawResponse(response: Sep6WithdrawResponse) {
+        Horizon.getWithdrawTask(object : SuccessErrorCallback {
+          override fun onSuccess() {
+            val withdrawal = CryptoWithdrawal(assetCode, amount, fee)
 
-        finishWithToast(getString(R.string.request_sent_message,
-          getString(R.string.withdrawal)))
+            MailHelper.notifyAboutNewWithdrawal(dmcUser, withdrawal)
+
+            finishWithToast(getString(R.string.request_sent_message,
+              getString(R.string.withdrawal)))
+          }
+
+          override fun onError(error: HorizonException) {
+            finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
+          }
+        }, getAsset(), secretSeed, response.accountId, response.memo, amount, fee).execute()
       }
-
-      override fun onError(error: HorizonException) {
-        finishWithToast(error.localizedMessage ?: "Unknown error while withdraw $assetCode")
-      }
-    }, getAsset(), secretSeed, anchorAddress, anchorMemo, amount, fee).execute()
+    })
   }
 
   private fun showDepositInfoDialog(deposit: Deposit) {

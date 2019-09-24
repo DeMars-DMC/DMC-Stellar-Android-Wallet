@@ -310,7 +310,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.title.setTextColor(ContextCompat.getColor(
         viewHolder.title.context, R.color.colorGreen))
       viewHolder.icon.setImageResource(R.drawable.ic_add)
-      viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_green)
+      viewHolder.button.setBackgroundResource(R.drawable.background_card_clickable_green)
       viewHolder.button.setOnClickListener {
         listener.addCustomAsset()
       }
@@ -324,7 +324,7 @@ class AssetsAdapter(private var listener: AssetListener) : RecyclerView.Adapter<
       viewHolder.title.setTextColor(ContextCompat.getColor(
         viewHolder.title.context, R.color.colorAccent))
       viewHolder.icon.setImageResource(R.drawable.ic_edit_accent)
-      viewHolder.button.setBackgroundResource(R.drawable.background_card_transparent_accent)
+      viewHolder.button.setBackgroundResource(R.drawable.background_card_clickable_accent)
       viewHolder.button.setOnClickListener {
         listener.customizeWallet()
       }

@@ -64,7 +64,7 @@ class PayToActivity : BaseActivity() {
         Toast.makeText(this, "Scan cancelled", Toast.LENGTH_LONG).show()
       } else {
         addressEditText.setText(result.contents)
-        bottomButton.isEnabled = true
+        nextButton.isEnabled = true
       }
     } else {
       when (requestCode) {
@@ -90,7 +90,7 @@ class PayToActivity : BaseActivity() {
       openQrScanner()
     }
 
-    bottomButton.setOnClickListener {
+    nextButton.setOnClickListener {
       validateAndProceed()
     }
 

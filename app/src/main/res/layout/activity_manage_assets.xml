@@ -5,7 +5,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/bg_main_dark"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -73,7 +73,7 @@
                         style="@style/WhiteDigitalInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_card_transparent"
+                        android:background="@drawable/background_card_clickable"
                         android:drawableEnd="@drawable/ic_arrow_drop_down"
                         android:fontFamily="@font/roboto_light"
                         android:paddingStart="@dimen/padding_mini"
@@ -153,7 +153,7 @@
                     android:layout_marginStart="@dimen/padding_horizontal"
                     android:layout_marginTop="@dimen/padding_vertical_double"
                     android:layout_marginEnd="@dimen/padding_horizontal"
-                    android:background="@drawable/background_card_transparent"
+                    android:background="@drawable/background_card_clickable"
                     android:orientation="horizontal">
 
                     <TextView
@@ -192,7 +192,7 @@
                     android:layout_marginTop="@dimen/padding_mini"
                     android:layout_marginEnd="@dimen/padding_horizontal"
                     android:layout_marginBottom="@dimen/padding_mini"
-                    android:background="@drawable/background_card_transparent_accent"
+                    android:background="@drawable/background_card_clickable_accent"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@id/addressContainer">
 

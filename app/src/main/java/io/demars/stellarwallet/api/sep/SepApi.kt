@@ -33,7 +33,7 @@ interface SepApi {
                @Query("email") email : String,
                @Query("email_address") emailAddress : String): Call<Sep6WithdrawResponse>
 
-  object Creator {
+  companion object {
     private var okHttpClientAuth = OkHttpClient.Builder().build()
 
     private fun createNewRetrofit(baseUrl: String) = Retrofit.Builder()

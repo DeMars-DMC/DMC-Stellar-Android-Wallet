@@ -213,6 +213,6 @@ class WalletHeterogeneousWrapper {
   private fun convertPrice(price: Price?): String? {
     if (price == null) return null
 
-    return (price.numerator.toDouble() / price.denominator.toDouble()).toString()
+    return (price.denominator.toDouble() / price.numerator.toDouble()).toString()
   }
 }

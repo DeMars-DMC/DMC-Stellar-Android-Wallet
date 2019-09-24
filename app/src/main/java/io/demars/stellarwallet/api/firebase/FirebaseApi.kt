@@ -3,7 +3,6 @@ package io.demars.stellarwallet.api.firebase
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.http.*
 
@@ -29,9 +28,7 @@ interface FirebaseApi {
     private const val serverKey = "AAAAFHZShHA:APA91bF0qxRi55-Xvd6dT6Hr8K4CSQHKPSvUCeHXqzI8FYkNFt3ck8PdMERCniJqniWlioKKWs8peEKAOjBW2h2uBfTwoO3cPUumbajwgPpRYqfzoMcDziQNd8cV9XXWPTe3VrAnzAVZ"
     private const val senderId = "87884465264"
     private const val baseUrl = "https://fcm.googleapis.com/fcm/"
-    private val okHttpClient = OkHttpClient.Builder()
-      .addNetworkInterceptor(StethoInterceptor())
-      .build()
+    private val okHttpClient = OkHttpClient.Builder().build()
 
     val api: FirebaseApi by lazy {
       Retrofit.Builder()

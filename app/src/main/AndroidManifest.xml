@@ -14,6 +14,7 @@
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.flash" android:required="false"  />
+
     <application
         android:name=".DmcApp"
         android:allowBackup="false"
@@ -35,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ManageAssetsActivity"
+            android:name=".activities.WalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.AssetActivity"
@@ -102,10 +103,6 @@
             tools:replace="screenOrientation" />
         <activity
             android:name=".activities.ReceiveActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activities.BalanceSummaryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity

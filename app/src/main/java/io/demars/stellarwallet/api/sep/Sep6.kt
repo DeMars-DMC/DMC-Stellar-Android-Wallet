@@ -56,7 +56,7 @@ object Sep6 {
               account: String,
               email: String,
               listener: DepositListener) {
-    val apiTransfer = SepApi.Creator.create(transferUrl)
+    val apiTransfer = SepApi.create(transferUrl)
     val tokenHeader = "Bearer $token"
     apiTransfer.deposit(tokenHeader, depositPath, assetCode, account, email, email).enqueue(object : Callback<Sep6DepositResponse> {
 
@@ -87,7 +87,7 @@ object Sep6 {
                destExtra: String,
                email: String,
                listener: WithdrawListener) {
-    val api = SepApi.Creator.create(transferUrl)
+    val api = SepApi.create(transferUrl)
     val tokenHeader = "Bearer $token"
 
     api.withdraw(tokenHeader, withdrawPath, assetCode, type, account, dest, destExtra, email, email).enqueue(object : Callback<Sep6WithdrawResponse> {

@@ -26,7 +26,7 @@ import io.demars.stellarwallet.interfaces.TransactionsListener
 import io.demars.stellarwallet.utils.AssetUtils
 
 
-class TransactionsAdapter(var context: Context, var listener: TransactionsListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(val context: Context, val assetCode: String, val listener: TransactionsListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var contacts: ArrayList<Contact>? = null
   private var items: ArrayList<Any>? = null
 
@@ -101,6 +101,7 @@ class TransactionsAdapter(var context: Context, var listener: TransactionsListen
   class OperationViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var rootView: View = v.findViewById(R.id.rootView)
     var amount: TextView = v.findViewById(R.id.amountTextView)
+    var counterAmount: TextView = v.findViewById(R.id.counterAmountTextView)
     var date: TextView = v.findViewById(R.id.dateTextView)
     var transactionType: TextView = v.findViewById(R.id.transactionTypeTextView)
     var info: TextView = v.findViewById(R.id.transactionInfoTextView)
@@ -127,6 +128,8 @@ class TransactionsAdapter(var context: Context, var listener: TransactionsListen
     viewHolder.date.text = StringFormat.getFormattedDateTime(transaction.createdAt,
       DateFormat.is24HourFormat(context))
 
+    viewHolder.counterAmount.visibility = GONE
+
     when {
       transaction.memo != null -> {
         viewHolder.info.visibility = VISIBLE
@@ -144,15 +147,21 @@ class TransactionsAdapter(var context: Context, var listener: TransactionsListen
       listener.onTransactionClicked(trade)
     }
 
+    viewHolder.counterAmount.visibility = VISIBLE
+
     viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
-      StringFormat.formatAssetCode(trade.baseAsset), StringFormat.formatAssetCode(trade.counterAsset))
+      StringFormat.formatAssetCode(trade.counterAsset), StringFormat.formatAssetCode(trade.baseAsset))
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
-    if (DmcApp.userSession.getSessionAsset().assetCode == trade.baseAsset) {
-      viewHolder.amount.text = String.format(context.getString(R.string.negative_template),
-        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)))
+    if (assetCode == trade.baseAsset) {
+      viewHolder.amount.text = truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset))
+      viewHolder.counterAmount.text = String.format(context.getString(R.string.negative_asset_template),
+        truncateDecimalPlaces(trade.counterAmount, AssetUtils.getMaxDecimals(trade.counterAsset)), trade.counterAsset)
     } else {
-      viewHolder.amount.text = truncateDecimalPlaces(trade.counterAmount,
-        AssetUtils.getMaxDecimals(trade.counterAsset))
+      viewHolder.amount.text =
+        String.format(context.getString(R.string.negative_template),
+          truncateDecimalPlaces(trade.counterAmount, AssetUtils.getMaxDecimals(trade.counterAsset)))
+      viewHolder.counterAmount.text = String.format(context.getString(R.string.positive_asset_template),
+        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)), trade.baseAsset)
     }
     viewHolder.date.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
@@ -173,7 +182,8 @@ class TransactionsAdapter(var context: Context, var listener: TransactionsListen
 
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
 
-    viewHolder.amount.text = StringFormat.formatNumber4Decimals(operation.amount, operation.asset ?: "XLM")
+    viewHolder.amount.text = StringFormat.formatNumber4Decimals(operation.amount, operation.asset
+      ?: "XLM")
     viewHolder.date.text = StringFormat.getFormattedDateTime(operation.createdAt,
       DateFormat.is24HourFormat(context))
 

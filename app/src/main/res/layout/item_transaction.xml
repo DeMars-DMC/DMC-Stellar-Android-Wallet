@@ -8,18 +8,17 @@
     android:layout_marginStart="@dimen/padding_horizontal"
     android:layout_marginTop="@dimen/padding_micro"
     android:layout_marginEnd="@dimen/padding_horizontal"
-    android:background="@drawable/background_card_transparent"
+    android:background="@drawable/background_card_clickable"
     android:clipToPadding="false"
     android:paddingTop="@dimen/padding_horizontal">
 
     <TextView
         android:id="@+id/transactionTypeTextView"
-        style="@style/RegularText"
+        style="@style/WhiteBoldText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:textColor="@color/whiteMain"
         android:textSize="@dimen/text_size_small"
         app:layout_constraintEnd_toStartOf="@+id/amountTextView"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,11 +27,10 @@
 
     <TextView
         android:id="@+id/transactionInfoTextView"
-        style="@style/RegularText"
+        style="@style/WhiteDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:alpha="0.8"
         android:paddingTop="@dimen/padding_mini"
         android:textColor="@color/whiteMain"
         android:textSize="@dimen/text_size_small"
@@ -47,10 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:alpha="0.6"
         android:paddingTop="@dimen/padding_mini"
         android:paddingBottom="@dimen/padding_mini"
-        android:textColor="@color/whiteMain"
+        android:textColor="@color/whiteSecondary"
         app:layout_constraintStart_toStartOf="@+id/transactionTypeTextView"
         app:layout_constraintTop_toBottomOf="@+id/transactionInfoTextView"
         tools:text="Sep 12, 2018 11:22" />
@@ -68,6 +65,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/transactionTypeTextView"
         tools:text="2.0000" />
+
+    <TextView
+        android:id="@+id/counterAmountTextView"
+        style="@style/LongDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_mini"
+        android:layout_marginTop="@dimen/padding_micro"
+        android:textAllCaps="true"
+        android:textColor="@color/whiteSecondary"
+        app:layout_constraintEnd_toEndOf="@+id/amountTextView"
+        app:layout_constraintTop_toBottomOf="@+id/amountTextView"
+        tools:text="-1.65 NGNT" />
 
     <ImageView
         android:id="@+id/dotImageView"

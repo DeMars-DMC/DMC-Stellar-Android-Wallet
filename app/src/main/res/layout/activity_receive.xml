@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height_big"
             android:layout_weight="0.9"
-            android:background="@drawable/background_card_transparent">
+            android:background="@drawable/background_card_clickable">
 
             <TextView
                 android:id="@+id/addressTextView"
@@ -106,7 +106,7 @@
             android:layout_width="@dimen/button_height_big"
             android:layout_height="@dimen/button_height_big"
             android:layout_marginStart="@dimen/padding_mini"
-            android:background="@drawable/background_card_transparent_yellow"
+            android:background="@drawable/background_card_clickable_yellow"
             android:src="@drawable/ic_share" />
     </LinearLayout>
 
@@ -118,7 +118,7 @@
         android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:layout_marginBottom="@dimen/padding_mini"
-        android:background="@drawable/background_card_transparent_accent"
+        android:background="@drawable/background_card_clickable_accent"
         android:orientation="horizontal">
 
         <TextView

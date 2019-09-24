@@ -103,6 +103,7 @@ class PayActivity : BaseActivity(), PinLockView.DialerListener, SuccessErrorCall
     amountAvailable = availableFormatted.toDouble()
     amountAvailableText = availableFormatted
     titleText.text = getString(R.string.pattern_available, "$availableFormatted $assetCode")
+    assetLogo.setImageResource(AssetUtils.getLogo(assetCode))
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

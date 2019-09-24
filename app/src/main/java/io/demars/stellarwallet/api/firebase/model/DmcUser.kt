@@ -72,7 +72,7 @@ data class DmcUser(
                          var branch: String = "",
                          var type: String = "",
                          var number: String = "",
-                         var bankName: String = "") {
+                         var bankName: String = "") : Serializable {
 
     @Exclude
     fun isValid(): Boolean = bankName.isNotEmpty() && branch.isNotEmpty() &&

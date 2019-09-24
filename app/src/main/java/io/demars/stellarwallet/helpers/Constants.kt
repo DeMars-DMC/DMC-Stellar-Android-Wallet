@@ -75,21 +75,25 @@ class Constants {
     const val URL_TERMS_AND_CONDITIONS = "https://docs.google.com/document/d/1T4QLKk0UCBMUo8v8hofGJ4CD1P35GkorLH2sE0Y1iKs/edit?usp=sharing"
     const val URL_QUICK_START = "https://docs.google.com/document/d/1qSSWxP9cxpyBLcXkB5Dv4ClIj_lam2CyfvTG9mpPgxs/edit?usp=sharing"
 
-    // Sep6
+    // StellarPort
     const val STELLARPORT_AUTH_URL = "https://api.stellarport.io/"
     const val STELLARPORT_TRANSFER_URL = "https://a3s.api.stellarport.io/"
     const val STELLARPORT_SIGNING_KEY = "GABWHTAVRYF2MCNDR5YC5SC3JTZQBGDZ3HKI4QAREV5533VU43W4HJUX"
-    const val STELLARPORT_DEPOSIT_PATH = ""
+    const val STELLARPORT_DEPOSIT_PATH = "/v2/GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5/deposit"
+    const val STELLARPORT_WITDHRAW_PATH = "/v2/GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5/withdraw"
 
     // Tempo
     const val TEMPO_TRANSFER_URL = "https://api.tempo.eu.com/"
     const val TEMPO_DEPOSIT_PATH = "/t1/deposit"
     const val TEMPO_WITHDRAW_PATH = "/t1/withdraw"
 
-
     // DMC
-    const val DMC_TRANSFER_URL = "https://admin.demars.io/"
-    const val DMC_DEPOSIT_PATH = "api/v1/deposit"
-    const val DMC_WITHDRAW_PATH = "api/v1/withdraw"
+    const val DEMARS_TRANSFER_URL = "https://admin.demars.io/"
+    const val DEMARS_DEPOSIT_PATH = "api/v1/deposit"
+    const val DEMARS_WITHDRAW_PATH = "api/v1/withdraw"
+
+    // PayFast
+    const val PAYFAST_BASE_URL = "https://sandbox.payfast.co.za/"
+    const val PAYFAST_NOTIFY_URL = "https://admin.demars.io/api/v1/payfast_notify_url"
   }
 }

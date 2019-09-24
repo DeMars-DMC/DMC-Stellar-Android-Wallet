@@ -4,7 +4,7 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient">
+    android:background="@drawable/bg_main_dark">
 
     <FrameLayout
         android:id="@+id/toolbar"
@@ -48,13 +48,13 @@
         android:layout_above="@+id/amountTip"
         android:layout_below="@+id/amountDivider">
 
-        <ImageView
+        <io.demars.stellarwallet.views.DmcRoundButton
             android:id="@+id/submitButton"
             android:layout_width="@dimen/button_height_big"
             android:layout_height="@dimen/button_height_big"
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:background="@drawable/background_round_transparent_green"
+            android:background="@drawable/background_round_clickable_green"
             android:enabled="false"
             android:padding="@dimen/padding_mini"
             android:rotation="270"
@@ -63,14 +63,13 @@
 
         <TextView
             android:id="@+id/amountTextView"
-            style="@style/BoldText"
+            style="@style/WhiteBoldText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/default_value"
             android:textAlignment="center"
-            android:textColor="@color/whiteMain"
             android:textSize="@dimen/text_size_xxbig"
             android:visibility="gone" />
 
@@ -91,12 +90,13 @@
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_mini"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:background="@drawable/bg_card_transparent"
+            android:background="@drawable/bg_card_clickable"
             android:orientation="vertical"
             android:paddingTop="@dimen/padding_micro"
             android:paddingBottom="@dimen/padding_micro">
 
             <TextView
+                android:theme="@style/ClickableItem"
                 android:id="@+id/bankPicker"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height_big"
@@ -114,6 +114,7 @@
                 android:textSize="@dimen/text_size_small" />
 
             <TextView
+                android:theme="@style/ClickableItem"
                 android:id="@+id/accountTypePicker"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height_big"
@@ -161,7 +162,7 @@
                 android:paddingEnd="@dimen/padding_horizontal"
                 android:paddingBottom="@dimen/padding_micro"
                 android:textColor="@color/whiteMain"
-                android:textColorHint="@color/transparent_white"
+                android:textColorHint="@color/whiteSecondary"
                 android:textSize="@dimen/text_size_small" />
 
         </LinearLayout>
@@ -185,13 +186,13 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
+            <io.demars.stellarwallet.views.DmcRoundButton
                 android:id="@+id/addDestanationButton"
                 android:layout_width="@dimen/logo_width_pin"
                 android:layout_height="@dimen/logo_width_pin"
                 android:layout_gravity="center_horizontal"
                 android:alpha="0.5"
-                android:background="@drawable/background_round_transparent_green"
+                android:background="@drawable/background_round_clickable_green"
                 android:enabled="false"
                 android:padding="@dimen/padding_mini"
                 android:rotation="270"
@@ -224,7 +225,7 @@
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_mini"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:background="@drawable/background_card_transparent"
+            android:background="@drawable/bg_card_transparent"
             android:orientation="vertical"
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_horizontal">
@@ -242,14 +243,14 @@
 
             <TextView
                 android:id="@+id/feeTextView"
-                style="@style/LongWhiteDescription"
+                style="@style/LongDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
                 android:gravity="start"
                 android:paddingStart="@dimen/padding_horizontal"
                 android:paddingTop="@dimen/padding_mini"
                 android:paddingEnd="@dimen/padding_horizontal"
+                android:textColor="@color/whiteSecondary"
                 tool:text="Following fee(s) will be applied:\nR5.00 - 1% DMC withdrawal fee\nR10.00 - ZAR withdrawal fee" />
 
         </LinearLayout>
@@ -300,13 +301,12 @@
             android:layout_marginTop="@dimen/padding_horizontal"
             android:orientation="vertical">
 
-            <ImageView
+            <io.demars.stellarwallet.views.DmcRoundButton
                 android:id="@+id/confirmButton"
                 android:layout_width="@dimen/logo_width_pin"
                 android:layout_height="@dimen/logo_width_pin"
                 android:layout_gravity="center_horizontal"
-                android:alpha="0.5"
-                android:background="@drawable/background_round_transparent_green"
+                android:background="@drawable/background_round_clickable_green"
                 android:enabled="false"
                 android:padding="@dimen/padding_mini"
                 android:rotation="270"
@@ -340,7 +340,7 @@
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:background="@drawable/background_card_transparent"
+        android:background="@drawable/bg_card_transparent"
         android:orientation="vertical"
         android:paddingTop="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/padding_horizontal"
@@ -363,8 +363,7 @@
             android:layout_below="@+id/selectedBankName"
             android:layout_marginStart="@dimen/padding_horizontal"
             android:layout_marginTop="@dimen/padding_mini"
-            android:alpha="0.6"
-            android:textColor="@color/whiteMain"
+            android:textColor="@color/whiteSecondary"
             tool:text="Branch number: 591000" />
 
         <TextView
@@ -385,14 +384,63 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/padding_mini"
             android:layout_marginEnd="@dimen/padding_horizontal"
-            android:alpha="0.6"
-            android:textColor="@color/whiteMain"
+            android:textColor="@color/whiteSecondary"
             tool:text="current/cheque account" />
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/paymentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/topDivider"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/paymentMessage"
+            style="@style/LongWhiteDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_horizontal"
+            android:background="@drawable/bg_card_transparent"
+            android:layout_margin="@dimen/padding_horizontal"
+            android:textSize="@dimen/text_size_small"
+            android:textIsSelectable="true"
+            android:gravity="start"/>
+
+        <LinearLayout
+            android:id="@+id/payFastButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/padding_horizontal"
+            android:orientation="vertical">
+
+            <io.demars.stellarwallet.views.DmcRoundButton
+                android:id="@+id/payFastButton"
+                android:layout_width="@dimen/logo_width_pin"
+                android:layout_height="@dimen/logo_width_pin"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/background_round_clickable_green"
+                android:padding="@dimen/padding_vertical"
+                android:src="@drawable/ic_logo_payfast" />
+
+            <TextView
+                android:id="@+id/payFastButtonLabel"
+                style="@style/WhiteDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_horizontal"
+                android:text="@string/payfast_button_label" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/bankAccountTitle"
+        android:id="@+id/topTitle"
         style="@style/WhiteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -454,7 +502,7 @@
     <View
         android:id="@+id/topDivider"
         style="@style/HorizontalDividerWhite"
-        android:layout_below="@id/bankAccountTitle"
+        android:layout_below="@id/topTitle"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal" />
 

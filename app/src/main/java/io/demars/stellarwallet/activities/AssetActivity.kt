@@ -94,7 +94,7 @@ class AssetActivity : BaseActivity(), TransactionsListener {
 
     transactionsRecyclerView.layoutManager = LinearLayoutManager(this)
 
-    transactionsAdapter = TransactionsAdapter(this, this)
+    transactionsAdapter = TransactionsAdapter(this, assetCode, this)
     transactionsRecyclerView.adapter = transactionsAdapter
 
     ContactsRepositoryImpl(this).getContactsListLiveData(true)
@@ -159,13 +159,12 @@ class AssetActivity : BaseActivity(), TransactionsListener {
   override fun onTransactionClicked(transaction: Any) {
     when (transaction) {
       is Operation -> {
-        startActivity(TransactionDetailsActivity.newInstance(this,transaction))
+        startActivity(TransactionDetailsActivity.newInstance(this, transaction))
       }
       is Trade -> {
-        startActivity(TransactionDetailsActivity.newInstance(this,transaction))
+        startActivity(TransactionDetailsActivity.newInstance(this, transaction))
       }
     }
-
   }
 
   override fun onResume() {

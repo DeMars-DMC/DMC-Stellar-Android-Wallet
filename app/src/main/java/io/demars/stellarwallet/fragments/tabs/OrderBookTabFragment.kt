@@ -74,21 +74,20 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
   override fun onAttach(context: Context) {
     super.onAttach(context)
     try {
-      parentListener = parentFragment as OnRefreshOrderBookListener
+      parentListener = activity as OnRefreshOrderBookListener
     } catch (e: ClassCastException) {
       Timber.e("the parent must implement: %s", OnRefreshOrderBookListener::class.java.simpleName)
     }
   }
 
   override fun onRefresh() {
-    if (!isAdded || isDetached || !isVisible) {
+    if (!isAdded || isDetached || !isVisible || !::parentListener.isInitialized) {
       Timber.d("onRefreshOrderBook failed fragment not ready")
+      swipeRefresh?.isRefreshing = false
       return
     }
 
-    if (::parentListener.isInitialized) {
-      parentListener.onRefreshOrderBook()
-    }
+    parentListener.onRefreshOrderBook()
   }
 
   private fun loadOrderBook(sellingCode: String, buyingCode: String, asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
@@ -118,7 +117,6 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
     asks.forEach {
       val item = OrderBook(id, Date(), it.price.toFloat(), it.amount.toFloat(), it.price.toFloat() * it.amount.toFloat(), OrderBookAdapterTypes.ITEM)
       orderBooks.add(item)
-      id++
 
     }
 
@@ -126,16 +124,12 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
       orderBooks.add(OrderBook(type = OrderBookAdapterTypes.EMPTY))
     }
 
-
     Timber.d("loading order book complete items %s", orderBooks.size)
 
     runOnUiThread {
       updateList(orderBooks, sellingCode, buyingCode)
       empty_view_order_book?.visibility = View.GONE
-    }
-
-    if (swipeRefresh != null) {
-      swipeRefresh.isRefreshing = false
+      swipeRefresh?.isRefreshing = false
     }
   }
 
@@ -152,11 +146,9 @@ class OrderBookTabFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, O
 
   override fun failedToUpdate() {
     runOnUiThread {
-      if (swipeRefresh != null) {
-        swipeRefresh.isRefreshing = false
-        orderBookRv.visibility = View.GONE
-        empty_view_order_book.visibility = View.VISIBLE
-      }
+      swipeRefresh?.isRefreshing = false
+      orderBookRv?.visibility = View.GONE
+      empty_view_order_book?.visibility = View.VISIBLE
     }
   }
 

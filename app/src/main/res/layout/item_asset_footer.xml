@@ -10,7 +10,7 @@
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:background="@drawable/background_card_transparent_yellow"
+        android:background="@drawable/background_card_clickable_yellow"
         android:orientation="horizontal">
 
         <TextView
@@ -41,7 +41,7 @@
         android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
         android:layout_marginBottom="@dimen/padding_mini"
-        android:background="@drawable/background_card_transparent_green"
+        android:background="@drawable/background_card_clickable_green"
         android:orientation="horizontal">
 
         <TextView

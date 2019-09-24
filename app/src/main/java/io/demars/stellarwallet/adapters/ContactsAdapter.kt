@@ -71,14 +71,14 @@ class ContactsAdapter(private val contacts: ArrayList<Contact>, val listener: Co
       val stellarAddress = contact.stellarAddress
       if (stellarAddress.isNullOrBlank()) {
         button.text = appContext.getString(R.string.add_stellar_address)
-        button.background = ContextCompat.getDrawable(appContext, R.drawable.background_card_transparent_accent)
+        button.background = ContextCompat.getDrawable(appContext, R.drawable.background_card_clickable_accent)
         button.textColor = ContextCompat.getColor(appContext, R.color.colorAccent)
         button.setOnClickListener {
           listener.addAddressToContact(contact)
         }
       } else {
         button.text = appContext.getString(R.string.send_payment)
-        button.background = ContextCompat.getDrawable(appContext, R.drawable.background_card_transparent_green)
+        button.background = ContextCompat.getDrawable(appContext, R.drawable.background_card_clickable_green)
         button.textColor = ContextCompat.getColor(appContext, R.color.colorGreen)
         button.setOnClickListener {
           listener.onPayToContact(contact)

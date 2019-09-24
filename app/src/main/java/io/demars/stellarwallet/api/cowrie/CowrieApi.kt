@@ -18,7 +18,7 @@ interface CowrieApi {
   fun ngntForNgn(@Query("bank_code") bankCode: String,
                  @Query("account_number") accountNumber: String) : Call<WithdrawResponse>
 
-  object Creator {
+  companion object {
     private var okHttpClient = OkHttpClient.Builder().build()
 
     private var retrofit = Retrofit.Builder()

@@ -3,7 +3,7 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/bg_main_dark"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
@@ -68,7 +68,7 @@
         android:layout_marginTop="@dimen/padding_horizontal"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:background="@drawable/bg_card_transparent"
+        android:background="@drawable/bg_card_clickable"
         android:orientation="horizontal"
         tool:ignore="UnusedAttribute">
 
@@ -108,7 +108,7 @@
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginTop="@dimen/padding_mini"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:background="@drawable/background_card_transparent_accent"
+        android:background="@drawable/background_card_clickable_accent"
         android:orientation="horizontal">
 
         <TextView
@@ -129,16 +129,37 @@
             android:tint="@color/colorAccent" />
     </FrameLayout>
 
-    <Button
-        android:id="@+id/bottomButton"
-        style="@style/ButtonStyleAccentFlat"
+    <TextView
+        android:id="@+id/payToTip"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height_big"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"
+        style="@style/LongWhiteDescription"
+        android:layout_margin="@dimen/padding_horizontal"
+        android:text="@string/tip_pay_to"
+        android:layout_below="@id/payToContactButton"/>
+
+    <io.demars.stellarwallet.views.DmcRoundButton
+        android:id="@+id/nextButton"
+        android:layout_width="@dimen/logo_width_pin"
+        android:layout_height="@dimen/logo_width_pin"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/background_round_clickable_green"
+        android:enabled="false"
+        android:padding="@dimen/padding_mini"
+        android:rotation="270"
+        android:src="@drawable/ic_arrow_deposit"
+        android:layout_marginTop="@dimen/padding_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/payToTip"/>
+
+    <TextView
+        android:id="@+id/confirmButtonLabel"
+        style="@style/WhiteDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nextButton"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/padding_horizontal"
-        android:elevation="@dimen/elevation"
-        android:text="@string/next"
-        tool:ignore="UnusedAttribute" />
+        android:text="@string/next" />
 
 </RelativeLayout>

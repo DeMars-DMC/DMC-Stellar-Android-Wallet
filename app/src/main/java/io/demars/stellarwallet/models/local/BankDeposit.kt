@@ -3,7 +3,7 @@ package io.demars.stellarwallet.models.local
 import io.demars.stellarwallet.api.firebase.model.DmcUser
 import io.demars.stellarwallet.helpers.Constants
 
-class BankDeposit(val assetCode: String, val amount: String, val ref: String, val anchorBank: DmcUser.BankAccount, val userBank: DmcUser.BankAccount) : Deposit(assetCode) {
+class BankDeposit(val assetCode: String, val amount: String, val ref: String, val anchorBank: DmcUser.BankAccount, private val userBank: DmcUser.BankAccount) : Deposit(assetCode) {
   override fun toReadableMessage(): String = when (assetCode) {
     Constants.NGNT_ASSET_CODE ->
       "Deposit $amount Niara at any Guaranty Trust Bank\n" +
@@ -22,7 +22,10 @@ class BankDeposit(val assetCode: String, val amount: String, val ref: String, va
         "Reference (this is essential): $ref"
   }
 
-  override fun toString(): String {
-    return "BankDeposit(baseAssetCode='$assetCode', amount='$amount', ref='$ref', anchorBank=$anchorBank, userBank=$userBank)"
-  }
+  override fun getDepositAssetCode(): String = this.assetCode
+  override fun getDepositAmount(): String = this.amount
+  override fun getDepositRef(): String = this.ref
+  override fun toString(): String =
+     "BankDeposit(baseAssetCode='$assetCode', amount='$amount', ref='$ref', anchorBank=$anchorBank, userBank=$userBank)"
+
 }

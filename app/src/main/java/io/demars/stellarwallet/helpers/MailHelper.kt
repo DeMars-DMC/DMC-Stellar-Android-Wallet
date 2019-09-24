@@ -70,10 +70,10 @@ object MailHelper {
   }
 
   fun notifyAboutNewDeposit(user: DmcUser, deposit: Deposit) {
-    // Notifying Back office
-    sendMailAsync(EMAIL_OFFICE, deposit.toReadableTitle(), "New deposit(${deposit.baseAssetCode}) was just requested\n\n$deposit\n\n$user")
-    // Notifying User with deposit payment information
-    sendMailAsync(user.email_address, deposit.toReadableTitle(), deposit.toReadableMessage())
+//    // Notifying Back office
+//    sendMailAsync(EMAIL_OFFICE, deposit.toReadableTitle(), "New deposit(${deposit.baseAssetCode}) was just requested\n\n$deposit\n\n$user")
+//    // Notifying User with deposit payment information
+//    sendMailAsync(user.email_address, deposit.toReadableTitle(), deposit.toReadableMessage())
 }
 
 fun notifyAboutNewWithdrawal(user: DmcUser, withdrawal: Withdrawal) {

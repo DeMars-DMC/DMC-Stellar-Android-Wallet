@@ -19,7 +19,7 @@ object Sep10 {
     }
 
     val seed = AccountUtils.getSecretSeed(activity)
-    val apiAuth = SepApi.Creator.create(authUrl)
+    val apiAuth = SepApi.create(authUrl)
     apiAuth.getAuthToken(account).enqueue(object : Callback<GetAuthResponse> {
       override fun onResponse(call: Call<GetAuthResponse>, response: Response<GetAuthResponse>) {
         val body = response.body()

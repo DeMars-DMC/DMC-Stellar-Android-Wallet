@@ -9,7 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.DmcApp
-import io.demars.stellarwallet.activities.ManageAssetsActivity
+import io.demars.stellarwallet.activities.WalletActivity
 import io.demars.stellarwallet.api.firebase.model.DmcUser
 
 class MessagingService : FirebaseMessagingService() {
@@ -41,7 +41,7 @@ class MessagingService : FirebaseMessagingService() {
 
       if (message.isEmpty()) return
 
-      val intent = Intent(this, ManageAssetsActivity::class.java)
+      val intent = Intent(this, WalletActivity::class.java)
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
       val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 

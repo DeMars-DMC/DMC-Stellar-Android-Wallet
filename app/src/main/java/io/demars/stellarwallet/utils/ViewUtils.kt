@@ -216,17 +216,5 @@ object ViewUtils {
     val color = ContextCompat.getColor(context, colorRes)
     drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN)
   }
-
-  fun setButtonEnabled(imageView: ImageView?, isEnabled: Boolean) {
-    imageView?.let {
-      if (isEnabled) {
-        imageView.alpha = 1.0f
-        imageView.isEnabled = true
-      } else {
-        imageView.alpha = 0.5f
-        imageView.isEnabled = false
-      }
-    }
-  }
   //endregion
 }

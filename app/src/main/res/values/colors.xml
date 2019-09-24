@@ -20,8 +20,6 @@
     <color name="colorRed">#c45757</color>
     <color name="colorRedHighlight">#C53B3B</color>
 
-    <color name="colorLightGrey">@color/alto</color>
-
     <color name="colorPaleSky">#6f7785</color>
 
     <color name="bgWhiteTransparent">#1Affffff</color>
@@ -38,6 +36,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="whiteMain">#ebebeb</color>
+    <color name="whiteSecondary">#ccebebeb</color>
 
     <!--MERGE COLORS-->
     <!--Colors-->
@@ -46,9 +45,7 @@
     <color name="puce">#C7808E</color>
     <color name="toryBlue">#0b55b3</color>
     <color name="alabaster">#f7f7f7</color>
-    <color name="transparent_alabaster">#77f7f7f7</color>
     <color name="lightGray">#cccccc</color>
-    <color name="alto">#D8D8D8</color>
     <color name="colorMantis">#71CD5C</color>
     <color name="purple">#800080</color>
     <color name="pink">#ffa5d2</color>
@@ -56,13 +53,7 @@
 
     <!--Branding Colors-->
     <color name="blueDark">#002a55</color>
-    <color name="blueRegular">#1E2C88</color>
-    <color name="blueLight">#1A48CF</color>
+    <color name="blueLight">#819EBE</color>
     <color name="main_bg_light">#F8F8F8</color>
-
-    <!--Global-->
-    <color name="fragmentBg">@color/main_bg_light</color>
-    <color name="toggleSelected">@color/royalBlue</color>
-    <color name="toggleUnselected">@color/whiteMain</color>
 
 </resources>

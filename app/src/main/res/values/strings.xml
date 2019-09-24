@@ -18,9 +18,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="no_network">There was a problem connecting to the network. Attempting to reconnect.</string>
-    <string name="balance_template">%1$s %2$s</string>
-    <string name="asset_template">%1$s (%2$s)</string>
+    <string name="asset_template">%1$s %2$s</string>
     <string name="negative_template">-%1$s</string>
+    <string name="negative_asset_template">-%1$s %2$s</string>
+    <string name="positive_asset_template">+%1$s %2$s</string>
     <string name="exchange_item_template">Exchange %1$s for %2$s</string>
 
     <!--Wallet Fragment-->
@@ -164,9 +165,7 @@
     <string name="inflation_set_success">Inflation destination set!</string>
     <string name="inflation_set_error">There was an error setting inflation destination.</string>
 
-    <!--Balance Summary Activity-->
     <string name="total_balance">Total Balance</string>
-    <string name="available_balance">Available Balance</string>
     <string name="type">Type</string>
     <string name="amount_lowercase">Amount</string>
     <string name="xlm">XLM</string>
@@ -444,4 +443,9 @@
     <string name="iban_and_swift">IBAN and SWIFT(BIC)</string>
     <string name="pattern_account">%s account</string>
     <string name="pattern_address">%s address</string>
+    <string name="pay_now">Pay now</string>
+    <string name="payfast_button_label">You can pay now using PayFast</string>
+    <string name="tip_pay_to">To proceed with the payment, please enter valid Stellar Address. You can type it manually, scan a QR-code or choose from Contacts</string>
+    <string name="please_enter_address">Please enter receiver\'s address</string>
+    <string name="exchanged">Exchanged</string>
 </resources>

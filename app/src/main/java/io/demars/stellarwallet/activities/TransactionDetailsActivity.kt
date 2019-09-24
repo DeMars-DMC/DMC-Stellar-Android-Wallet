@@ -158,19 +158,20 @@ class TransactionDetailsActivity : BaseActivity() {
 
     copyAddressIcon.visibility = View.GONE
 
-    titleView.text = "Exchanged"
+    titleView.setText(R.string.exchanged)
 
-    firstAssetTitle.text = StringFormat.formatAssetCode(trade.baseAsset)
-    firstAssetLogo.setImageResource(AssetUtils.getLogo(trade.baseAsset))
+    firstAssetTitle.text = StringFormat.formatAssetCode(trade.counterAsset)
+    firstAssetLogo.setImageResource(AssetUtils.getLogo(trade.counterAsset))
 
-    secondAssetTitle.text = StringFormat.formatAssetCode(trade.counterAsset)
-    secondAssetLogo.setImageResource(AssetUtils.getLogo(trade.counterAsset))
+    secondAssetTitle.text = StringFormat.formatAssetCode(trade.baseAsset)
+    secondAssetLogo.setImageResource(AssetUtils.getLogo(trade.baseAsset))
 
     firstAmountView.text = String.format(getString(R.string.negative_template),
-      StringFormat.truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)))
+      StringFormat.truncateDecimalPlaces(trade.counterAmount,
+        AssetUtils.getMaxDecimals(trade.counterAsset)))
 
-    secondAmountView.text = StringFormat.truncateDecimalPlaces(trade.counterAmount,
-      AssetUtils.getMaxDecimals(trade.counterAsset))
+    secondAmountView.text = StringFormat.truncateDecimalPlaces(trade.baseAmount,
+        AssetUtils.getMaxDecimals(trade.baseAsset))
 
     dateTimeView.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(this))
 

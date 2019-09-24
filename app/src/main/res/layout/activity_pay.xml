@@ -9,36 +9,67 @@
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/transparent"
+        android:layout_height="@dimen/button_height_big"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/padding_horizontal"
-            android:layout_marginTop="@dimen/padding_macro"
-            android:layout_marginEnd="@dimen/padding_horizontal"
-            android:layout_marginBottom="@dimen/padding_macro"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/receive"
-            android:paddingStart="@dimen/padding_zero"
-            android:paddingTop="@dimen/padding_horizontal"
-            android:paddingEnd="@dimen/padding_horizontal"
-            android:paddingBottom="@dimen/padding_horizontal"
-            android:src="@drawable/ic_chevron_left"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingEnd="@dimen/padding_medium"
+            android:src="@drawable/ic_close"
             android:theme="@style/ClickableItem" />
 
+        <ImageView
+            android:id="@+id/assetLogo"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_logo_asset" />
+
         <TextView
+            android:id="@+id/titleView"
             style="@style/WhiteTitle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/finish_payment"
-            android:textAllCaps="false"
             android:textSize="@dimen/text_size_medium" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/bottomContainer"
+        app:layout_constraintTop_toBottomOf="@id/topContainer">
+
+        <io.demars.stellarwallet.views.DmcRoundButton
+            android:id="@+id/payButton"
+            android:layout_width="@dimen/button_height_big"
+            android:layout_height="@dimen/button_height_big"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:background="@drawable/background_round_clickable_green"
+            android:enabled="false"
+            android:padding="@dimen/padding_mini"
+            android:src="@drawable/ic_arrow_pay" />
+
+        <TextView
+            android:id="@+id/amountTextView"
+            style="@style/WhiteBoldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/default_value"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_xxbig" />
+
     </FrameLayout>
 
     <LinearLayout
@@ -53,138 +84,92 @@
             style="@style/WhiteTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAllCaps="false"
             android:paddingStart="@dimen/padding_horizontal"
             android:paddingTop="@dimen/padding_horizontal"
             android:paddingEnd="@dimen/padding_horizontal"
+            android:textAllCaps="false"
             android:textSize="@dimen/text_size_big"
             tool:text="1,000,000,000 XLM" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_line_transparent"
-            android:layout_marginTop="@dimen/padding_micro"
-            android:layout_marginStart="-2dp"
-            android:layout_marginEnd="-2dp"
-            android:padding="@dimen/padding_horizontal">
+            android:layout_marginStart="@dimen/padding_horizontal"
+            android:layout_marginTop="@dimen/padding_mini"
+            android:layout_marginEnd="@dimen/padding_horizontal"
+            android:background="@drawable/bg_card_clickable"
+            android:orientation="vertical">
 
-            <TextView
-                style="@style/WhiteTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/to"
-                android:textAllCaps="false"
-                android:textSize="@dimen/text_size_small" />
-
-            <TextView
-                android:id="@+id/addressEditText"
-                style="@style/WhiteTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="@dimen/text_size_small" />
+                android:layout_height="@dimen/button_height_big"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_horizontal">
 
-        </LinearLayout>
+                <TextView
+                    style="@style/WhiteTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/to"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/text_size_small" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/padding_micro"
-            android:background="@drawable/bg_line_transparent"
-            android:layout_marginStart="-2dp"
-            android:layout_marginEnd="-2dp"
-            android:padding="@dimen/padding_horizontal">
+                <TextView
+                    android:id="@+id/addressEditText"
+                    style="@style/WhiteTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/padding_horizontal"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_small" />
 
-            <TextView
-                android:id="@+id/memoTitleTextView"
-                style="@style/WhiteTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/memo"
-                android:textAllCaps="false"
-                android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/memoTextView"
-                style="@style/WhiteTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:background="@android:color/transparent"
-                android:ellipsize="end"
-                android:hint="@string/optional"
-                android:imeOptions="actionDone"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLength="28"
-                android:maxLines="1"
-                android:textColorHint="@color/transparent_white"
-                android:textSize="@dimen/text_size_small"
-                tool:ignore="UnusedAttribute" />
+                android:layout_height="@dimen/button_height_big"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_horizontal">
 
+                <TextView
+                    android:id="@+id/memoTitleTextView"
+                    style="@style/WhiteTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/memo"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/text_size_small" />
+
+                <EditText
+                    android:id="@+id/memoTextView"
+                    style="@style/WhiteTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/padding_horizontal"
+                    android:background="@android:color/transparent"
+                    android:ellipsize="end"
+                    android:hint="@string/optional"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="28"
+                    android:maxLines="1"
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="@dimen/text_size_small"
+                    tool:ignore="UnusedAttribute" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="2dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/payButton"
-        app:layout_constraintTop_toBottomOf="@id/topContainer">
-
-        <TextView
-            style="@style/WhiteTitle"
-            android:id="@+id/amountTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:text="@string/default_value"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_xxxbig" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/payButton"
-        style="@style/ButtonStyleAccentFlat"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height_send"
-        android:elevation="0dp"
-        android:text="@string/pay"
-        android:textColor="@color/whiteMain"
-        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
-        tool:ignore="UnusedAttribute" />
 
     <RelativeLayout
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/whiteMain"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent">
-
-        <io.demars.stellarwallet.views.pin.PinLockView
-            android:id="@+id/numberKeyboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            app:keypadButtonSize="@dimen/button_height_big"
-            app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
-            app:keypadDotButtonDrawable="@drawable/ic_dot_decimal"
-            app:keypadShowDeleteButton="true"
-            app:keypadShowDotButton="true"
-            app:keypadTextColor="@color/colorPrimary"
-            app:keypadTextSize="@dimen/keypad_size" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -193,6 +178,27 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:visibility="gone" />
+
+        <View
+            android:id="@+id/keyboardDivider"
+            style="@style/HorizontalDividerWhite"/>
+
+        <io.demars.stellarwallet.views.pin.PinLockView
+            android:id="@+id/numberKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/keyboardDivider"
+            android:background="@color/bgWhiteTransparent"
+            android:paddingTop="@dimen/padding_mini"
+            android:paddingBottom="@dimen/padding_mini"
+            app:keypadButtonSize="@dimen/button_height_big"
+            app:keypadDeleteButtonDrawable="@drawable/ic_backspace_24dp"
+            app:keypadHorizontalSpacing="@dimen/padding_horizontal"
+            app:keypadShowDeleteButton="true"
+            app:keypadTextColor="@color/whiteMain"
+            app:keypadTextSize="@dimen/keypad_size"
+            app:keypadVerticalSpacing="@dimen/pin_spacing_vertical"
+            app:pinLength="4"/>
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

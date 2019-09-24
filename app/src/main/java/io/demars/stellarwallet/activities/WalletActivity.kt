@@ -38,7 +38,7 @@ import org.stellar.sdk.KeyPair
 import org.stellar.sdk.responses.OrderBookResponse
 import timber.log.Timber
 
-class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, ValueEventListener {
+class WalletActivity : BaseActivity(), AssetListener, OnAssetSelected, ValueEventListener {
 
   //region Properties
   companion object {
@@ -228,8 +228,11 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
   }
 
   private fun updateViewForError() {
+    totalBalanceProgress?.visibility = View.GONE
     swipeRefresh?.isRefreshing = false
     totalBalanceView?.setText(R.string.error)
+
+    // TODO: ADD NICE VIEW FOR ERROR
   }
   //endregion
 
@@ -246,7 +249,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
         }
 
         override fun onError(error: HorizonException) {
-          toast(error.message(this@ManageAssetsActivity))
+          toast(error.message(this@WalletActivity))
           swipeRefresh?.isRefreshing = false
         }
       }, asset, isRemove, secretSeed).execute()
@@ -405,7 +408,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
               // and converted XLM balance already and we can go through all the other
               // assets and convert them to XLM and then to reporting currency
               DmcApp.wallet.getBalances().filter { filter ->
-                !AssetUtils.isReporting(this@ManageAssetsActivity, filter) &&
+                !AssetUtils.isReporting(this@WalletActivity, filter) &&
                   filter.assetType != "native"
               }.forEach { balance ->
                 val dataAsset = AssetUtils.toDataAssetFrom(balance.asset)
@@ -521,7 +524,7 @@ class ManageAssetsActivity : BaseActivity(), AssetListener, OnAssetSelected, Val
     Horizon.getJoinInflationDestination(object : SuccessErrorCallback {
       override fun onSuccess() {
         Timber.d("Inflation destination set successfully")
-        Preferences.inflationSetOnce(this@ManageAssetsActivity)
+        Preferences.inflationSetOnce(this@WalletActivity)
       }
 
       override fun onError(error: HorizonException) {

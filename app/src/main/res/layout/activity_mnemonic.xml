@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/bg_main_dark"
     android:orientation="vertical"
     tools:context=".activities.MnemonicActivity">
 
@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_height"
             android:layout_gravity="center"
-            android:background="@drawable/background_card_transparent_yellow"
+            android:background="@drawable/background_card_clickable_yellow"
             android:clickable="true"
             android:focusable="true"
             android:paddingStart="@dimen/padding_horizontal"

@@ -58,7 +58,7 @@ object Horizon : HorizonApi {
     return SendTask(listener, asset, destAddress, secretSeed, memo, amount)
   }
 
-  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String?, amount: String, fee: String): AsyncTask<Void, Void, HorizonException> {
+  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String?, amount: String, fee: String?): AsyncTask<Void, Void, HorizonException> {
     return WithdrawTask(listener, asset, secretSeed, destination, memo, amount, fee)
   }
 
@@ -495,7 +495,7 @@ object Horizon : HorizonApi {
                              private val destination: String,
                              private val memo: String?,
                              private val amount: String,
-                             private val fee: String)
+                             private val fee: String?)
     : AsyncTask<Void, Void, HorizonException>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
@@ -510,8 +510,10 @@ object Horizon : HorizonApi {
         val transactionBuilder = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
         // Burn amount(99% of withdrawal) sending it to Issuing Account
         transactionBuilder.addOperation(PaymentOperation.Builder(destKeyPair, asset, amount).build())
-        // Send fee(1%) to Fee Account
-        transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
+        // Send fee to Fee Account
+        if (fee != null && fee.isNotEmpty()) {
+          transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
+        }
 
         if (memo != null && memo.isNotEmpty()) {
           transactionBuilder.addMemo(Memo.text(memo))

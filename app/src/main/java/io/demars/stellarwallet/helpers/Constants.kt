@@ -91,9 +91,6 @@ class Constants {
     const val DEMARS_TRANSFER_URL = "https://admin.demars.io/"
     const val DEMARS_DEPOSIT_PATH = "api/v1/deposit"
     const val DEMARS_WITHDRAW_PATH = "api/v1/withdraw"
-
-    // PayFast
-    const val PAYFAST_BASE_URL = "https://sandbox.payfast.co.za/"
-    const val PAYFAST_NOTIFY_URL = "https://admin.demars.io/api/v1/payfast_notify_url"
+    const val DEMARS_PAYFAST_URL = "https://demars.io/"
   }
 }

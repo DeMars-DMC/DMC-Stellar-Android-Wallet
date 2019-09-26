@@ -31,6 +31,7 @@ import io.demars.stellarwallet.api.cowrie.model.DepositResponse
 import io.demars.stellarwallet.api.cowrie.model.WithdrawResponse
 import io.demars.stellarwallet.api.cowrie.CowrieApi
 import io.demars.stellarwallet.api.horizon.Horizon
+import io.demars.stellarwallet.api.payfast.DemarsApi
 import io.demars.stellarwallet.api.sep.Sep6
 import io.demars.stellarwallet.api.sep.Sep6DepositResponse
 import io.demars.stellarwallet.api.sep.Sep6WithdrawResponse
@@ -38,6 +39,7 @@ import io.demars.stellarwallet.models.local.*
 import io.demars.stellarwallet.utils.*
 import io.demars.stellarwallet.views.LinkifiedDialog
 import io.demars.stellarwallet.views.SearchableListDialog
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -432,7 +434,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       feeTextView.text = feesString
     }
 
-    confirmButton.isEnabled =  termsChecked
+    confirmButton.isEnabled = termsChecked
 
     addBankContainer.visibility = View.GONE
     paymentContainer.visibility = View.GONE
@@ -774,8 +776,24 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
       View.VISIBLE else View.GONE
 
     payFastButton.setOnClickListener {
-      // Here we will request PayFast payment
+      payWithPayFast(deposit)
     }
+  }
+
+  private fun payWithPayFast(deposit: Deposit) {
+    DemarsApi.create().deposit(dmcUser.first_name, dmcUser.last_name, dmcUser.email_address,
+      deposit.getDepositRef(), deposit.getDepositAmount()).enqueue(object : Callback<ResponseBody> {
+      override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        response.headers()["Location"]?.let {
+          ViewUtils.openUrl(this@DepositActivity, it)
+        } ?: toast("Error - payment url is NULL")
+      }
+
+      override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        toast(t.localizedMessage)
+      }
+
+    })
   }
 
   private fun confirmWithdrawal() {
@@ -793,10 +811,10 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
       when (assetCode) {
         Constants.NGNT_ASSET_CODE -> {
-          withdrawNgnt(secretSeed, amount, fee)
+          withdrawNgnt(secretSeed, amount)
         }
         Constants.ZAR_ASSET_CODE -> {
-          withdrawZar(secretSeed, amount, fee)
+          withdrawZar(secretSeed, amount)
         }
         Constants.EURT_ASSET_CODE -> {
           withdrawEurt(secretSeed, amount, fee)
@@ -840,7 +858,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
 
   }
 
-  private fun withdrawZar(secretSeed: CharArray, amount: String, fee: String) {
+  private fun withdrawZar(secretSeed: CharArray, amount: String, fee: String? = null) {
     val transferUrl = Constants.DEMARS_TRANSFER_URL
     val withdrawPath = Constants.DEMARS_WITHDRAW_PATH
     val account = dmcUser.stellar_address
@@ -870,7 +888,7 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
     })
   }
 
-  private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String) {
+  private fun withdrawNgnt(secretSeed: CharArray, amount: String, fee: String? = null) {
     val bankAccount = userBankAccounts[0]
     cowrieApi.ngntForNgn(bankAccount.branch, bankAccount.number).enqueue(object : Callback<WithdrawResponse> {
       override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
@@ -960,5 +978,5 @@ class DepositActivity : BaseActivity(), PinLockView.DialerListener {
   private fun isCrypto(): Boolean = AssetUtils.isBtc(assetCode, assetIssuer) ||
     AssetUtils.isEth(assetCode, assetIssuer)
 
-  private fun getDmcFeePercent(): Double = if (assetCode == Constants.ZAR_ASSET_CODE) 0.01 else 0.005
+  private fun getDmcFeePercent(): Double = 0.005
 }

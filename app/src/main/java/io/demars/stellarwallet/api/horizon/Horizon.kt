@@ -58,8 +58,8 @@ object Horizon : HorizonApi {
     return SendTask(listener, asset, destAddress, secretSeed, memo, amount)
   }
 
-  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String?, amount: String, fee: String?): AsyncTask<Void, Void, HorizonException> {
-    return WithdrawTask(listener, asset, secretSeed, destination, memo, amount, fee)
+  override fun getWithdrawTask(listener: SuccessErrorCallback, asset: Asset, secretSeed: CharArray, destination: String, memo: String?, amount: String): AsyncTask<Void, Void, HorizonException> {
+    return WithdrawTask(listener, asset, secretSeed, destination, memo, amount)
   }
 
   override fun getJoinInflationDestination(listener: SuccessErrorCallback, secretSeed: CharArray, inflationDest: String): AsyncTask<Void, Void, HorizonException> {
@@ -489,13 +489,13 @@ object Horizon : HorizonApi {
     }
   }
 
+  ///TODO: CHECK IF IT"S COMPLETELY THE SAME AS SendTask
   private class WithdrawTask(private val listener: SuccessErrorCallback,
                              private val asset: Asset,
                              private val secretSeed: CharArray,
                              private val destination: String,
                              private val memo: String?,
-                             private val amount: String,
-                             private val fee: String?)
+                             private val amount: String)
     : AsyncTask<Void, Void, HorizonException>() {
 
     override fun doInBackground(vararg params: Void?): HorizonException? {
@@ -503,17 +503,12 @@ object Horizon : HorizonApi {
         val server = getServer()
         val sourceKeyPair = KeyPair.fromSecretSeed(secretSeed)
         val destKeyPair = KeyPair.fromAccountId(destination)
-        val feeKeyPair = KeyPair.fromAccountId(Constants.FEE_ACCOUNT)
 
         val sourceAccount = server.accounts().account(sourceKeyPair)
 
         val transactionBuilder = Transaction.Builder(sourceAccount).setTimeout(TIMEOUT_INFINITE)
-        // Burn amount(99% of withdrawal) sending it to Issuing Account
+        // Send all assets to the destanation
         transactionBuilder.addOperation(PaymentOperation.Builder(destKeyPair, asset, amount).build())
-        // Send fee to Fee Account
-        if (fee != null && fee.isNotEmpty()) {
-          transactionBuilder.addOperation(PaymentOperation.Builder(feeKeyPair, asset, fee).build())
-        }
 
         if (memo != null && memo.isNotEmpty()) {
           transactionBuilder.addMemo(Memo.text(memo))

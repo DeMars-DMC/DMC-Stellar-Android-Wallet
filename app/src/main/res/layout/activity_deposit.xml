@@ -241,18 +241,6 @@
                 android:textSize="@dimen/text_size_big"
                 tool:text="5000.00 ZAR" />
 
-            <TextView
-                android:id="@+id/feeTextView"
-                style="@style/LongDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingStart="@dimen/padding_horizontal"
-                android:paddingTop="@dimen/padding_mini"
-                android:paddingEnd="@dimen/padding_horizontal"
-                android:textColor="@color/whiteSecondary"
-                tool:text="Following fee(s) will be applied:\nR5.00 - 1% DMC withdrawal fee\nR10.00 - ZAR withdrawal fee" />
-
         </LinearLayout>
 
         <TextView

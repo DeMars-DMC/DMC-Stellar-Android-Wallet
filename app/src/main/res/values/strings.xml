@@ -371,7 +371,7 @@
     <string name="confirm_and_submit">Confirm &amp; Submit</string>
     <string name="dialog_deposit_terms_title">%s (%s)\nDeposit/Withdrawal T&amp;C\'s</string>
     <string name="dialog_deposit_terms_message_zar">The following terms and conditions apply to all South African Rand Deposits and Withdrawals.\n\n1. Transaction limits\nAll deposits and withdrawals are limited to R5,000 per transaction and R25,000 per month.\n\n2. Fees\nDéMars do not charge any fees for deposits and withdrawals, but third party fees may apply. Cash deposits will attract bank deposit fees (5%), as will deposits via credit cards (3.75%) and easy EFT (2.5%).</string>
-    <string name="dialog_deposit_terms_message_ngnt">Deposits and withdrawals are managed by Cowrie Integrated Systems (link to https://cowrie.exchange), the Nigerian Naira collateral provider. Cowrie levy a small N100 fee for deposits and N200 for withdrawals. The DMC fee is an additional 0.5%. Note the minimum sum for deposits and withdrawals is N500.</string>
+    <string name="dialog_deposit_terms_message_ngnt">Deposits and withdrawals are managed by Cowrie Integrated Systems (link to https://cowrie.exchange), the Nigerian Naira collateral provider. Cowrie levy a small N100 fee for deposits and N200 for withdrawals. Note the minimum sum for deposits and withdrawals is N500.</string>
     <string name="dialog_deposit_terms_message_stellarport">Deposits and withdrawals are managed by Stellarport (link to https://stellarport.io/home) , the collateral provider. Note that Stellarport fees and T&amp;C’s  (Link to https://stellarport.io/home) https://stellarportio.zendesk.com/hc/en-us/articles/360000952593-Stellarport-Fee-Structure) will apply and you will need to complete an additional level of KYC with Stellarport.</string>
     <string name="pattern_back_to">Back to %s</string>
     <string name="deposit_not_verified">You\'ll be able to deposit once your account is verified</string>
@@ -381,8 +381,6 @@
     <string name="withdrawal">Withdrawal</string>
     <string name="withdrawal_fee">Withdrawal fee</string>
     <string name="pattern_min_withdrawal">Minimal withdrawal: %s</string>
-    <string name="pattern_withdrawal_fee_dmc">Following fee(s) will be applied:\n%s - %s%% DMC withdrawal fee%s</string>
-    <string name="pattern_withdrawal_fee_asset">%s - %s withdrawal fee</string>
     <string name="reporting_currency">Reporting currency</string>
     <string name="manage_assets">Manage assets</string>
     <string name="currencies">Currencies</string>

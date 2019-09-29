@@ -21,15 +21,15 @@ import java.io.Serializable
 
 class TransactionDetailsActivity : BaseActivity() {
 
-  private lateinit var operation: Serializable
+  private lateinit var transaction: Serializable
   private var contacts = ArrayList<Contact>()
   private var toAddress: String? = null
 
   companion object {
-    private const val ARG_OPERATION = "ARG_OPERATION"
+    private const val ARG_TRANSACTION = "ARG_TRANSACTION"
     fun newInstance(context: Context, operation: Serializable): Intent {
       val intent = Intent(context, TransactionDetailsActivity::class.java)
-      intent.putExtra(ARG_OPERATION, operation)
+      intent.putExtra(ARG_TRANSACTION, operation)
       return intent
     }
   }
@@ -37,12 +37,10 @@ class TransactionDetailsActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_transaction_details)
-    checkIntent()
-    initUI()
-  }
 
-  private fun checkIntent() {
-    operation = intent.getSerializableExtra(ARG_OPERATION)
+    transaction = intent.getSerializableExtra(ARG_TRANSACTION)
+
+    initUI()
   }
 
   private fun initUI() {
@@ -55,12 +53,12 @@ class TransactionDetailsActivity : BaseActivity() {
       }
     }
 
-    when (operation) {
+    when (transaction) {
       is Operation -> {
-        initForOperation(operation as Operation)
+        initForOperation(transaction as Operation)
       }
       is Trade -> {
-        initForTrade(operation as Trade)
+        initForTrade(transaction as Trade)
       }
     }
   }
@@ -87,7 +85,7 @@ class TransactionDetailsActivity : BaseActivity() {
     when (operation.type) {
       Operation.OperationType.CREATED.value -> {
         if (operation.to == accountId) {
-          titleView.text = "Account created"
+          titleView.setText(R.string.account_created)
           toContainer.visibility = View.VISIBLE
           toPrefix.text = "Funder:"
           toAddress = operation.from
@@ -112,7 +110,7 @@ class TransactionDetailsActivity : BaseActivity() {
                 toContainer.visibility = View.GONE
               }
               else -> {
-                titleView.text = "Sent"
+                titleView.setText(R.string.sent)
                 toContainer.visibility = View.VISIBLE
                 toAddress = operation.to
               }
@@ -120,7 +118,7 @@ class TransactionDetailsActivity : BaseActivity() {
             firstAmountView.text = String.format(getString(R.string.negative_template), firstAmountView.text.toString())
           }
           operation.to -> {
-            titleView.text = "Received"
+            titleView.setText(R.string.received)
             toContainer.visibility = View.VISIBLE
             toPrefix.text = "From: "
             toAddress = operation.from
@@ -128,11 +126,11 @@ class TransactionDetailsActivity : BaseActivity() {
         }
       }
       Operation.OperationType.ALLOW_TRUST.value -> {
-        titleView.text = "Trustline allowed"
+        titleView.setText(R.string.trustline_allowed)
         infoContainer.visibility = View.GONE
       }
       Operation.OperationType.CHANGE_TRUST.value -> {
-        titleView.text = "Trustline changed"
+        titleView.setText(R.string.trustline_changed)
         infoContainer.visibility = View.GONE
       }
       Operation.OperationType.PATH_PAYMENT.value,
@@ -158,25 +156,36 @@ class TransactionDetailsActivity : BaseActivity() {
 
     copyAddressIcon.visibility = View.GONE
 
-    titleView.setText(R.string.exchanged)
+    infoContainer.setBackgroundResource(R.drawable.bg_card_transparent)
 
-    firstAssetTitle.text = StringFormat.formatAssetCode(trade.counterAsset)
-    firstAssetLogo.setImageResource(AssetUtils.getLogo(trade.counterAsset))
+    titleView.setText(R.string.trade_details)
 
-    secondAssetTitle.text = StringFormat.formatAssetCode(trade.baseAsset)
-    secondAssetLogo.setImageResource(AssetUtils.getLogo(trade.baseAsset))
+    val baseIsSeller = trade.baseIsSeller ?: false
 
+    val assetSold = if (baseIsSeller) trade.baseAsset else trade.counterAsset
+    val assetBought = if (baseIsSeller) trade.counterAsset else trade.baseAsset
+
+    val amountSold = if (baseIsSeller) trade.baseAmount else trade.counterAmount
+    val amountBought = if (baseIsSeller) trade.counterAmount else trade.baseAmount
+
+    val price = if (baseIsSeller) (trade.priceN.toDouble() / trade.priceD.toDouble()) else
+      (trade.priceD.toDouble() / trade.priceN.toDouble())
+
+    firstAssetTitle.text = StringFormat.formatAssetCode(assetSold)
+    firstAssetLogo.setImageResource(AssetUtils.getLogo(assetSold))
     firstAmountView.text = String.format(getString(R.string.negative_template),
-      StringFormat.truncateDecimalPlaces(trade.counterAmount,
-        AssetUtils.getMaxDecimals(trade.counterAsset)))
+      StringFormat.truncateDecimalPlaces(amountSold,
+        AssetUtils.getMaxDecimals(assetSold)))
 
-    secondAmountView.text = StringFormat.truncateDecimalPlaces(trade.baseAmount,
-        AssetUtils.getMaxDecimals(trade.baseAsset))
+    secondAssetTitle.text = StringFormat.formatAssetCode(assetBought)
+    secondAssetLogo.setImageResource(AssetUtils.getLogo(assetBought))
+    secondAmountView.text = StringFormat.truncateDecimalPlaces(amountBought,
+      AssetUtils.getMaxDecimals(assetBought))
 
     dateTimeView.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(this))
 
     toPrefix.text = "Price:"
-    toText.text = StringFormat.truncateDecimalPlaces(trade.price, 7)
+    toText.text = "${StringFormat.truncateDecimalPlaces(price, 7)} $assetSold/$assetBought"
   }
 
   private fun initContacts(address: String?) {

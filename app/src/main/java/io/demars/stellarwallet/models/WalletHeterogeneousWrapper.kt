@@ -130,7 +130,7 @@ class WalletHeterogeneousWrapper {
   private fun convertResponseToTrade(activeAsset: String, list: ArrayList<TradeResponse>): ArrayList<Trade> {
     return list.map {
       return@map Trade(activeAsset, it.ledgerCloseTime, it.offerId,
-        it.isBaseSeller, convertPrice(it.price),
+        it.isBaseSeller, it.price.numerator.toString(), it.price.denominator.toString(),
         it.baseOfferId, it.counterOfferId, convertAsset(it.baseAsset), convertAsset(it.counterAsset),
         it.baseAssetType, it.counterAssetType, it.baseAmount, it.counterAmount,
         it.baseAccount.accountId, it.counterAccount.accountId)
@@ -213,6 +213,6 @@ class WalletHeterogeneousWrapper {
   private fun convertPrice(price: Price?): String? {
     if (price == null) return null
 
-    return (price.denominator.toDouble() / price.numerator.toDouble()).toString()
+    return (price.numerator.toDouble() / price.denominator.toDouble()).toString()
   }
 }

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.demars.stellarwallet.R
 import io.demars.stellarwallet.adapters.AssetsAdapter
 import io.demars.stellarwallet.interfaces.AssetListener
-import kotlinx.android.synthetic.main.activity_manage_assets.*
+import kotlinx.android.synthetic.main.activity_wallet.*
 import org.stellar.sdk.Asset
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -32,7 +32,7 @@ import io.demars.stellarwallet.api.horizon.model.HorizonException
 import io.demars.stellarwallet.mvvm.account.AccountRepository
 import io.demars.stellarwallet.api.horizon.Horizon
 import io.demars.stellarwallet.utils.*
-import kotlinx.android.synthetic.main.activity_manage_assets.addressEditText
+import kotlinx.android.synthetic.main.activity_wallet.addressEditText
 import org.stellar.sdk.AssetTypeCreditAlphaNum4
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.responses.OrderBookResponse
@@ -57,7 +57,7 @@ class WalletActivity : BaseActivity(), AssetListener, OnAssetSelected, ValueEven
   //region Init
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_manage_assets)
+    setContentView(R.layout.activity_wallet)
 
     Firebase.getUserStellarAddress(this)
 

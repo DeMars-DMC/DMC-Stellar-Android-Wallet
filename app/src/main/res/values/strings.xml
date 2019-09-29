@@ -266,7 +266,8 @@
     <string name="public_address">Public Address</string>
     <string name="add_asset">Add asset</string>
     <string name="pay_to_contact">Pay to contact</string>
-    <string name="pattern_price">Price: %s</string>
+    <string name="pattern_price">Price: %s %s/%s</string>
+    <string name="pattern_rate">%s %s/%s</string>
     <string name="pattern_memo">Memo: %s</string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="verify_phone_number">Verify phone number</string>
@@ -445,5 +446,12 @@
     <string name="payfast_button_label">You can pay now using PayFast</string>
     <string name="tip_pay_to">To proceed with the payment, please enter valid Stellar Address. You can type it manually, scan a QR-code or choose from Contacts</string>
     <string name="please_enter_address">Please enter receiver\'s address</string>
-    <string name="exchanged">Exchanged</string>
+    <string name="trade_details">Trade details</string>
+    <string name="account_created">Account created</string>
+    <string name="sent">Sent</string>
+    <string name="received">Received</string>
+    <string name="trustline_allowed">Trustline allowed</string>
+    <string name="trustline_changed">Trustline changed</string>
+    <string name="market_rate">Market rate</string>
+    <string name="no_counter_offers">No counter offers</string>
 </resources>

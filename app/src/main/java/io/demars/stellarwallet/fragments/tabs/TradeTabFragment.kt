@@ -46,7 +46,8 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
   private var buyingCurrencies = mutableListOf<SelectionModel>()
   private var availableAmount: Double = 0.0
   private var addedCurrencies: ArrayList<Currency> = ArrayList()
-  private var latestBid: OrderBookResponse.Row? = null
+  private var bestBid: OrderBookResponse.Row? = null
+  private var bestAsk: OrderBookResponse.Row? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_tab_trade, container, false)
@@ -80,11 +81,10 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
 
     sellingCustomSelector.editText.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
-        updateBuyingValueIfNeeded()
+        updateBuyingValue()
         refreshSubmitTradeButton()
       }
     })
-
 
     buyingCustomSelector.editText.addTextChangedListener(object : AfterTextChanged() {
       override fun afterTextChanged(editable: Editable) {
@@ -190,12 +190,13 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
   }
 
   private fun onSelectorChanged() {
-    latestBid = null
+    bestBid = null
+    bestAsk = null
     if (isCurrenciesInitialized()) {
       notifyParent(selectedSellingCurrency, selectedBuyingCurrency)
     }
     refreshSubmitTradeButton()
-    updateBuyingValueIfNeeded()
+    updateBuyingValue()
   }
 
   private fun refreshSubmitTradeButton() {
@@ -225,7 +226,7 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
     }
   }
 
-  private fun updateBuyingValueIfNeeded() {
+  private fun updateBuyingValue() {
     if (sellingCustomSelector == null) return
     val sellingString = sellingCustomSelector.editText.text.toString()
     if (sellingString.isEmpty()) {
@@ -243,9 +244,9 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
     }
 
     var stringValue = buyingCustomSelector.editText.text.toString().toDoubleOrNull() ?: 0.0
-    if (latestBid != null) {
+    if (bestBid != null) {
       val value = sellingCustomSelector.editText.text.toString().toFloatOrNull()
-      val price = latestBid?.price?.toFloatOrNull()
+      val price = bestBid?.price?.toFloatOrNull()
       if (value != null && price != null) {
         val floatValue: Double = value.toDouble()
         val floatPrice: Double = price.toDouble()
@@ -259,14 +260,14 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
 
   private fun updatePrices() {
     prices?.let {
-      val price = latestBid?.price?.toDoubleOrNull()
+      val price = bestBid?.price?.toDoubleOrNull()
+      var revertPrice = bestAsk?.price?.toDoubleOrNull()
       val ssBuilder = SpannableStringBuilder("")
+      var indexTransparent = 0
       if (price != null) {
         val formattedPrice = StringFormat.truncateDecimalPlaces(price, 7)
-        val revertedPrice = StringFormat.truncateDecimalPlaces((1.0 / price), 7)
-        val priceString = "Price: 1\u00A0${selectedSellingCurrency.label}\u00A0=" +
-          "\u00A0$formattedPrice\u00A0${selectedBuyingCurrency.label}\n"
-        val invertedString = "1 ${selectedBuyingCurrency.label} = $revertedPrice ${selectedSellingCurrency.label}"
+        val priceString = getString(R.string.pattern_rate, formattedPrice,
+          selectedBuyingCurrency.label, selectedSellingCurrency.label)
 
         val indexBold = priceString.length
 
@@ -276,25 +277,31 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
           0, indexBold,
           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val transparentString = "Price: "
-        val indexTransparent = indexBold + transparentString.length
-
-        ssBuilder.append(transparentString)
-        ssBuilder.setSpan(
-          ForegroundColorSpan(Color.TRANSPARENT),
-          indexBold, indexTransparent,
-          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        ssBuilder.append(invertedString)
-        ssBuilder.setSpan(RelativeSizeSpan(0.7f),
-          indexTransparent, indexTransparent + invertedString.length,
-          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        indexTransparent = indexBold
       } else {
-        val noOffersString = getString(R.string.no_offers).toUpperCase()
+        val noOffersString = getString(R.string.no_offers)
+
+        indexTransparent = noOffersString.lastIndex + 1
+
         ssBuilder.append(noOffersString)
       }
 
+      val invertedPriceString = if (revertPrice != null) {
+        revertPrice = 1 / revertPrice
+        val formattedRevertedPrice = StringFormat.truncateDecimalPlaces(revertPrice, 7)
+        "\n${getString(R.string.pattern_rate, formattedRevertedPrice,
+          selectedSellingCurrency.label, selectedBuyingCurrency.label)}"
+      } else {
+        "\n${getString(R.string.no_counter_offers)}"
+      }
+
+      ssBuilder.append(invertedPriceString)
+      ssBuilder.setSpan(RelativeSizeSpan(0.7f),
+        indexTransparent, indexTransparent + invertedPriceString.length,
+        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
       it.text = ssBuilder
+      it.visibility = View.VISIBLE
     }
   }
 
@@ -390,7 +397,7 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
         } else {
           ViewUtils.showToast(appContext, "Order executed")
         }
-       }
+      }
 
       override fun onFailed(errorMessage: String) {
         if (isAdded) {
@@ -453,13 +460,10 @@ class TradeTabFragment(val assetCode: String, val assetIssuer: String) : Fragmen
   }
 
   override fun onLastOrderBookUpdated(asks: Array<OrderBookResponse.Row>, bids: Array<OrderBookResponse.Row>) {
-    if (bids.isNotEmpty()) {
-      latestBid = bids[0]
-      updateBuyingValueIfNeeded()
-    } else {
-      latestBid = null
-    }
+    bestBid = bids.firstOrNull()
+    bestAsk = asks.firstOrNull()
 
+    updateBuyingValue()
     updatePrices()
   }
 

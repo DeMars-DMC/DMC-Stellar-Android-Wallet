@@ -149,26 +149,39 @@ class TransactionsAdapter(val context: Context, val assetCode: String, val liste
 
     viewHolder.counterAmount.visibility = VISIBLE
 
+    val baseIsSeller = trade.baseIsSeller ?: false
+
+    val assetSold = if (baseIsSeller) trade.baseAsset else trade.counterAsset
+    val assetBought = if (baseIsSeller) trade.counterAsset else trade.baseAsset
+
+    val amountSold = if (baseIsSeller) trade.baseAmount else trade.counterAmount
+    val amountBought = if (baseIsSeller) trade.counterAmount else trade.baseAmount
+
+    val price = if (baseIsSeller) (trade.priceN.toDouble() / trade.priceD.toDouble()) else
+      (trade.priceD.toDouble() / trade.priceN.toDouble())
+
     viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
-      StringFormat.formatAssetCode(trade.counterAsset), StringFormat.formatAssetCode(trade.baseAsset))
-    viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorPaleSky), PorterDuff.Mode.SRC_IN)
-    if (assetCode == trade.baseAsset) {
-      viewHolder.amount.text = truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset))
-      viewHolder.counterAmount.text = String.format(context.getString(R.string.negative_asset_template),
-        truncateDecimalPlaces(trade.counterAmount, AssetUtils.getMaxDecimals(trade.counterAsset)), trade.counterAsset)
-    } else {
+      StringFormat.formatAssetCode(assetSold), StringFormat.formatAssetCode(assetBought))
+
+    if (assetCode == assetSold) {
       viewHolder.amount.text =
         String.format(context.getString(R.string.negative_template),
-          truncateDecimalPlaces(trade.counterAmount, AssetUtils.getMaxDecimals(trade.counterAsset)))
+          truncateDecimalPlaces(amountSold, AssetUtils.getMaxDecimals(assetSold)))
       viewHolder.counterAmount.text = String.format(context.getString(R.string.positive_asset_template),
-        truncateDecimalPlaces(trade.baseAmount, AssetUtils.getMaxDecimals(trade.baseAsset)), trade.baseAsset)
+        truncateDecimalPlaces(amountBought, AssetUtils.getMaxDecimals(assetBought)), assetBought)
+    } else if (assetCode == assetBought) {
+      viewHolder.amount.text = truncateDecimalPlaces(amountBought, AssetUtils.getMaxDecimals(assetBought))
+      viewHolder.counterAmount.text = String.format(context.getString(R.string.negative_asset_template),
+        truncateDecimalPlaces(amountSold, AssetUtils.getMaxDecimals(assetSold)), assetSold)
     }
+
+    viewHolder.info.visibility = VISIBLE
+    viewHolder.info.text = context.getString(R.string.pattern_price,
+      truncateDecimalPlaces(price, 7), assetSold, assetBought)
+
     viewHolder.date.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 
     viewHolder.dot.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
-    viewHolder.info.visibility = VISIBLE
-    viewHolder.info.text = context.getString(R.string.pattern_price,
-      truncateDecimalPlaces(trade.price, 7))
   }
 
   @SuppressLint("SetTextI18n")

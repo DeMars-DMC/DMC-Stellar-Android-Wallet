@@ -454,7 +454,8 @@
         android:text="@string/amount"
         android:textAllCaps="false"
         android:textSize="@dimen/text_size_big"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tool:visibility="visible"/>
 
     <TextView
         android:id="@+id/editAmountButton"
@@ -500,7 +501,8 @@
         android:layout_below="@id/amountTitle"
         android:layout_marginStart="@dimen/padding_horizontal"
         android:layout_marginEnd="@dimen/padding_horizontal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tool:visibility="visible"/>
 
     <View
         android:id="@+id/keyboardDivider"

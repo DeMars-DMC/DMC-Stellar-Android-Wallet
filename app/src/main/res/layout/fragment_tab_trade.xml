@@ -20,56 +20,57 @@
             android:paddingEnd="@dimen/padding_horizontal"
             android:paddingBottom="@dimen/padding_vertical">
 
-            <io.demars.stellarwallet.views.CustomSelector
-                android:id="@+id/sellingCustomSelector"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:customStrokeColor="@color/colorPrimary"
-                app:hint="@string/selling_hint"
-                app:inputType="decimal" />
-
             <TextView
                 android:id="@+id/availableToSell"
                 style="@style/WhiteRegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_micro"
-                android:layout_marginTop="@dimen/padding_mini"
+                android:layout_marginBottom="@dimen/padding_mini"
                 android:textColor="@color/colorGreen"
                 android:textStyle="bold"
-                android:layout_below="@id/sellingCustomSelector"
                 tools:text="1,000,000,000.1234567 PTS" />
 
-            <Button
-                android:id="@+id/sellAll"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/button_height"
-                android:text="@string/sell_100"
-                android:visibility="invisible"
-                android:textAllCaps="false"
-                android:background="@drawable/background_card_clickable_yellow"
-                android:layout_marginTop="@dimen/padding_mini"
-                android:textColor="@color/colorYellow"
+            <io.demars.stellarwallet.views.CustomSelector
+                android:id="@+id/sellingCustomSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:customStrokeColor="@color/colorPrimary"
                 android:layout_below="@id/availableToSell"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/swapCurrenciesButton"
-                android:enabled="false"/>
+                app:hint="@string/selling_hint"
+                app:inputType="decimal" />
 
-            <ImageView
-                android:id="@+id/swapCurrenciesButton"
-                android:layout_width="@dimen/button_height"
-                android:layout_height="@dimen/button_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_swap_vert_palesky"
-                android:theme="@style/ClickableItem"
-                android:layout_marginEnd="@dimen/padding_horizontal"
+            <LinearLayout
+                android:id="@+id/sellAllContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sellingCustomSelector"
                 android:layout_marginTop="@dimen/padding_horizontal"
-                android:layout_marginStart="@dimen/padding_horizontal"
-                android:layout_below="@+id/sellingCustomSelector"
-                android:layout_alignEnd="@+id/sellingCustomSelector"
-                android:layout_above="@id/buyingCustomSelector"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/sellAll"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:text="@string/sell_100"
+                    android:visibility="invisible"
+                    android:textAllCaps="false"
+                    android:background="@drawable/background_card_clickable_yellow"
+                    android:textColor="@color/colorYellow"
+                    android:layout_weight="0.75"
+                    android:enabled="false"/>
+
+                <ImageView
+                    android:id="@+id/swapCurrenciesButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_swap_vert_palesky"
+                    android:layout_weight="0.25"
+                    android:theme="@style/ClickableItem"/>
+
+            </LinearLayout>
 
             <io.demars.stellarwallet.views.CustomSelector
                 android:id="@+id/buyingCustomSelector"
@@ -78,7 +79,7 @@
                 android:layout_marginTop="@dimen/padding_horizontal"
                 app:customStrokeColor="@color/colorPrimary"
                 app:hint="@string/buying_hint"
-                android:layout_below="@id/sellAll"
+                android:layout_below="@id/sellAllContainer"
                 app:inputType="decimal" />
 
             <TextView
@@ -86,21 +87,39 @@
                 style="@style/WhiteRegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_micro"
                 android:layout_marginTop="@dimen/padding_mini"
                 android:textStyle="bold"
                 android:layout_below="@+id/buyingCustomSelector"
                 tools:text="1,000,000,000.1234567 PTS" />
 
             <TextView
+                android:id="@+id/pricesTitle"
+                style="@style/WhiteTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buyingBalance"
+                android:paddingBottom="@dimen/padding_mini"
+                android:text="@string/market_rate"
+                android:layout_marginTop="@dimen/padding_horizontal"
+                android:textAllCaps="false"
+                android:textSize="@dimen/text_size_big" />
+
+            <View
+                android:id="@+id/pricesDivider"
+                style="@style/HorizontalDividerWhite"
+                android:layout_below="@id/pricesTitle"/>
+
+            <TextView
                 android:id="@+id/prices"
                 style="@style/WhiteRegularText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/padding_micro"
                 android:layout_marginTop="@dimen/padding_horizontal"
-                android:layout_below="@id/buyingBalance"
-                tools:text="Price: 1 XLM = 1.25 DMC" />
+                android:layout_below="@id/pricesDivider"
+                android:background="@drawable/bg_card_transparent"
+                android:padding="@dimen/padding_horizontal"
+                android:visibility="gone"
+                tools:text="Price: 1.25 DMC/XLM" />
 
             <TextView
                 android:id="@+id/pricesExplain"

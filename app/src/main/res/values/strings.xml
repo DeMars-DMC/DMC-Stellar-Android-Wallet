@@ -267,6 +267,7 @@
     <string name="add_asset">Add asset</string>
     <string name="pay_to_contact">Pay to contact</string>
     <string name="pattern_price">Price: %s %s/%s</string>
+    <string name="pattern_price_simple">Price: %s</string>
     <string name="pattern_rate">%s %s/%s</string>
     <string name="pattern_memo">Memo: %s</string>
     <string name="enter_your_phone_number">Enter your phone number</string>

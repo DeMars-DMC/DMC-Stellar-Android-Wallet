@@ -157,8 +157,7 @@ class TransactionsAdapter(val context: Context, val assetCode: String, val liste
     val amountSold = if (baseIsSeller) trade.baseAmount else trade.counterAmount
     val amountBought = if (baseIsSeller) trade.counterAmount else trade.baseAmount
 
-    val price = if (baseIsSeller) (trade.priceN.toDouble() / trade.priceD.toDouble()) else
-      (trade.priceD.toDouble() / trade.priceN.toDouble())
+    val price = trade.priceN.toDouble() / trade.priceD.toDouble()
 
     viewHolder.transactionType.text = String.format(context.getString(R.string.exchange_item_template),
       StringFormat.formatAssetCode(assetSold), StringFormat.formatAssetCode(assetBought))
@@ -176,8 +175,8 @@ class TransactionsAdapter(val context: Context, val assetCode: String, val liste
     }
 
     viewHolder.info.visibility = VISIBLE
-    viewHolder.info.text = context.getString(R.string.pattern_price,
-      truncateDecimalPlaces(price, 7), assetSold, assetBought)
+    viewHolder.info.text = context.getString(R.string.pattern_price_simple,
+      truncateDecimalPlaces(price, 7))
 
     viewHolder.date.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(context))
 

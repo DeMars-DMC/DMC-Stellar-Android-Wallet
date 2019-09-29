@@ -168,8 +168,7 @@ class TransactionDetailsActivity : BaseActivity() {
     val amountSold = if (baseIsSeller) trade.baseAmount else trade.counterAmount
     val amountBought = if (baseIsSeller) trade.counterAmount else trade.baseAmount
 
-    val price = if (baseIsSeller) (trade.priceN.toDouble() / trade.priceD.toDouble()) else
-      (trade.priceD.toDouble() / trade.priceN.toDouble())
+    val price = trade.priceN.toDouble() / trade.priceD.toDouble()
 
     firstAssetTitle.text = StringFormat.formatAssetCode(assetSold)
     firstAssetLogo.setImageResource(AssetUtils.getLogo(assetSold))
@@ -185,7 +184,8 @@ class TransactionDetailsActivity : BaseActivity() {
     dateTimeView.text = StringFormat.getFormattedDateTime(trade.createdAt, DateFormat.is24HourFormat(this))
 
     toPrefix.text = "Price:"
-    toText.text = "${StringFormat.truncateDecimalPlaces(price, 7)} $assetSold/$assetBought"
+    toText.text = getString(R.string.pattern_rate,
+      StringFormat.truncateDecimalPlaces(price, 7), assetSold, assetBought)
   }
 
   private fun initContacts(address: String?) {

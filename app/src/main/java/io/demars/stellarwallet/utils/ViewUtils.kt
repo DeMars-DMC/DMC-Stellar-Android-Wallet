@@ -168,7 +168,7 @@ object ViewUtils {
   fun copyToClipBoard(context: Context, data: String, toastMessage: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("", data)
-    clipboard.primaryClip = clip
+    clipboard.setPrimaryClip(clip)
     showToast(context, toastMessage)
   }
 
@@ -176,7 +176,7 @@ object ViewUtils {
   fun copyToClipBoard(context: Context, data: String, toastMessage: Int) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("", data)
-    clipboard.primaryClip = clip
+    clipboard.setPrimaryClip(clip)
     showToast(context, toastMessage)
   }
   //endregion

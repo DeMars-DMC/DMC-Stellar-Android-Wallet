@@ -258,7 +258,7 @@ class ContactsActivity : BaseActivity(), ContactListener, SearchView.OnQueryText
     val filterList: ArrayList<Contact> = ArrayList()
     currentContactList.forEach {
       it.name.let { name ->
-        if (name.toLowerCase().contains(input.toLowerCase())) {
+        if (name.contains(input, true)) {
           filterList.add(it)
         }
       }

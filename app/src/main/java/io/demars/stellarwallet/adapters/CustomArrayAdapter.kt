@@ -18,7 +18,7 @@ open class CustomArrayAdapter(context: Context, private var resource: Int, priva
         inflater = LayoutInflater.from(context)
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var vi: View? = convertView
         if (convertView == null)
             vi = inflater!!.inflate(resource, parent, false)

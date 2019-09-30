@@ -13,6 +13,7 @@ import io.demars.stellarwallet.DmcApp
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.demars.stellarwallet.utils.AssetUtils
+import io.demars.stellarwallet.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_receive.*
 
 class ReceiveActivity : BaseActivity() {
@@ -51,7 +52,9 @@ class ReceiveActivity : BaseActivity() {
     val publicId = DmcApp.wallet.getStellarAccountId()
     addressTextView.text = publicId
     generateQRCode(publicId!!, qrImageView)
-    addressCopyButton.setOnClickListener { copyAddressToClipBoard(publicId) }
+    addressCopyButton.setOnClickListener {
+      ViewUtils.copyToClipBoard(this, publicId, R.string.address_copied_message)
+    }
     shareButton.setOnClickListener { shareAddress(publicId) }
   }
 
@@ -84,14 +87,6 @@ class ReceiveActivity : BaseActivity() {
     val barcodeEncoder = BarcodeEncoder()
     val bitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, size, size)
     imageView.setImageBitmap(bitmap)
-  }
-
-  private fun copyAddressToClipBoard(address: String) {
-    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("DMC Address", address)
-    clipboard.primaryClip = clip
-
-    Toast.makeText(this, getString(R.string.address_copied_message), Toast.LENGTH_LONG).show()
   }
 
   private fun shareAddress(address: String) {

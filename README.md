@@ -1,6 +1,6 @@
 # DMC-Stellar-Android-Wallet
 
-This is the original version of the DMC android Stellar wallet App, originally forked from BlockEQ.
+This is the old version of the DMC android Stellar wallet App, originally forked from BlockEQ.
 
 The current version is available to download in the Google Play store.
 
